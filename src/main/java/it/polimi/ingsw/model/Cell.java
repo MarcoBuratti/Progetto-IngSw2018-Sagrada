@@ -35,8 +35,7 @@ public class Cell {
     }
 
     public Boolean allowedMove (Die die) {
-        return true;
-        //da implementare
+        return this.restriction.restrictionCheck(die);
     }
 
     void dump(){
