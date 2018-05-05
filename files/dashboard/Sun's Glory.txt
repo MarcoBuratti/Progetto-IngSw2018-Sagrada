@@ -1,0 +1,13 @@
+[  
+    {  
+        "schemeName":"Sun's Glory",
+	"favourToken":"6",
+        "Restriction":[
+		["ONE_R","VIOLET_R","YELLOW_R","NO_R","FOUR_R"],
+                ["VIOLET_R","YELLOW_R","NO_R","NO_R","SIX_R"],
+                ["YELLOW_R","NO_R","NO_R","FIVE_R","THREE_R"],
+                ["NO_R","FIVE_R","FOUR_R","TWO_R","ONE_R"]
+	]
+    }
+      
+]

@@ -1,0 +1,13 @@
+[  
+    {  
+        "schemeName":"Shadow Thief",
+	"favourToken":"5",
+        "Restriction":[
+		["SIX_R","VIOLET_R","NO_R","NO_R","FIVE_R"],
+                ["FIVE_R","NO_R","VIOLET_R","NO_R","NO_R"],
+                ["RED_R","SIX_R","NO_R","VIOLET_R","NO_R"],
+                ["YELLOW_R","RED_R","FIVE_R","FOUR_R","THREE_R"]
+	]
+    }
+      
+]

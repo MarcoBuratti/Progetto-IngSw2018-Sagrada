@@ -1,0 +1,13 @@
+[  
+    {  
+        "schemeName":"Firelight",
+	"favourToken":"5",
+        "Restriction":[
+		["THREE_R","FOUR_R","ONE_R","FIVE_R","NO_R"],
+                ["NO_R","SIX_R","TWO_R","NO_R","YELLOW_R"],
+                ["NO_R","NO_R","NO_R","YELOW_R","RED_R"],
+                ["FIVE_R","NO_R","YELLOW_R","RED_R","SIX_R"]
+	]
+    }
+      
+]

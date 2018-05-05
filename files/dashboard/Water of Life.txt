@@ -1,0 +1,13 @@
+[  
+    {  
+        "schemeName":"Water of Life",
+	"favourToken":"6",
+        "Restriction":[
+		["SIX_R","BLUE_R","NO_R","NO_R","ONE_R"],
+                ["NO_R","FIVE_R","BLUE_R","NO_R","NO_R"],
+                ["FOUR_R","RED_R","TWO_R","BLUE_R","NO_R"],
+                ["GREEN_R","SIX_R","YELLOW_R","THREE_R","VIOLET_R"]
+	]
+    }
+      
+]

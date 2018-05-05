@@ -1,0 +1,13 @@
+[
+        {
+		"schemeName": "Sun_Catcher",
+		"favourToken": "3",
+		"Restriction": [
+			["NO_R", "BLUE_R", "TWO_R", "NO_R", "YELLOW_R"],
+			["NO_R", "FOUR_R", "NO_R", "RED_R", "NO_R"],
+			["NO_R", "NO_R", "FIVE_R", "YELLOW_R", "NO_R"],
+			["GREEN_R", "THREE_R", "NO_R", "NO_R", "VIOLET_R"]
+		]
+	}
+
+]

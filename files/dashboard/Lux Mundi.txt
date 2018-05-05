@@ -1,0 +1,13 @@
+[  
+    {  
+        "schemeName":"Lux Mundi",
+	"favourToken":"6",
+        "Restriction":[
+		["NO_R","NO_R","ONE_R","NO_R","NO_R"],
+                ["ONE_R","GREEN_R","THREE_R","BLUE_R","TWO_R"],
+                ["BLUE_R","FIVE_R","FOUR_R","SIX_R","GREEN_R"],
+                ["NO_R","BLUE_R","FIVE_R","GREEN_R","NO_R"]
+	]
+    }
+      
+]

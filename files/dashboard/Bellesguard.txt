@@ -1,0 +1,13 @@
+[  
+    {  
+        "schemeName":"Bellesguard",
+	"favourToken":"3",
+        "Restriction":[
+		["BLUE_R","SIX_R","NO_R","NO_R","YELLOW_R"],
+                ["NO_R","THREE_R","BLUE_R","NO_R","NO_R"],
+                ["NO_R","FIVE_R","SIX_R","TWO_R","NO_R"],
+                ["NO_R","FOUR_R","NO_R","ONE_R","GREEN_R"]
+	]
+    }
+      
+]

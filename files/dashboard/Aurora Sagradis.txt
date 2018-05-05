@@ -1,0 +1,13 @@
+[  
+    {  
+        "schemeName":"Aurora Sagradis",
+	"favourToken":"4",
+        "Restriction":[
+		["RED_R","NO_R","BLUE_R","NO_R","YELLOW_R"],
+                ["FOUR_R","VIOLET_T","THREE_R","GREEN_R","TWO_R"],
+                ["NO_R","ONE_R","NO_R","FIVE_R","NO_R"],
+                ["NO_R","NO_R","SIX_R","NO_R","NO_R"]
+	]
+    }
+      
+]

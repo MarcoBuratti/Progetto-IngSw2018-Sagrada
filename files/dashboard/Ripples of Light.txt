@@ -1,0 +1,13 @@
+[  
+    {  
+        "schemeName":"Ripples of Light",
+	"favourToken":"5",
+        "Restriction":[
+		["NO_R","NO_R","NO_R","RED_R","FIVE_R"],
+                ["NO_R","NO_R","VIOLET_R","FOUR_R","BLUE_R"],
+                ["NO_R","BLUE_R","THREE_R","YELLOW_R","SIX_R"],
+                ["YELLOW_R","TWO_R","GREEN_R","ONE_R","RED_R"]
+	]
+    }
+      
+]

@@ -1,0 +1,13 @@
+[  
+    {  
+        "schemeName":"Firmitas",
+	"favourToken":"5",
+        "Restriction":[
+		["VIOLET_R","SIX_R","NO_R","NO_R","THREE_R"],
+                ["FIVE_R","VIOLET_R","THREE_R","NO_R","NO_R"],
+                ["NO_R","TWO_R","VIOLET_R","ONE_R","NO_R"],
+                ["NO_R","ONE_R","FIVE_R","VIOLET_R","FOUR_R"]
+	]
+    }
+      
+]

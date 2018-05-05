@@ -1,0 +1,13 @@
+[  
+    {  
+        "schemeName":"Fractal Drops",
+	"favourToken":"3",
+        "Restriction":[
+		["NO_R","FOUR_R","NO_R","YELLOW_R","SIX_R"],
+                ["RED_R","NO_R","TWO_R","NO_R","NO_R"],
+                ["NO_R","NO_R","RED_R","VIOLET_R","ONE_R"],
+                ["BLUE_R","YELLOW_R","NO_R","NO_R","NO_R"]
+	]
+    }
+      
+]

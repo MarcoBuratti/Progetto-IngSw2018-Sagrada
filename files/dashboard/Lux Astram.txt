@@ -1,0 +1,13 @@
+[  
+    {  
+        "schemeName":"Lux Astram",
+	"favourToken":"5",
+        "Restriction":[
+		["NO_R","ONE_R","GREEN_R","VIOLET_R","FOUR_R"],
+                ["SIX_R","VIOLET_R","TWO_R","FIVE_R","GREEN_R"],
+                ["ONE_R","GREEN_R","FIVE_R","THREE_R","VIOLET_R"],
+                ["NO_R","NO_R","NO_R","NO_R","NO_R"]
+	]
+    }
+      
+]
