@@ -49,4 +49,15 @@ public class Cell {
         else
             return "This cell is empty";
     }
+
+    @Override
+    public Cell clone(){
+        Cell cell= new Cell(this.getRestriction());
+
+        if(getUsedCell())
+            cell.setDie(this.getDie());
+
+        return cell;
+
+    }
 }

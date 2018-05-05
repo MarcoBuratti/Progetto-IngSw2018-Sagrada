@@ -1,10 +1,8 @@
-package ProvaMain.Prova;
+package it.polimi.ingsw.model;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.json.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -28,8 +26,8 @@ public class Dashboard {
             this.favourToken = (Integer) jsonObject.get("favourToken");
 
             JSONArray first = (JSONArray) jsonObject.get("Restriction");
-            for (int i = 0; i < COLUMN_LENGTH; i++)
-                for (int j = 0; j < ROW_LENGTH; j++)
+            for (int i = 0; i < ROW; i++)
+                for (int j = 0; j < COLUMN; j++)
                     this.matrixScheme[i][j] = new Cell((Restriction) ((JSONArray) jsonObject.get(i)).get(j));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
