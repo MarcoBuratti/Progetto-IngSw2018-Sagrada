@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.exception.NotEnoughDiceLeftException;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,7 +26,7 @@ class DiceBagTest {
     }
 
     @Test
-    public void goodExtraction() throws NotEnoughDiceLeftException{
+    public void goodExtraction() throws NotEnoughDiceLeftException {
         DiceBag bag = new DiceBag();
         Die d1,d2;
         d1 = bag.extract();

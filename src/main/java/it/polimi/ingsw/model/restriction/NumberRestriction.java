@@ -1,5 +1,8 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.restriction;
 
+
+import it.polimi.ingsw.model.Die;
+import it.polimi.ingsw.model.exception.NumberNotValidException;
 
 public class NumberRestriction extends Restriction {
     private static final int NUMBER_OF_SIDES = 6;

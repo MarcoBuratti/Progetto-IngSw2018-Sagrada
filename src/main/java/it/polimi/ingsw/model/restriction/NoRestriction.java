@@ -1,4 +1,6 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.restriction;
+
+import it.polimi.ingsw.model.Die;
 
 public class NoRestriction extends Restriction {
     @Override

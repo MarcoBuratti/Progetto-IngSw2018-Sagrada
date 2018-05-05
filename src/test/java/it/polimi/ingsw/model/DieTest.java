@@ -1,11 +1,12 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.exception.NumberNotValidException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DieTest {
     @Test
-    public void numberFromOneToSix() throws NumberNotValidException{
+    public void numberFromOneToSix() throws NumberNotValidException {
         Die myDie = new Die(Colour.GREEN);
         assertTrue(myDie.getNumber()>0 && myDie.getNumber()<7);
         myDie.extractAgain();

@@ -1,9 +1,11 @@
 package it.polimi.ingsw.model;
 
-import org.json.simple.JSONArray;
+import it.polimi.ingsw.model.restriction.Restriction;
+/*import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-
+import org.json.simple.parser.ParseException;
+*/
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,7 +17,7 @@ public class Dashboard {
     private int favourToken;
     private Cell[][] matrixScheme;
 
-    public Dashboard(Player owner, String schemeName) {
+    /*ublic Dashboard(Player owner, String schemeName) {
         this.matrixScheme = new Cell[ROW][COLUMN];
         this.owner = owner;
         JSONParser parser = new JSONParser();
@@ -36,6 +38,14 @@ public class Dashboard {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }*/
+
+    public Dashboard(Cell[][] matrixScheme){
+
+        this.matrixScheme=matrixScheme;
+
+
+
     }
 
     public Player getOwner() {

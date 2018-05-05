@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.exception.NumberNotValidException;
+
 import java.util.Random;
 
 public class Die {

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.exception.NotEnoughDiceLeftException;
+
 import java.util.ArrayList;
 import java.util.Collections;
 

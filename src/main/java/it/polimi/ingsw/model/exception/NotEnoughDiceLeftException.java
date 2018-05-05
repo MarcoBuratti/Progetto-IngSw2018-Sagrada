@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.exception;
 
 public class NotEnoughDiceLeftException extends Exception {
     public NotEnoughDiceLeftException(){
