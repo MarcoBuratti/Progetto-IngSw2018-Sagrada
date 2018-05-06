@@ -1,4 +1,5 @@
 package it.polimi.ingsw.model;
+import it.polimi.ingsw.model.restriction.*;
 
 public class Cell {
     private Restriction restriction;
@@ -35,7 +36,7 @@ public class Cell {
     }
 
     public Boolean allowedMove (Die die) {
-        return this.restriction.restrictionCheck(die);
+        return (this.restriction.restrictionCheck(die) && !this.getUsedCell());
     }
 
     void dump(){
