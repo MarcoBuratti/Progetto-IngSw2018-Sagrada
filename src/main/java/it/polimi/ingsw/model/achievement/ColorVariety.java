@@ -22,6 +22,7 @@ public class ColorVariety implements CardAchievement {
                     counter.put(colour, counter.get(colour) + 1);
                 }
 
+
         return Collections.min(counter.values()) * 4;
 
     }

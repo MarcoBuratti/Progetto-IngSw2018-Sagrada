@@ -11,14 +11,15 @@ class ControlPosTest {
 
     @Test
     void isEmpty() {
-        Cell[][] matrixScheme = new Cell[4][5];
 
+        Cell[][] matrixScheme = new Cell[4][5];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
                 matrixScheme[i][j] = new Cell(new NoRestriction());
             }
         }
         Dashboard dashboard = new Dashboard(matrixScheme);
+
         Assertions.assertTrue(new ControlPos().isEmpty(matrixScheme));
 
         dashboard.setDieOnCell(0,0,new Die(Colour.GREEN));
