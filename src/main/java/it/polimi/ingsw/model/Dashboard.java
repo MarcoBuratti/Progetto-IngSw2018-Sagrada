@@ -88,7 +88,7 @@ public class Dashboard {
      */
     public void setDieOnCell(int row, int column, Die myDie) {
 
-            this.matrixScheme[row][column].setDie(myDie);
+        this.matrixScheme[row][column].setDie(myDie);
     }
 
 }
