@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.publicAchievement;
+package it.polimi.ingsw.model.achievement;
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.restriction.NoRestriction;

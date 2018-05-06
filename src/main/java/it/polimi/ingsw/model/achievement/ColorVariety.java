@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.publicAchievement;
+package it.polimi.ingsw.model.achievement;
 
 import java.util.*;
 import it.polimi.ingsw.model.*;
