@@ -6,6 +6,13 @@ public class ControlPos {
     private static final int ROW = 4;
     private static final int COLUMN = 5;
 
+    /**
+     * the isEmpty class checks if a die has already been placed on the matrixScheme,
+     * if there are dice return true otherwise return false
+     *
+     * @param matrixScheme
+     * @return boolean
+     */
     public boolean isEmpty(Cell[][] matrixScheme) {
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COLUMN; j++) {
@@ -15,14 +22,39 @@ public class ControlPos {
         return true;
     }
 
+    /**
+     * control if two dice has the same colour and return true if is the same
+     *
+     * @param die1
+     * @param die2
+     * @return
+     */
     public boolean checkDiceColour(Die die1, Die die2) {
         return (die1.getColour() == die2.getColour());
     }
 
+    /**
+     * control if two dice has the same number, return false if is different
+     *
+     * @param die1
+     * @param die2
+     * @return
+     */
     public boolean checkDiceNumber(Die die1, Die die2) {
         return (die1.getNumber() == die2.getNumber());
     }
 
+    /**
+     * the class allowedNeighbours checks if the "neighbors" (above, below, right, left)
+     * have common characters, same color or same number
+     * it return false if one the condition is verified, true otherwise
+     *
+     * @param row
+     * @param column
+     * @param myDie
+     * @param matrixScheme
+     * @return
+     */
     public boolean allowedNeighbours(int row, int column, Die myDie, Cell[][] matrixScheme) {
 
         if (row > 0 && matrixScheme[row - 1][column].getUsedCell()) {
@@ -48,6 +80,16 @@ public class ControlPos {
         return true;
     }
 
+    /**
+     * performs a generic check through the methods previously defined
+     * if there are no particular constraints
+     *
+     * @param row
+     * @param column
+     * @param myDie
+     * @param matrixScheme
+     * @return
+     */
     public boolean genericCheck(int row, int column, Die myDie, Cell[][] matrixScheme) {
 
         if (!matrixScheme[row][column].allowedMove(myDie))
@@ -69,6 +111,15 @@ public class ControlPos {
         return true;
     }
 
+    /**
+     * check if there are any neighbors to be able to place the die, it does not control any kind of restriction
+     * return true if the die can be place, false if can't
+     *
+     * @param row
+     * @param column
+     * @param matrixScheme
+     * @return
+     */
     public boolean nearBy(int row, int column, Cell[][] matrixScheme) {
         if (row > 0) {
             if (matrixScheme[row - 1][column].getUsedCell()) return true;

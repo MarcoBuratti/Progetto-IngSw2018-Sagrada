@@ -48,14 +48,27 @@ public class Dashboard {
 
     } // da togliere quando è completo json
 
+    /**
+     * returns the name of the board owner
+     * @return
+     */
     public Player getOwner() {
         return owner;
     }
 
+    /**
+     * return the number of favourToken
+     * @return
+     */
     public int getFavourToken() {
         return favourToken;
     }
 
+    /**
+     * returns a copy of the matrix, before being passed is cloned
+     * has non @param input
+     * @return matrixScheme
+     */
     public Cell[][] getMatrixScheme() {
 
         Cell[][] matrixScheme = new Cell[ROW][COLUMN];
@@ -67,6 +80,12 @@ public class Dashboard {
         return matrixScheme;
     }
 
+    /**
+     * sets the die on cell (row, column) and does not perform any kind of restriction control
+     * @param row
+     * @param column
+     * @param myDie
+     */
     public void setDieOnCell(int row, int column, Die myDie) {
 
             this.matrixScheme[row][column].setDie(myDie);
