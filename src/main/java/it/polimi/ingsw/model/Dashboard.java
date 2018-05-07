@@ -17,7 +17,7 @@ public class Dashboard {
     private int favourToken;
     private Cell[][] matrixScheme;
 
-    /*ublic Dashboard(Player owner, String schemeName) {
+    /*public Dashboard(Player owner, String schemeName) {
         this.matrixScheme = new Cell[ROW][COLUMN];
         this.owner = owner;
         JSONParser parser = new JSONParser();
