@@ -97,7 +97,7 @@ public class DiceBag {
     /**
      * Returns a string specifying the number of dice included in the bag.
      */
-    public String toString(){
+    public String toString() {
         return "This bag contains " + this.diceSet.size() + " dice \n";
     }
 }

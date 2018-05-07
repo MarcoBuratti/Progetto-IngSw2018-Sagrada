@@ -87,7 +87,6 @@ class ControlPosTest {
 
     }
 
-
     @Test
     void nearBy() throws NumberNotValidException {
         Cell[][] matrixScheme = new Cell[4][5];
