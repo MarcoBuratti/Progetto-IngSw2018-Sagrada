@@ -86,15 +86,12 @@ public class Dashboard {
      * @param myDie
      */
     public void setDieOnCell(int row, int column, Die myDie) throws NotValidParametersException {
-        try {
+
             if ((row >= 0 && row < 4) && (column >= 0 && column < 5)) {
                 this.matrixScheme[row][column].setDie(myDie);
             } else {
                 throw new NotValidParametersException();
             }
-        }catch (Exception e){
-            System.out.println(e);
-        }
     }
 
     @Override

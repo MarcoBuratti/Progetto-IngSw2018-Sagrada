@@ -113,4 +113,25 @@ class ControlPosTest {
         Assertions.assertFalse(new ControlPos().nearBy(3,3, matrixScheme));
         Assertions.assertFalse(new ControlPos().nearBy(3,4, matrixScheme));
     }
+
+    @Test
+    void genericCheck() throws NotValidParametersException {
+
+        Cell[][] matrixScheme = new Cell[4][5];
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 5; j++) {
+                matrixScheme[i][j] = new Cell(new NoRestriction());
+            }
+        }
+        Dashboard dashboard = new Dashboard(matrixScheme);
+        Die die1 = new Die(Colour.GREEN);
+        Die die2 = new Die(Colour.BLUE);
+        Die die3 = new Die(Colour.GREEN);
+
+        Assertions.assertTrue(new ControlPos().genericCheck(0, 3, die1, matrixScheme));
+        dashboard.setDieOnCell(0, 3, die1);
+        Assertions.assertTrue(new ControlPos().genericCheck(1, 3, die2, matrixScheme));
+        Assertions.assertFalse(new ControlPos().genericCheck(2,0, die3, matrixScheme));
+
+    }
 }
