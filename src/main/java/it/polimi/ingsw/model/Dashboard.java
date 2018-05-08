@@ -97,15 +97,16 @@ public class Dashboard {
         }
     }
 
-    /*@Override
-    /*public String toString(){
-
-        for (int i = 0; i < ROW; i++){
-            for (int j = 0; j < COLUMN; j++){
-                this.matrixScheme[i][j].toString()            }
-
-
-        return null;
-    }*/
+    @Override
+    public String toString() {
+        String ret = "";
+        for (int i = 0; i < ROW; i++) {
+            for (int j = 0; j < COLUMN; j++) {
+                ret += this.matrixScheme[i][j].toString();
+            }
+            ret += "\n";
+        }
+        return ret;
+    }
 
 }
