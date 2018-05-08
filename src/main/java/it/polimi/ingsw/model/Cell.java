@@ -97,7 +97,7 @@ public class Cell {
                     if (this.usedCell) {
                         return (this.die.equals(myCell.die));
                     } else return true;
-                } else return false;
+                }
             }
         } return false;
     }
