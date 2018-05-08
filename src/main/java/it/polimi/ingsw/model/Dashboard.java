@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.exception.NotValidParameters;
+import it.polimi.ingsw.model.exception.NotValidParametersException;
 import it.polimi.ingsw.model.restriction.Restriction;
 /*import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -85,12 +85,12 @@ public class Dashboard {
      * @param column
      * @param myDie
      */
-    public void setDieOnCell(int row, int column, Die myDie) throws NotValidParameters {
+    public void setDieOnCell(int row, int column, Die myDie) throws NotValidParametersException {
         try {
             if ((row >= 0 && row < 4) && (column >= 0 && column < 5)) {
                 this.matrixScheme[row][column].setDie(myDie);
             } else {
-                throw new NotValidParameters();
+                throw new NotValidParametersException();
             }
         }catch (Exception e){
             System.out.println(e);

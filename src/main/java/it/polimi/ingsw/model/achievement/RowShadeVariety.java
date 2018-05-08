@@ -16,7 +16,7 @@ public class RowShadeVariety implements CardAchievement {
 
         for (int i = 0; i < 4; i++) {
             for (int j=0; j < 6; j++)
-                counter[i] = false;
+                counter[j] = false;
             for (int j = 0; j < 5; j++)
                 if (matrixScheme[i][j].getUsedCell()) {
                     int numberDie = matrixScheme[i][j].getDie().getNumber();

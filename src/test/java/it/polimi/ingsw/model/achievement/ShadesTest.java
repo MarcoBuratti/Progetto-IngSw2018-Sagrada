@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.Cell;
 import it.polimi.ingsw.model.Colour;
 import it.polimi.ingsw.model.Dashboard;
 import it.polimi.ingsw.model.Die;
-import it.polimi.ingsw.model.exception.NotValidParameters;
+import it.polimi.ingsw.model.exception.NotValidParametersException;
 import it.polimi.ingsw.model.exception.NumberNotValidException;
 import it.polimi.ingsw.model.restriction.NoRestriction;
 import org.junit.jupiter.api.Assertions;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ShadesTest {
 
     @Test
-    void scoreEffect() throws NotValidParameters, NumberNotValidException {
+    void scoreEffect() throws NotValidParametersException, NumberNotValidException {
 
         Cell[][] matrixScheme = new Cell[4][5];
 

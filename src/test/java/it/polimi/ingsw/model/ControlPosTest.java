@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.exception.NotValidParametersException;
 import it.polimi.ingsw.model.exception.NumberNotValidException;
 import it.polimi.ingsw.model.restriction.NoRestriction;
 import org.junit.jupiter.api.Assertions;
@@ -10,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ControlPosTest {
 
     @Test
-    void isEmpty() {
+    void isEmpty() throws NotValidParametersException {
 
         Cell[][] matrixScheme = new Cell[4][5];
         for (int i = 0; i < 4; i++) {
@@ -54,7 +55,7 @@ class ControlPosTest {
     }
 
     @Test
-    void allowedNeighbours() throws NumberNotValidException {
+    void allowedNeighbours() throws NumberNotValidException, NotValidParametersException {
 
         Cell[][] matrixScheme = new Cell[4][5];
         for (int i = 0; i < 4; i++) {
@@ -88,7 +89,7 @@ class ControlPosTest {
     }
 
     @Test
-    void nearBy() throws NumberNotValidException {
+    void nearBy() throws NumberNotValidException, NotValidParametersException {
         Cell[][] matrixScheme = new Cell[4][5];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {

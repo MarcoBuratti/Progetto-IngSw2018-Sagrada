@@ -21,7 +21,7 @@ public class Shades implements CardAchievement {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++)
                 if (matrixScheme[i][j].getUsedCell()) {
-                    int numberDie = matrixScheme[j][i].getDie().getNumber();
+                    int numberDie = matrixScheme[i][j].getDie().getNumber();
                     if (numberDie == number1)
                         count1++;
                     else if(numberDie == number2)

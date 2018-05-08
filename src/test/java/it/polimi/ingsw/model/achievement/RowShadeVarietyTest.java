@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.Cell;
 import it.polimi.ingsw.model.Colour;
 import it.polimi.ingsw.model.Dashboard;
 import it.polimi.ingsw.model.Die;
-import it.polimi.ingsw.model.exception.NotValidParameters;
+import it.polimi.ingsw.model.exception.NotValidParametersException;
 import it.polimi.ingsw.model.exception.NumberNotValidException;
 import it.polimi.ingsw.model.restriction.NoRestriction;
 import org.junit.jupiter.api.Assertions;
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RowShadeVarietyTest {
 
     @Test
-    void scoreEffect() throws NotValidParameters, NumberNotValidException {
+    void scoreEffect() throws NotValidParametersException, NumberNotValidException {
 
         Cell[][] matrixScheme = new Cell[4][5];
 
@@ -79,7 +79,7 @@ class RowShadeVarietyTest {
         dashboard.setDieOnCell(3,2,new Die(Colour.VIOLET));
         dashboard.getMatrixScheme()[3][2].getDie().setNumber(5);
 
-        Assertions.assertEquals(10, new ColumnShadeVariety().scoreEffect(dashboard));
+        Assertions.assertEquals(10, new RowShadeVariety().scoreEffect(dashboard));
 
         }
 }

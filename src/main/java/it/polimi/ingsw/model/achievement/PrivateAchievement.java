@@ -15,8 +15,8 @@ public class PrivateAchievement implements CardAchievement {
         int score = 0;
         Cell[][]matrixScheme= dashboard.getMatrixScheme();
 
-        for (int i = 0; i < 5; i++)
-            for (int j = 0; j < i; j++)
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 5; j++)
                 if(matrixScheme[i][j].getUsedCell())
                     if(this.colour==matrixScheme[i][j].getDie().getColour())
                         score += matrixScheme[i][j].getDie().getNumber();
