@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exception.NotEnoughDiceLeftException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,7 +38,7 @@ class DiceBagTest {
         ArrayList<Die> diceSet = bag.extractSet(7);
         assertEquals(7, diceSet.size());
         assertEquals(82, bag.getDiceSet().size());
-        diceSet = bag.extractSet(83);
+        Assertions.assertThrows(NotEnoughDiceLeftException.class,()->bag.extractSet(83));
         diceSet = bag.extractSet(0);
         diceSet = bag.extractSet(82);
         assertEquals(0, bag.getDiceSet().size());

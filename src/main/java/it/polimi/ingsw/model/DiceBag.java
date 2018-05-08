@@ -74,7 +74,6 @@ public class DiceBag {
      */
     public ArrayList<Die> extractSet (int quantity) throws NotEnoughDiceLeftException {
         ArrayList<Die> mySet = new ArrayList<Die>();
-        try {
             if (quantity <= this.diceSet.size()) {
                 Die newDie;
                 for (int i = 0; i < quantity; i++) {
@@ -83,9 +82,6 @@ public class DiceBag {
                 }
             }else
                 throw new NotEnoughDiceLeftException();
-        }catch(Exception e){
-            System.out.println(e);
-        }
         return mySet;
     }
 

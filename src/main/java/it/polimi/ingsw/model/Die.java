@@ -44,16 +44,10 @@ public class Die {
      * @throws NumberNotValidException if the user tries to use a number which is not included in the allowed range.
      */
     public void setNumber(int number) throws NumberNotValidException {
-        try {
             if (number > 0 && number <= NUMBER_OF_SIDES)
                 this.number = number;
             else
                 throw new NumberNotValidException();
-        }
-        catch (Exception e){
-            System.out.println(e);
-        }
-
     }
 
     /**

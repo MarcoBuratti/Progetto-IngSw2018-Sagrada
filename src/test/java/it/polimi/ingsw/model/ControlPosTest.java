@@ -115,7 +115,7 @@ class ControlPosTest {
     }
 
     @Test
-    void genericCheck() throws NotValidParametersException {
+    void genericCheck() throws NotValidParametersException, NumberNotValidException {
 
         Cell[][] matrixScheme = new Cell[4][5];
         for (int i = 0; i < 4; i++) {
@@ -128,10 +128,21 @@ class ControlPosTest {
         Die die2 = new Die(Colour.BLUE);
         Die die3 = new Die(Colour.GREEN);
 
+        die1.setNumber(5);
+        die2.setNumber(5);
+        die3.setNumber(3);
+
+
         Assertions.assertTrue(new ControlPos().genericCheck(0, 3, die1, matrixScheme));
+        Assertions.assertFalse(new ControlPos().genericCheck(2,2, die2, matrixScheme));
         dashboard.setDieOnCell(0, 3, die1);
-        Assertions.assertTrue(new ControlPos().genericCheck(1, 3, die2, matrixScheme));
-        Assertions.assertFalse(new ControlPos().genericCheck(2,0, die3, matrixScheme));
+        Assertions.assertFalse(new ControlPos().genericCheck(0, 2, die2, matrixScheme));
+        Assertions.assertFalse(new ControlPos().genericCheck(1,3, die3, matrixScheme));
+        Assertions.assertTrue(new ControlPos().genericCheck(1,4, die2, matrixScheme));
+        Die die4 =new Die(Colour.RED);
+        die4.setNumber(1);
+        Assertions.assertTrue(new ControlPos().genericCheck(1,3,die4,matrixScheme));
+        Assertions.assertFalse(new ControlPos().genericCheck(1, 1, die2, matrixScheme));
 
     }
 }
