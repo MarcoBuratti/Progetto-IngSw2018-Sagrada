@@ -1,8 +1,6 @@
 package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.restriction.*;
 
-import it.polimi.ingsw.model.restriction.*;
-
 public class Cell {
     private Restriction restriction;
     private Die die;

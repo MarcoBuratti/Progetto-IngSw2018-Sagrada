@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ColumnColorVarietyTest {
+class RowColorVarietyTest {
 
     @Test
     void scoreEffect() throws NotValidParameters {
@@ -25,27 +25,29 @@ class ColumnColorVarietyTest {
         }
 
         Dashboard dashboard = new Dashboard(matrixScheme);
-        Assertions.assertEquals(0, new ColumnColorVariety().scoreEffect(dashboard));
+        Assertions.assertEquals(0, new RowColorVariety().scoreEffect(dashboard));
 
         dashboard.setDieOnCell(0,0,new Die(Colour.GREEN));
         dashboard.setDieOnCell(1,0,new Die(Colour.BLUE));
         dashboard.setDieOnCell(2,0,new Die(Colour.YELLOW));
         dashboard.setDieOnCell(3,3,new Die(Colour.RED));
 
-        Assertions.assertEquals(0, new ColumnColorVariety().scoreEffect(dashboard));
+        Assertions.assertEquals(0, new RowColorVariety().scoreEffect(dashboard));
 
         dashboard.setDieOnCell(3,0,new Die(Colour.VIOLET));
+        dashboard.setDieOnCell(3,4,new Die(Colour.GREEN));
+        dashboard.setDieOnCell(3,1,new Die(Colour.BLUE));
+        dashboard.setDieOnCell(3,2,new Die(Colour.YELLOW));
 
-        Assertions.assertEquals(5, new ColumnColorVariety().scoreEffect(dashboard));
+        Assertions.assertEquals(6, new RowColorVariety().scoreEffect(dashboard));
 
         dashboard.setDieOnCell(1,1,new Die(Colour.RED));
         dashboard.setDieOnCell(2,2,new Die(Colour.YELLOW));
-        dashboard.setDieOnCell(3,4,new Die(Colour.GREEN));
         dashboard.setDieOnCell(0,4,new Die(Colour.BLUE));
         dashboard.setDieOnCell(2,4,new Die(Colour.VIOLET));
         dashboard.setDieOnCell(1,4,new Die(Colour.BLUE));
 
-        Assertions.assertEquals(5, new ColumnColorVariety().scoreEffect(dashboard));
+        Assertions.assertEquals(6, new RowColorVariety().scoreEffect(dashboard));
 
         dashboard.setDieOnCell(0,1,new Die(Colour.RED));
         dashboard.setDieOnCell(1,2,new Die(Colour.YELLOW));
@@ -54,13 +56,9 @@ class ColumnColorVarietyTest {
         dashboard.setDieOnCell(2,1,new Die(Colour.RED));
         dashboard.setDieOnCell(2,3,new Die(Colour.BLUE));
         dashboard.setDieOnCell(0,3,new Die(Colour.YELLOW));
-        dashboard.setDieOnCell(3,1,new Die(Colour.BLUE));
-        dashboard.setDieOnCell(3,2,new Die(Colour.VIOLET));
-
-        Assertions.assertEquals(10, new ColumnColorVariety().scoreEffect(dashboard));
 
 
-
+        Assertions.assertEquals(12, new RowColorVariety().scoreEffect(dashboard));
 
     }
 }

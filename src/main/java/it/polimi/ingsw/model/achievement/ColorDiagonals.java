@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.*;
 public class ColorDiagonals implements CardAchievement {
 
     public int scoreEffect(Dashboard dashboard) {
+
         int score = 0;
         Cell[][] matrixScheme = dashboard.getMatrixScheme();
         boolean found = false;

@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ColumnShadeVarietyTest {
+class ShadesTest {
 
     @Test
-    void scoreEffect() throws NumberNotValidException, NotValidParameters {
+    void scoreEffect() throws NotValidParameters, NumberNotValidException {
 
         Cell[][] matrixScheme = new Cell[4][5];
 
@@ -26,7 +26,9 @@ class ColumnShadeVarietyTest {
         }
 
         Dashboard dashboard = new Dashboard(matrixScheme);
-        Assertions.assertEquals(0, new ColumnShadeVariety().scoreEffect(dashboard));
+        Assertions.assertEquals(0, new Shades(1,2).scoreEffect(dashboard));
+        Assertions.assertEquals(0, new Shades(5,6).scoreEffect(dashboard));
+
 
         dashboard.setDieOnCell(0,0,new Die(Colour.GREEN));
         dashboard.getMatrixScheme()[0][0].getDie().setNumber(2);
@@ -34,16 +36,14 @@ class ColumnShadeVarietyTest {
         dashboard.getMatrixScheme()[1][0].getDie().setNumber(4);
         dashboard.setDieOnCell(2,0,new Die(Colour.YELLOW));
         dashboard.getMatrixScheme()[2][0].getDie().setNumber(5);
-        dashboard.setDieOnCell(3,3,new Die(Colour.RED));
-        dashboard.getMatrixScheme()[3][3].getDie().setNumber(2);
+        dashboard.setDieOnCell(3,3,new Die(Colour.BLUE));
+        dashboard.getMatrixScheme()[3][3].getDie().setNumber(1);
 
-        Assertions.assertEquals(0, new ColumnShadeVariety().scoreEffect(dashboard));
+        Assertions.assertEquals(2, new Shades(1,2).scoreEffect(dashboard));
+        Assertions.assertEquals(0, new Shades(3,4).scoreEffect(dashboard));
 
         dashboard.setDieOnCell(3,0,new Die(Colour.VIOLET));
         dashboard.getMatrixScheme()[3][0].getDie().setNumber(3);
-
-        Assertions.assertEquals(4, new ColumnShadeVariety().scoreEffect(dashboard));
-
         dashboard.setDieOnCell(1,1,new Die(Colour.RED));
         dashboard.getMatrixScheme()[1][1].getDie().setNumber(1);
         dashboard.setDieOnCell(2,2,new Die(Colour.YELLOW));
@@ -57,7 +57,9 @@ class ColumnShadeVarietyTest {
         dashboard.setDieOnCell(1,4,new Die(Colour.BLUE));
         dashboard.getMatrixScheme()[1][4].getDie().setNumber(2);
 
-        Assertions.assertEquals(4, new ColumnShadeVariety().scoreEffect(dashboard));
+        Assertions.assertEquals(4, new Shades(5,6).scoreEffect(dashboard));
+        Assertions.assertEquals(4, new Shades(1,2).scoreEffect(dashboard));
+        Assertions.assertEquals(2, new Shades(3,4).scoreEffect(dashboard));
 
         dashboard.setDieOnCell(0,1,new Die(Colour.RED));
         dashboard.getMatrixScheme()[0][1].getDie().setNumber(6);
@@ -78,7 +80,10 @@ class ColumnShadeVarietyTest {
         dashboard.setDieOnCell(3,2,new Die(Colour.VIOLET));
         dashboard.getMatrixScheme()[3][2].getDie().setNumber(5);
 
-        Assertions.assertEquals(12, new ColumnShadeVariety().scoreEffect(dashboard));
+        Assertions.assertEquals(6, new Shades(1,2).scoreEffect(dashboard));
+        Assertions.assertEquals(6, new Shades(3,4).scoreEffect(dashboard));
+        Assertions.assertEquals(8, new Shades(5,6).scoreEffect(dashboard));
+
 
     }
 }

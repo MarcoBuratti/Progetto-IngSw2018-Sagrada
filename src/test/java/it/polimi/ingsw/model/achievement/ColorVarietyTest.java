@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.achievement;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exception.NotValidParameters;
 import it.polimi.ingsw.model.restriction.NoRestriction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class ColorVarietyTest {
 
     @Test
-    void scoreEffect() {
+    void scoreEffect() throws NotValidParameters {
 
         Cell[][] matrixScheme = new Cell[4][5];
 
