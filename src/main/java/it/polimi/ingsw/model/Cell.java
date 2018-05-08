@@ -80,17 +80,19 @@ public class Cell {
 
     @Override
     public boolean equals (Object myObject) {
-        if(this.getClass() == myObject.getClass()) {
-            Cell myCell = (Cell) myObject;
-            if ( (this.restriction.equals(myCell.restriction)) && (this.usedCell == myCell.usedCell) )
-                if ( this.usedCell ) {
-                    if (this.die.equals(myCell.die))
-                        return true;
-                    else
-                        return false;
-                } else return true;
-            else return false;
-        } else return false;
+        if (myObject != null)
+            if(this.getClass() == myObject.getClass()) {
+                Cell myCell = (Cell) myObject;
+                if ( (this.restriction.equals(myCell.restriction)) && (this.usedCell == myCell.usedCell) ) {
+                    if (this.usedCell) {
+                        if (this.die.equals(myCell.die))
+                            return true;
+                        else
+                            return false;
+                    } else return true;
+                }else return false;
+            }else return false;
+        else return false;
     }
 
     @Override

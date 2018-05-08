@@ -35,9 +35,11 @@ public class NumberRestriction extends Restriction {
 
     @Override
     public boolean equals (Object myObject) {
-        if (this.getClass() == myObject.getClass()) {
-            NumberRestriction numberRestriction = (NumberRestriction) myObject;
-            return (this.number == numberRestriction.number);
-        } else return false;
+        if( myObject != null ) {
+            if (this.getClass() == myObject.getClass()) {
+                NumberRestriction numberRestriction = (NumberRestriction) myObject;
+                return (this.number == numberRestriction.number);
+            } else return false;
+        }else return false;
     }
 }

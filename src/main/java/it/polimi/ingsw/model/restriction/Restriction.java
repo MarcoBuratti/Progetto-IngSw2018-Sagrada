@@ -13,6 +13,8 @@ public abstract class Restriction {
 
     @Override
     public boolean equals (Object myObject){
-        return (this.getClass() == myObject.getClass());
+        if( myObject != null )
+            return (this.getClass() == myObject.getClass());
+        else return false;
     }
 }

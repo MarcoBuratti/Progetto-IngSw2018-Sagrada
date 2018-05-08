@@ -27,9 +27,11 @@ public class ColourRestriction extends Restriction {
 
     @Override
     public boolean equals (Object myObject) {
-        if (this.getClass() == myObject.getClass()) {
-            ColourRestriction colourRestriction = (ColourRestriction) myObject;
-            return (this.colour.equals(colourRestriction.colour));
+        if (myObject != null) {
+            if (this.getClass() == myObject.getClass()) {
+                ColourRestriction colourRestriction = (ColourRestriction) myObject;
+                return (this.colour.equals(colourRestriction.colour));
+            } else return false;
         } else return false;
     }
 }
