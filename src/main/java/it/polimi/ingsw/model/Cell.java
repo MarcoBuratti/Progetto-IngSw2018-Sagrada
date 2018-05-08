@@ -59,10 +59,10 @@ public class Cell {
      */
     public Die removeDie() {
         if(this.usedCell) {
-            Die die = this.die;
+            Die myDie = this.die;
             this.die = null;
             this.usedCell = false;
-            return die;
+            return myDie;
         }
         else return null;
     }
@@ -78,21 +78,28 @@ public class Cell {
     }
 
 
+    /**
+     * Returns a Cell object which is a copy of the original Cell object, having its same attributes.
+     * @return a copy of the Cell object.
+     */
+    public Cell copyConstructor(){
+        Cell cell = new Cell(this.restriction);
+        if(this.usedCell)
+            cell.setDie(this.die);
+        return cell;
+    }
     @Override
     public boolean equals (Object myObject) {
-        if (myObject != null)
-            if(this.getClass() == myObject.getClass()) {
+        if (myObject != null) {
+            if (this.getClass() == myObject.getClass()) {
                 Cell myCell = (Cell) myObject;
-                if ( (this.restriction.equals(myCell.restriction)) && (this.usedCell == myCell.usedCell) ) {
+                if ((this.restriction.equals(myCell.restriction)) && (this.usedCell == myCell.usedCell)) {
                     if (this.usedCell) {
-                        if (this.die.equals(myCell.die))
-                            return true;
-                        else
-                            return false;
+                        return (this.die.equals(myCell.die));
                     } else return true;
-                }else return false;
-            }else return false;
-        else return false;
+                } else return false;
+            }
+        } return false;
     }
 
     @Override
@@ -103,11 +110,5 @@ public class Cell {
             return "This cell is empty";
     }
 
-    @Override
-    public Cell clone(){
-        Cell cell = new Cell(this.restriction);
-        if(this.usedCell)
-            cell.setDie(this.die);
-        return cell;
-    }
+
 }

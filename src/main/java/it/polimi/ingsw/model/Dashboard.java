@@ -1,15 +1,11 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exception.NotValidParametersException;
-import it.polimi.ingsw.model.restriction.Restriction;
 /*import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 */
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 
 public class Dashboard {
     private static final int ROW = 4;
@@ -74,7 +70,7 @@ public class Dashboard {
 
         for (int i = 0; i < ROW; i++)
             for (int j = 0; j < COLUMN; j++)
-                matrixScheme[i][j] = this.matrixScheme[i][j].clone();
+                matrixScheme[i][j] = this.matrixScheme[i][j].copyConstructor();
 
         return matrixScheme;
     }

@@ -23,7 +23,7 @@ class CellTest {
         c1.setDie(d1);
         assertEquals(d1, c1.getDie());
         assertTrue(c1.getUsedCell());
-        Cell c2 = c1.clone();
+        Cell c2 = c1.copyConstructor();
         assertTrue(c1.equals(c2));
         d1 = c1.removeDie();
         assertEquals(null, c1.getDie());
