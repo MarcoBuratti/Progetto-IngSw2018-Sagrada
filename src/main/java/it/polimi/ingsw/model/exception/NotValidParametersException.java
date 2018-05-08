@@ -7,6 +7,6 @@ public class NotValidParametersException extends Exception {
 
     @Override
     public String toString() {
-        return "There parameters (row and column) are not right!";
+        return "These parameters (row and column) are incorrect";
     }
 }

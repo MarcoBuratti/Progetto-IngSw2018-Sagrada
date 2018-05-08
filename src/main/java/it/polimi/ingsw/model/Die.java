@@ -59,9 +59,6 @@ public class Die {
         this.number = random.nextInt(NUMBER_OF_SIDES) + 1;
     }
 
-    void dump(){
-        System.out.println(this);
-    }
 
     @Override
     /**

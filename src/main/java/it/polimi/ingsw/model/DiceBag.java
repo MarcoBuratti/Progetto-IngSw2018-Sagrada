@@ -85,9 +85,6 @@ public class DiceBag {
         return mySet;
     }
 
-    void dump(){
-        System.out.println(this);
-    }
 
     @Override
     /**

@@ -77,9 +77,6 @@ public class Cell {
         return (this.restriction.restrictionCheck(die) && !this.getUsedCell());
     }
 
-    void dump(){
-        System.out.println(this);
-    }
 
     @Override
     public boolean equals (Object myObject) {

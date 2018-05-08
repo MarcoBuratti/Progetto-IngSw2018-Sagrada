@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exception.NotValidNumberException;
-import it.polimi.ingsw.model.exception.NotValidNumberException;
 import it.polimi.ingsw.model.restriction.NumberRestriction;
 import it.polimi.ingsw.model.restriction.Restriction;
 import org.junit.jupiter.api.Test;
