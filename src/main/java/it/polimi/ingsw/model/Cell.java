@@ -88,6 +88,7 @@ public class Cell {
             cell.setDie(this.die);
         return cell;
     }
+    
     @Override
     public boolean equals (Object myObject) {
         if (myObject != null) {
