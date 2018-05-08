@@ -87,7 +87,7 @@ public class Dashboard {
      */
     public void setDieOnCell(int row, int column, Die myDie) throws NotValidParameters {
         try {
-            if ((row > 0 && row < 4) && (column > 0 && column < 5)) {
+            if ((row >= 0 && row < 4) && (column >= 0 && column < 5)) {
                 this.matrixScheme[row][column].setDie(myDie);
             } else {
                 throw new NotValidParameters();
@@ -103,7 +103,7 @@ public class Dashboard {
         for (int i = 0; i < ROW; i++){
             for (int j = 0; j < COLUMN; j++){
                 if(this.matrixScheme[i][j].getUsedCell()) {
-                    return this.matrixScheme[i][j].getDie();
+                    return String.valueOf(this.matrixScheme[i][j].getDie());
                 } else {
                     return String.valueOf(this.matrixScheme[i][j]);
                 }

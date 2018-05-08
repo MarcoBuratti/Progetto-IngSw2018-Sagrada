@@ -15,7 +15,7 @@ public class Cell {
         return restriction;
     }
 
-    public String getDie() {
+    public Die getDie() {
         return die;
     }
 
