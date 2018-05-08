@@ -10,4 +10,9 @@ public abstract class Restriction {
     public String toString(){
         return "Restriction";
     }
+
+    @Override
+    public boolean equals (Object myObject){
+        return (this.getClass() == myObject.getClass());
+    }
 }

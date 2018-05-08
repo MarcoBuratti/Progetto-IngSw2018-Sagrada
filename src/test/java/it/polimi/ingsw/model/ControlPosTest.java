@@ -1,12 +1,10 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exception.NotValidParametersException;
-import it.polimi.ingsw.model.exception.NumberNotValidException;
+import it.polimi.ingsw.model.exception.NotValidNumberException;
 import it.polimi.ingsw.model.restriction.NoRestriction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ControlPosTest {
 
@@ -42,7 +40,7 @@ class ControlPosTest {
     }
 
     @Test
-    void checkDiceNumber() throws NumberNotValidException {
+    void checkDiceNumber() throws NotValidNumberException {
         Die die1 = new Die(Colour.GREEN);
         die1.setNumber(5);
         Die die2 = new Die(Colour.GREEN);
@@ -55,7 +53,7 @@ class ControlPosTest {
     }
 
     @Test
-    void allowedNeighbours() throws NumberNotValidException, NotValidParametersException {
+    void allowedNeighbours() throws NotValidNumberException, NotValidParametersException {
 
         Cell[][] matrixScheme = new Cell[4][5];
         for (int i = 0; i < 4; i++) {
@@ -89,7 +87,7 @@ class ControlPosTest {
     }
 
     @Test
-    void nearBy() throws NumberNotValidException, NotValidParametersException {
+    void nearBy() throws NotValidNumberException, NotValidParametersException {
         Cell[][] matrixScheme = new Cell[4][5];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
@@ -115,7 +113,7 @@ class ControlPosTest {
     }
 
     @Test
-    void genericCheck() throws NotValidParametersException, NumberNotValidException {
+    void genericCheck() throws NotValidParametersException, NotValidNumberException {
 
         Cell[][] matrixScheme = new Cell[4][5];
         for (int i = 0; i < 4; i++) {

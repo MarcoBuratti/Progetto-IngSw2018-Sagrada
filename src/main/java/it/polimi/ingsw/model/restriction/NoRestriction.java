@@ -12,4 +12,9 @@ public class NoRestriction extends Restriction {
     public String toString() {
         return "There are no restrictions on this cell";
     }
+
+    @Override
+    public boolean equals (Object myObject) {
+        return super.equals(myObject);
+    }
 }

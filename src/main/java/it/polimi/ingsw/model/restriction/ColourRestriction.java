@@ -24,4 +24,12 @@ public class ColourRestriction extends Restriction {
     public String toString() {
         return "Colour: " + colour;
     }
+
+    @Override
+    public boolean equals (Object myObject) {
+        if (this.getClass() == myObject.getClass()) {
+            ColourRestriction colourRestriction = (ColourRestriction) myObject;
+            return (this.colour.equals(colourRestriction.colour));
+        } else return false;
+    }
 }
