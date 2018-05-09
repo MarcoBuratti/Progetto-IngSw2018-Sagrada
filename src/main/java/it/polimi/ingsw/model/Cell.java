@@ -22,7 +22,7 @@ public class Cell {
     }
 
     /**
-     * Returns a ColourRestriction, NumberRestriction or NoRestriction object that represents
+     * Returns a ColorRestriction, NumberRestriction or NoRestriction object that represents
      * the restriction imposed on the cell.
      * @return the Cell object's restriction
      */

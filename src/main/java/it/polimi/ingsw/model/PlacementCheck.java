@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
 
-public class ControlPos {
+public class PlacementCheck {
 
     private static final int ROW = 4;
     private static final int COLUMN = 5;
@@ -30,7 +30,7 @@ public class ControlPos {
      * @return
      */
     public boolean checkDiceColour(Die die1, Die die2) {
-        return (die1.getColour() == die2.getColour());
+        return (die1.getColor() == die2.getColor());
     }
 
     /**

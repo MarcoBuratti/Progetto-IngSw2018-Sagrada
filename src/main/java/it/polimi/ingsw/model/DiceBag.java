@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class DiceBag {
-    private static final int NUMBER_OF_COLOURS = Colour.values().length;
+    private static final int NUMBER_OF_COLOURS = Color.values().length;
     private static final int NUMBER_OF_DICE = 90;
-    private static final Colour[] coloursIndex = Colour.values();
+    private static final Color[] COLOURS_INDICES = Color.values();
 
     private ArrayList<Die> diceSet = new ArrayList<Die> ();
 
@@ -21,7 +21,7 @@ public class DiceBag {
     public DiceBag() {
         for (int i = 0; i < NUMBER_OF_COLOURS; i++)
             for (int j = 0; j < (NUMBER_OF_DICE / NUMBER_OF_COLOURS); j++) {
-                this.diceSet.add(new Die(coloursIndex[i]));
+                this.diceSet.add(new Die(COLOURS_INDICES[i]));
             }
         Collections.shuffle(diceSet);
     }

@@ -7,7 +7,7 @@ import java.util.*;
 
 public class ColumnColorVariety implements CardAchievement {
 
-    private Map<Colour, Boolean> counter = new EnumMap<>(Colour.class);
+    private Map<Color, Boolean> counter = new EnumMap<>(Color.class);
 
     public int scoreEffect(Dashboard dashboard) throws OccupiedCellException {
 
@@ -17,15 +17,15 @@ public class ColumnColorVariety implements CardAchievement {
 
 
         for (int i = 0; i < 5; i++) {
-            for (Colour colour : Colour.values())
-                counter.put(colour, false);
+            for (Color color : Color.values())
+                counter.put(color, false);
             for (int j = 0; j < 4; j++)
                 if (matrixScheme[j][i].getUsedCell()) {
-                    Colour colour = matrixScheme[j][i].getDie().getColour();
-                    if (counter.get(colour))
+                    Color color = matrixScheme[j][i].getDie().getColor();
+                    if (counter.get(color))
                         foundColumn = false;
                     else
-                        counter.put(colour, true);
+                        counter.put(color, true);
                 }
                 else
                     foundColumn=false;
@@ -36,6 +36,11 @@ public class ColumnColorVariety implements CardAchievement {
         }
         return score;
 
+    }
+
+    @Override
+    public String toString() {
+        return "Column Color Variety\nColumns with no repeated colors.";
     }
 
 }

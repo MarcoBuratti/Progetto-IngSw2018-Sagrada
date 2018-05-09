@@ -5,10 +5,10 @@ import it.polimi.ingsw.model.exception.OccupiedCellException;
 
 public class PrivateAchievement implements CardAchievement {
 
-    private Colour colour;
+    private Color color;
 
-    public PrivateAchievement(Colour colour){
-        this.colour= colour;
+    public PrivateAchievement(Color color){
+        this.color = color;
     }
 
     public int scoreEffect(Dashboard dashboard) throws OccupiedCellException {
@@ -19,7 +19,7 @@ public class PrivateAchievement implements CardAchievement {
         for (int i = 0; i < 4; i++)
             for (int j = 0; j < 5; j++)
                 if(matrixScheme[i][j].getUsedCell())
-                    if(this.colour==matrixScheme[i][j].getDie().getColour())
+                    if(this.color ==matrixScheme[i][j].getDie().getColor())
                         score += matrixScheme[i][j].getDie().getNumber();
 
         return score;
@@ -27,6 +27,6 @@ public class PrivateAchievement implements CardAchievement {
 
     @Override
     public String toString() {
-        return "This is a private achievement: Colour: " + this.colour;
+        return "This is a private achievement: Color: " + this.color;
     }
 }

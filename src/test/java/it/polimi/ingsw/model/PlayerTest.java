@@ -2,7 +2,6 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.achievement.PrivateAchievement;
 import it.polimi.ingsw.model.exception.NotEnoughFavourTokensLeft;
-import it.polimi.ingsw.model.restriction.ColourRestriction;
 import it.polimi.ingsw.model.restriction.NoRestriction;
 import it.polimi.ingsw.model.restriction.Restriction;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,7 @@ class PlayerTest {
         Restriction restriction = new NoRestriction();
         matrix[0][0] = new Cell(restriction);
         Dashboard dashboard = new Dashboard(matrix, favourToken);
-        PrivateAchievement privateAchievement = new PrivateAchievement(Colour.GREEN);
+        PrivateAchievement privateAchievement = new PrivateAchievement(Color.GREEN);
         Player player = new Player(nickname, dashboard,privateAchievement);
         assertEquals(nickname, player.getNickname());
         assertEquals(favourToken, player.getCurrentFavourToken());

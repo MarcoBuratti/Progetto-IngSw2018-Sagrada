@@ -16,8 +16,8 @@ class CellTest {
         assertEquals(r1, c1.getRestriction());
         assertFalse(c1.getUsedCell());
         assertEquals(null, c1.getDie());
-        Die d1 = new Die(Colour.VIOLET);
-        Die d2 = new Die(Colour.YELLOW);
+        Die d1 = new Die(Color.VIOLET);
+        Die d2 = new Die(Color.YELLOW);
         d1.setNumber(6);
         assertFalse(c1.allowedMove(d1));
         d1.setNumber(5);

@@ -17,15 +17,15 @@ class RoundTrackTest {
         for (int i = 1; i <= NUMBER_OF_ROUNDS; i++)
             assertTrue(roundTrack.getDiceList(i).isEmpty());
         Die d1, d2;
-        d1 = new Die(Colour.BLUE);
-        d2 = new Die(Colour.RED);
+        d1 = new Die(Color.BLUE);
+        d2 = new Die(Color.RED);
         ArrayList<Die> diceList = new ArrayList<>();
         diceList.add(d1);
         diceList.add(d2);
         assertThrows(NotValidRoundException.class, ()->roundTrack.setDiceList(diceList, 0));
         roundTrack.setDiceList(diceList, 1);
         assertEquals(diceList, roundTrack.getDiceList(1));
-        Die d3 = new Die(Colour.YELLOW);
+        Die d3 = new Die(Color.YELLOW);
         ArrayList<Die> diceList2 = new ArrayList<>();
         diceList2.add(d3);
         assertEquals(2, roundTrack.getCurrentRound());
@@ -34,7 +34,7 @@ class RoundTrackTest {
         roundTrack.setNextRound(diceList3);
         assertTrue(diceList3.isEmpty());
         assertEquals(3, roundTrack.getCurrentRound());
-        Die d4 = new Die(Colour.VIOLET);
+        Die d4 = new Die(Color.VIOLET);
         diceList3.add(d4);
         assertEquals(4, roundTrack.getCurrentRound());
         for (int i = 0; i < NUMBER_OF_ROUNDS-3 ; i++)

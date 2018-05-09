@@ -24,7 +24,7 @@ public class GameBoard {
            this.publicAchievements.add(publicAchievementsFactory);
         }
 
-        List<Colour> privateAchievementsList = Arrays.asList(Colour.values());
+        List<Color> privateAchievementsList = Arrays.asList(Color.values());
         Collections.shuffle(privateAchievementsList);
         int i = 0;
 
