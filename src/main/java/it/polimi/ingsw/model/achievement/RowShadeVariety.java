@@ -1,12 +1,12 @@
 package it.polimi.ingsw.model.achievement;
 
 import it.polimi.ingsw.model.*;
-
+import it.polimi.ingsw.model.exception.OccupiedCellException;
 
 
 public class RowShadeVariety implements CardAchievement {
 
-    public int scoreEffect(Dashboard dashboard) {
+    public int scoreEffect(Dashboard dashboard) throws OccupiedCellException {
 
         int score = 0;
         boolean foundRow = true;

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exception.NotValidParametersException;
+import it.polimi.ingsw.model.exception.OccupiedCellException;
 /*import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -64,13 +65,16 @@ public class Dashboard {
      * has non @param input
      * @return matrixScheme
      */
-    public Cell[][] getMatrixScheme() {
+    public Cell[][] getMatrixScheme() throws OccupiedCellException {
 
         Cell[][] matrixScheme = new Cell[ROW][COLUMN];
-
-        for (int i = 0; i < ROW; i++)
-            for (int j = 0; j < COLUMN; j++)
-                matrixScheme[i][j] = this.matrixScheme[i][j].copyConstructor();
+        try {
+            for (int i = 0; i < ROW; i++)
+                for (int j = 0; j < COLUMN; j++)
+                    matrixScheme[i][j] = this.matrixScheme[i][j].copyConstructor();
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
 
         return matrixScheme;
     }
@@ -81,10 +85,13 @@ public class Dashboard {
      * @param column
      * @param myDie
      */
-    public void setDieOnCell(int row, int column, Die myDie) throws NotValidParametersException {
-
+    public void setDieOnCell(int row, int column, Die myDie) throws NotValidParametersException, OccupiedCellException {
             if ((row >= 0 && row < 4) && (column >= 0 && column < 5)) {
-                this.matrixScheme[row][column].setDie(myDie);
+                try {
+                    this.matrixScheme[row][column].setDie(myDie);
+                }catch (Exception e) {
+                    throw new OccupiedCellException();
+                }
             } else {
                 throw new NotValidParametersException();
             }

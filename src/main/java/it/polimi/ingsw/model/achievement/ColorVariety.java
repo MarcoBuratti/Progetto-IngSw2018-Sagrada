@@ -2,13 +2,14 @@ package it.polimi.ingsw.model.achievement;
 
 import java.util.*;
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exception.OccupiedCellException;
 
 public class ColorVariety implements CardAchievement {
 
     private Map<Colour, Integer> counter = new EnumMap<>(Colour.class);
 
     @Override
-    public int scoreEffect(Dashboard dashboard) {
+    public int scoreEffect(Dashboard dashboard) throws OccupiedCellException {
 
         Cell[][] matrixScheme = dashboard.getMatrixScheme();
 

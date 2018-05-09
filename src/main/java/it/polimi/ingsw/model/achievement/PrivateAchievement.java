@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.achievement;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exception.OccupiedCellException;
 
 public class PrivateAchievement implements CardAchievement {
 
@@ -10,7 +11,7 @@ public class PrivateAchievement implements CardAchievement {
         this.colour= colour;
     }
 
-    public int scoreEffect(Dashboard dashboard) {
+    public int scoreEffect(Dashboard dashboard) throws OccupiedCellException {
 
         int score = 0;
         Cell[][]matrixScheme= dashboard.getMatrixScheme();

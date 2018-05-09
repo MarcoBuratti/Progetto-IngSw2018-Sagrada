@@ -1,4 +1,5 @@
 package it.polimi.ingsw.model;
+import it.polimi.ingsw.model.exception.OccupiedCellException;
 import it.polimi.ingsw.model.restriction.*;
 
 public class Cell {
@@ -46,9 +47,17 @@ public class Cell {
         return usedCell;
     }
 
-    public void setDie(Die die) {
-        this.die = die;
-        this.usedCell = true;
+    /**
+     * Allows the user to set a Die object as the Cell object's die attribute if the cell is not occupied.
+     * @param die the die the user wants to set on the cell
+     * @throws OccupiedCellException whether the user tries to set a die on an occupied cell
+     */
+    public void setDie(Die die) throws OccupiedCellException {
+        if(!this.usedCell) {
+            this.die = die;
+            this.usedCell = true;
+        }
+        else throw new OccupiedCellException();
     }
 
     /**
@@ -82,7 +91,7 @@ public class Cell {
      * Returns a Cell object which is a copy of the original Cell object, having its same attributes.
      * @return a copy of the Cell object.
      */
-    public Cell copyConstructor(){
+    public Cell copyConstructor() throws OccupiedCellException {
         Cell cell = new Cell(this.restriction);
         if(this.usedCell)
             cell.setDie(this.die);

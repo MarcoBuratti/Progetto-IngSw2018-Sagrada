@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exception.NotValidParametersException;
 import it.polimi.ingsw.model.exception.NotValidNumberException;
+import it.polimi.ingsw.model.exception.OccupiedCellException;
 import it.polimi.ingsw.model.restriction.NoRestriction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class ControlPosTest {
 
     @Test
-    void isEmpty() throws NotValidParametersException {
+    void isEmpty() throws NotValidParametersException, OccupiedCellException {
 
         Cell[][] matrixScheme = new Cell[4][5];
         for (int i = 0; i < 4; i++) {
@@ -53,7 +54,7 @@ class ControlPosTest {
     }
 
     @Test
-    void allowedNeighbours() throws NotValidNumberException, NotValidParametersException {
+    void allowedNeighbours() throws NotValidNumberException, NotValidParametersException, OccupiedCellException {
 
         Cell[][] matrixScheme = new Cell[4][5];
         for (int i = 0; i < 4; i++) {
@@ -87,7 +88,7 @@ class ControlPosTest {
     }
 
     @Test
-    void nearBy() throws NotValidNumberException, NotValidParametersException {
+    void nearBy() throws NotValidNumberException, NotValidParametersException, OccupiedCellException {
         Cell[][] matrixScheme = new Cell[4][5];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
@@ -113,7 +114,7 @@ class ControlPosTest {
     }
 
     @Test
-    void genericCheck() throws NotValidParametersException, NotValidNumberException {
+    void genericCheck() throws NotValidParametersException, NotValidNumberException, OccupiedCellException {
 
         Cell[][] matrixScheme = new Cell[4][5];
         for (int i = 0; i < 4; i++) {

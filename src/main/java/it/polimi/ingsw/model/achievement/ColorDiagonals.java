@@ -1,10 +1,11 @@
 package it.polimi.ingsw.model.achievement;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exception.OccupiedCellException;
 
 public class ColorDiagonals implements CardAchievement {
 
-    public int scoreEffect(Dashboard dashboard) {
+    public int scoreEffect(Dashboard dashboard) throws OccupiedCellException {
 
         int score = 0;
         Cell[][] matrixScheme = dashboard.getMatrixScheme();

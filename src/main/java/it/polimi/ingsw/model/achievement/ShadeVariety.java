@@ -1,12 +1,14 @@
 package it.polimi.ingsw.model.achievement;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exception.OccupiedCellException;
+
 import java.util.*;
 
 public class ShadeVariety implements CardAchievement {
 
 
-    public int scoreEffect(Dashboard dashboard) {
+    public int scoreEffect(Dashboard dashboard) throws OccupiedCellException {
 
         Cell[][] matrixScheme = dashboard.getMatrixScheme();
         Integer[] counter = new Integer[6];

@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exception.NotValidParametersException;
 import it.polimi.ingsw.model.exception.NotValidNumberException;
+import it.polimi.ingsw.model.exception.OccupiedCellException;
 import it.polimi.ingsw.model.restriction.NoRestriction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,7 @@ import org.junit.jupiter.api.Test;
 class DashboardTest {
 
     @Test
-    void getMatrixScheme() throws NotValidParametersException, NotValidNumberException {
+    void getMatrixScheme() throws NotValidParametersException, NotValidNumberException, OccupiedCellException {
         Cell[][] matrixScheme = new Cell[4][5];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
@@ -131,7 +132,7 @@ class DashboardTest {
     }
 
     @Test
-    void setDieOnCell() throws NotValidParametersException, NotValidNumberException {
+    void setDieOnCell() throws NotValidParametersException, NotValidNumberException, OccupiedCellException {
 
         Cell[][] matrixScheme = new Cell[4][5];
         for (int i = 0; i < 4; i++) {
