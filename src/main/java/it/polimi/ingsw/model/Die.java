@@ -7,17 +7,17 @@ import java.util.Random;
 public class Die {
     private static final int NUMBER_OF_SIDES = 6;
     private int number;
-    private Colour colour;
+    private Color color;
 
     /**
      * Creates a Die object, which represents a die.
-     * The colour argument must specify the die's colour.
+     * The color argument must specify the die's color.
      * The number on the side facing upwards is randomly selected between 1 and the number of sides of the dice (boundaries included).
-     * @param colour the colour of the die that the user wants to create
+     * @param color the color of the die that the user wants to create
      */
-    public Die (Colour colour){
+    public Die (Color color){
         Random random  = new Random();
-        this.colour = colour;
+        this.color = color;
         this.number = random.nextInt(NUMBER_OF_SIDES) + 1;
     }
 
@@ -30,11 +30,11 @@ public class Die {
     }
 
     /**
-     * Returns a Colour object which represents the die's colour.
-     * @return the colour of the Die object
+     * Returns a Color object which represents the die's color.
+     * @return the color of the Die object
      */
-    public Colour getColour() {
-        return colour;
+    public Color getColor() {
+        return color;
     }
 
     /**
@@ -62,17 +62,17 @@ public class Die {
 
     @Override
     /**
-     * Returns a string which represents the die, specifying its colour and the number on its side facing upwards.
+     * Returns a string which represents the die, specifying its color and the number on its side facing upwards.
      */
     public String toString(){
-        return "Die: Colour " + this.colour + " , Number: " + this.number + "\n";
+        return "Die: Color " + this.color + " , Number: " + this.number + "\n";
     }
 
     @Override
     public boolean equals (Object myObject) {
         if( this.getClass() == myObject.getClass() ) {
             Die myDie = (Die) myObject;
-            return ( (this.colour.equals(myDie.colour)) && (this.number == myDie.number) );
+            return ( (this.color.equals(myDie.color)) && (this.number == myDie.number) );
         } else return false;
     }
 }
