@@ -1,7 +1,5 @@
-[  
     {  
-        "schemeName":"Gravitas",
-	"favourToken":"5",
+	"favourToken": 5,
         "Restriction":[
 		["ONE_R","NO_R","THREE_R","BLUE_R","NO_R"],
                 ["NO_R","TWO_R","BLUE_R","NO_R","NO_R"],
@@ -9,5 +7,4 @@
                 ["BLUE_R","FIVE_R","TWO_R","NO_R","ONE_R"]
 	]
     }
-      
-]
+

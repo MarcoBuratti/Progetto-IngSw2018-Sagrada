@@ -1,7 +1,5 @@
-[  
     {  
-        "schemeName":"Virtus",
-	"favourToken":"5",
+	"favourToken": 5,
         "Restriction":[
 		["FOUR_R","NO_R","TWO_R","FIVE_R","GREEN_R"],
                 ["NO_R","NO_R","SIX_R","GREEN_R","TWO_R"],
@@ -9,5 +7,3 @@
                 ["FIVE_R","GREEN_R","ONE_R","NO_R","NO_R"]
 	]
     }
-      
-]

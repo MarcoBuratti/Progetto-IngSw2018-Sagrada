@@ -1,7 +1,5 @@
-[  
     {  
-        "schemeName":"Kaleidoscopic Dream",
-	"favourToken":"4",
+	"favourToken": 4,
         "Restriction":[
 		["YELLOW_R","BLUE_R","NO_R","NO_R","ONE_R"],
                 ["GREEN_R","NO_R","FIVE_R","NO_R","FOUR_R"],
@@ -9,5 +7,3 @@
                 ["TWO_R","NO_R","NO_R","BLUE_R","YELLOW_R"]
 	]
     }
-      
-]

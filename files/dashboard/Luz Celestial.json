@@ -1,7 +1,5 @@
-[  
     {  
-        "schemeName":"Luz Celestial",
-	"favourToken":"3",
+	"favourToken": 3,
         "Restriction":[
 		["NO_R","NO_R","RED_R","FIVE_R","NO_R"],
                 ["VIOLET_R","FOUR_R","NO_R","GREEN_R","THREE_R"],
@@ -9,5 +7,3 @@
                 ["NO_R","YELLOW_R","TWO_R","NO_R","NO_R"]
 	]
     }
-      
-]

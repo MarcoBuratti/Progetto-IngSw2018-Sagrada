@@ -1,7 +1,5 @@
-[  
     {  
-        "schemeName":"Comitas",
-	"favourToken":"5",
+	"favourToken": 5,
         "Restriction":[
 		["YELLOW_R","NO_R","TWO_R","NO_R","SIX_R"],
                 ["NO_R","FOUR_R","NO_R","FIVE_R","YELLOW_R"],
@@ -9,5 +7,3 @@
                 ["ONE_R","TWO_R","YELLOW_R","THREE_R","NO_R"]
 	]
     }
-      
-]

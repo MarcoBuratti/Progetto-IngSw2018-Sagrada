@@ -1,7 +1,5 @@
-[  
     {  
-        "schemeName":"Industria",
-	"favourToken":"5",
+	"favourToken": 5,
         "Restriction":[
 		["ONE_R","RED_R","THREE_R","NO_R","SIX_R"],
                 ["FIVE_R","FOUR_R","RED_R","TWO_R","NO_R"],
@@ -9,5 +7,4 @@
                 ["NO_R","NO_R","NO_R","THREE_R","RED_R"]
 	]
     }
-      
-]
+
