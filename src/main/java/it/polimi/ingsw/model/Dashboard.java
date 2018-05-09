@@ -44,12 +44,21 @@ public class Dashboard {
 
     } // da togliere quando è completo json, utile solo per eseguire i test
 
+    public Dashboard(Cell[][] matrixScheme, int favourToken){
+        this.matrixScheme = matrixScheme;
+        this.favourToken = favourToken;
+    } // da togliere
+
     /**
      * returns the name of the board owner
      * @return
      */
     public Player getOwner() {
         return owner;
+    }
+
+    public void setOwner(Player player) {
+        this.owner = player;
     }
 
     /**

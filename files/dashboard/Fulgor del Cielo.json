@@ -1,7 +1,5 @@
-[  
     {  
-        "schemeName":"Pulgor del Cielo",
-	"favourToken":"5",
+	"favourToken": 5,
         "Restriction":[
 		["NO_R","BLUE_R","RED_R","NO_R","NO_R"],
                 ["NO_R","FOUR_R","FIVE_R","NO_R","BLUE_R"],
@@ -9,5 +7,4 @@
                 ["SIX_R","RED_R,"THREE_R","ONE_R","NO_R"]
 	]
     }
-      
-]
+

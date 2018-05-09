@@ -1,7 +1,5 @@
-[  
     {  
-        "schemeName":"Symphony of Light",
-	"favourToken":"6",
+	"favourToken": 6,
         "Restriction":[
 		["TWO_R","NO_R","FIVE_R","NO_R","ONE_R"],
                 ["YELLOW_R","SIX_R","VIOLET_R","TWO_R","RED_R"],
@@ -9,5 +7,3 @@
                 ["NO_R","THREE_R","NO_R","FIVE_R","NO_R"]
 	]
     }
-      
-]

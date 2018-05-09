@@ -1,7 +1,5 @@
-[  
-    {  
-        "schemeName":"Via Lux",
-	"favourToken":"4",
+    {
+	"favourToken": 4,
         "Restriction":[
 		["YELLOW_R","NO_R","SIX_R","NO_R","NO_R"],
                 ["NO_R","ONE_R","FIVE_R","NO_R","TWO_R"],
@@ -9,5 +7,3 @@
                 ["NO_R","NO_R","FOUR_R","THREE_R","RED_R"]
 	]
     }
-      
-]
