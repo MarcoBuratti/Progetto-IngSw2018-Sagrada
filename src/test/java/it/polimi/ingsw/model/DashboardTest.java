@@ -169,5 +169,21 @@ class DashboardTest {
 
     }
 
+    @Test
+        void accazzo() throws NotValidNumberException, OccupiedCellException {
+
+
+        Dashboard dashboard = new Dashboard("files/dashboard/Virtus.json");
+        System.out.println(dashboard.getFavourToken());
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 5; j++) {
+                System.out.println(dashboard.getMatrixScheme()[i][j].getRestriction().toString());
+            }
+            System.out.println("\n");
+        }
+    }
 }
+
+
 

@@ -4,7 +4,7 @@ package it.polimi.ingsw.model.restriction;
 import it.polimi.ingsw.model.Colour;
 import it.polimi.ingsw.model.Die;
 
-public class ColourRestriction extends Restriction {
+public class ColourRestriction implements Restriction {
     private Colour colour;
 
     public ColourRestriction (Colour colour){

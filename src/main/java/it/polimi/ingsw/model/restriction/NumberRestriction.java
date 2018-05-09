@@ -4,7 +4,7 @@ package it.polimi.ingsw.model.restriction;
 import it.polimi.ingsw.model.Die;
 import it.polimi.ingsw.model.exception.NotValidNumberException;
 
-public class NumberRestriction extends Restriction {
+public class NumberRestriction implements Restriction {
     private static final int NUMBER_OF_SIDES = 6;
     private int number;
 

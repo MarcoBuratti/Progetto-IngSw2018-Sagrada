@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.restriction;
 
 import it.polimi.ingsw.model.Die;
 
-public class NoRestriction extends Restriction {
+public class NoRestriction implements Restriction {
     @Override
     public Boolean restrictionCheck(Die die) {
         return true;
