@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.achievement;
 
-public class CardFactory extends AbstractFactory {
+public class CardFactory extends AbstractCardFactory {
 
     @Override
     public CardAchievement getCardAchievement (PublicAchievementNames publicAchievementNames) {

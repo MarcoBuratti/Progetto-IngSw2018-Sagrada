@@ -4,10 +4,10 @@ package it.polimi.ingsw.model.restriction;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Die;
 
-public class ColorRestriction extends Restriction {
+public class ColorRestriction implements Restriction {
     private Color color;
 
-    public ColorRestriction(Color color){
+    public ColorRestriction (Color colour){
         this.color = color;
     }
 
@@ -29,8 +29,8 @@ public class ColorRestriction extends Restriction {
     public boolean equals (Object myObject) {
         if (myObject != null) {
             if (this.getClass() == myObject.getClass()) {
-                ColorRestriction colorRestriction = (ColorRestriction) myObject;
-                return (this.color.equals(colorRestriction.color));
+                ColorRestriction colourRestriction = (ColorRestriction) myObject;
+                return (this.color.equals(colourRestriction.color));
             } else return false;
         } else return false;
     }

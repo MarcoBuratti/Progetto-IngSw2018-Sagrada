@@ -18,7 +18,7 @@ public class GameBoard {
 
         List<PublicAchievementNames> publicAchievementList = Arrays.asList(PublicAchievementNames.values());
         Collections.shuffle(publicAchievementList);
-        AbstractFactory abstractFactory = new CardFactory();
+        AbstractCardFactory abstractFactory = new CardFactory();
         for ( int i = 0; i < NUMBER_OF_PUBLIC_ACHIEVEMENTS; i++ ) {
             CardAchievement publicAchievementsFactory = abstractFactory.getCardAchievement(publicAchievementList.get(i));
            this.publicAchievements.add(publicAchievementsFactory);
