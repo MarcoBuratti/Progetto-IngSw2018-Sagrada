@@ -24,4 +24,9 @@ public class PrivateAchievement implements CardAchievement {
 
         return score;
     }
+
+    @Override
+    public String toString() {
+        return "This is a private achievement: Colour: " + this.colour;
+    }
 }
