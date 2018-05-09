@@ -1,7 +1,6 @@
-[  
-    {  
-        "schemeName":"Aurorae_Magnificus",
-	"favourToken":"5",
+	{  
+
+	"favourToken": 5,
         "Restriction":[
 		["FIVE_R","GREEN_R","BLUE_R","VIOLET_R","TWO_R"],
                 ["VIOLET_R","NO_R","NO_R","NO_R","YELLOW_R"],
@@ -9,5 +8,3 @@
                 ["ONE_R","NO_R","NO_R","GREEN_R","FOUR_R"]
 	]
     }
-      
-]

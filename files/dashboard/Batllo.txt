@@ -1,7 +1,6 @@
-[  
     {  
-        "schemeName":"Batllo",
-	"favourToken":"5",
+
+	"favourToken": 5,
         "Restriction":[
 		["NO_R","NO_R","SIX_R","NO_R","NO_R"],
                 ["NO_R","FIVE_R","BLUE_R","FOUR_R","NO_R"],
@@ -9,5 +8,3 @@
                 ["ONE_R","FOUR_R","RED_R","FIVE_R","THREE_R"]
 	]
     }
-      
-]
