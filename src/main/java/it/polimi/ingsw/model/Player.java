@@ -83,5 +83,13 @@ public class Player {
         }else throw new NotEnoughFavourTokensLeft();
     }
 
-
+    @Override
+    public String toString(){
+        String string = "Player:\n";
+        string += "Nickname: " + this.nickname + "\n";
+        string += this.dashboard.toString() + "\n";
+        string += "Current Favour Tokens: " + this.currentFavourToken + "\n";
+        string += "Private Achievement: " + this.privateAchievement;
+        return string;
+    }
 }

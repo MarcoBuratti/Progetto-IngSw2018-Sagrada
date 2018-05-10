@@ -34,5 +34,25 @@ public class Shades implements CardAchievement {
 
     }
 
+    @Override
+    public String toString() {
+        String string;
+        switch(this.number1) {
+            case 1:
+                string = "Light Shades\n";
+                break;
+            case 3:
+                string = "Medium Shades\n";
+                break;
+            case 5:
+                string = "Dark Shades\n";
+                break;
+            default:
+                string = "Shades\n";
+                break;
+        }
+        string += "Sets of " + this.number1 + " & " + this.number2 + " values anywhere.";
+        return string;
+    }
 }
 

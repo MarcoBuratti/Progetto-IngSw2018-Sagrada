@@ -84,7 +84,7 @@ public class RoundTrack {
 
     @Override
     public String toString() {
-        String myRoundTrack = "Roundtrack:\n\n";
+        String myRoundTrack = "Round track:\n\n";
         StringBuilder bld = new StringBuilder();
         for (int i = 0; i < NUMBER_OF_ROUNDS; i++) {
             bld.append("Round ");

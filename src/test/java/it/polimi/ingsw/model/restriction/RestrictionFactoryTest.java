@@ -1,14 +1,12 @@
 package it.polimi.ingsw.model.restriction;
 
-import it.polimi.ingsw.model.exception.NotValidNumberException;
+import it.polimi.ingsw.model.exception.NotValidValueException;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class RestrictionFactoryTest {
 
     @Test
-    void getRestriction() throws NotValidNumberException {
+    void getRestriction() throws NotValidValueException {
 
         AbstractRestriction restrictionFactory = new RestrictionFactory();
 

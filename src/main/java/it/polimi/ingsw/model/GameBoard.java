@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.achievement.*;
-import it.polimi.ingsw.model.exception.NotValidNumberException;
+import it.polimi.ingsw.model.exception.NotValidValueException;
 
 import java.util.*;
 
@@ -12,7 +12,7 @@ public class GameBoard {
     private DiceBag diceBag;
     private ArrayList<CardAchievement> publicAchievements = new ArrayList<>();
 
-    public GameBoard (Map<String, String> schemes) throws NotValidNumberException {
+    public GameBoard (Map<String, String> schemes) throws NotValidValueException {
 
         this.roundTrack = new RoundTrack();
         this.diceBag = new DiceBag();

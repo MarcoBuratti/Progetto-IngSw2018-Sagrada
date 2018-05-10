@@ -28,8 +28,8 @@ public class ColorRestriction implements Restriction {
     public boolean equals (Object myObject) {
         if (myObject != null) {
             if (this.getClass() == myObject.getClass()) {
-                ColorRestriction colourRestriction = (ColorRestriction) myObject;
-                return (this.color.equals(colourRestriction.color));
+                ColorRestriction colorRestriction = (ColorRestriction) myObject;
+                return (this.color.equals(colorRestriction.color));
             } else return false;
         } else return false;
     }

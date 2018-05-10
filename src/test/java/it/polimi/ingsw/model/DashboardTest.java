@@ -1,8 +1,7 @@
 
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.exception.NotEnoughDiceLeftException;
-import it.polimi.ingsw.model.exception.NotValidNumberException;
+import it.polimi.ingsw.model.exception.NotValidValueException;
 import it.polimi.ingsw.model.exception.NotValidParametersException;
 import it.polimi.ingsw.model.exception.OccupiedCellException;
 import it.polimi.ingsw.model.restriction.NoRestriction;
@@ -15,7 +14,7 @@ import java.util.List;
 class DashboardTest {
 
     @Test
-    void getMatrixScheme() throws NotValidParametersException, NotValidNumberException, OccupiedCellException {
+    void getMatrixScheme() throws NotValidParametersException, NotValidValueException, OccupiedCellException {
 
         Dashboard dashboard = new Dashboard("Scheme Test");
 
@@ -131,7 +130,7 @@ class DashboardTest {
     }
 
     @Test
-    void setDieOnCell() throws NotValidParametersException, NotValidNumberException, OccupiedCellException {
+    void setDieOnCell() throws NotValidParametersException, NotValidValueException, OccupiedCellException {
 
         Dashboard dashboard = new Dashboard("Scheme Test");
 
@@ -163,7 +162,7 @@ class DashboardTest {
     }
 
     @Test
-    void jsonTester() throws NotValidNumberException, OccupiedCellException {
+    void jsonTester() throws NotValidValueException, OccupiedCellException {
         List<SchemesEnum> schemesEnum = Arrays.asList(SchemesEnum.values());
 
         Dashboard dashboard = new Dashboard(schemesEnum.get(8).getName());

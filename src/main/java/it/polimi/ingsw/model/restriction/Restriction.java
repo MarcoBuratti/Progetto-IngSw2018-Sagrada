@@ -4,6 +4,6 @@ import it.polimi.ingsw.model.Die;
 
 public interface Restriction {
 
-    public abstract Boolean restrictionCheck(Die die);
+    Boolean restrictionCheck(Die die);
 
 }

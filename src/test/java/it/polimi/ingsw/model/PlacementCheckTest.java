@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exception.NotValidParametersException;
-import it.polimi.ingsw.model.exception.NotValidNumberException;
+import it.polimi.ingsw.model.exception.NotValidValueException;
 import it.polimi.ingsw.model.exception.OccupiedCellException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 class PlacementCheckTest {
 
     @Test
-    void isEmpty() throws NotValidParametersException, OccupiedCellException, NotValidNumberException {
+    void isEmpty() throws NotValidParametersException, OccupiedCellException, NotValidValueException {
 
 
         Dashboard dashboard = new Dashboard("Scheme Test");
@@ -35,7 +35,7 @@ class PlacementCheckTest {
     }
 
     @Test
-    void checkDiceNumber() throws NotValidNumberException {
+    void checkDiceNumber() throws NotValidValueException {
         Die die1 = new Die(Color.GREEN);
         die1.setNumber(5);
         Die die2 = new Die(Color.GREEN);
@@ -48,7 +48,7 @@ class PlacementCheckTest {
     }
 
     @Test
-    void allowedNeighbours() throws NotValidNumberException, NotValidParametersException, OccupiedCellException {
+    void allowedNeighbours() throws NotValidValueException, NotValidParametersException, OccupiedCellException {
 
 
         Dashboard dashboard = new Dashboard("Scheme Test");
@@ -77,7 +77,7 @@ class PlacementCheckTest {
     }
 
     @Test
-    void nearBy() throws NotValidNumberException, NotValidParametersException, OccupiedCellException {
+    void nearBy() throws NotValidValueException, NotValidParametersException, OccupiedCellException {
 
         Dashboard dashboard = new Dashboard("Scheme Test");
         Die die1 = new Die(Color.GREEN);
@@ -97,7 +97,7 @@ class PlacementCheckTest {
     }
 
     @Test
-    void genericCheck() throws NotValidParametersException, NotValidNumberException, OccupiedCellException {
+    void genericCheck() throws NotValidParametersException, NotValidValueException, OccupiedCellException {
 
 
         Dashboard dashboard = new Dashboard("Scheme Test");

@@ -1,20 +1,18 @@
 package it.polimi.ingsw.model.achievement;
 
-import it.polimi.ingsw.model.Cell;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Dashboard;
 import it.polimi.ingsw.model.Die;
 import it.polimi.ingsw.model.exception.NotValidParametersException;
-import it.polimi.ingsw.model.exception.NotValidNumberException;
+import it.polimi.ingsw.model.exception.NotValidValueException;
 import it.polimi.ingsw.model.exception.OccupiedCellException;
-import it.polimi.ingsw.model.restriction.NoRestriction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class ColumnShadeVarietyTest {
 
     @Test
-    void scoreEffect() throws NotValidNumberException, NotValidParametersException, OccupiedCellException {
+    void scoreEffect() throws NotValidValueException, NotValidParametersException, OccupiedCellException {
 
         Dashboard dashboard = new Dashboard("Scheme Test");
         Assertions.assertEquals(0, new ColumnShadeVariety().scoreEffect(dashboard));

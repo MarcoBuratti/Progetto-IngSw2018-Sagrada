@@ -1,8 +1,8 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.exception.NotValidNumberException;
+import it.polimi.ingsw.model.exception.NotValidValueException;
 import it.polimi.ingsw.model.exception.OccupiedCellException;
-import it.polimi.ingsw.model.restriction.NumberRestriction;
+import it.polimi.ingsw.model.restriction.ValueRestriction;
 import it.polimi.ingsw.model.restriction.Restriction;
 import org.junit.jupiter.api.Test;
 
@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CellTest {
     @Test
-    public void cellTest() throws NotValidNumberException, OccupiedCellException {
-        Restriction r1 = new NumberRestriction(5);
+    public void cellTest() throws NotValidValueException, OccupiedCellException {
+        Restriction r1 = new ValueRestriction(5);
         Cell c1 = new Cell(r1);
         assertEquals(r1, c1.getRestriction());
         assertFalse(c1.getUsedCell());

@@ -1,20 +1,18 @@
 package it.polimi.ingsw.model.achievement;
 
-import it.polimi.ingsw.model.Cell;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Dashboard;
 import it.polimi.ingsw.model.Die;
 import it.polimi.ingsw.model.exception.NotValidParametersException;
-import it.polimi.ingsw.model.exception.NotValidNumberException;
+import it.polimi.ingsw.model.exception.NotValidValueException;
 import it.polimi.ingsw.model.exception.OccupiedCellException;
-import it.polimi.ingsw.model.restriction.NoRestriction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class PrivateAchievementTest {
 
     @Test
-    void scoreEffect() throws NotValidNumberException, NotValidParametersException, OccupiedCellException {
+    void scoreEffect() throws NotValidValueException, NotValidParametersException, OccupiedCellException {
 
     PrivateAchievement redAchievement =new PrivateAchievement(Color.RED);
     PrivateAchievement violetAchievement =new PrivateAchievement(Color.VIOLET);

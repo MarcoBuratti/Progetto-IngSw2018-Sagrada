@@ -2,17 +2,14 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.achievement.PrivateAchievement;
 import it.polimi.ingsw.model.exception.NotEnoughFavourTokensLeft;
-import it.polimi.ingsw.model.exception.NotValidNumberException;
-import it.polimi.ingsw.model.restriction.ColorRestriction;
-import it.polimi.ingsw.model.restriction.NoRestriction;
-import it.polimi.ingsw.model.restriction.Restriction;
+import it.polimi.ingsw.model.exception.NotValidValueException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
     @Test
-    public void playerTest() throws NotEnoughFavourTokensLeft, NotValidNumberException {
+    public void playerTest() throws NotEnoughFavourTokensLeft, NotValidValueException {
 
         String nickname = "tester";
         Dashboard dashboard = new Dashboard("Scheme Test");

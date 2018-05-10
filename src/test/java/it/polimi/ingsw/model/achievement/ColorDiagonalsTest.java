@@ -1,22 +1,18 @@
 package it.polimi.ingsw.model.achievement;
 
-import it.polimi.ingsw.model.Cell;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Dashboard;
 import it.polimi.ingsw.model.Die;
-import it.polimi.ingsw.model.exception.NotValidNumberException;
+import it.polimi.ingsw.model.exception.NotValidValueException;
 import it.polimi.ingsw.model.exception.NotValidParametersException;
 import it.polimi.ingsw.model.exception.OccupiedCellException;
-import it.polimi.ingsw.model.restriction.NoRestriction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ColorDiagonalsTest {
 
     @Test
-    void scoreEffect() throws NotValidParametersException, OccupiedCellException, NotValidNumberException {
+    void scoreEffect() throws NotValidParametersException, OccupiedCellException, NotValidValueException {
 
 
         Dashboard dashboard = new Dashboard("Scheme Test");

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.exception.NotValidNumberException;
+import it.polimi.ingsw.model.exception.NotValidValueException;
 
 import java.util.Random;
 
@@ -41,13 +41,13 @@ public class Die {
      * Gives the user the possibility to set the die's number (choosing the side facing upwards).
      * The user is allowed to set an int between 1 and the number of sides of the die (boundaries included).
      * @param number the number that the user wants to set.
-     * @throws NotValidNumberException if the user tries to use a number which is not included in the allowed range.
+     * @throws NotValidValueException if the user tries to use a number which is not included in the allowed range.
      */
-    public void setNumber(int number) throws NotValidNumberException {
+    public void setNumber(int number) throws NotValidValueException {
             if (number > 0 && number <= NUMBER_OF_SIDES)
                 this.number = number;
             else
-                throw new NotValidNumberException();
+                throw new NotValidValueException();
     }
 
     /**

@@ -2,18 +2,18 @@ package it.polimi.ingsw.model.restriction;
 
 
 import it.polimi.ingsw.model.Die;
-import it.polimi.ingsw.model.exception.NotValidNumberException;
+import it.polimi.ingsw.model.exception.NotValidValueException;
 
-public class NumberRestriction implements Restriction {
+public class ValueRestriction implements Restriction {
     private static final int NUMBER_OF_SIDES = 6;
     private int number;
 
-    public NumberRestriction (int number) throws NotValidNumberException {
+    public ValueRestriction(int number) throws NotValidValueException {
         try{
             if(number>0 && number<=NUMBER_OF_SIDES)
                 this.number=number;
             else
-                throw new NotValidNumberException();
+                throw new NotValidValueException();
         }catch (Exception e){
             System.out.println(e);
         }
@@ -37,8 +37,8 @@ public class NumberRestriction implements Restriction {
     public boolean equals (Object myObject) {
         if( myObject != null ) {
             if (this.getClass() == myObject.getClass()) {
-                NumberRestriction numberRestriction = (NumberRestriction) myObject;
-                return (this.number == numberRestriction.number);
+                ValueRestriction valueRestriction = (ValueRestriction) myObject;
+                return (this.number == valueRestriction.number);
             } else return false;
         }else return false;
     }

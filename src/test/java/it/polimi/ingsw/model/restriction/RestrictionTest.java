@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.restriction;
 
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Die;
-import it.polimi.ingsw.model.exception.NotValidNumberException;
+import it.polimi.ingsw.model.exception.NotValidValueException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,9 +21,9 @@ class RestrictionTest {
     }
 
     @Test
-    public void numberTest() throws NotValidNumberException {
-        NumberRestriction n1 = new NumberRestriction(2);
-        Restriction n2 = new NumberRestriction(6);
+    public void valueTest() throws NotValidValueException {
+        ValueRestriction n1 = new ValueRestriction(2);
+        Restriction n2 = new ValueRestriction(6);
         assertEquals(2, n1.getRestriction());
         Die d1 = new Die(Color.GREEN);
         d1.setNumber(2);
@@ -34,12 +34,12 @@ class RestrictionTest {
     }
 
     @Test
-    public void genericTest() throws NotValidNumberException {
+    public void genericTest() throws NotValidValueException {
         Die d1 = new Die(Color.BLUE);
         d1.setNumber(1);
         Restriction r1 = new ColorRestriction(Color.BLUE);
         assertTrue(r1.restrictionCheck(d1));
-        r1 = new NumberRestriction(2);
+        r1 = new ValueRestriction(2);
         assertFalse(r1.restrictionCheck(d1));
         r1 = new NoRestriction();
         assertTrue(r1.restrictionCheck(d1));

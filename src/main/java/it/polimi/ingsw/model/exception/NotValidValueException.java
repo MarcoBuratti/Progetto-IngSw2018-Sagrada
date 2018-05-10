@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.exception;
 
-public class NotValidNumberException extends Exception {
-    public NotValidNumberException(){
+public class NotValidValueException extends Exception {
+    public NotValidValueException(){
         super();
     }
 

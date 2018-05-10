@@ -1,10 +1,9 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.exception.NotValidNumberException;
+import it.polimi.ingsw.model.exception.NotValidValueException;
 import it.polimi.ingsw.model.exception.NotValidParametersException;
 import it.polimi.ingsw.model.exception.OccupiedCellException;
 import it.polimi.ingsw.model.restriction.AbstractRestriction;
-import it.polimi.ingsw.model.restriction.Restriction;
 import it.polimi.ingsw.model.restriction.RestrictionEnum;
 import it.polimi.ingsw.model.restriction.RestrictionFactory;
 import org.json.simple.JSONArray;
@@ -22,7 +21,7 @@ public class Dashboard {
     private long favourToken;
     private Cell[][] matrixScheme;
 
-    public Dashboard( String schemeName) throws NotValidNumberException {
+    public Dashboard( String schemeName) throws NotValidValueException {
         this.matrixScheme = new Cell[ROW][COLUMN];
         JSONParser parser = new JSONParser();
 
@@ -72,7 +71,7 @@ public class Dashboard {
      * has non @param input
      * @return matrixScheme
      */
-    public Cell[][] getMatrixScheme() throws OccupiedCellException {
+    public Cell[][] getMatrixScheme() {
 
         Cell[][] matrixScheme = new Cell[ROW][COLUMN];
         try {
@@ -106,14 +105,17 @@ public class Dashboard {
 
     @Override
     public String toString() {
-        String ret = "";
+        String string = "Dashboard\n\n";
+        StringBuilder bld = new StringBuilder();
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COLUMN; j++) {
-                ret += this.matrixScheme[i][j].toString();
+                bld.append(this.matrixScheme[i][j].toString());
+                bld.append(" ");
             }
-            ret += "\n";
+            bld.append("\n");
         }
-        return ret;
+        string += bld.toString();
+        return string;
     }
 
 }
