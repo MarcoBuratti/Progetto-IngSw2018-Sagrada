@@ -14,11 +14,7 @@ class PlayerTest {
     @Test
     public void playerTest() throws NotEnoughFavourTokensLeft, NotValidNumberException {
 
-        String nickname = "tester";;
-        Cell[][] matrix = new Cell[1][1];
-        Restriction restriction = new NoRestriction();
-
-        matrix[0][0] = new Cell(restriction);
+        String nickname = "tester";
         Dashboard dashboard = new Dashboard("Scheme Test");
         PrivateAchievement privateAchievement = new PrivateAchievement(Color.GREEN);
         Player player = new Player(nickname, dashboard,privateAchievement);

@@ -21,7 +21,7 @@ public class ColorRestriction implements Restriction {
 
     @Override
     public String toString() {
-        return "Color: " + color;
+        return "Color Restriction: " + color;
     }
 
     @Override

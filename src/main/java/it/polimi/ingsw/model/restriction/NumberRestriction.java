@@ -30,7 +30,7 @@ public class NumberRestriction implements Restriction {
 
     @Override
     public String toString() {
-        return "Number: " + number;
+        return "Value Restriction: " + number;
     }
 
     @Override
