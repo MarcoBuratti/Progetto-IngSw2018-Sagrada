@@ -1,24 +1,23 @@
 
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.exception.NotValidParametersException;
+import it.polimi.ingsw.model.exception.NotEnoughDiceLeftException;
 import it.polimi.ingsw.model.exception.NotValidNumberException;
+import it.polimi.ingsw.model.exception.NotValidParametersException;
 import it.polimi.ingsw.model.exception.OccupiedCellException;
 import it.polimi.ingsw.model.restriction.NoRestriction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 class DashboardTest {
 
     @Test
     void getMatrixScheme() throws NotValidParametersException, NotValidNumberException, OccupiedCellException {
-        Cell[][] matrixScheme = new Cell[4][5];
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 5; j++) {
-                matrixScheme[i][j] = new Cell(new NoRestriction());
-            }
-        }
-        Dashboard dashboard = new Dashboard(matrixScheme);
+
+        Dashboard dashboard = new Dashboard("Scheme Test");
 
         Cell[][] matrixScheme2 = new Cell[4][5];
         for (int i = 0; i < 4; i++) {
@@ -134,13 +133,7 @@ class DashboardTest {
     @Test
     void setDieOnCell() throws NotValidParametersException, NotValidNumberException, OccupiedCellException {
 
-        Cell[][] matrixScheme = new Cell[4][5];
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 5; j++) {
-                matrixScheme[i][j] = new Cell(new NoRestriction());
-            }
-        }
-        Dashboard dashboard = new Dashboard(matrixScheme);
+        Dashboard dashboard = new Dashboard("Scheme Test");
 
         Die die1 = new Die(Color.GREEN);
         die1.setNumber(1);
@@ -170,17 +163,17 @@ class DashboardTest {
     }
 
     @Test
-        void accazzo() throws NotValidNumberException, OccupiedCellException {
+    void jsonTester() throws NotValidNumberException, OccupiedCellException {
+        List<SchemesEnum> schemesEnum = Arrays.asList(SchemesEnum.values());
 
-
-        Dashboard dashboard = new Dashboard("files/dashboard/Virtus.json");
-        System.out.println(dashboard.getFavourToken());
+        Dashboard dashboard = new Dashboard(schemesEnum.get(8).getName());
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
                 System.out.println(dashboard.getMatrixScheme()[i][j].getRestriction().toString());
             }
             System.out.println("\n");
+
         }
     }
 }

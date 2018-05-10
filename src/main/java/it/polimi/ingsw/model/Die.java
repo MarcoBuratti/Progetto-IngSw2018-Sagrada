@@ -11,9 +11,9 @@ public class Die {
 
     /**
      * Creates a Die object, which represents a die.
-     * The color argument must specify the die's color.
+     * The colour argument must specify the die's colour.
      * The number on the side facing upwards is randomly selected between 1 and the number of sides of the dice (boundaries included).
-     * @param color the color of the die that the user wants to create
+     * @param color the colour of the die that the user wants to create
      */
     public Die (Color color){
         Random random  = new Random();
@@ -30,8 +30,8 @@ public class Die {
     }
 
     /**
-     * Returns a Color object which represents the die's color.
-     * @return the color of the Die object
+     * Returns a Colour object which represents the die's colour.
+     * @return the colour of the Die object
      */
     public Color getColor() {
         return color;
@@ -62,7 +62,7 @@ public class Die {
 
     @Override
     /**
-     * Returns a string which represents the die, specifying its color and the number on its side facing upwards.
+     * Returns a string which represents the die, specifying its colour and the number on its side facing upwards.
      */
     public String toString(){
         return "Die: Color " + this.color + " , Number: " + this.number + "\n";

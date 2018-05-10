@@ -24,7 +24,7 @@ class DieTest {
     }
 
     @Test
-    public void coloursTest(){
+    public void colorsTest(){
         Die myDie1 = new Die(Color.valueOf("GREEN"));
         assertEquals(Color.GREEN, myDie1.getColor());
         Die myDie2 = new Die(Color.values()[2]);

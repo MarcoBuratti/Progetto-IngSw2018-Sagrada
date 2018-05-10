@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DiceBagTest {
 
-    public int colourCounter (ArrayList<Die> diceSet, Color C){
+    public int colorCounter (ArrayList<Die> diceSet, Color C){
         int counter = 0;
         for(Die d: diceSet)
             if(d.getColor().equals(C))
@@ -16,14 +16,14 @@ class DiceBagTest {
         return counter;
     }
     @Test
-    public void enoughDiceForEachColour(){
+    public void enoughDiceForEachColor(){
         DiceBag bag = new DiceBag();
         assertEquals(90, bag.getDiceSet().size());
-        assertEquals(colourCounter(bag.getDiceSet(), Color.GREEN), 18);
-        assertEquals(colourCounter(bag.getDiceSet(), Color.YELLOW), 18);
-        assertEquals(colourCounter(bag.getDiceSet(), Color.BLUE), 18);
-        assertEquals(colourCounter(bag.getDiceSet(), Color.RED), 18);
-        assertEquals(colourCounter(bag.getDiceSet(), Color.VIOLET), 18);
+        assertEquals(colorCounter(bag.getDiceSet(), Color.GREEN), 18);
+        assertEquals(colorCounter(bag.getDiceSet(), Color.YELLOW), 18);
+        assertEquals(colorCounter(bag.getDiceSet(), Color.BLUE), 18);
+        assertEquals(colorCounter(bag.getDiceSet(), Color.RED), 18);
+        assertEquals(colorCounter(bag.getDiceSet(), Color.VIOLET), 18);
     }
 
     @Test

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.achievement.*;
+import it.polimi.ingsw.model.exception.NotValidNumberException;
 
 import java.util.*;
 
@@ -11,7 +12,7 @@ public class GameBoard {
     private DiceBag diceBag;
     private ArrayList<CardAchievement> publicAchievements = new ArrayList<>();
 
-    public GameBoard (Map<String, String> schemes) {
+    public GameBoard (Map<String, String> schemes) throws NotValidNumberException {
 
         this.roundTrack = new RoundTrack();
         this.diceBag = new DiceBag();
@@ -20,7 +21,7 @@ public class GameBoard {
         Collections.shuffle(publicAchievementList);
         AbstractCardFactory abstractFactory = new CardFactory();
         for ( int i = 0; i < NUMBER_OF_PUBLIC_ACHIEVEMENTS; i++ ) {
-            CardAchievement publicAchievementsFactory = abstractFactory.getCardAchievement(publicAchievementList.get(i));
+            CardAchievement publicAchievementsFactory = abstractFactory.extractCardAchievement(publicAchievementList.get(i));
            this.publicAchievements.add(publicAchievementsFactory);
         }
 

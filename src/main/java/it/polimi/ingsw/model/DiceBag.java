@@ -8,20 +8,20 @@ import java.util.Collections;
 public class DiceBag {
     private static final int NUMBER_OF_COLOURS = Color.values().length;
     private static final int NUMBER_OF_DICE = 90;
-    private static final Color[] COLOURS_INDICES = Color.values();
+    private static final Color[] colorsIndex = Color.values();
 
     private ArrayList<Die> diceSet = new ArrayList<Die> ();
 
     /**
      * Creates a DiceBag object representing a bag containing some dice.
      * An ArrayList contains the Die objects.
-     * The bag must contain the same number of dice for each colour.
+     * The bag must contain the same number of dice for each color.
      * The dice set is finally shuffled.
      */
     public DiceBag() {
         for (int i = 0; i < NUMBER_OF_COLOURS; i++)
             for (int j = 0; j < (NUMBER_OF_DICE / NUMBER_OF_COLOURS); j++) {
-                this.diceSet.add(new Die(COLOURS_INDICES[i]));
+                this.diceSet.add(new Die(colorsIndex[i]));
             }
         Collections.shuffle(diceSet);
     }

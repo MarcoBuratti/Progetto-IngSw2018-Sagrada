@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
 
-public class PlacementCheck {
+public class CheckPositioning {
 
     private static final int ROW = 4;
     private static final int COLUMN = 5;
@@ -23,13 +23,13 @@ public class PlacementCheck {
     }
 
     /**
-     * control if two dice has the same colour and return true if is the same
+     * control if two dice has the same color and return true if is the same
      *
      * @param die1
      * @param die2
      * @return
      */
-    public boolean checkDiceColour(Die die1, Die die2) {
+    public boolean checkDiceColor(Die die1, Die die2) {
         return (die1.getColor() == die2.getColor());
     }
 
@@ -59,22 +59,22 @@ public class PlacementCheck {
 
         if (row > 0 && matrixScheme[row - 1][column].getUsedCell()) {
             Die die = matrixScheme[row - 1][column].getDie();
-            if (checkDiceColour(myDie, die) || checkDiceNumber(myDie, die))
+            if (checkDiceColor(myDie, die) || checkDiceNumber(myDie, die))
                 return false;
         }
         if (row < 3 && matrixScheme[row + 1][column].getUsedCell()) {
             Die die = matrixScheme[row + 1][column].getDie();
-            if (checkDiceColour(myDie, die) || checkDiceNumber(myDie, die))
+            if (checkDiceColor(myDie, die) || checkDiceNumber(myDie, die))
                 return false;
         }
         if (column > 0 && matrixScheme[row][column - 1].getUsedCell()) {
             Die die = matrixScheme[row][column - 1].getDie();
-            if (checkDiceColour(myDie, die) || checkDiceNumber(myDie, die))
+            if (checkDiceColor(myDie, die) || checkDiceNumber(myDie, die))
                 return false;
         }
         if (column < 4 && matrixScheme[row][column + 1].getUsedCell()) {
             Die die = matrixScheme[row][column + 1].getDie();
-            if (checkDiceColour(myDie, die) || checkDiceNumber(myDie, die))
+            if (checkDiceColor(myDie, die) || checkDiceNumber(myDie, die))
                 return false;
         }
         return true;

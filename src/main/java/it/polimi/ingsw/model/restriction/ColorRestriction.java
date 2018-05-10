@@ -1,13 +1,12 @@
 package it.polimi.ingsw.model.restriction;
 
-
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Die;
 
 public class ColorRestriction implements Restriction {
     private Color color;
 
-    public ColorRestriction (Color colour){
+    public ColorRestriction (Color color){
         this.color = color;
     }
 

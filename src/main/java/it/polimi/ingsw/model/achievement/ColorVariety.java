@@ -28,9 +28,4 @@ public class ColorVariety implements CardAchievement {
 
     }
 
-    @Override
-    public String toString() {
-        return "Color Variety\nSets of one of each color anywhere.";
-    }
-
 }

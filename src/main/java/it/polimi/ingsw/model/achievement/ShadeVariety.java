@@ -28,9 +28,4 @@ public class ShadeVariety implements CardAchievement {
         return Collections.min(Arrays.asList(counter))*5;
 
     }
-
-    @Override
-    public String toString() {
-        return "Shades Variety\nSets of one of each value anywhere.";
-    }
 }

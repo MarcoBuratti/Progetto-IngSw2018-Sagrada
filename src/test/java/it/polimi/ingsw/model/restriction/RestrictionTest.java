@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RestrictionTest {
     @Test
-    public void colorTest() {
+    public void colourTest() {
         ColorRestriction c1 = new ColorRestriction(Color.BLUE);
         assertEquals(Color.BLUE, c1.getRestriction());
         Die d1 = new Die(Color.BLUE);

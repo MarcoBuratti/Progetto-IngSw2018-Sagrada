@@ -22,15 +22,7 @@ class PrivateAchievementTest {
     PrivateAchievement greenAchievement =new PrivateAchievement(Color.GREEN);
     PrivateAchievement blueAchievement =new PrivateAchievement(Color.BLUE);
 
-        Cell[][] matrixScheme = new Cell[4][5];
-
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 5; j++) {
-                matrixScheme[i][j] = new Cell(new NoRestriction());
-            }
-        }
-
-        Dashboard dashboard = new Dashboard(matrixScheme);
+        Dashboard dashboard = new Dashboard("Scheme Test");
         Assertions.assertEquals(0, redAchievement.scoreEffect(dashboard));
         Assertions.assertEquals(0, greenAchievement.scoreEffect(dashboard));
 

@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.achievement;
 public class CardFactory extends AbstractCardFactory {
 
     @Override
-    public CardAchievement getCardAchievement (PublicAchievementNames publicAchievementNames) {
+    public CardAchievement extractCardAchievement (PublicAchievementNames publicAchievementNames) {
 
         if(publicAchievementNames == PublicAchievementNames.COLORDIAGONALS)
             return new ColorDiagonals();

@@ -1,34 +1,43 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.exception.NotValidNumberException;
 import it.polimi.ingsw.model.exception.NotValidParametersException;
 import it.polimi.ingsw.model.exception.OccupiedCellException;
-/*import org.json.simple.JSONArray;
+import it.polimi.ingsw.model.restriction.AbstractRestriction;
+import it.polimi.ingsw.model.restriction.Restriction;
+import it.polimi.ingsw.model.restriction.RestrictionEnum;
+import it.polimi.ingsw.model.restriction.RestrictionFactory;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-*/
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Dashboard {
     private static final int ROW = 4;
     private static final int COLUMN = 5;
     private Player owner;
-    private int favourToken;
+    private long favourToken;
     private Cell[][] matrixScheme;
 
-    /*public Dashboard(Player owner, String schemeName) {
+    public Dashboard( String schemeName) throws NotValidNumberException {
         this.matrixScheme = new Cell[ROW][COLUMN];
-        this.owner = owner;
         JSONParser parser = new JSONParser();
 
         try {
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("C:\\Users\\Marco\\Dropbox\\File JSON\\" + schemeName));
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("files/dashboard/"+schemeName+".json"));
 
-            this.favourToken = (Integer) jsonObject.get("favourToken");
+            this.favourToken = (Long) jsonObject.get("favourToken");
 
+            AbstractRestriction restrictionFactory = new RestrictionFactory();
             JSONArray first = (JSONArray) jsonObject.get("Restriction");
+
             for (int i = 0; i < ROW; i++)
-                for (int j = 0; j < COLUMN; j++)
-                    this.matrixScheme[i][j] = new Cell((Restriction) ((JSONArray) jsonObject.get(i)).get(j));
+                for (int j = 0; j < COLUMN; j++) {
+                    this.matrixScheme[i][j] = new Cell(restrictionFactory.getRestriction (RestrictionEnum.valueOf((String)((JSONArray) first.get(i)).get(j))));
+                }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -36,18 +45,7 @@ public class Dashboard {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-    }*/
-
-    public Dashboard(Cell[][] matrixScheme){
-
-        this.matrixScheme=matrixScheme;
-
-    } // da togliere quando è completo json, utile solo per eseguire i test
-
-    public Dashboard(Cell[][] matrixScheme, int favourToken){
-        this.matrixScheme = matrixScheme;
-        this.favourToken = favourToken;
-    } // da togliere
+    }
 
     /**
      * returns the name of the board owner
@@ -66,7 +64,7 @@ public class Dashboard {
      * @return
      */
     public int getFavourToken() {
-        return favourToken;
+        return (int)favourToken;
     }
 
     /**

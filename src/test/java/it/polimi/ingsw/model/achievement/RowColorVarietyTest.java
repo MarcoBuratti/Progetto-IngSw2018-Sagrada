@@ -4,26 +4,21 @@ import it.polimi.ingsw.model.Cell;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Dashboard;
 import it.polimi.ingsw.model.Die;
+import it.polimi.ingsw.model.exception.NotValidNumberException;
 import it.polimi.ingsw.model.exception.NotValidParametersException;
 import it.polimi.ingsw.model.exception.OccupiedCellException;
 import it.polimi.ingsw.model.restriction.NoRestriction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 class RowColorVarietyTest {
 
     @Test
-    void scoreEffect() throws NotValidParametersException, OccupiedCellException {
+    void scoreEffect() throws NotValidParametersException, OccupiedCellException, NotValidNumberException {
 
-        Cell[][] matrixScheme = new Cell[4][5];
-
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 5; j++) {
-                matrixScheme[i][j] = new Cell(new NoRestriction());
-            }
-        }
-
-        Dashboard dashboard = new Dashboard(matrixScheme);
+        Dashboard dashboard = new Dashboard("Scheme Test");
         Assertions.assertEquals(0, new RowColorVariety().scoreEffect(dashboard));
 
         dashboard.setDieOnCell(0,0,new Die(Color.GREEN));

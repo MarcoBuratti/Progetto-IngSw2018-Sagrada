@@ -16,15 +16,7 @@ class RowShadeVarietyTest {
     @Test
     void scoreEffect() throws NotValidParametersException, NotValidNumberException, OccupiedCellException {
 
-        Cell[][] matrixScheme = new Cell[4][5];
-
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 5; j++) {
-                matrixScheme[i][j] = new Cell(new NoRestriction());
-            }
-        }
-
-        Dashboard dashboard = new Dashboard(matrixScheme);
+        Dashboard dashboard = new Dashboard("Scheme Test");
         Assertions.assertEquals(0, new RowShadeVariety().scoreEffect(dashboard));
 
         dashboard.setDieOnCell(0,0,new Die(Color.GREEN));
