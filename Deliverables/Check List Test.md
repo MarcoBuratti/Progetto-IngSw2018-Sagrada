@@ -16,12 +16,12 @@ Classes already tested and passed:
 **PlacementCheck totally full**
 
 - __First__ method "isEmpty" test if the matrix scheme is empty
-- __Second__ method "checkDiceColor" test the colour of two dice, it truns
+- __Second__ method "checkDiceColor" test the colour of two dice, it turns
 - true if the dice has the same colour
 - __Third__ method "checkDiceNumber" test the number of two dice, it turns
 - true if the dice has the same number
 - __Fourth__ method "allowedNeighbours" test if we can place a die on a cell
-- it test if our neighbourd has the sema colour or the same number, it
+- it test if our neighbour has the same colour or the same number, it
 - return true if we can place
 - __Fifth__ method "nearBy" test if the cell has any neighbours ( left, 
 - right, up, down and diagonals)
@@ -31,7 +31,7 @@ Classes already tested and passed:
 **Cell empty**
 **Cell full**
 
-- __First__ method "cellTest" test if a cell is empty, if I palaced a die and
+- __First__ method "cellTest" test if a cell is empty, if I placed a die and
 - if I try to place a die on a occupied cell, in this case it throws an exception
 
 
@@ -40,7 +40,7 @@ Classes already tested and passed:
 
 - __First__ method "enoughDiceForEachColour" test if in one bag the are 18
 - dice for each colour
-- __Second__ method "goodExtraction" test the estraction of some dice from the bag
+- __Second__ method "goodExtraction" test the extraction of some dice from the bag
 
 
 **Die empty**
@@ -49,7 +49,7 @@ Classes already tested and passed:
 - __First__ method "numberFromOneToSix" try to set the number of some dice,
 - if I can't set the number it throws exception
 - __Second__ method "colourTest" create some dice with color attributes and
-- controll if colour is the same at run time execution
+- check if colour is the same at run time execution
 
 
 **Player empty**
@@ -63,7 +63,7 @@ Classes already tested and passed:
 **RoundTrack empty**
 **RoundTrack full**
 
--__First__ method "roundTrackTest" test every method in RoundTrack.java, it creste a
+-__First__ method "roundTrackTest" test every method in RoundTrack.java, it create a
 - RoundTrack object which represents the round track, test the builder and the getter
 
 
