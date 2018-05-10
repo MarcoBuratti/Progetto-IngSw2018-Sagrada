@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
 
-public class CheckPositioning {
+public class PlacementCheck {
 
     private static final int ROW = 4;
     private static final int COLUMN = 5;
