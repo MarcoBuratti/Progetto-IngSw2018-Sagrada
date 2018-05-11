@@ -81,6 +81,21 @@ public class RoundTrack {
         else throw new NotValidRoundException();
     }
 
+    /**
+     * Checks whether there is a die on the round track having the color chosen
+     * as argument by the user.
+     * @param color the color of which the user wants to know whether there is a die on the round track or not
+     * @return a Boolean object specifying if there is a die having that color or not
+     */
+    public Boolean isColorOnRoundTrack (Color color) {
+        for ( int i = 0; i < NUMBER_OF_ROUNDS; i++ )
+            for ( Object object: diceList[i]){
+                Die d = (Die) object;
+                if (d.getColor().equals(color))
+                    return true;
+            }
+        return false;
+    }
 
     @Override
     public String toString() {

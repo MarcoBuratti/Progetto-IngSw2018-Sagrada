@@ -17,15 +17,15 @@ class GameBoardTest {
         map.put("christian", "Chromatic Splendor");
         map.put("marco", "Fulgor del Cielo");
         GameBoard gameBoard = new GameBoard(map);
-        ArrayList<Die> diceStock = new ArrayList<>();
+        ArrayList<Die> draftPool = new ArrayList<>();
         Die d1, d2, d3;
         d1 = new Die(Color.VIOLET);
         d2 = new Die(Color.YELLOW);
         d3 = new Die(Color.GREEN);
-        diceStock.add(d1);
-        diceStock.add(d2);
-        diceStock.add(d3);
-        gameBoard.setDiceStock(diceStock);
+        draftPool.add(d1);
+        draftPool.add(d2);
+        draftPool.add(d3);
+        gameBoard.setDraftPool(draftPool);
         assertNotNull(gameBoard.getDiceBag());
         assertNotNull(gameBoard.getRoundTrack());
         assertEquals(3, gameBoard.getPlayers().size());
@@ -36,12 +36,12 @@ class GameBoardTest {
         assertNotNull(gameBoard.getPlayers().get(0).getPrivateAchievement());
         assertEquals(4, gameBoard.getPlayers().get(0).getCurrentFavourToken());
         assertEquals(3, gameBoard.getPublicAchievements().size());
-        assertEquals(diceStock, gameBoard.getDiceStock());
-        gameBoard.removeDieFromDiceStock(d2);
-        assertEquals(2, gameBoard.getDiceStock().size());
-        assertTrue(gameBoard.getDiceStock().contains(d1));
-        assertTrue(gameBoard.getDiceStock().contains(d3));
-        assertFalse(gameBoard.getDiceStock().contains(d2));
+        assertEquals(draftPool, gameBoard.getDraftPool());
+        gameBoard.removeDieFromDraftPool(d2);
+        assertEquals(2, gameBoard.getDraftPool().size());
+        assertTrue(gameBoard.getDraftPool().contains(d1));
+        assertTrue(gameBoard.getDraftPool().contains(d3));
+        assertFalse(gameBoard.getDraftPool().contains(d2));
         System.out.println(gameBoard.getPublicAchievements().toString());
     }
 }

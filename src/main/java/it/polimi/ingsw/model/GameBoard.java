@@ -11,7 +11,7 @@ public class GameBoard {
     private ArrayList<Player> players = new ArrayList<>();
     private DiceBag diceBag;
     private ArrayList<CardAchievement> publicAchievements = new ArrayList<>();
-    private ArrayList<Die> diceStock = new ArrayList<>();
+    private ArrayList<Die> draftPool = new ArrayList<>();
 
     public GameBoard (Map<String, String> schemes) throws NotValidValueException {
 
@@ -53,16 +53,19 @@ public class GameBoard {
         return publicAchievements;
     }
 
-    public ArrayList<Die> getDiceStock() {
-        return new ArrayList<>(this.diceStock);
+    public ArrayList<Die> getDraftPool() {
+        return new ArrayList<>(this.draftPool);
     }
 
-    public void setDiceStock(ArrayList<Die> diceStock) {
-        this.diceStock.addAll(diceStock);
+    public void setDraftPool(ArrayList<Die> draftPool) {
+        this.draftPool.addAll(draftPool);
     }
 
-    public void removeDieFromDiceStock ( Die die ){
-        if ( die != null )
-            this.diceStock.remove(diceStock.indexOf(die));
+    public void removeDieFromDraftPool ( Die die ){
+        try {
+            this.draftPool.remove(draftPool.indexOf(die));
+        }catch (Exception e) {
+            System.out.println(e.toString());
+        }
     }
 }
