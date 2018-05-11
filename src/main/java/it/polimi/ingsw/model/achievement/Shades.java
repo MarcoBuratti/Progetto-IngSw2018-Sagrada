@@ -51,7 +51,7 @@ public class Shades implements CardAchievement {
                 string = "Shades\n";
                 break;
         }
-        string += "Sets of " + this.number1 + " & " + this.number2 + " values anywhere.";
+        string += "Sets of " + this.number1 + " & " + this.number2 + " values anywhere.\n";
         return string;
     }
 }

@@ -11,6 +11,7 @@ public class GameBoard {
     private ArrayList<Player> players = new ArrayList<>();
     private DiceBag diceBag;
     private ArrayList<CardAchievement> publicAchievements = new ArrayList<>();
+    private ArrayList<Die> diceStock = new ArrayList<>();
 
     public GameBoard (Map<String, String> schemes) throws NotValidValueException {
 
@@ -29,8 +30,9 @@ public class GameBoard {
         Collections.shuffle(privateAchievementsList);
         int i = 0;
 
-        for ( String key: schemes.keySet() ) {
-            players.add(new Player(key, new Dashboard(schemes.get(key)), new PrivateAchievement(privateAchievementsList.get(i))));
+        for ( Map.Entry<String, String> elem: schemes.entrySet() ) {
+            players.add(new Player(elem.getKey(), new Dashboard(elem.getValue()), new PrivateAchievement(privateAchievementsList.get(i))));
+            players.get(i).getDashboard().setOwner(players.get(i));
             i++;
         }
     }
@@ -49,5 +51,18 @@ public class GameBoard {
 
     public ArrayList<CardAchievement> getPublicAchievements() {
         return publicAchievements;
+    }
+
+    public ArrayList<Die> getDiceStock() {
+        return new ArrayList<>(this.diceStock);
+    }
+
+    public void setDiceStock(ArrayList<Die> diceStock) {
+        this.diceStock.addAll(diceStock);
+    }
+
+    public void removeDieFromDiceStock ( Die die ){
+        if ( die != null )
+            this.diceStock.remove(diceStock.indexOf(die));
     }
 }

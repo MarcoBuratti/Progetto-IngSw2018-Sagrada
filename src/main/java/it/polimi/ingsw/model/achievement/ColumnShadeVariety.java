@@ -37,6 +37,6 @@ public class ColumnShadeVariety implements CardAchievement {
 
     @Override
     public String toString() {
-        return "Column Shade Variety\nColumns with no repeated values.";
+        return "Column Shade Variety\nColumns with no repeated values.\n";
     }
 }

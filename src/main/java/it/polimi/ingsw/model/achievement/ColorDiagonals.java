@@ -45,6 +45,6 @@ public class ColorDiagonals implements CardAchievement {
 
     @Override
     public String toString (){
-        return "Color Diagonals\nCount of diagonally adjacent same color dice.";
+        return "Color Diagonals\nCount of diagonally adjacent same color dice.\n";
     }
 }

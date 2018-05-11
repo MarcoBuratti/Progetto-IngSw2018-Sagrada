@@ -92,7 +92,7 @@ public class Dashboard {
      * @param myDie
      */
     public void setDieOnCell(int row, int column, Die myDie) throws NotValidParametersException, OccupiedCellException {
-            if ((row >= 0 && row < 4) && (column >= 0 && column < 5)) {
+            if ((row >= 0 && row < ROW) && (column >= 0 && column < COLUMN)) {
                 try {
                     this.matrixScheme[row][column].setDie(myDie);
                 }catch (Exception e) {
@@ -101,6 +101,19 @@ public class Dashboard {
             } else {
                 throw new NotValidParametersException();
             }
+    }
+
+    public boolean equalsScheme (Object myObject){
+        if(myObject != null) {
+            if (myObject.getClass() == this.getClass()) {
+                Dashboard dashboard = (Dashboard) myObject;
+                for (int row = 0; row < ROW; row++)
+                    for (int col = 0; col < COLUMN; col++)
+                        if (!this.matrixScheme[row][col].equals(dashboard.matrixScheme[row][col]))
+                            return false;
+                return true;
+            } else return false;
+        }else return false;
     }
 
     @Override
