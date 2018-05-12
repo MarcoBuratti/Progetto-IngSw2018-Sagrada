@@ -39,7 +39,7 @@ public class Round{
         }
     }
 
-   public void addDraftPooltoRoundTrack(GameBoard gameBoard) throws NotValidRoundException, EndedGameException {
+   public void endRound (GameBoard gameBoard) throws NotValidRoundException, EndedGameException {
         try {
             gameBoard.getRoundTrack().setNextRound(this.draftPool);
         }catch (Exception e){
