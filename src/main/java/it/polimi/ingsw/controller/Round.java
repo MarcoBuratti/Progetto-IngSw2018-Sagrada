@@ -3,27 +3,28 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Die;
 import it.polimi.ingsw.model.GameBoard;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.exception.EndedGameException;
 import it.polimi.ingsw.model.exception.NotValidRoundException;
 
 import java.util.*;
 
 public class Round{
-
     private ArrayList<Die> draftPool;
+    private static int DRAFT_POOL_CAPACITY;
 
     public Round(List<Player> players){
-
-        this.draftPool= new ArrayList<>(players.size()*2+1);
+        DRAFT_POOL_CAPACITY = (players.size() * 2 ) + 1;
+        this.draftPool= new ArrayList<>(DRAFT_POOL_CAPACITY);
     }
 
     public void initializeDraftPool(List<Player> players,GameBoard gameBoard) {
-        for (int i = 0; i < players.size() * 2 + 1; i++)
+        for (int i = 0; i < DRAFT_POOL_CAPACITY; i++)
             draftPool.add(gameBoard.getDiceBag().extract());
     }
 
     public void roundManager(List<Player> players){
         ListIterator<Player> iterator = players.listIterator();
-        Map <Player,Boolean> secondTurnPlayer = new HashMap<>(players.size());
+        Map <Player,Boolean> secondTurnPlayed = new HashMap<>(players.size());
 
 
         while(iterator.hasNext()){
@@ -31,16 +32,19 @@ public class Round{
 
 
 
-        secondTurnPlayer.put(iterator.next(),true);
+        secondTurnPlayed.put(iterator.next(),true);
         }
-        while (iterator.hasPrevious()&&secondTurnPlayer.get(iterator.next())){
+        while (iterator.hasPrevious()&&secondTurnPlayed.get(iterator.next())){
 
         }
     }
 
-   public void addDraftPooltoRoundTrack(GameBoard gameBoard,int round) throws NotValidRoundException {
-
-        gameBoard.getRoundTrack().setDiceList(this.draftPool,round-1);
+   public void addDraftPooltoRoundTrack(GameBoard gameBoard) throws NotValidRoundException, EndedGameException {
+        try {
+            gameBoard.getRoundTrack().setNextRound(this.draftPool);
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
 
 
 
