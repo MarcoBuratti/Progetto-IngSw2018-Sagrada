@@ -31,11 +31,11 @@ Message sent from client to server to notify the user is online again after a di
 Message sent from server to client to notify the user has been reconnected to the game and is now able to play.
 *"reconnected"CR*
 
-### Game Update
+### Game Update message
 Message sent from server to client to notify changes on the game board through a JSON file.
 *"game_update"<json_file>CR*
 
-### Player moves
+### Player moves messages
 Message sent from client to server to notify a game move.
 The playerID argument must specify the player making the move,
 the moveID specifies which kind of move is done and other arguments depend on the kind of move.
