@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.controller.socket;
 
 import java.io.BufferedReader;
 import java.io.IOException;

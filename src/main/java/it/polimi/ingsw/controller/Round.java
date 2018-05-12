@@ -26,7 +26,6 @@ public class Round{
         ListIterator<Player> iterator = players.listIterator();
         Map <Player,Boolean> secondTurnPlayed = new HashMap<>(players.size());
 
-
         while(iterator.hasNext()){
 
 

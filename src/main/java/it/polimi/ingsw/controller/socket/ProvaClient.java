@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.controller.socket;
 
 public class ProvaClient {
     public static void main (String[] args) {
