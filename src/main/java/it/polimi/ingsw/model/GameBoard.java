@@ -61,6 +61,11 @@ public class GameBoard {
         this.draftPool.addAll(draftPool);
     }
 
+    public void emptyDraftPool () {
+        for (Die die: this.draftPool)
+            this.draftPool.remove(die);
+    }
+
     public void removeDieFromDraftPool ( Die die ){
         try {
             this.draftPool.remove(draftPool.indexOf(die));
