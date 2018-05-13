@@ -11,6 +11,7 @@ import java.util.*;
 public class Round{
     private ArrayList<Die> draftPool;
     private static int DRAFT_POOL_CAPACITY;
+    private Turn currentTurn;
 
     public Round(List<Player> players){
         DRAFT_POOL_CAPACITY = (players.size() * 2 ) + 1;
@@ -22,19 +23,18 @@ public class Round{
             draftPool.add(gameBoard.getDiceBag().extract());
     }
 
-    public void roundManager(List<Player> players){
+    public void roundManager(List<Player> players,GameBoard gameBoard){
         ListIterator<Player> iterator = players.listIterator();
         Map <Player,Boolean> secondTurnPlayed = new HashMap<>(players.size());
 
         while(iterator.hasNext()){
-
-
-
-
-        secondTurnPlayed.put(iterator.next(),true);
+            this.currentTurn =new Turn(iterator.next(),gameBoard,false);
+            secondTurnPlayed.put(iterator.next(), currentTurn.isHasSecondTurn());
         }
-        while (iterator.hasPrevious()&&secondTurnPlayed.get(iterator.next())){
-
+        while (iterator.hasPrevious()){
+            if(secondTurnPlayed.get(iterator.next())) {
+               this.currentTurn= new Turn(iterator.next(),gameBoard,true);
+            }
         }
     }
 
@@ -48,4 +48,8 @@ public class Round{
 
 
    }
+
+    public Turn getCurrentTurn() {
+        return currentTurn;
+    }
 }

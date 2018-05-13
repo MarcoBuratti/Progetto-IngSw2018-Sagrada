@@ -1,34 +1,42 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.controller.action.Placement;
 import it.polimi.ingsw.model.Die;
 import it.polimi.ingsw.model.GameBoard;
+import it.polimi.ingsw.model.PlacementCheck;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exception.NotValidParametersException;
 import it.polimi.ingsw.model.exception.OccupiedCellException;
 
-public class PlacementMove implements Runnable {
+public class PlacementMove {
 
-    private String move;
     private Player player;
     private GameBoard gameboard;
+    private int row;
+    private int column;
+    private int indexDieOnDiceStock;
 
-    public PlacementMove(String move, Player player, GameBoard gameBoard) {
+    public PlacementMove(String input, Player player, GameBoard gameBoard) {
         this.player = player;
-        this.move = move;
         this.gameboard = gameBoard;
+        this.row=Integer.parseInt(input.substring(0,input.indexOf(" ")));
+        input=input.substring(input.indexOf("")+1);
+        this.column=Integer.parseInt(input.substring(0,input.indexOf("")));
+        input=input.substring(input.indexOf("")+1);
+        this.indexDieOnDiceStock=Integer.parseInt(input);
     }
 
-    @Override
-    public void run() {
+    public boolean positionDie() throws OccupiedCellException, NotValidParametersException {
 
-        Placement placement = new Placement(move);
-        Die die = this.gameboard.getDraftPool().get(placement.getIndexDieOnDiceStock());
-        try {
-            player.getDashboard().setDieOnCell(placement.getRow(), placement.getColumn(), die);
-            this.gameboard.getDraftPool().remove(placement.getIndexDieOnDiceStock());
-        } catch (NotValidParametersException | OccupiedCellException e) {
-            e.printStackTrace();
+        Die die = this.gameboard.getDraftPool().get(this.indexDieOnDiceStock);
+            PlacementCheck placementCheck = new PlacementCheck();
+            if(placementCheck.genericCheck(this.row,this.column,die,player.getDashboard().getMatrixScheme())) {
+                player.getDashboard().setDieOnCell(this.row, this.column, die);
+                this.gameboard.getDraftPool().remove(this.indexDieOnDiceStock);
+                return true;
+            }
+            else
+                return false;
+
         }
     }
-}
+
