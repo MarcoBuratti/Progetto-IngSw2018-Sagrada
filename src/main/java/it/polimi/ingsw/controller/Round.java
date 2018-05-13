@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Die;
 import it.polimi.ingsw.model.GameBoard;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.exception.NotEnoughDiceLeftException;
 
 import java.util.*;
 
@@ -13,12 +14,15 @@ public class Round {
 
     public Round(List<Player> players) {
         DRAFT_POOL_CAPACITY = (players.size() * 2) + 1;
-        this.draftPool = new ArrayList<>(DRAFT_POOL_CAPACITY);
+        this.draftPool = new ArrayList<>();
     }
 
-    public void initializeDraftPool(List<Player> players, GameBoard gameBoard) {
-        for (int i = 0; i < DRAFT_POOL_CAPACITY; i++)
-            draftPool.add(gameBoard.getDiceBag().extract());
+    public ArrayList<Die> getDraftPool() {
+        return draftPool;
+    }
+
+    public void initializeDraftPool(GameBoard gameBoard) throws NotEnoughDiceLeftException {
+        this.draftPool.addAll(gameBoard.getDiceBag().extractSet(DRAFT_POOL_CAPACITY));
     }
 
     public void roundManager(List<Player> players, GameBoard gameBoard) {
@@ -44,6 +48,7 @@ public class Round {
     public void endRound(GameBoard gameBoard) {
         try {
             gameBoard.getRoundTrack().setNextRound(this.draftPool);
+            gameBoard.emptyDraftPool();
         } catch (Exception e) {
             System.out.println(e.toString());
         }
