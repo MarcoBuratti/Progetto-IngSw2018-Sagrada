@@ -30,7 +30,7 @@ public class Round {
         Map<Player, Boolean> secondTurnPlayed = new HashMap<>(players.size());
 
         while (iterator.hasNext()) {
-            this.currentTurn = new Turn(iterator.next(), gameBoard, false);
+            this.currentTurn = new Turn(iterator.next(), gameBoard, false,this);
             Thread turn = new Thread(currentTurn);
             turn.start();
             while (!turn.isAlive())
@@ -38,7 +38,7 @@ public class Round {
         }
         while (iterator.hasPrevious()) {
             if (secondTurnPlayed.get(iterator.next())) {
-                this.currentTurn = new Turn(iterator.next(), gameBoard, true);
+                this.currentTurn = new Turn(iterator.next(), gameBoard, true,this);
                 Thread turn = new Thread(currentTurn);
                 turn.start();
             }
@@ -58,5 +58,14 @@ public class Round {
 
     public Turn getCurrentTurn() {
         return currentTurn;
+    }
+
+    public void removeDieFromDraftPool( int index ){
+        try {
+            Die die = this.draftPool.get(index);
+            this.draftPool.remove(draftPool.indexOf(die));
+        }catch (Exception e) {
+            System.out.println(e.toString());
+        }
     }
 }
