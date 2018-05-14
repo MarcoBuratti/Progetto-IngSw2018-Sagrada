@@ -25,19 +25,6 @@ public class Server {
         }
     }
 
-    public void signIn () {
-        String nickname = "";
-        try {
-            fromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            toClient = new PrintStream(socket.getOutputStream());
-            toClient.println("Welcome to Sagrada. Please insert your name.");
-            nickname = fromClient.readLine();
-            toClient.println("Your nickname is " + nickname);
-            socket.close();
-        }catch (IOException e) {
-            System.out.println(e.toString());
-        }
-    }
 
     public void run () {
         Boolean b = true;
