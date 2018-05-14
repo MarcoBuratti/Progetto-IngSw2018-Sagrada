@@ -33,6 +33,8 @@ class GameBoardTest {
         assertEquals("christian", gameBoard.getPlayers().get(0).getNickname());
         assertEquals("marco", gameBoard.getPlayers().get(1).getNickname());
         assertTrue(new Dashboard("Aurora Sagradis").equalsScheme(gameBoard.getPlayers().get(2).getDashboard()));
+        assertTrue(new Dashboard("Chromatic Splendor").equalsScheme(gameBoard.getPlayers().get(0).getDashboard()));
+        assertTrue(new Dashboard("Fulgor del Cielo").equalsScheme(gameBoard.getPlayers().get(1).getDashboard()));
         assertNotNull(gameBoard.getPlayers().get(0).getPrivateAchievement());
         assertEquals(4, gameBoard.getPlayers().get(0).getCurrentFavourToken());
         assertEquals(3, gameBoard.getPublicAchievements().size());

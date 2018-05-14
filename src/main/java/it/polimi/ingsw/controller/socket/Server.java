@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Server {
-    private ServerSocket server;
-    private Socket connection;
+    private ServerSocket serverSocket;
+    private Socket socket;
     private BufferedReader fromClient;
     private PrintStream toClient;
     private Map<String, String> users = new HashMap<>();
@@ -18,11 +18,8 @@ public class Server {
 
     public Server (){
         try {
-            server = new ServerSocket(PORT, 4);
+            serverSocket = new ServerSocket(PORT, 4);
             System.out.println("Server is online");
-            connection = server.accept();
-            fromClient = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            toClient = new PrintStream(connection.getOutputStream());
         } catch (IOException e) {
             System.out.println(e.toString());
         }
@@ -30,17 +27,28 @@ public class Server {
 
     public void signIn () {
         String nickname = "";
-        String newPsw = "";
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
-            toClient.println("Welcome to Sagrada. Please insert nickname and password to sign in.");
-            while (!nickname.equals("end")) {
-                nickname = fromClient.readLine();
-                toClient.println("Your nickname is " + nickname);
-            }
-            connection.close();
+            fromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            toClient = new PrintStream(socket.getOutputStream());
+            toClient.println("Welcome to Sagrada. Please insert your name.");
+            nickname = fromClient.readLine();
+            toClient.println("Your nickname is " + nickname);
+            socket.close();
         }catch (IOException e) {
             System.out.println(e.toString());
+        }
+    }
+
+    public void run () {
+        Boolean b = true;
+        while (b) {
+            try {
+                this.socket = serverSocket.accept();
+            } catch (IOException e){
+                System.out.println(e.toString());
+                b=false;
+            }
+            new ServerToClientThread(socket).start();
         }
     }
 }
