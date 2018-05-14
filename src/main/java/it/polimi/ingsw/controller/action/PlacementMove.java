@@ -7,6 +7,12 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exception.NotValidParametersException;
 import it.polimi.ingsw.model.exception.OccupiedCellException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.stream.Collectors;
+
 public class PlacementMove {
 
     private Player player;
@@ -19,6 +25,10 @@ public class PlacementMove {
         this.player = player;
         this.gameboard = gameBoard;
         String[] scanner= input.split(" ");
+        List<String> parameterList = new ArrayList<>();
+        for (String s : scanner) {
+            if(!s.equals("")) parameterList.add(s);
+        }
         this.row=Integer.parseInt(scanner[0]);
         this.column=Integer.parseInt(scanner[1]);
         this.indexDieOnDraftPool=Integer.parseInt(scanner[2]);
