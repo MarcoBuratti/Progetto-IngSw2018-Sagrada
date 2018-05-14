@@ -13,25 +13,29 @@ public class PlacementMove {
     private GameBoard gameboard;
     private int row;
     private int column;
-    private int indexDieOnDiceStock;
+    private int indexDieOnDraftPool;
 
     public PlacementMove(String input, Player player, GameBoard gameBoard) {
         this.player = player;
         this.gameboard = gameBoard;
-        this.row=Integer.parseInt(input.substring(0,input.indexOf(" ")));
-        input=input.substring(input.indexOf("")+1);
-        this.column=Integer.parseInt(input.substring(0,input.indexOf("")));
-        input=input.substring(input.indexOf("")+1);
-        this.indexDieOnDiceStock=Integer.parseInt(input);
+        String[] scanner= input.split(" ");
+        this.row=Integer.parseInt(scanner[0]);
+        this.column=Integer.parseInt(scanner[1]);
+        this.indexDieOnDraftPool=Integer.parseInt(scanner[2]);
+    }
+
+    public int getIndexDieOnDraftPool() {
+        return indexDieOnDraftPool;
     }
 
     public boolean positionDie() throws OccupiedCellException, NotValidParametersException {
 
-        Die die = this.gameboard.getDraftPool().get(this.indexDieOnDiceStock);
+        Die die = this.gameboard.getDraftPool().get(this.indexDieOnDraftPool);
             PlacementCheck placementCheck = new PlacementCheck();
             if(placementCheck.genericCheck(this.row,this.column,die,player.getDashboard().getMatrixScheme())) {
                 player.getDashboard().setDieOnCell(this.row, this.column, die);
-                this.gameboard.getDraftPool().remove(this.indexDieOnDiceStock);
+                this.gameboard.removeDieFromDraftPool(die);
+
                 return true;
             }
             else
