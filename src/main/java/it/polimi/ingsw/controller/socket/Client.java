@@ -24,17 +24,37 @@ public class Client {
         }
     }
 
-    public void run(){
-        String message = "";
+    public synchronized void run(){
+        String message;
+        String username;
+        String chatMessage;
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         try {
             message = fromServer.readLine();
             System.out.println(message);
-            message = br.readLine();
-            toServer.println(message);
+            do {
+                username = br.readLine();
+                toServer.println(username);
+                toServer.flush();
+                message = fromServer.readLine();
+                System.out.println(message);
+            } while (!message.equals("Now you're logged as " + username));
             message = fromServer.readLine();
             System.out.println(message);
+            chatMessage = br.readLine();
+            while (!chatMessage.equals("/quit")) {
+                toServer.println(chatMessage);
+                toServer.flush();
+                message = fromServer.readLine();
+                System.out.println(message);
+                chatMessage = br.readLine();
+            }
+            toServer.println(chatMessage);
+            toServer.flush();
+            System.out.println("You've been disconnected");
+            this.socket.close();
+
         } catch (IOException e){
             System.out.println("IOException in Client");
         }
