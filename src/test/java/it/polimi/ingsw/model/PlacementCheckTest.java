@@ -82,7 +82,7 @@ class PlacementCheckTest {
         Dashboard dashboard = new Dashboard("Scheme Test");
         Die die1 = new Die(Color.GREEN);
         Die die2 = new Die(Color.RED);
-        Die die3 = new Die(Color.YELLOW);;
+        Die die3 = new Die(Color.YELLOW);
         die1.setNumber(1);
         die2.setNumber(2);
         die3.setNumber(3);
@@ -94,6 +94,25 @@ class PlacementCheckTest {
         Assertions.assertTrue(new PlacementCheck().nearBy(2,2, dashboard.getMatrixScheme()));
         Assertions.assertFalse(new PlacementCheck().nearBy(3,3, dashboard.getMatrixScheme()));
         Assertions.assertFalse(new PlacementCheck().nearBy(3,4, dashboard.getMatrixScheme()));
+
+        Die die4 = new Die(Color.RED);
+        die4.setNumber(4);
+        Die die5 = new Die(Color.BLUE);
+        die5.setNumber(5);
+        Die die6 = new Die(Color.GREEN);
+        die6.setNumber(6);
+        Die die7 = new Die(Color.VIOLET);
+        die7.setNumber(6);
+        dashboard.setDieOnCell(0, 2, die4);
+        dashboard.setDieOnCell(0, 4, die5);
+        dashboard.setDieOnCell(1, 1, die6);
+        dashboard.setDieOnCell(3, 2, die7);
+
+
+        Assertions.assertTrue(new PlacementCheck().nearBy(2,1, dashboard.getMatrixScheme()));
+        Assertions.assertTrue(new PlacementCheck().nearBy(3,1, dashboard.getMatrixScheme()));
+        Assertions.assertFalse(new PlacementCheck().nearBy(3,0, dashboard.getMatrixScheme()));
+        Assertions.assertFalse(new PlacementCheck().nearBy(2,4, dashboard.getMatrixScheme()));
     }
 
     @Test
