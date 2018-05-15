@@ -1,10 +1,7 @@
 package it.polimi.ingsw.controller.action;
 
 import it.polimi.ingsw.controller.Round;
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.Dashboard;
-import it.polimi.ingsw.model.GameBoard;
-import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.achievement.PrivateAchievement;
 import it.polimi.ingsw.model.exception.NotEnoughDiceLeftException;
 import it.polimi.ingsw.model.exception.NotValidParametersException;
@@ -29,22 +26,22 @@ class PlacementMoveTest {
         map.put("marco", "Fulgor del Cielo");
         GameBoard gameBoard = new GameBoard(map);
 
-        Round round=new Round(gameBoard.getPlayers());
-        round.initializeDraftPool(gameBoard);
-        gameBoard.setDraftPool(round.getDraftPool());
-        PlacementMove placementMove = new PlacementMove("0 0 2",gameBoard.getPlayers().get(0),gameBoard );
-        Assertions.assertTrue(placementMove.positionDie());
+        Die die1 = new Die(Color.BLUE);
+        die1.setNumber(4);
+        Die die2 = new Die(Color.VIOLET);
+        die2.setNumber(4);
+        Die die3 = new Die(Color.YELLOW);
+        die3.setNumber(1);
+
+        PlacementMove placementMove = new PlacementMove(gameBoard.getPlayers().get(0),0,0,die1);
+        Assertions.assertTrue(placementMove.placeDie());
         System.out.println(gameBoard.getPlayers().get(0).getDashboard().getMatrixScheme()[0][0]);
-        Assertions.assertEquals(6,gameBoard.getDraftPool().size());
-        Assertions.assertFalse(placementMove.positionDie());
-        PlacementMove placementMove1 = new PlacementMove("1 1 2",gameBoard.getPlayers().get(0),gameBoard);
-        Assertions.assertTrue(placementMove1.positionDie());
-        System.out.println(gameBoard.getPlayers().get(0).getDashboard().getMatrixScheme()[1][1]);
-        Assertions.assertEquals(5,gameBoard.getDraftPool().size());
-        PlacementMove placementMove2= new PlacementMove("3 3 4",gameBoard.getPlayers().get(0),gameBoard);
-        Assertions.assertFalse(placementMove2.positionDie());
-        System.out.println(gameBoard.getPlayers().get(0).getDashboard().getMatrixScheme()[3][3]);
-        Assertions.assertEquals(5,gameBoard.getDraftPool().size());
+        PlacementMove placementMove1 = new PlacementMove(gameBoard.getPlayers().get(0),0,1,die2);
+        Assertions.assertFalse(placementMove1.placeDie());
+        PlacementMove placementMove2= new PlacementMove(gameBoard.getPlayers().get(0),0,1,die3);
+        PlacementMove placementMove3= new PlacementMove(gameBoard.getPlayers().get(0),1,1,die2);
+        Assertions.assertTrue(placementMove3.placeDie());
+        Assertions.assertTrue((placementMove2.placeDie()));
 
 
     }

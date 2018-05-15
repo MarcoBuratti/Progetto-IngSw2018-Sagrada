@@ -9,63 +9,48 @@ import java.util.*;
 
 public class Round {
     private static int DRAFT_POOL_CAPACITY;
-    private ArrayList<Die> draftPool;
     private Turn currentTurn;
+    private GameBoard gameBoard;
 
-    public Round(List<Player> players) {
+    public Round(List<Player> players,GameBoard gameBoard) {
+        this.gameBoard=gameBoard;
         DRAFT_POOL_CAPACITY = (players.size() * 2) + 1;
-        this.draftPool = new ArrayList<>();
     }
 
-    public ArrayList<Die> getDraftPool() {
-        return draftPool;
+    public void initializeDraftPool() throws NotEnoughDiceLeftException {
+        ArrayList<Die> draftPool = new ArrayList<>();
+        draftPool.addAll(gameBoard.getDiceBag().extractSet(DRAFT_POOL_CAPACITY));
+        this.gameBoard.setDraftPool(draftPool);
     }
 
-    public void initializeDraftPool(GameBoard gameBoard) throws NotEnoughDiceLeftException {
-        this.draftPool.addAll(gameBoard.getDiceBag().extractSet(DRAFT_POOL_CAPACITY));
-    }
-
-    public void roundManager(List<Player> players, GameBoard gameBoard) {
+    public void roundManager(List<Player> players) {
         ListIterator<Player> iterator = players.listIterator();
         Map<Player, Boolean> secondTurnPlayed = new HashMap<>(players.size());
 
         while (iterator.hasNext()) {
             this.currentTurn = new Turn(iterator.next(), gameBoard, false,this);
-            Thread turn = new Thread(currentTurn);
-            turn.start();
-            while (!turn.isAlive())
-                secondTurnPlayed.put(iterator.next(), currentTurn.isHasSecondTurn());
+            currentTurn.turnManager();
+            secondTurnPlayed.put(iterator.next(), currentTurn.isHasSecondTurn());
         }
         while (iterator.hasPrevious()) {
             if (secondTurnPlayed.get(iterator.next())) {
                 this.currentTurn = new Turn(iterator.next(), gameBoard, true,this);
-                Thread turn = new Thread(currentTurn);
-                turn.start();
+                currentTurn.turnManager();
             }
         }
     }
 
-    public void endRound(GameBoard gameBoard) {
+    public void endRound() {
         try {
-            gameBoard.getRoundTrack().setNextRound(this.draftPool);
+            gameBoard.getRoundTrack().setNextRound(gameBoard.getDraftPool());
             gameBoard.emptyDraftPool();
         } catch (Exception e) {
             System.out.println(e.toString());
         }
 
-
     }
-
     public Turn getCurrentTurn() {
         return currentTurn;
     }
 
-    public void removeDieFromDraftPool( int index ){
-        try {
-            Die die = this.draftPool.get(index);
-            this.draftPool.remove(draftPool.indexOf(die));
-        }catch (Exception e) {
-            System.out.println(e.toString());
-        }
-    }
 }
