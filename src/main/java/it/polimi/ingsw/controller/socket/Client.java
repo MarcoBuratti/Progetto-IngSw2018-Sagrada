@@ -13,9 +13,9 @@ public class Client {
     private BufferedReader fromServer;
     private PrintStream toServer;
 
-    public Client() {
+    public Client(String address) {
         try {
-            this.socket = new Socket(InetAddress.getLocalHost(), Server.PORT);
+            this.socket = new Socket(address, Server.PORT);
             fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             toServer = new PrintStream(socket.getOutputStream());
             System.out.println("Client is online");
