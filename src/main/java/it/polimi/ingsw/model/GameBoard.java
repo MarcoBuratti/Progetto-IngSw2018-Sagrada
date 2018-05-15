@@ -58,7 +58,7 @@ public class GameBoard {
     }
 
     public void setDraftPool(ArrayList<Die> draftPool) {
-        this.draftPool.addAll(draftPool);
+        this.draftPool = draftPool;
     }
 
     public void emptyDraftPool () {
