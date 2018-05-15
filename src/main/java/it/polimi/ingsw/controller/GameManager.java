@@ -12,5 +12,5 @@ public class GameManager {
 
     public void initializeGameBoard() throws NotValidValueException {
         GameBoard gameBoard = new GameBoard(schemes);
-    };
+    }
 }
