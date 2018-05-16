@@ -7,11 +7,14 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exception.NotValidParametersException;
 import it.polimi.ingsw.model.exception.OccupiedCellException;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class Turn{
 
 
     private final boolean secondTurn;
-
+    private int timeTurn;
     private String typeMove;
 
     private boolean turnIsOver;
@@ -38,11 +41,13 @@ public class Turn{
         this.player = player;
         this.gameBoard = gameBoard;
         this.round =round;
+        this.timeTurn=3*1000;
     }
 
 
     public synchronized void setTurnIsOver(boolean turnIsOver) {
         this.turnIsOver = turnIsOver;
+        notifyAll();
     }
 
     public synchronized boolean isWaitMove() {
@@ -70,9 +75,9 @@ public class Turn{
     }
 
     public synchronized void newMove(String typeMove) {
-        this.typeMove = typeMove;
-        this.waitMove = false;
-        notifyAll();
+            this.typeMove = typeMove;
+            this.waitMove = false;
+            notifyAll();
     }
 
     public synchronized void newMove(String typeMove,int row,int column,Die die){
@@ -84,25 +89,37 @@ public class Turn{
         notifyAll();
     }
 
+    public void time(){
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if(!isTurnIsOver())
+                    setTurnIsOver(true);
+
+            }
+        },this.timeTurn);
+    }
+
     public void turnManager() {
 
-        Timer timer = new Timer(this);
-        new Thread(timer).start();
+        this.time();
         while (!isTurnIsOver()) {
-            while(!isTurnIsOver() && isWaitMove()) {
+            synchronized(this){
+            while(!isTurnIsOver() && isWaitMove())
                 try {
-                    this.wait();
+                    wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-
+            if(!isWaitMove()) {
                 if (typeMove.equals("setdie") && !placementDone) {
-                    PlacementMove placementMove = new PlacementMove(this.player,this.row,this.column,this.die);
+                    PlacementMove placementMove = new PlacementMove(this.player, this.row, this.column, this.die);
                     try {
                         this.placementDone = placementMove.placeDie();
                         this.gameBoard.removeDieFromDraftPool(this.die);
-                        if (isUsedTool()&&isPlacementDone())
+                        if (isUsedTool() && isPlacementDone())
                             this.turnIsOver = true;
                     } catch (OccupiedCellException | NotValidParametersException e) {
                         e.printStackTrace();
@@ -111,15 +128,16 @@ public class Turn{
 
                 } else if (typeMove.equals("usetool") && !usedTool) {
                     //codice dei tool
-                    if(isPlacementDone()&&isUsedTool()){
+                    if (isPlacementDone() && isUsedTool()) {
                         this.turnIsOver = true;
                     }
 
                 } else if (typeMove.equals("gothrough")) {
-                    this.turnIsOver = true;
+                    setTurnIsOver(true);
                 }
 
                 this.waitMove = true;
+            }
             }
         }
     }
