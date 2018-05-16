@@ -18,23 +18,26 @@ public class PlacementMove {
     private int column;
     private Die die;
 
-    public PlacementMove(Player player, int row,int column,Die die) {
+    public PlacementMove(Player player, int row, int column, Die die) {
         this.player = player;
-        this.row=row;
-        this.column=column;
-        this.die=die;
-        }
+        this.row = row;
+        this.column = column;
+        this.die = die;
+    }
 
     public boolean placeDie() throws OccupiedCellException, NotValidParametersException {
 
         PlacementCheck placementCheck = new PlacementCheck();
-            if(placementCheck.genericCheck(this.row,this.column,die,player.getDashboard().getMatrixScheme())) {
-                player.getDashboard().setDieOnCell(this.row, this.column, die);
-                return true;
-            }
-            else
-                return false;
+        if (placementCheck.genericCheck(this.row, this.column, die, player.getDashboard().getMatrixScheme())) {
+            player.getDashboard().setDieOnCell(this.row, this.column, die);
+            return true;
+        } else
+            return false;
 
-        }
     }
+
+    public Die getDie() {
+        return this.die;
+    }
+}
 

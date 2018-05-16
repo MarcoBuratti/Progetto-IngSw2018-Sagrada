@@ -27,9 +27,7 @@ public class Turn{
     private GameBoard gameBoard;
     private Round round;
 
-    private int row;
-    private int column;
-    private Die die;
+    private PlacementMove placementMove;
 
     public Turn(Player player, GameBoard gameBoard,boolean secondTurn,Round round) {
         this.usedTool = false;
@@ -74,6 +72,13 @@ public class Turn{
         return hasSecondTurn;
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+    public GameBoard getGameBoard(){
+        return gameBoard;
+    }
+
     public synchronized void newMove(String typeMove) {
             this.typeMove = typeMove;
             this.waitMove = false;
@@ -82,9 +87,7 @@ public class Turn{
 
     public synchronized void newMove(String typeMove,int row,int column,Die die){
         this.typeMove = typeMove;
-        this.row=row;
-        this.column=column;
-        this.die=die;
+        this.placementMove= new PlacementMove(this.player,row,column,die);
         this.waitMove = false;
         notifyAll();
     }
@@ -115,10 +118,9 @@ public class Turn{
             }
             if(!isWaitMove()) {
                 if (typeMove.equals("setdie") && !placementDone) {
-                    PlacementMove placementMove = new PlacementMove(this.player, this.row, this.column, this.die);
                     try {
                         this.placementDone = placementMove.placeDie();
-                        this.gameBoard.removeDieFromDraftPool(this.die);
+                        this.gameBoard.removeDieFromDraftPool(placementMove.getDie());
                         if (isUsedTool() && isPlacementDone())
                             this.turnIsOver = true;
                     } catch (OccupiedCellException | NotValidParametersException e) {
