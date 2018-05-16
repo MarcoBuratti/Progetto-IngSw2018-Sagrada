@@ -113,11 +113,14 @@ public class Cell {
     }
 
     @Override
+    /**
+     * Returns a string representing the cell, specifying its restriction and the die set on it, if present.
+     */
     public String toString(){
         if (this.usedCell)
             return "This cell has the following Restriction: << " + this.restriction.toString () + " >> and contains the following " + this.die.toString();
         else
-            return "This cell is empty";
+            return "This cell is empty and has the following Restriction: << " + this.restriction.toString() + " >>";
     }
 
 

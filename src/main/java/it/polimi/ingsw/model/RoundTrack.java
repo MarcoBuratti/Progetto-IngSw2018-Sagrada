@@ -64,7 +64,8 @@ public class RoundTrack {
     }
 
     /**
-     * Allows the user to place the dice remaining in the dice stock (at the end of the round) on the first empty cell (representing the currently played round).
+     * Allows the user to place the dice remaining in the dice stock (at the end of the round) on the first empty cell
+     * (representing the currently played round).
      * This also marks the end of that round.
      * @param mySet the dice set the user wants to place on the cell
      * @throws NotValidRoundException if the user tries to access the round track after the game is ended (every round already played)
@@ -98,6 +99,9 @@ public class RoundTrack {
     }
 
     @Override
+    /**
+     * Returns a string representing the round track, specifying the dice placed on every round's cell.
+     */
     public String toString() {
         String myRoundTrack = "Round track:\n\n";
         StringBuilder bld = new StringBuilder();

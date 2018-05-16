@@ -84,6 +84,10 @@ public class Player {
     }
 
     @Override
+    /**
+     * Returns a string which represent the Player object, specifying the player's user name, his dashboard,
+     * how many favour tokens he/she currently has and his/her private achievement.
+     */
     public String toString(){
         String string = "Player:\n";
         string += "Nickname: " + this.nickname + "\n";
