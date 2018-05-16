@@ -120,7 +120,7 @@ public class Cell {
         if (this.usedCell)
             return "This cell has the following Restriction: << " + this.restriction.toString () + " >> and contains the following " + this.die.toString();
         else
-            return "This cell is empty and has the following Restriction: << " + this.restriction.toString() + " >>\n";
+            return "This cell is empty and has the following Restriction: << " + this.restriction.toString() + " >>";
     }
 
 
