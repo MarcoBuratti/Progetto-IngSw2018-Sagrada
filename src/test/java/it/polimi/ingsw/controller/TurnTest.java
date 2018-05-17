@@ -6,10 +6,7 @@ import it.polimi.ingsw.model.GameBoard;
 import it.polimi.ingsw.model.exception.NotValidValueException;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 class TurnTest {
 
@@ -23,7 +20,19 @@ class TurnTest {
 
         Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false, new Round(gameBoard.getPlayers(), gameBoard));
 
+        ArrayList<Die> testDraftPool= new ArrayList<Die>();
+        Die die1 =new Die(Color.BLUE);
+        die1.setNumber(1);
+        Die die2 =new Die(Color.GREEN);
+        die2.setNumber(2);
+        Die die3 =new Die(Color.RED);
+        die3.setNumber(3);
 
+        testDraftPool.add(die1);
+        testDraftPool.add(die2);
+        testDraftPool.add(die3);
+
+        gameBoard.setDraftPool(testDraftPool);
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -34,19 +43,19 @@ class TurnTest {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove("setdie", 1, 1, new Die(Color.GREEN));
+                turn.newMove("setdie", 1, 1, die2);
             }
         }, 500);
-        timer.schedule(new TimerTask() {
+       timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove("setdie", 0, 0, new Die(Color.BLUE));
+                turn.newMove("setdie", 0, 0, die1);
             }
         }, 1000);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove("setdie", 1, 0, new Die(Color.RED));
+                turn.newMove("setdie", 0, 1, die2);
             }
         }, 1500);
         turn.turnManager();
@@ -54,7 +63,7 @@ class TurnTest {
         System.out.println(gameBoard.getPlayers().get(0).getDashboard().getMatrixScheme()[1][1].toString());
         System.out.println(gameBoard.getPlayers().get(0).getDashboard().getMatrixScheme()[0][0].toString());
         System.out.println(gameBoard.getPlayers().get(0).getDashboard().getMatrixScheme()[1][0].toString());
-
+        System.out.println(gameBoard.getDraftPool());
 
     }
 }

@@ -120,9 +120,10 @@ public class Turn{
                 if (typeMove.equals("setdie") && !placementDone) {
                     try {
                         this.placementDone = placementMove.placeDie();
-                        this.gameBoard.removeDieFromDraftPool(placementMove.getDie());
-                        if (isUsedTool() && isPlacementDone())
-                            this.turnIsOver = true;
+                        if(isPlacementDone())
+                            this.gameBoard.removeDieFromDraftPool(placementMove.getDie());
+                            if (isUsedTool())
+                                this.turnIsOver = true;
                     } catch (OccupiedCellException | NotValidParametersException e) {
                         e.printStackTrace();
                     }
