@@ -7,9 +7,6 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exception.NotValidParametersException;
 import it.polimi.ingsw.model.exception.OccupiedCellException;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 public class PlacementMove {
 
     private Player player;

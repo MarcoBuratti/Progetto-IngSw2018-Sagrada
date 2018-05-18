@@ -11,87 +11,46 @@ public class ToolReplaceDie implements Tool {
 
     private boolean isAlreadyUsed;
     private Color color;
+    private boolean needPlacement;
 
     private boolean notCheckValue;
     private boolean notCheckColor;
     private boolean needRoundTrack;
-    private  Turn turn;
-    private int oldrow1;
-    private int oldcolumn1;
-    private int newrow1;
-    private int newcolumn1;
-    private int oldrow2;
-    private int oldcolumn2;
-    private int newrow2;
-    private int newcolumn2;
-    private boolean twoReplace;
 
-    public ToolReplaceDie(boolean notCheckColor,boolean notCheckValue,boolean needRoundTrack) {
+    public ToolReplaceDie(boolean notCheckColor,boolean notCheckValue,boolean needRoundTrack,boolean needPlacement) {
         this.notCheckColor=notCheckColor;
         this.notCheckValue=notCheckValue;
         this.needRoundTrack=needRoundTrack;
+        this.needPlacement=needPlacement;
         this.isAlreadyUsed = false;
 
     }
 
-
-    @Override
     public boolean isAlreadyUsed() {
         return this.isAlreadyUsed;
     }
 
-    @Override
     public void setAlreadyUsed() {
         this.isAlreadyUsed = true;
     }
 
-    @Override
-    public boolean toolEffect(Turn turn) throws OccupiedCellException, NotValidParametersException {
-        Die die = turn.getPlayer().getDashboard().getMatrixScheme()[oldrow1][oldcolumn1].getDie();
-        if (!specialCheck(newrow1,newcolumn1,die,turn.getPlayer().getDashboard().getMatrixScheme()))
-            return false;
-        else {
-            die = turn.getPlayer().getDashboard().removeDieFromCell(oldrow1,oldcolumn1);
-            turn.getPlayer().getDashboard().setDieOnCell(newrow1,newcolumn1,die);
-        }
-        if(this.twoReplace) {
-            die = turn.getPlayer().getDashboard().getMatrixScheme()[oldrow2][oldcolumn2].getDie();
-            if (!specialCheck(newrow2, newcolumn2, die, turn.getPlayer().getDashboard().getMatrixScheme()))
-                return false;
-            else {
-                turn.getPlayer().getDashboard().removeDieFromCell(oldrow2,oldcolumn2);
-                turn.getPlayer().getDashboard().setDieOnCell(newrow2,newcolumn2,die);
-            }
-        }
-        return true;
+    public boolean toolEffect(Turn turn,PlayerMove playerMove){
+        boolean ret;
+        ret = replaceDie(turn,playerMove.getIntParameters(0),playerMove.getIntParameters(1), playerMove.getIntParameters(2), playerMove.getIntParameters(3));
+        if(playerMove.getTwoReplace()&& ret)
+            ret = replaceDie(turn,playerMove.getIntParameters(4), playerMove.getIntParameters(5), playerMove.getIntParameters(6), playerMove.getIntParameters(7));
+        return ret;
 
     }
-
-    public void setToolParameters(Turn turn, int oldrow1, int oldcolumn1, int newrow1, int newcolumn1,
-                                           int oldrow2, int oldcolumn2, int newrow2, int newcolumn2) {
-        this.turn=turn;
-        this.oldrow1 = oldrow1;
-        this.oldcolumn1 = oldcolumn1;
-        this.newrow1 = newrow1;
-        this.newcolumn1 = newcolumn1;
-        this.oldrow2 = oldrow2;
-        this.oldcolumn2 = oldcolumn2;
-        this.newrow2 = newrow2;
-        this.newcolumn2 = newcolumn2;
-        this.twoReplace = true;
+    public Color getColor() {
+        return this.color;
     }
 
-    public void setToolParameters(Turn turn,int oldrow1, int oldcolumn1, int newrow1, int newcolumn1) {
-
-        this.turn=turn;
-        this.oldrow1 = oldrow1;
-        this.oldcolumn1 = oldcolumn1;
-        this.newrow1 = newrow1;
-        this.newcolumn1 = newcolumn1;
-        this.twoReplace = false;
+    public boolean needPlacement() {
+        return this.needPlacement;
     }
 
-    public boolean specialCheck(int row, int column, Die myDie, Cell[][] matrixScheme) {
+    public boolean specialCheck(Turn turn,int row, int column, Die myDie, Cell[][] matrixScheme) {
 
         PlacementCheck placementCheck = new PlacementCheck();
 
@@ -110,5 +69,24 @@ public class ToolReplaceDie implements Tool {
         if((!placementCheck.nearBy(row,column,matrixScheme))&&(!placementCheck.allowedNeighbours(row,column,myDie,matrixScheme)))
             return false;
         return true;
+    }
+
+    private boolean replaceDie(Turn turn, int oldRow,int oldColumn,int newRow,int newColumn){
+        Die die = turn.getPlayer().getDashboard().getMatrixScheme()[oldRow][oldColumn].getDie();
+        if (!specialCheck(turn,newRow, newColumn, die, turn.getPlayer().getDashboard().getMatrixScheme()))
+            return false;
+        else {
+
+            try {
+                turn.getPlayer().getDashboard().removeDieFromCell(oldRow,oldColumn);
+                turn.getPlayer().getDashboard().setDieOnCell(newRow,newColumn,die);
+            } catch (NotValidParametersException|OccupiedCellException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return true;
+
+
     }
 }

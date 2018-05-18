@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.controller.action.PlayerMove;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Die;
 import it.polimi.ingsw.model.GameBoard;
@@ -20,7 +21,7 @@ class TurnTest {
 
         Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false, new Round(gameBoard.getPlayers(), gameBoard));
 
-        ArrayList<Die> testDraftPool= new ArrayList<Die>();
+        ArrayList<Die> testDraftPool= new ArrayList<>();
         Die die1 =new Die(Color.BLUE);
         die1.setNumber(1);
         Die die2 =new Die(Color.GREEN);
@@ -37,25 +38,25 @@ class TurnTest {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove("gothrough");
+                turn.newMove(new PlayerMove("gothrough"));
             }
         }, 2000);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove("setdie", 1, 1, die2);
+                turn.newMove(new PlayerMove("setdie", 2, new int[]{ 1,1}));
             }
         }, 500);
        timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove("setdie", 0, 0, die1);
+                turn.newMove(new PlayerMove("setdie",1, new int[]{0, 0}));
             }
         }, 1000);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove("setdie", 0, 1, die2);
+                turn.newMove(new PlayerMove("setdie",2,new int[] {0, 1}));
             }
         }, 1500);
         turn.turnManager();
