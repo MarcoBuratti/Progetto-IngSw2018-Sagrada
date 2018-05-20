@@ -41,7 +41,7 @@ class ToolReplaceDieTest {
         dashboard.setDieOnCell(1,1,new Die(Color.RED));
         dashboard.getMatrixScheme()[1][1].getDie().setNumber(6);
 
-        PlayerMove playerMove = new PlayerMove("usetool",new int[]{0,0,1,2});
+        PlayerMove playerMove = new PlayerMove("UseTool",new int[]{0,0,1,2});
         Assertions.assertTrue(toolReplaceDie.toolEffect(turn,playerMove));
 
         ToolReplaceDie toolReplaceDie1= new ToolReplaceDie(false, false, true,false);
@@ -53,10 +53,10 @@ class ToolReplaceDieTest {
         diceList.add(d2);
         gameBoard.getRoundTrack().setDiceList(diceList, 1);
 
-        PlayerMove playerMove1 = new PlayerMove("usetool",new int[]{1,0,1,3});
+        PlayerMove playerMove1 = new PlayerMove("UseTool",new int[]{1,0,1,3});
         //Assertions.assertTrue(toolReplaceDie1.specialCheck(1,3,dashboard.getMatrixScheme()[1][0].getDie(),dashboard.getMatrixScheme()));
         Assertions.assertTrue(toolReplaceDie1.toolEffect(turn,playerMove1));
-        PlayerMove playerMove2 = new PlayerMove("usetool",new int[]{2,0,2,1});
+        PlayerMove playerMove2 = new PlayerMove("UseTool",new int[]{2,0,2,1});
         Assertions.assertFalse(toolReplaceDie1.toolEffect(turn,playerMove2));
 
         ToolReplaceDie toolReplaceDie2= new ToolReplaceDie(true, true, false,false);
@@ -64,7 +64,7 @@ class ToolReplaceDieTest {
         dashboard.getMatrixScheme()[0][0].getDie().setNumber(1);
         dashboard.setDieOnCell(3,0,new Die(Color.RED));
         dashboard.getMatrixScheme()[3][0].getDie().setNumber(6);
-        PlayerMove playerMove3 = new PlayerMove("usetool",new int[]{0,0,1,4,3,0,2,4});
+        PlayerMove playerMove3 = new PlayerMove("UseTool",new int[]{0,0,1,4,3,0,2,4});
         Assertions.assertTrue(toolReplaceDie2.toolEffect(turn,playerMove3));
         for (int i = 0; i <4 ; i++) {
             for (int j = 0; j <5; j++) {

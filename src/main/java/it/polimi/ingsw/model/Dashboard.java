@@ -37,12 +37,8 @@ public class Dashboard {
                 for (int j = 0; j < COLUMN; j++) {
                     this.matrixScheme[i][j] = new Cell(restrictionFactory.getRestriction (RestrictionEnum.valueOf((String)((JSONArray) first.get(i)).get(j))));
                 }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
+        } catch (IOException | ParseException e) {
+            System.out.println(e.toString());
         }
     }
 

@@ -125,16 +125,16 @@ public class Turn{
                 }
             }
             if(!isWaitMove()) {
-                if (typeMove.equals("setdie") && !placementDone) {
+                if (typeMove.equals("SetDie") && !placementDone) {
                     this.setMove(this.playerMove);
 
-                } else if (typeMove.equals("usetool") && !usedTool) {
+                } else if (typeMove.equals("UseTool") && !usedTool) {
                     //codice dei tool
                     if (isPlacementDone() && isUsedTool()) {
                         this.turnIsOver = true;
                     }
 
-                } else if (typeMove.equals("gothrough")) {
+                } else if (typeMove.equals("GoThrough")) {
                     setTurnIsOver(true);
                 }
 

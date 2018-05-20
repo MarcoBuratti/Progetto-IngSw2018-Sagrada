@@ -1,8 +1,17 @@
 package it.polimi.ingsw.controller.action;
 
 import it.polimi.ingsw.model.Die;
+import org.json.simple.JSONObject;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Optional;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class PlayerMove {
     private int[] intMatrixParameters;
@@ -14,17 +23,58 @@ public class PlayerMove {
     private Optional<Integer> setOnDie;
 
     private String typeMove;
-    private Optional<String> nameTool;
+    private Optional<String> toolName;
+
+    public static PlayerMove PlayerMoveConstructor(){
+        JSONParser parser = new JSONParser();
+        try {
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/LastPlayerMove.json"));
+
+            String moveType = (String) jsonObject.get("type_playerMove");
+
+            switch (moveType){
+                case "PlaceDie":
+                    int die, row, column;
+                    die = Integer.parseInt((String) jsonObject.get("Die"));
+                    row = Integer.parseInt((String) jsonObject.get("Row"));
+                    column = Integer.parseInt((String) jsonObject.get("Column"));
+                    int[] coordinates = new int[]{row, column};
+                    return new PlayerMove("PlaceDie", die, coordinates);
+
+                case "UseTool":
+                    String toolName = (String) jsonObject.get("Tool");
+                    try {
+                        switch (toolName) {
+                            default:
+                                throw new IllegalAccessException();
+
+                        }
+                    } catch (Exception e) {
+                        System.out.println(e.toString());
+                    }
+
+                case "GoThrough":
+                    return new PlayerMove("GoThrough");
+
+                default: throw new IllegalArgumentException();
+
+            }
+
+        } catch (IOException | ParseException e ) {
+            System.out.println(e.toString());
+        }
+        throw new IllegalArgumentException();
+    }
 
     public PlayerMove(String typeMove){
-        if(typeMove.equals("gothrough"))
+        if(typeMove.equals("GoThrough"))
             this.typeMove=typeMove;
         else
             throw new IllegalArgumentException();
     }
 
     public PlayerMove(String typeMove, int indexDie, int[] intParameters){
-        if(typeMove.equals("setdie")){
+        if(typeMove.equals("PlaceDie")){
             this.typeMove=typeMove;
             this.intMatrixParameters=intParameters.clone();
             this.indexDie=Optional.of(indexDie);
@@ -32,7 +82,7 @@ public class PlayerMove {
     }
 
     public PlayerMove(String typeMove,int[] intParameters) {
-        if (typeMove.equals("usetool")) {
+        if (typeMove.equals("UseTool")) {
             this.typeMove = typeMove;
             this.intMatrixParameters = intParameters.clone();
             if (intParameters.length > 4) {

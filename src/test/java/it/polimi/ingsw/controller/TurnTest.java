@@ -38,25 +38,25 @@ class TurnTest {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove(new PlayerMove("gothrough"));
+                turn.newMove(new PlayerMove("GoThrough"));
             }
         }, 2000);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove(new PlayerMove("setdie", 2, new int[]{ 1,1}));
+                turn.newMove(new PlayerMove("PlaceDie", 2, new int[]{ 1,1}));
             }
         }, 500);
        timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove(new PlayerMove("setdie",1, new int[]{0, 0}));
+                turn.newMove(new PlayerMove("PlaceDie",1, new int[]{0, 0}));
             }
         }, 1000);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove(new PlayerMove("setdie",2,new int[] {0, 1}));
+                turn.newMove(new PlayerMove("PlaceDie",2,new int[] {0, 1}));
             }
         }, 1500);
         turn.turnManager();

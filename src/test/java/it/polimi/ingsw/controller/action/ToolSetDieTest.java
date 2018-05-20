@@ -52,9 +52,9 @@ class ToolSetDieTest {
         dashboard.setDieOnCell(1,1,new Die(Color.RED));
         dashboard.getMatrixScheme()[1][1].getDie().setNumber(6);
 
-        PlayerMove playerMove = new PlayerMove("usetool",0,5);
+        PlayerMove playerMove = new PlayerMove("UseTool",0,5);
         System.out.println(gameBoard.getDraftPool().get(0));
-        turn.newMove(new PlayerMove("setdie",0, new int[]{0, 1}));
+        turn.newMove(new PlayerMove("PlaceDie",0, new int[]{0, 1}));
         Assertions.assertTrue(toolSetDie.toolEffect(turn,playerMove));
         System.out.println(gameBoard.getDraftPool().get(0));
         toolSetDie.placementDie(turn);
@@ -66,9 +66,9 @@ class ToolSetDieTest {
 
 
         Turn turn1 = new Turn(gameBoard.getPlayers().get(0), gameBoard, false, new Round(gameBoard.getPlayers(), gameBoard));
-        PlayerMove playerMove1 = new PlayerMove("usetool",0,1);
+        PlayerMove playerMove1 = new PlayerMove("UseTool",0,1);
         System.out.println(gameBoard.getDraftPool().get(0));
-        turn.newMove(new PlayerMove("setdie",0, new int[]{0, 1}));
+        turn.newMove(new PlayerMove("PlaceDie",0, new int[]{0, 1}));
         Assertions.assertTrue(toolSetDie.toolEffect(turn1,playerMove1));
         System.out.println(gameBoard.getDraftPool().get(0));
         toolSetDie.endTurn(turn1);

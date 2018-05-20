@@ -1,4 +1,4 @@
-# Data exchange protocol
+# Socket data exchange protocol
 
 All messages are encoded using standard JSON format (key/value).
 ### Welcome message
@@ -37,7 +37,7 @@ Message sent from server to client to notify the user has been reconnected to th
 Message sent from server to client to notify changes on the game board through a JSON file.
 *<{"game_update": "matrixScheme", "playerID"}>CR*
 
-### Player moves messages
+### Player moves messages DA CANCELLARE
 Message sent from client to server to notify a game move.
 The playerID argument must specify the player making the move,
 the moveID specifies which kind of move is done and other arguments depend on the kind of move.
@@ -45,12 +45,12 @@ the moveID specifies which kind of move is done and other arguments depend on th
 
 ##### Going through
 This message is used to notify the player has chosen to go through without placing dice or using tool cards.
-*<{"type_playerMove": "playerID", "GoThrough"}>CR*
+*<{"playerID": "ID", "type_playerMove": "GoThrough"}>CR*
 
 ##### Placing a die
 This message is used to notify the player has chosen to place a die on his own dashboard.
-*<{"type_playerMove": "playerID", "SetDie": "Die", "Row", "Column"}>CR*
+*<{"playerID": "ID", "type_playerMove": "PlaceDie", "Die": "Die_Index", "Row": "Row_Index", "Column": "Column_Index"}>CR*
 
 ##### Using a tool card
 This message is used to notify the player has chosen to use a tool card.
-*<{"type_playerMove": "playerID", "UseTool": "Tool", "arguments.."}>CR*
+*<{"playerID": "ID", "type_playerMove": "UseTool", "Tool": "Tool_Name", "arguments.."}>CR*
