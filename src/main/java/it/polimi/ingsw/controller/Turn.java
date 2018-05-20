@@ -125,7 +125,7 @@ public class Turn{
                 }
             }
             if(!isWaitMove()) {
-                if (typeMove.equals("SetDie") && !placementDone) {
+                if (typeMove.equals("PlaceDie") && !placementDone) {
                     this.setMove(this.playerMove);
 
                 } else if (typeMove.equals("UseTool") && !usedTool) {
