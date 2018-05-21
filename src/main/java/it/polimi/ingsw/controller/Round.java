@@ -28,13 +28,17 @@ public class Round {
         Map<Player, Boolean> secondTurnPlayed = new HashMap<>(players.size());
 
         while (iterator.hasNext()) {
-            this.currentTurn = new Turn(iterator.next(), gameBoard, false,this);
+            Player currentPlayer = iterator.next();
+            //this.gameBoard.getModelView().setCurrentPlayer(currentPlayer.getNickname());
+            this.currentTurn = new Turn(currentPlayer, gameBoard, false,this);
             currentTurn.turnManager();
-            secondTurnPlayed.put(iterator.next(), currentTurn.isHasSecondTurn());
+            secondTurnPlayed.put(currentPlayer, currentTurn.isHasSecondTurn());
         }
         while (iterator.hasPrevious()) {
-            if (secondTurnPlayed.get(iterator.next())) {
-                this.currentTurn = new Turn(iterator.next(), gameBoard, true,this);
+            Player currentPlayer = iterator.previous();
+            if (secondTurnPlayed.get(currentPlayer)) {
+                //this.gameBoard.getModelView().setCurrentPlayer(currentPlayer.getNickname());
+                this.currentTurn = new Turn(currentPlayer, gameBoard, true,this);
                 currentTurn.turnManager();
             }
         }
