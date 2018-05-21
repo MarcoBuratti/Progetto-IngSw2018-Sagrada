@@ -16,14 +16,14 @@ import java.io.IOException;
 public class PlayerMove {
     private int[] intMatrixParameters;
     private Optional<Boolean> twoReplace;
-    private Optional<Boolean> needPlacement;
+    private Optional<Boolean> addOne;
 
     private Optional<Integer> indexDie;
     private Optional<Die> die2;
     private Optional<Integer> setOnDie;
 
     private String typeMove;
-    private Optional<String> toolName;
+    private Optional<ToolNames> toolName;
 
     public static PlayerMove PlayerMoveConstructor(){
         JSONParser parser = new JSONParser();
@@ -73,6 +73,16 @@ public class PlayerMove {
             throw new IllegalArgumentException();
     }
 
+    //tool 7
+    public PlayerMove(String typeMove,ToolNames toolName){
+        if(typeMove.equals("GoThrough")&&toolName.equals(ToolNames.GLAZING_HAMMER)) {
+            this.typeMove = typeMove;
+            this.toolName = Optional.of(toolName);
+        }
+        else
+            throw new IllegalArgumentException();
+    }
+
     public PlayerMove(String typeMove, int indexDie, int[] intParameters){
         if(typeMove.equals("PlaceDie")){
             this.typeMove=typeMove;
@@ -81,6 +91,17 @@ public class PlayerMove {
         }
     }
 
+    //tool 5 e 11
+    public PlayerMove(String typeMove, ToolNames toolName, int indexDie, int[] intParameters){
+        if(typeMove.equals("UseTool")&&(toolName.equals(ToolNames.LENS_CUTTER)||toolName.equals(ToolNames.FLUX_REMOVER))){
+            this.typeMove=typeMove;
+            this.toolName=Optional.of(toolName);
+            this.intMatrixParameters=intParameters.clone();
+            this.indexDie=Optional.of(indexDie);
+        }
+    }
+
+    //tool 2 3 4 e 12
     public PlayerMove(String typeMove,int[] intParameters) {
         if (typeMove.equals("UseTool")) {
             this.typeMove = typeMove;
@@ -92,11 +113,22 @@ public class PlayerMove {
         }
     }
 
-    public PlayerMove(String typeMove,int indexDie,int newValue) {
-        if (typeMove.equals("usetool")) {
+    //tool 1
+    public PlayerMove(String typeMove,ToolNames toolName,int indexDie,boolean addOne) {
+        if (typeMove.equals("UseTool")&&toolName.equals(ToolNames.GROZING_PLIERS)) {
+            this.toolName=Optional.of(toolName);
             this.typeMove = typeMove;
             this.indexDie=Optional.of(indexDie);
-            this.setOnDie=Optional.of(newValue);
+            this.addOne=Optional.of(addOne);
+        }
+    }
+
+    //tool 6 e 10
+    public PlayerMove(String typeMove,ToolNames toolName,int indexDie) {
+        if (typeMove.equals("UseTool")&&(toolName.equals(ToolNames.GRINDING_STONE)||toolName.equals(ToolNames.FLUX_BRUSH))) {
+            this.toolName=Optional.of(toolName);
+            this.typeMove = typeMove;
+            this.indexDie=Optional.of(indexDie);
         }
     }
 
@@ -107,9 +139,6 @@ public class PlayerMove {
            throw new IllegalArgumentException();
     }
 
-    public Optional<Boolean> getNeedPlacement() {
-        return needPlacement;
-    }
 
     public Boolean getTwoReplace() {
         if(twoReplace.isPresent())
@@ -121,6 +150,21 @@ public class PlayerMove {
     public Integer getIndexDie() {
         if(indexDie.isPresent())
             return indexDie.get();
+        else
+            throw new IllegalArgumentException();
+    }
+
+    public boolean getAddOne() {
+        if(this.addOne.isPresent())
+            return addOne.get();
+        else
+            throw new IllegalArgumentException();
+
+    }
+
+    public ToolNames getToolName() {
+        if(this.toolName.isPresent())
+            return toolName.get();
         else
             throw new IllegalArgumentException();
     }
