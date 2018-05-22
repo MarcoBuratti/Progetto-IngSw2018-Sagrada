@@ -41,7 +41,7 @@ class ToolSetDieTest {
         gameBoard.setDraftPool(testDraftPool);
 
         Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false, new Round(gameBoard.getPlayers(), gameBoard));
-        ToolSetDie toolSetDie= new ToolSetDie(true);
+        ToolSetDie toolSetDie= new ToolSetDie(true,ToolNames.FLUX_BRUSH);
         Dashboard dashboard =gameBoard.getPlayers().get(0).getDashboard();
         dashboard.setDieOnCell(0,0,new Die(Color.GREEN));
         dashboard.getMatrixScheme()[0][0].getDie().setNumber(2);
@@ -52,8 +52,9 @@ class ToolSetDieTest {
         dashboard.setDieOnCell(1,1,new Die(Color.RED));
         dashboard.getMatrixScheme()[1][1].getDie().setNumber(6);
 
-        PlayerMove playerMove = new PlayerMove("UseTool",0,5);
+        PlayerMove playerMove = new PlayerMove("UseTool",ToolNames.FLUX_BRUSH,0);
         System.out.println(gameBoard.getDraftPool().get(0));
+        Assertions.assertTrue(toolSetDie.toolEffect(turn,playerMove));
         turn.newMove(new PlayerMove("PlaceDie",0, new int[]{0, 1}));
         Assertions.assertTrue(toolSetDie.toolEffect(turn,playerMove));
         System.out.println(gameBoard.getDraftPool().get(0));
@@ -64,15 +65,20 @@ class ToolSetDieTest {
             }
         }
 
-
+        System.out.println("\n\n\n");
+        ToolSetDie toolSetDie1= new ToolSetDie(true,ToolNames.GRINDING_STONE);
         Turn turn1 = new Turn(gameBoard.getPlayers().get(0), gameBoard, false, new Round(gameBoard.getPlayers(), gameBoard));
-        PlayerMove playerMove1 = new PlayerMove("UseTool",0,1);
         System.out.println(gameBoard.getDraftPool().get(0));
+        PlayerMove playerMove1 = new PlayerMove("UseTool",ToolNames.GRINDING_STONE,0);
         turn.newMove(new PlayerMove("PlaceDie",0, new int[]{0, 1}));
-        Assertions.assertTrue(toolSetDie.toolEffect(turn1,playerMove1));
+        Assertions.assertTrue(toolSetDie1.toolEffect(turn1,playerMove1));
         System.out.println(gameBoard.getDraftPool().get(0));
-        toolSetDie.endTurn(turn1);
-        System.out.println(gameBoard.getDraftPool().get(0));
+
+        for (int i = 0; i <4 ; i++) {
+            for (int j = 0; j <5; j++) {
+                System.out.println(dashboard.getMatrixScheme()[i][j]);
+            }
+        }
 
     }
 

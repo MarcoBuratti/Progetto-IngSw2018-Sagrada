@@ -94,16 +94,8 @@ public class PlacementCheck {
 
         if (!matrixScheme[row][column].allowedMove(myDie))
             return false;
-
-        if (isEmpty(matrixScheme)) {
-            if (row == 0 || row == 4 || column == 0 || column == 5) {
-                return true;
-            } else return false;
-
-        } else {
-            if (!nearBy(row, column, matrixScheme))
+        if (!nearBy(row, column, matrixScheme))
                 return false;
-        }
 
         if (!allowedNeighbours(row, column, myDie, matrixScheme))
             return false;
@@ -121,23 +113,33 @@ public class PlacementCheck {
      * @return
      */
     public boolean nearBy(int row, int column, Cell[][] matrixScheme) {
-        if (row > 0) {
-            if (matrixScheme[row - 1][column].getUsedCell()) return true;
-            if (column > 0)
-                if (matrixScheme[row - 1][column - 1].getUsedCell() || matrixScheme[row][column - 1].getUsedCell())
-                    return true;
-            if (column < 4)
-                if (matrixScheme[row - 1][column + 1].getUsedCell() || matrixScheme[row][column + 1].getUsedCell())
-                    return true;
-        }
-        if (row < 3) {
-            if (matrixScheme[row + 1][column].getUsedCell()) return true;
-            if (column > 0)
-                if (matrixScheme[row + 1][column - 1].getUsedCell() || matrixScheme[row][column - 1].getUsedCell())
-                    return true;
-            if (column < 4)
-                if (matrixScheme[row + 1][column + 1].getUsedCell() || matrixScheme[row][column + 1].getUsedCell())
-                    return true;
+
+
+        if (isEmpty(matrixScheme)) {
+            if (row == 0 || row == 4 || column == 0 || column == 5) {
+                return true;
+            } else return false;
+
+        } else {
+
+            if (row > 0) {
+                if (matrixScheme[row - 1][column].getUsedCell()) return true;
+                if (column > 0)
+                    if (matrixScheme[row - 1][column - 1].getUsedCell() || matrixScheme[row][column - 1].getUsedCell())
+                        return true;
+                if (column < 4)
+                    if (matrixScheme[row - 1][column + 1].getUsedCell() || matrixScheme[row][column + 1].getUsedCell())
+                        return true;
+            }
+            if (row < 3) {
+                if (matrixScheme[row + 1][column].getUsedCell()) return true;
+                if (column > 0)
+                    if (matrixScheme[row + 1][column - 1].getUsedCell() || matrixScheme[row][column - 1].getUsedCell())
+                        return true;
+                if (column < 4)
+                    if (matrixScheme[row + 1][column + 1].getUsedCell() || matrixScheme[row][column + 1].getUsedCell())
+                        return true;
+            }
         }
         return false;
     }

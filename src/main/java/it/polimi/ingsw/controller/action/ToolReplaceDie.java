@@ -10,14 +10,15 @@ import it.polimi.ingsw.model.restriction.ValueRestriction;
 public class ToolReplaceDie implements Tool {
 
     private boolean isAlreadyUsed;
-    private Color color;
     private boolean needPlacement;
+    private ToolNames toolName;
 
     private boolean notCheckValue;
     private boolean notCheckColor;
     private boolean needRoundTrack;
 
-    public ToolReplaceDie(boolean notCheckColor,boolean notCheckValue,boolean needRoundTrack,boolean needPlacement) {
+    public ToolReplaceDie(boolean notCheckColor,boolean notCheckValue,boolean needRoundTrack,boolean needPlacement,ToolNames toolName) {
+        this.toolName=toolName;
         this.notCheckColor=notCheckColor;
         this.notCheckValue=notCheckValue;
         this.needRoundTrack=needRoundTrack;
@@ -30,8 +31,8 @@ public class ToolReplaceDie implements Tool {
         return this.isAlreadyUsed;
     }
 
-    public void setAlreadyUsed() {
-        this.isAlreadyUsed = true;
+    public void setAlreadyUsed(boolean alreadyUsed) {
+        this.isAlreadyUsed = alreadyUsed;
     }
 
     public boolean toolEffect(Turn turn,PlayerMove playerMove){
@@ -43,7 +44,7 @@ public class ToolReplaceDie implements Tool {
 
     }
     public Color getColor() {
-        return this.color;
+        return this.toolName.getColor();
     }
 
     public boolean needPlacement() {

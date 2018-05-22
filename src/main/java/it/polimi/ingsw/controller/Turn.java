@@ -2,7 +2,7 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.controller.action.PlacementMove;
 import it.polimi.ingsw.controller.action.PlayerMove;
-import it.polimi.ingsw.model.Die;
+import it.polimi.ingsw.model.Cell;
 import it.polimi.ingsw.model.GameBoard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exception.NotValidParametersException;
@@ -76,6 +76,10 @@ public class Turn{
 
     public boolean isHasSecondTurn() {
         return hasSecondTurn;
+    }
+
+    public boolean isSecondTurn() {
+        return secondTurn;
     }
 
     public Player getPlayer() {

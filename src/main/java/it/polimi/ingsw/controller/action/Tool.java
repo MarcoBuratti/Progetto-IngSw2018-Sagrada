@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.exception.OccupiedCellException;
 public interface Tool {
 
     boolean isAlreadyUsed();
-    void setAlreadyUsed();
+    void setAlreadyUsed(boolean alreadyUsed);
     boolean toolEffect(Turn turn,PlayerMove playerMove);
     Color getColor();
     boolean needPlacement();

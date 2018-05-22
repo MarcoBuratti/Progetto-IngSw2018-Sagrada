@@ -21,9 +21,11 @@ public class StartClient {
             MessengerInterface m = new Messenger(usernamen, server);
             server.login(m);
             server.sendToAll("Just Connected", m);
-            while (true){
+            boolean isOn = true;
+            while (isOn){
                 String newmex = scanner.nextLine();
                 server.sendToAll(newmex, m);
+                if(newmex.equals("quit")) isOn = false;
             }
         }catch (Exception e) {
             System.out.println("Hello Client Exception: " + e);

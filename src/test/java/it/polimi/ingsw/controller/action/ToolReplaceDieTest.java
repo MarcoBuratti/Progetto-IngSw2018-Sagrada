@@ -30,7 +30,7 @@ class ToolReplaceDieTest {
         GameBoard gameBoard = new GameBoard(map);
 
         Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false, new Round(gameBoard.getPlayers(), gameBoard));
-        ToolReplaceDie toolReplaceDie= new ToolReplaceDie(false, true, false,false);
+        ToolReplaceDie toolReplaceDie= new ToolReplaceDie(false, true, false,false,ToolNames.GROZING_PLIERS);
         Dashboard dashboard =gameBoard.getPlayers().get(0).getDashboard();
         dashboard.setDieOnCell(0,0,new Die(Color.GREEN));
         dashboard.getMatrixScheme()[0][0].getDie().setNumber(2);
@@ -44,7 +44,7 @@ class ToolReplaceDieTest {
         PlayerMove playerMove = new PlayerMove("UseTool",new int[]{0,0,1,2});
         Assertions.assertTrue(toolReplaceDie.toolEffect(turn,playerMove));
 
-        ToolReplaceDie toolReplaceDie1= new ToolReplaceDie(false, false, true,false);
+        ToolReplaceDie toolReplaceDie1= new ToolReplaceDie(false, false, true,false,ToolNames.EGLOMISE_BRUSH);
         Die d1, d2;
         d1 = new Die(Color.BLUE);
         d2 = new Die(Color.RED);
@@ -59,7 +59,7 @@ class ToolReplaceDieTest {
         PlayerMove playerMove2 = new PlayerMove("UseTool",new int[]{2,0,2,1});
         Assertions.assertFalse(toolReplaceDie1.toolEffect(turn,playerMove2));
 
-        ToolReplaceDie toolReplaceDie2= new ToolReplaceDie(true, true, false,false);
+        ToolReplaceDie toolReplaceDie2= new ToolReplaceDie(true, true, false,false,ToolNames.GROZING_PLIERS);
         dashboard.setDieOnCell(0,0,new Die(Color.YELLOW));
         dashboard.getMatrixScheme()[0][0].getDie().setNumber(1);
         dashboard.setDieOnCell(3,0,new Die(Color.RED));
