@@ -1,10 +1,13 @@
-package it.polimi.ingsw.controller.action;
+package it.polimi.ingsw.controller.tool;
 
 import it.polimi.ingsw.controller.Turn;
+import it.polimi.ingsw.controller.action.PlayerMove;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Die;
 import it.polimi.ingsw.model.exception.NotValidRoundException;
 import it.polimi.ingsw.model.exception.NotValidValueException;
+
+import java.util.ArrayList;
 
 public class ChangeDieTool implements Tool {
 
@@ -16,11 +19,11 @@ public class ChangeDieTool implements Tool {
     private Die secondDie;
     private Die dieDraftPool;
 
-    public ChangeDieTool(boolean needPlacement,ToolNames toolName){
-        this.color=toolName.getColor();
-        this.toolName=toolName;
-        this.needPlacement=needPlacement;
-        this.isAlreadyUsed=false;
+    public ChangeDieTool(boolean needPlacement, ToolNames toolName) {
+        this.color = toolName.getColor();
+        this.toolName = toolName;
+        this.needPlacement = needPlacement;
+        this.isAlreadyUsed = false;
 
     }
 
@@ -30,16 +33,16 @@ public class ChangeDieTool implements Tool {
     }
 
     public void setAlreadyUsed(boolean alreadyUsed) {
-        this.isAlreadyUsed=alreadyUsed;
+        this.isAlreadyUsed = alreadyUsed;
 
     }
 
     public boolean toolEffect(Turn turn, PlayerMove playerMove) {
-        if(toolName.equals("Lens Cutter")) {
+        if (toolName.equals(ToolNames.LENS_CUTTER)) {
             try {
                 secondDie = (Die) turn.getGameBoard().getRoundTrack().getDiceList(playerMove.getIntParameters(0)).get(playerMove.getIntParameters(1));
-                dieDraftPool =turn.getGameBoard().getDraftPool().get(playerMove.getIndexDie());
-                turn.getGameBoard().getDraftPool().remove(playerMove.getIndexDie());
+                dieDraftPool = turn.getGameBoard().getDraftPool().get(playerMove.getIndexDie());
+                turn.getGameBoard().removeDieFromDraftPool(dieDraftPool);
                 turn.getGameBoard().getRoundTrack().getDiceList(playerMove.getIntParameters(0)).remove(playerMove.getIntParameters(1));
                 turn.getGameBoard().getDraftPool().add(secondDie);
                 turn.getGameBoard().getRoundTrack().getDiceList(playerMove.getIntParameters(0)).add(dieDraftPool);
@@ -47,16 +50,20 @@ public class ChangeDieTool implements Tool {
             } catch (NotValidRoundException e) {
                 e.printStackTrace();
             }
-        }
-        else if(toolName.equals("Flux Remover")){
-            dieDraftPool =turn.getGameBoard().getDraftPool().get(playerMove.getIndexDie());
+        } else if (toolName.equals(ToolNames.FLUX_REMOVER)) {
+            dieDraftPool = turn.getGameBoard().getDraftPool().get(playerMove.getIndexDie());
+            turn.getGameBoard().removeDieFromDraftPool(dieDraftPool);
             secondDie = turn.getGameBoard().getDiceBag().changeDie(dieDraftPool);
+            ArrayList<Die> newPool = turn.getGameBoard().getDraftPool();
+            newPool.add(playerMove.getIndexDie(), secondDie);
+            turn.getGameBoard().setDraftPool(newPool);
+
             return true;
         }
 
         return false;
 
-        }
+    }
 
     public Color getColor() {
         return this.color;
@@ -67,10 +74,10 @@ public class ChangeDieTool implements Tool {
     }
 
 
-    public void placementDie(Turn turn){
+    public void placementDie(Turn turn) {
         if (turn.getTypeMove().equals("PlaceDie") && !turn.isPlacementDone() &&
                 dieDraftPool.equals(turn.getGameBoard().getDraftPool().get(turn.getPlayerMove().getIndexDie()))) {
-            if(toolName.equals("Flux Remover")) {
+            if (toolName.equals("Flux Remover")) {
                 try {
                     dieDraftPool.setNumber(turn.getPlayerMove().getSetOnDie());
                 } catch (NotValidValueException e) {

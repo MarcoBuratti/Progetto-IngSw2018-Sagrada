@@ -1,6 +1,7 @@
-package it.polimi.ingsw.controller.action;
+package it.polimi.ingsw.controller.tool;
 
 import it.polimi.ingsw.controller.Turn;
+import it.polimi.ingsw.controller.action.PlayerMove;
 import it.polimi.ingsw.model.Color;
 
 public class TwoTurnTool implements Tool {
@@ -9,10 +10,10 @@ public class TwoTurnTool implements Tool {
     private ToolNames toolName;
     private boolean needPlacement;
 
-    public TwoTurnTool(boolean needPlacement,ToolNames toolName){
-        this.needPlacement=needPlacement;
-        this.toolName=toolName;
-        this.isAlreadyUsed=false;
+    public TwoTurnTool(boolean needPlacement, ToolNames toolName) {
+        this.needPlacement = needPlacement;
+        this.toolName = toolName;
+        this.isAlreadyUsed = false;
     }
 
     public boolean isAlreadyUsed() {
@@ -20,11 +21,11 @@ public class TwoTurnTool implements Tool {
     }
 
     public void setAlreadyUsed(boolean alreadyUsed) {
-        this.isAlreadyUsed=alreadyUsed;
+        this.isAlreadyUsed = alreadyUsed;
     }
 
     public boolean toolEffect(Turn turn, PlayerMove playerMove) {
-        if(!turn.isSecondTurn()&&turn.isPlacementDone()){
+        if (!turn.isSecondTurn() && turn.isPlacementDone()) {
             turn.setPlacementDone(false);
             return true;
         }
