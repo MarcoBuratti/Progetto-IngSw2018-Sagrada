@@ -7,9 +7,8 @@ import java.rmi.registry.LocateRegistry;
 public class StartServer {
     public static void main(String [] args){
         try {
-            LocateRegistry.createRegistry(1099).rebind("127.0.0.1", new ChatServer() );
-            ChatServer obj = new ChatServer();
-            Naming.rebind("1099", obj);
+            LocateRegistry.createRegistry(1099);
+            Naming.rebind("server",new ChatServer());
             System.out.println("[System] Chat Server is ready.\n");
         } catch (RemoteException e) {
             e.printStackTrace();

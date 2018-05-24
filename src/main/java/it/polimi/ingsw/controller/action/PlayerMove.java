@@ -1,17 +1,15 @@
 package it.polimi.ingsw.controller.action;
 
+import it.polimi.ingsw.controller.tool.ToolNames;
 import it.polimi.ingsw.model.Die;
 import org.json.simple.JSONObject;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Optional;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import java.io.FileReader;
-import java.io.IOException;
 
 public class PlayerMove {
     private int[] intMatrixParameters;
@@ -73,9 +71,10 @@ public class PlayerMove {
             throw new IllegalArgumentException();
     }
 
-    //tool 7
+    //tool 7 e 8
     public PlayerMove(String typeMove,ToolNames toolName){
-        if(typeMove.equals("GoThrough")&&toolName.equals(ToolNames.GLAZING_HAMMER)) {
+        if((typeMove.equals("GoThrough"))||
+                (typeMove.equals("UseTool")&&(toolName.equals(ToolNames.GLAZING_HAMMER)||toolName.equals(ToolNames.RUNNING_PLIERS)))) {
             this.typeMove = typeMove;
             this.toolName = Optional.of(toolName);
         }
@@ -91,26 +90,32 @@ public class PlayerMove {
         }
     }
 
-    //tool 5 e 11
+    //tool 5 ,9 e 11
     public PlayerMove(String typeMove, ToolNames toolName, int indexDie, int[] intParameters){
-        if(typeMove.equals("UseTool")&&(toolName.equals(ToolNames.LENS_CUTTER)||toolName.equals(ToolNames.FLUX_REMOVER))){
+        if(typeMove.equals("UseTool")&&((toolName.equals(ToolNames.LENS_CUTTER)||toolName.equals(ToolNames.CORK_BAKED_STRAIGHTEDGE)))){
             this.typeMove=typeMove;
             this.toolName=Optional.of(toolName);
             this.intMatrixParameters=intParameters.clone();
             this.indexDie=Optional.of(indexDie);
         }
+        else
+            throw new IllegalArgumentException();
     }
 
     //tool 2 3 4 e 12
-    public PlayerMove(String typeMove,int[] intParameters) {
-        if (typeMove.equals("UseTool")) {
+    public PlayerMove(String typeMove,ToolNames toolName,int[] intParameters) {
+        if (typeMove.equals("UseTool")&&(toolName.equals(ToolNames.EGLOMISE_BRUSH)||toolName.equals(ToolNames.COPPER_FOIL_BURNISHER)||
+                toolName.equals(ToolNames.LATHEKIN)||toolName.equals(ToolNames.TAP_WHEEL))){
             this.typeMove = typeMove;
+            this.toolName=Optional.of(toolName);
             this.intMatrixParameters = intParameters.clone();
             if (intParameters.length > 4) {
                 this.twoReplace = Optional.of(true);
             } else
                 this.twoReplace = Optional.of(false);
         }
+        else
+            throw new IllegalArgumentException();
     }
 
     //tool 1
@@ -121,15 +126,19 @@ public class PlayerMove {
             this.indexDie=Optional.of(indexDie);
             this.addOne=Optional.of(addOne);
         }
+        else
+            throw new IllegalArgumentException();
     }
 
     //tool 6 e 10
     public PlayerMove(String typeMove,ToolNames toolName,int indexDie) {
-        if (typeMove.equals("UseTool")&&(toolName.equals(ToolNames.GRINDING_STONE)||toolName.equals(ToolNames.FLUX_BRUSH))) {
+        if (typeMove.equals("UseTool")&&(toolName.equals(ToolNames.GRINDING_STONE)||toolName.equals(ToolNames.FLUX_BRUSH)||toolName.equals(ToolNames.FLUX_REMOVER))) {
             this.toolName=Optional.of(toolName);
             this.typeMove = typeMove;
             this.indexDie=Optional.of(indexDie);
         }
+        else
+            throw new IllegalArgumentException();
     }
 
     public Integer getIntParameters(int index) {

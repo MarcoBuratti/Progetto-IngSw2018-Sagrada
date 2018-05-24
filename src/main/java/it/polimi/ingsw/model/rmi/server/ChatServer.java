@@ -22,7 +22,7 @@ public class ChatServer extends UnicastRemoteObject implements ChatInterface {
 
     @Override
     public void sendToAll(String s, MessengerInterface from) throws RemoteException {
-        System.out.println("\n[" + from.getUsername() + "] " + s);
+        System.out.println("[" + from.getUsername() + "] " + s);
         Enumeration usernames = l.keys();
         while (usernames.hasMoreElements()){
             String user = (String) usernames.nextElement();             //**Inviare i JSON aggoirnati a tutti i client

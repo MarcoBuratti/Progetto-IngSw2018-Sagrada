@@ -5,15 +5,15 @@ import it.polimi.ingsw.model.rmi.interfaces.ChatInterface;
 import it.polimi.ingsw.model.rmi.interfaces.MessengerInterface;
 
 import java.rmi.Naming;
+import java.rmi.registry.LocateRegistry;
 import java.util.Scanner;
 
 public class StartClient {
 
     public static void main(String [] args){
         try {
-            String chatServerURL = "127.0.0.1";
-            ChatInterface chatServer = (ChatInterface) Naming.lookup(chatServerURL);
-            ChatInterface server = (ChatInterface) Naming.lookup("1099");
+            String chatServerURL = "//localhost/server";
+            ChatInterface server = (ChatInterface)Naming.lookup(chatServerURL);
             Scanner scanner = new Scanner(System.in);
             System.out.println("[System] Client Messenger is running\n");
             System.out.println("Enter a username to login and press enter: \n");
@@ -21,9 +21,11 @@ public class StartClient {
             MessengerInterface m = new Messenger(usernamen, server);
             server.login(m);
             server.sendToAll("Just Connected", m);
-            while (true){
+            boolean isOn = true;
+            while (isOn){
                 String newmex = scanner.nextLine();
                 server.sendToAll(newmex, m);
+                if(newmex.equals("quit")) isOn = false;
             }
         }catch (Exception e) {
             System.out.println("Hello Client Exception: " + e);

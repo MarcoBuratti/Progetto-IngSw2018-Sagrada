@@ -1,7 +1,8 @@
-package it.polimi.ingsw.controller.action;
+package it.polimi.ingsw.controller.tool;
 
 import it.polimi.ingsw.controller.Round;
 import it.polimi.ingsw.controller.Turn;
+import it.polimi.ingsw.controller.action.PlayerMove;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Dashboard;
 import it.polimi.ingsw.model.Die;
@@ -14,13 +15,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class ToolReplaceDieTest {
+class ReplaceDieToolTest {
 
     @Test
     void toolEffect() throws NotValidValueException, OccupiedCellException, NotValidParametersException, NotValidRoundException {
@@ -30,46 +28,44 @@ class ToolReplaceDieTest {
         GameBoard gameBoard = new GameBoard(map);
 
         Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false, new Round(gameBoard.getPlayers(), gameBoard));
-        ToolReplaceDie toolReplaceDie= new ToolReplaceDie(false, true, false,false);
+        ReplaceDieTool replaceDieTool= new ReplaceDieTool(true, false, false,false,ToolNames.EGLOMISE_BRUSH);
         Dashboard dashboard =gameBoard.getPlayers().get(0).getDashboard();
-        dashboard.setDieOnCell(0,0,new Die(Color.GREEN));
+        dashboard.setDieOnCell(0,0,new Die(Color.VIOLET));
         dashboard.getMatrixScheme()[0][0].getDie().setNumber(2);
         dashboard.setDieOnCell(1,0,new Die(Color.BLUE));
         dashboard.getMatrixScheme()[1][0].getDie().setNumber(4);
-        dashboard.setDieOnCell(2,0,new Die(Color.YELLOW));
+        dashboard.setDieOnCell(2,0,new Die(Color.VIOLET));
         dashboard.getMatrixScheme()[2][0].getDie().setNumber(5);
         dashboard.setDieOnCell(1,1,new Die(Color.RED));
         dashboard.getMatrixScheme()[1][1].getDie().setNumber(6);
 
-        PlayerMove playerMove = new PlayerMove("UseTool",new int[]{0,0,1,2});
-        Assertions.assertTrue(toolReplaceDie.toolEffect(turn,playerMove));
+        PlayerMove playerMove = new PlayerMove("UseTool",ToolNames.EGLOMISE_BRUSH,new int[]{0,0,0,2});
+        Assertions.assertTrue(replaceDieTool.toolEffect(turn,playerMove));
+        ReplaceDieTool replaceDieTool1= new ReplaceDieTool(false, true, false,false,ToolNames.COPPER_FOIL_BURNISHER);
 
-        ToolReplaceDie toolReplaceDie1= new ToolReplaceDie(false, false, true,false);
-        Die d1, d2;
-        d1 = new Die(Color.BLUE);
-        d2 = new Die(Color.RED);
+        PlayerMove playerMove1 = new PlayerMove("UseTool",ToolNames.COPPER_FOIL_BURNISHER,new int[]{1,0,1,2});
+        Assertions.assertTrue(replaceDieTool1.toolEffect(turn,playerMove1));
+        PlayerMove playerMove2 = new PlayerMove("UseTool",ToolNames.LATHEKIN,new int[]{1,2,1,3,0,2,0,1});
+        ReplaceDieTool replaceDieTool2= new ReplaceDieTool(true, true, false,false,ToolNames.LATHEKIN);
+        Assertions.assertTrue(replaceDieTool2.toolEffect(turn,playerMove2));
+
+        Die d1 = new Die(Color.BLUE);
+        Die d2 = new Die(Color.VIOLET);
         ArrayList<Die> diceList = new ArrayList<>();
         diceList.add(d1);
         diceList.add(d2);
         gameBoard.getRoundTrack().setDiceList(diceList, 1);
 
-        PlayerMove playerMove1 = new PlayerMove("UseTool",new int[]{1,0,1,3});
-        //Assertions.assertTrue(toolReplaceDie1.specialCheck(1,3,dashboard.getMatrixScheme()[1][0].getDie(),dashboard.getMatrixScheme()));
-        Assertions.assertTrue(toolReplaceDie1.toolEffect(turn,playerMove1));
-        PlayerMove playerMove2 = new PlayerMove("UseTool",new int[]{2,0,2,1});
-        Assertions.assertFalse(toolReplaceDie1.toolEffect(turn,playerMove2));
 
-        ToolReplaceDie toolReplaceDie2= new ToolReplaceDie(true, true, false,false);
-        dashboard.setDieOnCell(0,0,new Die(Color.YELLOW));
-        dashboard.getMatrixScheme()[0][0].getDie().setNumber(1);
-        dashboard.setDieOnCell(3,0,new Die(Color.RED));
-        dashboard.getMatrixScheme()[3][0].getDie().setNumber(6);
-        PlayerMove playerMove3 = new PlayerMove("UseTool",new int[]{0,0,1,4,3,0,2,4});
-        Assertions.assertTrue(toolReplaceDie2.toolEffect(turn,playerMove3));
+        ReplaceDieTool replaceDieTool3= new ReplaceDieTool(true, true, true,false,ToolNames.TAP_WHEEL);
+        PlayerMove playerMove3 = new PlayerMove("UseTool",ToolNames.TAP_WHEEL,new int[]{0,1,0,0,2,0,1,2});
+        Assertions.assertTrue(replaceDieTool3.toolEffect(turn,playerMove3));
+
         for (int i = 0; i <4 ; i++) {
             for (int j = 0; j <5; j++) {
                 System.out.println(dashboard.getMatrixScheme()[i][j]);
             }
+            System.out.println("\n");
         }
     }
 }
