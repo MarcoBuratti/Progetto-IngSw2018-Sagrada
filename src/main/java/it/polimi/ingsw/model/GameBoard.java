@@ -2,16 +2,18 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.achievement.*;
 import it.polimi.ingsw.model.exception.NotValidValueException;
+import it.polimi.ingsw.model.server.ModelView;
 
 import java.util.*;
 
-public class GameBoard {
+public class GameBoard extends Observable{
     private static final int NUMBER_OF_PUBLIC_ACHIEVEMENTS = 3;
     private RoundTrack roundTrack;
     private ArrayList<Player> players;
     private DiceBag diceBag;
     private ArrayList<CardAchievement> publicAchievements;
     private ArrayList<Die> draftPool;
+    private Player currentPlayer;
 
     /**
      * Creates a GameBoard object which represents the game board, containing all the objects used during the game.
@@ -37,7 +39,7 @@ public class GameBoard {
         AbstractCardFactory abstractFactory = new CardFactory();
         for ( int i = 0; i < NUMBER_OF_PUBLIC_ACHIEVEMENTS; i++ ) {
             CardAchievement publicAchievementsFactory = abstractFactory.extractCardAchievement(publicAchievementList.get(i));
-           this.publicAchievements.add(publicAchievementsFactory);
+            this.publicAchievements.add(publicAchievementsFactory);
         }
 
         List<Color> privateAchievementsList = Arrays.asList(Color.values());
@@ -53,6 +55,38 @@ public class GameBoard {
         } catch (Exception e){
             System.out.println(e.toString());
         }
+    }
+
+    public GameBoard (ArrayList<Player> players) {
+
+        this.players = players;
+        publicAchievements = new ArrayList<>();
+
+        this.roundTrack = new RoundTrack();
+        this.diceBag = new DiceBag();
+
+        List<PublicAchievementNames> publicAchievementList = Arrays.asList(PublicAchievementNames.values());
+        Collections.shuffle(publicAchievementList);
+        AbstractCardFactory abstractFactory = new CardFactory();
+        for ( int i = 0; i < NUMBER_OF_PUBLIC_ACHIEVEMENTS; i++ ) {
+            CardAchievement publicAchievementsFactory = abstractFactory.extractCardAchievement(publicAchievementList.get(i));
+           this.publicAchievements.add(publicAchievementsFactory);
+        }
+
+        List<Color> privateAchievementsList = Arrays.asList(Color.values());
+        Collections.shuffle(privateAchievementsList);
+        int i = 0;
+
+        try {
+            for (Player p: players) {
+                p.setPrivateAchievement(new PrivateAchievement(privateAchievementsList.get(i)));
+                i++;
+            }
+        } catch (Exception e){
+            System.out.println(e.toString());
+        }
+        setChanged();
+        notifyObservers(this);
     }
 
     /**
@@ -104,6 +138,8 @@ public class GameBoard {
      */
     public void setDraftPool(ArrayList<Die> draftPool) {
         this.draftPool = draftPool;
+        setChanged();
+        notifyObservers(this);
     }
 
     /**
@@ -111,7 +147,9 @@ public class GameBoard {
      */
     public void emptyDraftPool () {
         if(this.draftPool != null)
-            this.draftPool.removeAll(this.draftPool);
+            this.draftPool.clear();
+        setChanged();
+        notifyObservers(this);
     }
 
     /**
@@ -125,5 +163,17 @@ public class GameBoard {
         }catch (Exception e) {
             System.out.println(e.toString());
         }
+        setChanged();
+        notifyObservers(this);
+    }
+
+    public void setCurrentPlayer (Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+        setChanged();
+        notifyObservers(this);
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 }
