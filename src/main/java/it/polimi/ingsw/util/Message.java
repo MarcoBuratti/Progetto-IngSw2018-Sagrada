@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.util;
+package it.polimi.ingsw.util;
 
 public class Message {
 
