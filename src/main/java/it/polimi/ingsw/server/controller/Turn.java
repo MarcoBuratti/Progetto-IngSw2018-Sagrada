@@ -7,10 +7,12 @@ import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.exception.NotValidParametersException;
 import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Turn{
+public class Turn extends Observable {
 
 
     private final boolean secondTurn;
@@ -40,12 +42,15 @@ public class Turn{
         this.gameBoard = gameBoard;
         this.round =round;
         this.timeTurn=3*1000;
+        this.addObserver( (Observer) player.getServerAbstractClass() );
     }
 
 
     public synchronized void setTurnIsOver(boolean turnIsOver) {
         this.turnIsOver = turnIsOver;
         notifyAll();
+        setChanged();
+        notifyObservers(turnIsOver);
     }
 
     public synchronized void setWaitMove(boolean waitMove) {
@@ -77,10 +82,6 @@ public class Turn{
         return hasSecondTurn;
     }
 
-    public boolean isSecondTurn() {
-        return secondTurn;
-    }
-
     public Player getPlayer() {
         return player;
     }
@@ -97,10 +98,10 @@ public class Turn{
     }
 
     public synchronized void newMove(PlayerMove playerMove) {
-            this.typeMove = playerMove.getTypeMove();
-            this.playerMove=playerMove;
-            this.waitMove = false;
-            notifyAll();
+        this.typeMove = playerMove.getTypeMove();
+        this.playerMove=playerMove;
+        this.waitMove = false;
+        notifyAll();
     }
 
 
@@ -116,16 +117,16 @@ public class Turn{
     }
 
     public void turnManager() {
-
+        setTurnIsOver(false);
         this.time();
         while (!isTurnIsOver()) {
             synchronized(this){
-            while(!isTurnIsOver() && isWaitMove())
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                while(!isTurnIsOver() && isWaitMove())
+                    try {
+                        wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
             }
             if(!isWaitMove()) {
                 if (typeMove.equals("PlaceDie") && !placementDone) {
@@ -134,7 +135,7 @@ public class Turn{
                 } else if (typeMove.equals("UseTool") && !usedTool) {
                     //codice dei tool
                     if (isPlacementDone() && isUsedTool()) {
-                        this.turnIsOver = true;
+                        setTurnIsOver(true);
                     }
 
                 } else if (typeMove.equals("GoThrough")) {
@@ -143,24 +144,25 @@ public class Turn{
 
                 this.waitMove = true;
             }
-            }
         }
-
-        public void setMove(PlayerMove playerMove){
-            try {
-                PlacementMove placementMove=new PlacementMove(player,playerMove.getIntParameters(0),
-                        playerMove.getIntParameters(1),gameBoard.getDraftPool().get(playerMove.getIndexDie()));
-                this.placementDone = placementMove.placeDie();
-                if(isPlacementDone()) {
-                    this.gameBoard.removeDieFromDraftPool(placementMove.getDie());
-                    if (isUsedTool())
-                        this.turnIsOver = true;
-                }
-            }catch (OccupiedCellException | NotValidParametersException e) {
-                e.printStackTrace();
-            }
-        }
-
     }
+
+
+    public void setMove(PlayerMove playerMove){
+        try {
+            PlacementMove placementMove=new PlacementMove(player,playerMove.getIntParameters(0),
+                    playerMove.getIntParameters(1),gameBoard.getDraftPool().get(playerMove.getIndexDie()));
+            this.placementDone = placementMove.placeDie();
+            if(isPlacementDone()) {
+                this.gameBoard.removeDieFromDraftPool(placementMove.getDie());
+                if (isUsedTool())
+                    this.turnIsOver = true;
+            }
+        }catch (OccupiedCellException | NotValidParametersException e) {
+            e.printStackTrace();
+        }
+    }
+
+}
 
 

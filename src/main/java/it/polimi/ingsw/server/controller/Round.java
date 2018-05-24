@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.model.Die;
 import it.polimi.ingsw.server.model.GameBoard;
 import it.polimi.ingsw.server.model.Player;
@@ -7,14 +8,16 @@ import it.polimi.ingsw.server.model.exception.NotEnoughDiceLeftException;
 
 import java.util.*;
 
-public class Round {
+public class Round implements Observer {
     private static int DRAFT_POOL_CAPACITY;
     private Turn currentTurn;
     private GameBoard gameBoard;
+    private ArrayList<Player> players;
 
-    public Round(List<Player> players,GameBoard gameBoard) {
-        this.gameBoard=gameBoard;
+    public Round(ArrayList<Player> players, GameBoard gameBoard) {
+        this.gameBoard = gameBoard;
         DRAFT_POOL_CAPACITY = (players.size() * 2) + 1;
+        this.players = players;
     }
 
     public void initializeDraftPool() throws NotEnoughDiceLeftException {
@@ -23,23 +26,26 @@ public class Round {
         this.gameBoard.setDraftPool(draftPool);
     }
 
-    public void roundManager(List<Player> players) {
+    public void roundManager() {
         ListIterator<Player> iterator = players.listIterator();
         Map<Player, Boolean> secondTurnPlayed = new HashMap<>(players.size());
+        Player currentPlayer;
 
         while (iterator.hasNext()) {
-            Player currentPlayer = iterator.next();
-            //this.gameBoard.getModelView().setCurrentPlayer(currentPlayer.getNickname());
-            this.currentTurn = new Turn(currentPlayer, gameBoard, false,this);
+            currentPlayer = iterator.next();
+            this.gameBoard.setCurrentPlayer(currentPlayer);
+            this.currentTurn = new Turn(currentPlayer, gameBoard, false, this);
             currentTurn.turnManager();
             secondTurnPlayed.put(currentPlayer, currentTurn.isHasSecondTurn());
         }
         while (iterator.hasPrevious()) {
-            Player currentPlayer = iterator.previous();
+            currentPlayer = iterator.previous();
             if (secondTurnPlayed.get(currentPlayer)) {
-                //this.gameBoard.getModelView().setCurrentPlayer(currentPlayer.getNickname());
-                this.currentTurn = new Turn(currentPlayer, gameBoard, true,this);
-                currentTurn.turnManager();
+                this.gameBoard.setCurrentPlayer(currentPlayer);
+                if (currentPlayer.getServerAbstractClass() != null) {
+                    this.currentTurn = new Turn(currentPlayer, gameBoard, true, this);
+                    currentTurn.turnManager();
+                }
             }
         }
     }
@@ -53,8 +59,16 @@ public class Round {
         }
 
     }
+
     public Turn getCurrentTurn() {
         return currentTurn;
     }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        PlayerMove playerMove = (PlayerMove) arg;
+        currentTurn.newMove(playerMove);
+    }
+
 
 }

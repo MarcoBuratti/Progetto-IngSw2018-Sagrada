@@ -1,14 +1,43 @@
 package it.polimi.ingsw.server.model;
 
+import it.polimi.ingsw.server.interfaces_and_abstract_classes.ServerAbstractClass;
 import it.polimi.ingsw.server.model.achievement.PrivateAchievement;
 import it.polimi.ingsw.server.model.exception.NotEnoughFavourTokensLeft;
+import it.polimi.ingsw.server.model.exception.NotValidValueException;
 
 public class Player {
     private String nickname;
     private int currentFavourToken;
     private Dashboard dashboard;
     private PrivateAchievement privateAchievement;
+    private ServerAbstractClass serverAbstractClass;
 
+
+    public Player (String nickname, ServerAbstractClass serverAbstractClass){
+        this.nickname = nickname;
+        this.serverAbstractClass = serverAbstractClass;
+    }
+
+    public ServerAbstractClass getServerAbstractClass() {
+        return this.serverAbstractClass;
+    }
+
+    public void setServerAbstractClass (ServerAbstractClass serverAbstractClass) {
+        this.serverAbstractClass = serverAbstractClass;
+    }
+
+    public void removeServerAbstractClass() {
+        this.serverAbstractClass = null;
+    }
+
+    public void setDashboard(String scheme) throws NotValidValueException {
+        this.dashboard = new Dashboard(scheme);
+        this.dashboard.setOwner(this);
+    }
+
+    public void setPrivateAchievement (PrivateAchievement privateAchievement) {
+        this.privateAchievement = privateAchievement;
+    }
     /**
      * Creates a Player object, which represent a player, having his own nickname and having his dashboard
      * and private achievement randomly assigned by the Game board.

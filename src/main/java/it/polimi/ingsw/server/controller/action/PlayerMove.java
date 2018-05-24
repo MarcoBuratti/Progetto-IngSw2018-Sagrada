@@ -33,9 +33,9 @@ public class PlayerMove {
             switch (moveType){
                 case "PlaceDie":
                     int die, row, column;
-                    die = Integer.parseInt((String) jsonObject.get("Die"));
-                    row = Integer.parseInt((String) jsonObject.get("Row"));
-                    column = Integer.parseInt((String) jsonObject.get("Column"));
+                    die = Integer.parseInt((String) jsonObject.get("Key1"));
+                    row = Integer.parseInt((String) jsonObject.get("Key2"));
+                    column = Integer.parseInt((String) jsonObject.get("Key3"));
                     int[] coordinates = new int[]{row, column};
                     return new PlayerMove("PlaceDie", die, coordinates);
 
