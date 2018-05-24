@@ -36,13 +36,13 @@ public class Turn extends Observable {
         this.placementDone = false;
         this.turnIsOver = false;
         this.waitMove = true;
-        this.hasSecondTurn=true;
-        this.secondTurn=secondTurn;
+        this.hasSecondTurn = true;
+        this.secondTurn = secondTurn;
         this.player = player;
         this.gameBoard = gameBoard;
-        this.round =round;
-        this.timeTurn=3*1000;
-        this.addObserver( (Observer) player.getServerAbstractClass() );
+        this.round = round;
+        this.timeTurn = 3*1000;
+     /*   this.addObserver( (Observer) player.getServerAbstractClass() ); */
     }
 
 
@@ -80,6 +80,10 @@ public class Turn extends Observable {
 
     public boolean isHasSecondTurn() {
         return hasSecondTurn;
+    }
+
+    public boolean isSecondTurn() {
+        return secondTurn;
     }
 
     public Player getPlayer() {
