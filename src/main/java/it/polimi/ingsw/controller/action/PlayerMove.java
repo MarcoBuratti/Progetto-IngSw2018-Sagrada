@@ -40,7 +40,7 @@ public class PlayerMove {
                     return new PlayerMove("PlaceDie", die, coordinates);
 
                 case "UseTool":
-                    String toolName = (String) jsonObject.get("Tool");
+                    String toolName = (String) jsonObject.get("tool");
                     try {
                         switch (toolName) {
                             default:
