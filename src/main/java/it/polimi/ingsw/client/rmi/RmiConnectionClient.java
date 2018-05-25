@@ -3,14 +3,15 @@ package it.polimi.ingsw.client.rmi;
 import it.polimi.ingsw.client.View;
 import it.polimi.ingsw.client.interfaces.ClientInterface;
 import it.polimi.ingsw.client.interfaces.RmiClientInterface;
+import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.interfaces_and_abstract_classes.RmiControllerInterface;
 import it.polimi.ingsw.server.interfaces_and_abstract_classes.RmiServerInterface;
-import it.polimi.ingsw.server.interfaces_and_abstract_classes.ServerAbstractClass;
 import it.polimi.ingsw.util.Message;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Observable;
@@ -49,7 +50,7 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
             try {
                 channel.update(new Message(message));
             } catch (RemoteException e) {
-                e.printStackTrace();
+                System.err.println(e.toString());
                 close();
             }
 
@@ -71,6 +72,43 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
             close();
 
     }
+
+    @Override
+    public void sendName(Message message) {
+        if(getIsOn()) {
+            try {
+                this.channel.setPlayerAndAskScheme(message);
+            } catch (RemoteException e) {
+                System.err.println(e.toString());
+                close();
+            }
+        }
+    }
+
+    @Override
+    public void sendScheme(Message message) {
+        if(getIsOn()) {
+            try {
+                this.channel.setDashboard(message);
+            } catch (RemoteException e) {
+                System.err.println(e.toString());
+                close();
+            }
+        }
+    }
+
+    @Override
+    public void sendMove(PlayerMove playerMove) {
+        if(getIsOn()) {
+            try {
+                this.channel.sendMove(playerMove);
+            } catch (RemoteException e) {
+                System.err.println(e.toString());
+                close();
+            }
+        }
+    }
+
 
     @Override
     public synchronized boolean getIsOn() {
