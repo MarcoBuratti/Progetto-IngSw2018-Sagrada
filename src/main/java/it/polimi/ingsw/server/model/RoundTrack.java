@@ -100,8 +100,8 @@ public class RoundTrack {
     }
 
     public Die changeDie(Die die, int round, int dieIndex) {
-        Die myDie = (Die) this.diceList[round-1].remove(dieIndex-1);
-        this.diceList[round-1].add(dieIndex-1, die);
+        Die myDie = (Die) this.diceList[round-1].remove(dieIndex);
+        this.diceList[round-1].add(dieIndex, die);
         return myDie;
     }
 

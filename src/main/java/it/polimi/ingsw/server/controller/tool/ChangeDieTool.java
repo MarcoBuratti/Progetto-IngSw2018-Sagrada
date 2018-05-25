@@ -41,22 +41,16 @@ public class ChangeDieTool implements Tool {
         if (toolName.equals(ToolNames.LENS_CUTTER)) {
             try {
                 secondDie = (Die) turn.getGameBoard().getRoundTrack().getDiceList(playerMove.getIntParameters(0)).get(playerMove.getIntParameters(1));
-                dieDraftPool = turn.getGameBoard().getDraftPool().get(playerMove.getIndexDie());
-                turn.getGameBoard().removeDieFromDraftPool(dieDraftPool);
-                turn.getGameBoard().getRoundTrack().getDiceList(playerMove.getIntParameters(0)).remove(playerMove.getIntParameters(1));
-                turn.getGameBoard().getDraftPool().add(secondDie);
-                turn.getGameBoard().getRoundTrack().getDiceList(playerMove.getIntParameters(0)).add(dieDraftPool);
+                dieDraftPool =turn.getGameBoard().changeDie(secondDie,playerMove.getIndexDie());
+                turn.getGameBoard().getRoundTrack().changeDie(dieDraftPool,playerMove.getIntParameters(0),playerMove.getIntParameters(1));
                 return true;
             } catch (NotValidRoundException e) {
                 e.printStackTrace();
             }
         } else if (toolName.equals(ToolNames.FLUX_REMOVER)) {
             dieDraftPool = turn.getGameBoard().getDraftPool().get(playerMove.getIndexDie());
-            turn.getGameBoard().removeDieFromDraftPool(dieDraftPool);
             secondDie = turn.getGameBoard().getDiceBag().changeDie(dieDraftPool);
-            ArrayList<Die> newPool = turn.getGameBoard().getDraftPool();
-            newPool.add(playerMove.getIndexDie(), secondDie);
-            turn.getGameBoard().setDraftPool(newPool);
+            turn.getGameBoard().changeDie(secondDie,playerMove.getIndexDie());
 
             return true;
         }

@@ -2,21 +2,19 @@ package it.polimi.ingsw.server.controller.tool;
 
 import it.polimi.ingsw.server.controller.Round;
 import it.polimi.ingsw.server.controller.Turn;
+import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Die;
 import it.polimi.ingsw.server.model.GameBoard;
 import it.polimi.ingsw.server.model.RoundTrack;
 import it.polimi.ingsw.server.model.exception.NotValidRoundException;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ChangeDieToolTest {
 
@@ -40,7 +38,6 @@ class ChangeDieToolTest {
         gameBoard.setDraftPool(testDraftPool);
 
 
-        RoundTrack roundTrack = new RoundTrack();
         Die d1 = new Die(Color.BLUE);
         d1.setNumber(4);
         Die d2 = new Die(Color.RED);
@@ -48,26 +45,23 @@ class ChangeDieToolTest {
         ArrayList<Die> diceList = new ArrayList<>();
         diceList.add(d1);
         diceList.add(d2);
-        roundTrack.setDiceList(diceList, 1);
+        gameBoard.getRoundTrack().setDiceList(diceList, 1);
         Die d3 = new Die(Color.YELLOW);
         d3.setNumber(6);
         ArrayList<Die> diceList2 = new ArrayList<>();
         diceList2.add(d3);
-        roundTrack.setNextRound(diceList2);
+        gameBoard.getRoundTrack().setNextRound(diceList2);
 
         Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false, new Round(gameBoard.getPlayers(), gameBoard));
 
-       /* ChangeDieTool changeDieTool=new ChangeDieTool(false,ToolNames.LENS_CUTTER);
+        System.out.println(gameBoard.getDraftPool());
+        ChangeDieTool changeDieTool=new ChangeDieTool(false,ToolNames.LENS_CUTTER);
         PlayerMove playerMove = new PlayerMove("UseTool",ToolNames.LENS_CUTTER,0,new int[]{1,0});
         Assertions.assertTrue(changeDieTool.toolEffect(turn,playerMove));
         System.out.println(gameBoard.getDraftPool());
-        System.out.println(gameBoard.getRoundTrack());
-
-
-
         ChangeDieTool changeDieTool1=new ChangeDieTool(true,ToolNames.FLUX_REMOVER);
-        PlayerMove playerMove1 = new PlayerMove("UseTool",ToolNames.FLUX_REMOVER,0);
+        PlayerMove playerMove1 = new PlayerMove("UseTool",ToolNames.FLUX_REMOVER,2);
         Assertions.assertTrue(changeDieTool1.toolEffect(turn,playerMove1));
-        System.out.println(gameBoard.getDraftPool());*/
+        System.out.println(gameBoard.getDraftPool());
     }
 }

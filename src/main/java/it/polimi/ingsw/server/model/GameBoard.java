@@ -170,7 +170,7 @@ public class GameBoard extends Observable{
     }
 
     public Die changeDie ( Die die, int dieIndex ) {
-        Die myDie = this.draftPool.remove(dieIndex-1);
+        Die myDie = this.draftPool.remove(dieIndex);
         this.draftPool.add( dieIndex , die );
         return myDie;
     }
