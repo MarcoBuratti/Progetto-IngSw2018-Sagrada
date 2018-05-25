@@ -42,9 +42,11 @@ public class Turn extends Observable {
         this.gameBoard = gameBoard;
         this.round = round;
         this.timeTurn = 3*1000;
-     /*   this.addObserver( (Observer) player.getServerAbstractClass() ); */
     }
 
+    public void setObserver(){
+        this.addObserver( (Observer) player.getServerAbstractClass());
+    }
 
     public synchronized void setTurnIsOver(boolean turnIsOver) {
         this.turnIsOver = turnIsOver;

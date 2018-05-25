@@ -165,6 +165,16 @@ public class GameBoard extends Observable{
         notifyObservers(this);
     }
 
+    public void addDieToDraftPool ( Die die ){
+        this.draftPool.add( die);
+    }
+
+    public Die changeDie ( Die die, int dieIndex ) {
+        Die myDie = this.draftPool.remove(dieIndex-1);
+        this.draftPool.add( dieIndex , die );
+        return myDie;
+    }
+
     public void setCurrentPlayer (Player currentPlayer) {
         this.currentPlayer = currentPlayer;
         setChanged();

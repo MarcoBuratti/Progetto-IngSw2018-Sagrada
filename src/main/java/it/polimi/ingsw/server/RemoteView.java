@@ -15,7 +15,7 @@ public class RemoteView extends Observable implements Observer {
     public RemoteView(ServerAbstractClass serverAbstractClass, ModelView modelView){
         this.serverAbstractClass = serverAbstractClass;
         player = serverAbstractClass.getPlayer();
-        (serverAbstractClass).addObserver(new MessageReceiver());
+        this.serverAbstractClass.addObserver(new MessageReceiver());
         modelView.addObserver(this);
     }
 
@@ -46,8 +46,7 @@ public class RemoteView extends Observable implements Observer {
     private class MessageReceiver implements Observer {
 
         @Override
-        public void update(Observable o, Object arg) {		//riceve messaggio dalla view lato client
-
+        public void update(Observable o, Object arg) {
             PlayerMove playerMove = (PlayerMove) arg;
             process(playerMove);
 

@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.interfaces_and_abstract_classes.ServerAbstractClas
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.SchemeCardsEnum;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
+import it.polimi.ingsw.server.rmi.RmiController;
 import it.polimi.ingsw.server.socket.SocketConnectionServer;
 
 import java.io.IOException;
@@ -62,7 +63,7 @@ public class Server extends UnicastRemoteObject {
     }
 
     public void start() {
-      /*  try {
+        try {
             LocateRegistry.createRegistry(1099);//Creo un registy sulla porta 1099 (quella di default).
         } catch (RemoteException e) {
             System.out.println("The registry has already been created!");
@@ -76,7 +77,6 @@ public class Server extends UnicastRemoteObject {
         } catch (RemoteException e) {
             System.err.println("Connection error: " + e.getMessage() + "!");
         }
-        */
 
 
         while (isServerOn) {

@@ -99,6 +99,12 @@ public class RoundTrack {
         return false;
     }
 
+    public Die changeDie(Die die, int round, int dieIndex) {
+        Die myDie = (Die) this.diceList[round-1].remove(dieIndex-1);
+        this.diceList[round-1].add(dieIndex-1, die);
+        return myDie;
+    }
+
     @Override
     /**
      * Returns a string representing the round track, specifying the dice placed on every round's cell.
