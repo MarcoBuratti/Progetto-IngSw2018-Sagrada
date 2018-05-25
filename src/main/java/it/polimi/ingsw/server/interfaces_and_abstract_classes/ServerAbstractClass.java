@@ -12,5 +12,4 @@ public abstract class ServerAbstractClass extends Observable implements Observer
     public abstract void setYourTurn(boolean bool);
     public abstract void send(String message);
     public abstract void close();
-    public abstract String askForChosenScheme() throws IOException;
 }

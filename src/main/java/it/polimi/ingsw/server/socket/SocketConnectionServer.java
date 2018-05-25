@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.interfaces_and_abstract_classes.ServerAbstractClass;
 import it.polimi.ingsw.server.model.Player;
+import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import org.json.simple.JSONObject;
 
 import java.io.*;
@@ -95,7 +96,7 @@ public class SocketConnectionServer extends ServerAbstractClass implements Runna
         }
     }
 
-    public synchronized String askForChosenScheme () throws IOException {
+    private synchronized String askForChosenScheme () throws IOException {
         StringBuilder bld = new StringBuilder();
         bld.append(server.getSchemes().get(0).getFirstScheme() + "_" + server.getSchemes().get(0).getSecondScheme());
         bld.append("_");
@@ -117,6 +118,10 @@ public class SocketConnectionServer extends ServerAbstractClass implements Runna
         try {
             this.player = new Player(in.readLine(), this);
             server.registerConnection(this);
+            if ( this.player.getDashboard() == null ) {
+                String chosenScheme = askForChosenScheme();
+                this.player.setDashboard(chosenScheme);
+            }
             while(getIsOn()) {
                 while (getYourTurn()) {
                     send("Make your move now.");
@@ -133,7 +138,7 @@ public class SocketConnectionServer extends ServerAbstractClass implements Runna
                 if(in.readLine() != null)
                     notYourTurn();
             }
-        } catch (IOException e) {
+        } catch (IOException | NotValidValueException e) {
             System.out.println("Connection expired.");
         } finally {
             server.deregisterConnection(this);

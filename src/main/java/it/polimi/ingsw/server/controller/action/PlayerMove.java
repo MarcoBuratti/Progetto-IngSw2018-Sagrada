@@ -6,12 +6,13 @@ import org.json.simple.JSONObject;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Optional;
 
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class PlayerMove {
+public class PlayerMove implements Serializable {
     private int[] intMatrixParameters;
     private Optional<Boolean> twoReplace;
     private Optional<Boolean> addOne;
@@ -23,45 +24,52 @@ public class PlayerMove {
     private String typeMove;
     private Optional<ToolNames> toolName;
 
-    public static PlayerMove PlayerMoveConstructor(){
+
+
+    public static PlayerMove PlayerMoveConstructor() {
         JSONParser parser = new JSONParser();
         try {
             JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/LastPlayerMove.json"));
-
-            String moveType = (String) jsonObject.get("type_playerMove");
-
-            switch (moveType){
-                case "PlaceDie":
-                    int die, row, column;
-                    die = Integer.parseInt((String) jsonObject.get("Key1"));
-                    row = Integer.parseInt((String) jsonObject.get("Key2"));
-                    column = Integer.parseInt((String) jsonObject.get("Key3"));
-                    int[] coordinates = new int[]{row, column};
-                    return new PlayerMove("PlaceDie", die, coordinates);
-
-                case "UseTool":
-                    String toolName = (String) jsonObject.get("tool");
-                    try {
-                        switch (toolName) {
-                            default:
-                                throw new IllegalAccessException();
-
-                        }
-                    } catch (Exception e) {
-                        System.out.println(e.toString());
-                    }
-
-                case "GoThrough":
-                    return new PlayerMove("GoThrough");
-
-                default: throw new IllegalArgumentException();
-
-            }
-
-        } catch (IOException | ParseException e ) {
-            System.out.println(e.toString());
+            return PlayerMoveReader(jsonObject);
+        } catch (IOException | ParseException e) {
+            System.err.println(e.toString());
         }
         throw new IllegalArgumentException();
+    }
+
+
+
+        public static PlayerMove PlayerMoveReader(JSONObject jsonObject) {
+
+        String moveType = (String) jsonObject.get("type_playerMove");
+
+        switch (moveType) {
+            case "PlaceDie":
+                int die, row, column;
+                die = Integer.parseInt((String) jsonObject.get("Key1"));
+                row = Integer.parseInt((String) jsonObject.get("Key2"));
+                column = Integer.parseInt((String) jsonObject.get("Key3"));
+                int[] coordinates = new int[]{row, column};
+                return new PlayerMove("PlaceDie", die, coordinates);
+
+            case "UseTool":
+                String toolName = (String) jsonObject.get("tool");
+                try {
+                    switch (toolName) {
+                        default:
+                            throw new IllegalAccessException();
+
+                    }
+                } catch (Exception e) {
+                    System.out.println(e.toString());
+                }
+
+            case "GoThrough":
+                return new PlayerMove("GoThrough");
+
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 
     public PlayerMove(String typeMove){

@@ -146,14 +146,6 @@ public class Server extends UnicastRemoteObject {
                         newServerAbstractClass.setPlayer(oldPlayer);
                         oldPlayer.setServerAbstractClass(newServerAbstractClass);
                         serverAbstractClasses.add(newServerAbstractClass);
-                        if (oldPlayer.getDashboard() == null) {
-                            try {
-                                String chosenScheme = newServerAbstractClass.askForChosenScheme();
-                                newServerAbstractClass.getPlayer().setDashboard(chosenScheme);
-                            } catch (IOException | NotValidValueException e) {
-                                System.err.println(e.toString());
-                            }
-                        }
                         for (RemoteView r : remoteViews) {
                             if (r.getPlayer().equals(newServerAbstractClass.getPlayer()))
                                 r.ChangeConnection(newServerAbstractClass);

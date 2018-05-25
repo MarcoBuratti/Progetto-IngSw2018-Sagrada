@@ -94,6 +94,6 @@ public class SocketMessageHandler implements MessageHandler {
 
     @Override
     public void handleName(String name) {
-
+        this.clientInterface.send(name);
     }
 }

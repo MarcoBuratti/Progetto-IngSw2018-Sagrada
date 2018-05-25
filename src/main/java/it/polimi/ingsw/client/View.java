@@ -1,6 +1,8 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.interfaces.ClientInterface;
+import it.polimi.ingsw.client.rmi.RmiConnectionClient;
+import it.polimi.ingsw.client.rmi.RmiMessageHandler;
 import it.polimi.ingsw.client.socket.SocketConnectionClient;
 import it.polimi.ingsw.client.socket.SocketMessageHandler;
 import it.polimi.ingsw.util.MessageHandler;
@@ -32,10 +34,10 @@ public class View implements Observer {
                 connectionClient = new SocketConnectionClient(this);
                 messageHandler = new SocketMessageHandler(connectionClient);
             }
-           /* else {
-                connectionClient = new ConnectionRmiClient(this, player);
+           else {
+                connectionClient = new RmiConnectionClient(this);
                 messageHandler = new RmiMessageHandler(connectionClient);
-            }*/
+            }
 
             messageHandler.handleName(nickname);
 
