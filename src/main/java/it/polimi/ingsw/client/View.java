@@ -16,6 +16,7 @@ public class View implements Observer {
     BufferedReader bufferedReader;
     ClientInterface connectionClient;
     MessageHandler messageHandler;
+    Boolean hasChosenScheme;
 
     public View(InputStreamReader input){
         bufferedReader = new BufferedReader(input);
@@ -29,6 +30,7 @@ public class View implements Observer {
             String nickname = bufferedReader.readLine();
             System.out.println("Premi 1 per Socket, 2 per RMI");
             int choice = Integer.parseInt(bufferedReader.readLine());
+            hasChosenScheme = false;
 
             if (choice == 1) {
                 connectionClient = new SocketConnectionClient(this);
@@ -45,8 +47,10 @@ public class View implements Observer {
             System.out.println("Premi -1 per terminare la partita");
 
             while (connectionClient.getIsOn()) {
-                String move = bufferedReader.readLine();
-                messageHandler.handleMove(move);
+                while (hasChosenScheme) {
+                    String move = bufferedReader.readLine();
+                    messageHandler.handleMove(move);
+                }
             }
             System.out.println("Partita terminata");
         } catch (Exception e) {
@@ -57,13 +61,14 @@ public class View implements Observer {
     }
 
     @Override
-    public void update(Observable o, Object arg) {
+    public synchronized void update(Observable o, Object arg) {
         try {
             String fromServer = (String) arg;
             if (fromServer.startsWith("Please choose one of these schemes in a minute: insert a number between 1 and 4.")) {
                 System.out.println(fromServer);
                 String fromClient = bufferedReader.readLine();
                 messageHandler.handleScheme(fromServer, fromClient);
+                hasChosenScheme = true;
             } else System.out.println(fromServer);
         } catch (Exception e) {
             System.err.println(e.toString());

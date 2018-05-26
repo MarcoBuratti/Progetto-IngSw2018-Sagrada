@@ -65,7 +65,6 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
     @Override
     public void run() {
         try {
-
             while(getIsOn()) {
                 String message = in.readLine();
                 setChanged();

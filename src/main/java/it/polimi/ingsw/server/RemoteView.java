@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.server.controller.action.PlayerMove;
-import it.polimi.ingsw.server.interfaces_and_abstract_classes.ServerAbstractClass;
+import it.polimi.ingsw.server.interfaces.ServerInterface;
 import it.polimi.ingsw.server.model.Player;
 
 import java.util.Observable;
@@ -10,19 +10,20 @@ import java.util.Observer;
 public class RemoteView extends Observable implements Observer {
 
     private Player player;
-    private ServerAbstractClass serverAbstractClass;
+    private ServerInterface serverInterface;
 
-    public RemoteView(ServerAbstractClass serverAbstractClass, ModelView modelView){
-        this.serverAbstractClass = serverAbstractClass;
-        player = serverAbstractClass.getPlayer();
-        this.serverAbstractClass.addObserver(new MessageReceiver());
+    public RemoteView(ServerInterface serverInterface, ModelView modelView){
+        this.serverInterface = serverInterface;
+        player = serverInterface.getPlayer();
+        Observable serverConnection = (Observable) this.serverInterface;
+        serverConnection.addObserver(new MessageReceiver());
         modelView.addObserver(this);
     }
 
-    public void ChangeConnection(ServerAbstractClass serverAbstractClass){
-        this.serverAbstractClass = serverAbstractClass;
-        (serverAbstractClass).addObserver(new MessageReceiver());
-
+    public void ChangeConnection(ServerInterface serverAbstractClass){
+        this.serverInterface = serverAbstractClass;
+        Observable serverConnection = (Observable) this.serverInterface;
+        serverConnection.addObserver(new MessageReceiver());
     }
 
     public Player getPlayer () {
@@ -35,7 +36,7 @@ public class RemoteView extends Observable implements Observer {
     }
 
     public void showGameboard (ModelView modelView){
-        serverAbstractClass.send(modelView.toString() + "\nIt's " + modelView.getCurrentPlayer() + "'s turn.\n");
+        serverInterface.send(modelView.toString());
     }
 
     public void process(PlayerMove playerMove){

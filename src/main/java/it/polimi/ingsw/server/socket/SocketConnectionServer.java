@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.socket;
 
 import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
-import it.polimi.ingsw.server.interfaces_and_abstract_classes.ServerAbstractClass;
+import it.polimi.ingsw.server.interfaces.ServerInterface;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import org.json.simple.JSONObject;
@@ -10,10 +10,9 @@ import org.json.simple.JSONObject;
 import java.io.*;
 import java.net.Socket;
 import java.util.Observable;
-import java.util.Observer;
 import java.util.StringTokenizer;
 
-public class SocketConnectionServer extends ServerAbstractClass implements Runnable, Observer {
+public class SocketConnectionServer extends Observable implements Runnable, ServerInterface {
 
     private Server server;
     private Socket socket;
@@ -98,13 +97,13 @@ public class SocketConnectionServer extends ServerAbstractClass implements Runna
 
     private synchronized String askForChosenScheme () throws IOException {
         StringBuilder bld = new StringBuilder();
-        bld.append(server.getSchemes().get(0).getFirstScheme() + "_" + server.getSchemes().get(0).getSecondScheme());
-        bld.append("_");
+        bld.append(server.getSchemes().get(0).getFirstScheme() + "," + server.getSchemes().get(0).getSecondScheme());
+        bld.append(",");
         server.getSchemes().remove(0);
-        bld.append(server.getSchemes().get(0).getFirstScheme() + "_" + server.getSchemes().get(0).getSecondScheme());
+        bld.append(server.getSchemes().get(0).getFirstScheme() + "," + server.getSchemes().get(0).getSecondScheme());
         String message = bld.toString();
         server.getSchemes().remove(0);
-        this.send("Please choose one of these schemes in a minute: insert a number between 1 and 4.\n" + message);
+        this.send("Please choose one of these schemes in a minute: insert a number between 1 and 4. " + message);
         String chosenScheme = in.readLine();
         return chosenScheme;
     }
@@ -121,6 +120,7 @@ public class SocketConnectionServer extends ServerAbstractClass implements Runna
             if ( this.player.getDashboard() == null ) {
                 String chosenScheme = askForChosenScheme();
                 this.player.setDashboard(chosenScheme);
+                this.send("You have chosen the following scheme: " + chosenScheme + "\n" + this.player.getDashboard().toString());
             }
             while(getIsOn()) {
                 while (getYourTurn()) {

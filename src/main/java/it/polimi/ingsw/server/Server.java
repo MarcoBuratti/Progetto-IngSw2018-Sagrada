@@ -1,10 +1,9 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.server.controller.Controller;
-import it.polimi.ingsw.server.interfaces_and_abstract_classes.ServerAbstractClass;
+import it.polimi.ingsw.server.interfaces.ServerInterface;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.SchemeCardsEnum;
-import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import it.polimi.ingsw.server.rmi.RmiController;
 import it.polimi.ingsw.server.socket.SocketConnectionServer;
 
@@ -25,12 +24,11 @@ public class Server extends UnicastRemoteObject {
     private static final int PORT_NUMBER = 1996;
     private ServerSocket serverSocket;
     private ExecutorService executor;
-    private List<ServerAbstractClass> serverAbstractClasses;
+    private ArrayList<ServerInterface> serverInterfaces;
     private ArrayList<String> nicknames;
     private ArrayList<Player> players;
     private boolean isServerOn;
     private boolean playersConnected;
-    private boolean gameStarted = false;
     private Controller controller;
     private ModelView modelView;
     private ArrayList<SchemeCardsEnum> schemes;
@@ -41,7 +39,7 @@ public class Server extends UnicastRemoteObject {
     public Server() throws IOException {
         this.serverSocket = new ServerSocket(PORT_NUMBER);
         executor = Executors.newCachedThreadPool();
-        serverAbstractClasses = new ArrayList<>();
+        serverInterfaces = new ArrayList<>();
 
         isServerOn = true;
         playersConnected = false;
@@ -84,24 +82,24 @@ public class Server extends UnicastRemoteObject {
                 Socket newSocket = serverSocket.accept();                //attende nuovi utenti
                 SocketConnectionServer connectionServer = new SocketConnectionServer(newSocket, this); //Crea un oggetto connessione
                 executor.submit(connectionServer);//Crea un thread per la singola connessione
-                if (playersConnected && !gameStarted) {
-                    this.timer.cancel();
-                    this.controller = new Controller(this);
-                    modelView = new ModelView(controller.getGameBoard());
-                    for (ServerAbstractClass s: serverAbstractClasses)
-                        remoteViews.add(new RemoteView(s, modelView));
-                    setGameStarted(true);
-                    System.out.println("Game started!");
-                }
-
             } catch (IOException e) {
                 System.out.println("Connection error!");
             }
         }
     }
 
-    private synchronized void setGameStarted(boolean bool) {
-        this.gameStarted = bool;
+    private synchronized void startGame() {
+        this.timer.cancel();
+        this.controller = new Controller(this);
+        modelView = new ModelView(controller.getGameBoard());
+        for (ServerInterface s: serverInterfaces)
+            remoteViews.add(new RemoteView(s, modelView));
+        this.controller.setRemoteViews(this);
+        setPlayersConnected(true);
+        System.out.println("Game started!");
+        for(ServerInterface s: serverInterfaces)
+            s.send("The game has started!");
+        this.controller.startGame();
     }
 
     private synchronized boolean getPlayersConnected() { return this.playersConnected; }
@@ -115,8 +113,9 @@ public class Server extends UnicastRemoteObject {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if(!getPlayersConnected())
-                    setPlayersConnected(true);
+                if(!getPlayersConnected()) {
+                        startGame();
+                }
             }
         },this.lobbyTime);
     }
@@ -135,27 +134,27 @@ public class Server extends UnicastRemoteObject {
         return remoteViews;
     }
 
-    public synchronized void registerConnection(ServerAbstractClass newServerAbstractClass) {
+    public synchronized void registerConnection(ServerInterface newServerInterface) {
 
-        if (nicknames.contains(newServerAbstractClass.getPlayer().getNickname())){
+        if (nicknames.contains(newServerInterface.getPlayer().getNickname())){
             Player oldPlayer;
             for (Player p: players) {
-                if (p.getNickname().equals(newServerAbstractClass.getPlayer().getNickname())) {
+                if (p.getNickname().equals(newServerInterface.getPlayer().getNickname())) {
                     oldPlayer = p;
-                    if(p.getServerAbstractClass() == null) {
-                        newServerAbstractClass.setPlayer(oldPlayer);
-                        oldPlayer.setServerAbstractClass(newServerAbstractClass);
-                        serverAbstractClasses.add(newServerAbstractClass);
+                    if(p.getServerInterface() == null) {
+                        newServerInterface.setPlayer(oldPlayer);
+                        oldPlayer.setServerInterface(newServerInterface);
+                        serverInterfaces.add(newServerInterface);
                         for (RemoteView r : remoteViews) {
-                            if (r.getPlayer().equals(newServerAbstractClass.getPlayer()))
-                                r.ChangeConnection(newServerAbstractClass);
+                            if (r.getPlayer().equals(newServerInterface.getPlayer()))
+                                r.ChangeConnection(newServerInterface);
                         }
                         System.out.println(oldPlayer.getNickname() + " has logged in again.");
-                        newServerAbstractClass.send("You have logged in as: " + newServerAbstractClass.getPlayer().getNickname());
+                        newServerInterface.send("You have logged in as: " + newServerInterface.getPlayer().getNickname());
                     }
                     else {
-                        newServerAbstractClass.send("This nickname has been already used! Please try again.");
-                        newServerAbstractClass.send("Terminate.");
+                        newServerInterface.send("This nickname has been already used! Please try again.");
+                        newServerInterface.send("Terminate.");
                     }
 
                 }
@@ -163,31 +162,32 @@ public class Server extends UnicastRemoteObject {
 
         }
         else if (!playersConnected && nicknames.size()<4) {
-            serverAbstractClasses.add(newServerAbstractClass);
+            serverInterfaces.add(newServerInterface);
             try {
-                String chosenScheme = newServerAbstractClass.askForChosenScheme();
-                newServerAbstractClass.getPlayer().setDashboard(chosenScheme);
-                players.add(newServerAbstractClass.getPlayer());
-                nicknames.add(newServerAbstractClass.getPlayer().getNickname());
-                System.out.println(newServerAbstractClass.getPlayer().getNickname() + " has logged in.");
+                players.add(newServerInterface.getPlayer());
+                nicknames.add(newServerInterface.getPlayer().getNickname());
+                newServerInterface.send("You have logged in as: " + newServerInterface.getPlayer().getNickname());
+                System.out.println(newServerInterface.getPlayer().getNickname() + " has logged in.");
             } catch(Exception e) {
                 System.out.println("Client Connection Error!");
             }
-            if(!playersConnected && serverAbstractClasses.size()==2) {
+            if(serverInterfaces.size()==2) {
                 this.gameStartTimer();
             }
-            if( (!playersConnected && (serverAbstractClasses.size()==4)) )
-                this.setPlayersConnected(true);
+            else if( ((serverInterfaces.size()==4)) ) {
+                this.startGame();
+            }
+
         } else{
-            newServerAbstractClass.send("Game has already started! Please try again later.");
-            newServerAbstractClass.send("Terminate.");
+            newServerInterface.send("Game has already started! Please try again later.");
+            newServerInterface.send("Terminate.");
         }
     }
 
 
-    public synchronized void deregisterConnection(ServerAbstractClass serverAbstractClass) {
-        serverAbstractClasses.remove(serverAbstractClass);
-        System.out.println(serverAbstractClass.getPlayer().getNickname() + " has disconnected from the server.");
-        serverAbstractClass.getPlayer().removeServerAbstractClass();
+    public synchronized void deregisterConnection(ServerInterface serverInterface) {
+        serverInterfaces.remove(serverInterface);
+        System.out.println(serverInterface.getPlayer().getNickname() + " has disconnected from the server.");
+        serverInterface.getPlayer().removeServerInterface();
     }
 }

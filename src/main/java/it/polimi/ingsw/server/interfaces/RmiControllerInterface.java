@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.interfaces_and_abstract_classes;
+package it.polimi.ingsw.server.interfaces;
 
 import it.polimi.ingsw.client.interfaces.RmiClientInterface;
 

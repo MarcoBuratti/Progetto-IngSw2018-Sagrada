@@ -17,22 +17,28 @@ public class SocketMessageHandler implements MessageHandler {
     @Override
     public void handleScheme (String fromServer, String fromClient) {
         int choice = Integer.parseInt(fromClient);
-        StringTokenizer strtok = new StringTokenizer(fromServer);
+        String substringSchemes = fromServer.substring(fromServer.indexOf(".") + 2);
+        StringTokenizer strtok = new StringTokenizer(substringSchemes, ",");
         String[] schemes = new String[4];
-        for (int i=0; i<4; i++){
-            String scheme = strtok.nextToken("_");
-            schemes[i] = scheme;
+        int i = 0;
+        while(strtok.hasMoreTokens()){
+            schemes[i] = strtok.nextToken();
+            i++;
         }
         String chosenScheme;
         switch (choice){
             case 1:
                 chosenScheme = schemes[0];
+                break;
             case 2:
                 chosenScheme = schemes[1];
+                break;
             case 3:
                 chosenScheme = schemes[2];
+                break;
             case 4:
                 chosenScheme = schemes[3];
+                break;
             default:
                 chosenScheme = schemes[0];
         }
@@ -83,12 +89,20 @@ public class SocketMessageHandler implements MessageHandler {
         StringTokenizer strtok = new StringTokenizer(fromClient);
         int moveChoice = Integer.parseInt(strtok.nextToken());
         switch (moveChoice){
-            case 1: placeDieHandler(fromClient);
-
-            case 2: useToolHandler(fromClient);
-            case 3: goThroughHandler();
-            case 4: quitHandler();
-            default: goThroughHandler();
+            case 1:
+                placeDieHandler(fromClient);
+                break;
+            case 2:
+                useToolHandler(fromClient);
+                break;
+            case 3:
+                goThroughHandler();
+                break;
+            case 4:
+                quitHandler();
+                break;
+            default:
+                goThroughHandler();
         }
     }
 

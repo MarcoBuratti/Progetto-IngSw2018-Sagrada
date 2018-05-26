@@ -2,8 +2,7 @@ package it.polimi.ingsw.server.rmi;
 
 import it.polimi.ingsw.client.interfaces.RmiClientInterface;
 import it.polimi.ingsw.server.Server;
-import it.polimi.ingsw.server.interfaces_and_abstract_classes.RmiServerInterface;
-import it.polimi.ingsw.server.interfaces_and_abstract_classes.ServerAbstractClass;
+import it.polimi.ingsw.server.interfaces.*;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.util.Message;
 
@@ -12,23 +11,11 @@ import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 import java.util.Observable;
 
-import it.polimi.ingsw.client.interfaces.RmiClientInterface;
-import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
-import it.polimi.ingsw.server.interfaces_and_abstract_classes.RmiServerInterface;
-import it.polimi.ingsw.server.interfaces_and_abstract_classes.ServerAbstractClass;
-import it.polimi.ingsw.server.model.Player;
+import it.polimi.ingsw.server.interfaces.RmiServerInterface;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
-import it.polimi.ingsw.util.Message;
 
-import java.io.IOException;
-import java.rmi.ConnectException;
-import java.rmi.RemoteException;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.StringTokenizer;
-
-public class RmiConnectionServer extends ServerAbstractClass implements RmiServerInterface, Observer {
+public class RmiConnectionServer extends Observable implements RmiServerInterface, ServerInterface {
 
     Server server;
     private Player player;
@@ -55,7 +42,9 @@ public class RmiConnectionServer extends ServerAbstractClass implements RmiServe
     @Override
     public void setDashboard(Message message) throws RemoteException {
         try {
+            send(this.player.getNickname());
             this.player.setDashboard(message.getMessage());
+
         } catch (NotValidValueException e) {
             System.err.println(e.toString());
         }
@@ -121,10 +110,10 @@ public class RmiConnectionServer extends ServerAbstractClass implements RmiServe
 
     public void askForChosenScheme() throws IOException {
         StringBuilder bld = new StringBuilder();
-        bld.append(server.getSchemes().get(0).getFirstScheme() + "_" + server.getSchemes().get(0).getSecondScheme());
-        bld.append("_");
+        bld.append(server.getSchemes().get(0).getFirstScheme() + "," + server.getSchemes().get(0).getSecondScheme());
+        bld.append(",");
         server.getSchemes().remove(0);
-        bld.append(server.getSchemes().get(0).getFirstScheme() + "_" + server.getSchemes().get(0).getSecondScheme());
+        bld.append(server.getSchemes().get(0).getFirstScheme() + "," + server.getSchemes().get(0).getSecondScheme());
         String message = bld.toString();
         server.getSchemes().remove(0);
         this.send("Please choose one of these schemes in a minute: insert a number between 1 and 4.\n" + message);

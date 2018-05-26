@@ -184,4 +184,8 @@ public class GameBoard extends Observable{
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
+
+    public String toString(){
+        return "Ciaooo";
+    }
 }

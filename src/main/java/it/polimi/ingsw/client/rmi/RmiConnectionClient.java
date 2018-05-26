@@ -4,14 +4,13 @@ import it.polimi.ingsw.client.View;
 import it.polimi.ingsw.client.interfaces.ClientInterface;
 import it.polimi.ingsw.client.interfaces.RmiClientInterface;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
-import it.polimi.ingsw.server.interfaces_and_abstract_classes.RmiControllerInterface;
-import it.polimi.ingsw.server.interfaces_and_abstract_classes.RmiServerInterface;
+import it.polimi.ingsw.server.interfaces.RmiControllerInterface;
+import it.polimi.ingsw.server.interfaces.RmiServerInterface;
 import it.polimi.ingsw.util.Message;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Observable;
@@ -66,14 +65,15 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
 
     public void update(String str) throws RemoteException{ //NOTIFICA LA VIEW
 
-        setChanged();
-        notifyObservers(str);
-        if (str.equals("Terminate."))
-            close();
-
+        if(getIsOn()) {
+            setChanged();
+            notifyObservers(str);
+            if (str.equals("Terminate."))
+                close();
+        }
     }
 
-    @Override
+
     public void sendName(Message message) {
         if(getIsOn()) {
             try {
@@ -85,7 +85,6 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
         }
     }
 
-    @Override
     public void sendScheme(Message message) {
         if(getIsOn()) {
             try {
@@ -97,7 +96,7 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
         }
     }
 
-    @Override
+
     public void sendMove(PlayerMove playerMove) {
         if(getIsOn()) {
             try {

@@ -1,7 +1,6 @@
-package it.polimi.ingsw.server.interfaces_and_abstract_classes;
+package it.polimi.ingsw.server.interfaces;
 import it.polimi.ingsw.server.model.Player;
 
-import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 

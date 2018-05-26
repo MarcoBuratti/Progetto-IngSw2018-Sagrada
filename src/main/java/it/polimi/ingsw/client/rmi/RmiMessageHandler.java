@@ -1,9 +1,7 @@
 package it.polimi.ingsw.client.rmi;
 
 import it.polimi.ingsw.client.interfaces.ClientInterface;
-import it.polimi.ingsw.client.interfaces.RmiClientInterface;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
-import it.polimi.ingsw.server.interfaces_and_abstract_classes.RmiServerInterface;
 import it.polimi.ingsw.util.Message;
 import it.polimi.ingsw.util.MessageHandler;
 import org.json.simple.JSONObject;
@@ -19,27 +17,34 @@ public class RmiMessageHandler implements MessageHandler {
 
     @Override
     public synchronized void handleScheme(String fromServer, String fromClient) {
-        RmiClientInterface client = (RmiClientInterface) clientInterface;
+        RmiConnectionClient client = (RmiConnectionClient) clientInterface;
         int choice = Integer.parseInt(fromClient);
-        StringTokenizer strtok = new StringTokenizer(fromServer);
+        String substringSchemes = fromServer.substring(fromServer.indexOf(".") + 2);
+        StringTokenizer strtok = new StringTokenizer(substringSchemes, ",");
         String[] schemes = new String[4];
-        for (int i=0; i<4; i++){
-            String scheme = strtok.nextToken("_");
-            schemes[i] = scheme;
+        int i = 0;
+        while(strtok.hasMoreTokens()){
+            schemes[i] = strtok.nextToken();
+            i++;
         }
         String chosenScheme;
         switch (choice){
             case 1:
                 chosenScheme = schemes[0];
+                break;
             case 2:
                 chosenScheme = schemes[1];
+                break;
             case 3:
                 chosenScheme = schemes[2];
+                break;
             case 4:
                 chosenScheme = schemes[3];
+                break;
             default:
                 chosenScheme = schemes[0];
         }
+        System.out.println("You have chosen the following scheme: " + chosenScheme);
         client.sendScheme(new Message(chosenScheme));
     }
 
@@ -53,15 +58,14 @@ public class RmiMessageHandler implements MessageHandler {
             value = strtok.nextToken();
             jsonObject.put(key, value);
         }
-        RmiClientInterface client = (RmiClientInterface) clientInterface;
+        RmiConnectionClient client = (RmiConnectionClient) clientInterface;
         client.sendMove(PlayerMove.PlayerMoveReader(jsonObject));
 
     }
 
     @Override
     public void handleName(String name){
-        RmiClientInterface client = (RmiClientInterface) clientInterface;
+        RmiConnectionClient client = (RmiConnectionClient) clientInterface;
         client.sendName(new Message(name));
-        //E' bruttino, pensa ad un'altra soluzione sfruttando la ClientInterface
     }
 }

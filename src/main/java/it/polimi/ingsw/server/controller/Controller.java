@@ -15,14 +15,17 @@ public class Controller extends Observable implements Observer {
     private static final int NUMBER_OF_ROUNDS = 10;
     private Round currentRound;
     private GameBoard gameBoard;
-    private RemoteView[] remoteViews;
+    private ArrayList<RemoteView> remoteViews;
     private ArrayList<Player> players;
 
     public Controller(Server server) {
         gameBoard = new GameBoard(server.getPlayers());
         players = gameBoard.getPlayers();
-        remoteViews = (RemoteView[]) server.getRemoteViews().toArray();
-        for(RemoteView r: remoteViews)
+    }
+
+    public void setRemoteViews (Server server) {
+        remoteViews = new ArrayList<>(server.getRemoteViews());
+        for (RemoteView r: remoteViews)
             r.addObserver(this);
     }
 

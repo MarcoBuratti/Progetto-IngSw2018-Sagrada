@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model;
 
-import it.polimi.ingsw.server.interfaces_and_abstract_classes.ServerAbstractClass;
+import it.polimi.ingsw.server.interfaces.ServerInterface;
 import it.polimi.ingsw.server.model.achievement.PrivateAchievement;
 import it.polimi.ingsw.server.model.exception.NotEnoughFavourTokensLeft;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
@@ -10,24 +10,24 @@ public class Player {
     private int currentFavourToken;
     private Dashboard dashboard;
     private PrivateAchievement privateAchievement;
-    private ServerAbstractClass serverAbstractClass;
+    private ServerInterface serverInterface;
 
 
-    public Player (String nickname, ServerAbstractClass serverAbstractClass){
+    public Player (String nickname, ServerInterface serverInterface){
         this.nickname = nickname;
-        this.serverAbstractClass = serverAbstractClass;
+        this.serverInterface = serverInterface;
     }
 
-    public ServerAbstractClass getServerAbstractClass() {
-        return this.serverAbstractClass;
+    public ServerInterface getServerInterface() {
+        return this.serverInterface;
     }
 
-    public void setServerAbstractClass (ServerAbstractClass serverAbstractClass) {
-        this.serverAbstractClass = serverAbstractClass;
+    public void setServerInterface(ServerInterface serverInterface) {
+        this.serverInterface = serverInterface;
     }
 
-    public void removeServerAbstractClass() {
-        this.serverAbstractClass = null;
+    public void removeServerInterface() {
+        this.serverInterface = null;
     }
 
     public void setDashboard(String scheme) throws NotValidValueException {

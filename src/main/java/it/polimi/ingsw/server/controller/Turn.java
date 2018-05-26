@@ -8,7 +8,6 @@ import it.polimi.ingsw.server.model.exception.NotValidParametersException;
 import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 
 import java.util.Observable;
-import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -41,11 +40,13 @@ public class Turn extends Observable {
         this.player = player;
         this.gameBoard = gameBoard;
         this.round = round;
-        this.timeTurn = 3*1000;
+        this.timeTurn = 1*1000;
     }
 
     public void setObserver(){
-        this.addObserver( (Observer) player.getServerAbstractClass());
+        this.addObserver(player.getServerInterface());
+        setChanged();
+        notifyObservers(true);
     }
 
     public synchronized void setTurnIsOver(boolean turnIsOver) {

@@ -2,9 +2,8 @@ package it.polimi.ingsw.server.rmi;
 
 import it.polimi.ingsw.client.interfaces.RmiClientInterface;
 import it.polimi.ingsw.server.Server;
-import it.polimi.ingsw.server.interfaces_and_abstract_classes.RmiControllerInterface;
-import it.polimi.ingsw.server.interfaces_and_abstract_classes.RmiServerInterface;
-import it.polimi.ingsw.server.model.Player;
+import it.polimi.ingsw.server.interfaces.RmiControllerInterface;
+import it.polimi.ingsw.server.interfaces.RmiServerInterface;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
