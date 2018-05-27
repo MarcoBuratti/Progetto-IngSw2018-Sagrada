@@ -23,6 +23,7 @@ class RoundTest {
 
         Round round =new Round(gameBoard.getPlayers(),gameBoard);
         int size = gameBoard.getDiceBag().getDiceSet().size();
+        round.initializeDraftPool();
         gameBoard.setDraftPool(gameBoard.getDraftPool());
         Assertions.assertEquals(7,gameBoard.getDraftPool().size());
         size -= 7;
@@ -31,6 +32,7 @@ class RoundTest {
         Assertions.assertEquals(0,gameBoard.getDraftPool().size());
 
         Round round2 =new Round(gameBoard.getPlayers(),gameBoard);
+        round2.initializeDraftPool();
         gameBoard.setDraftPool(gameBoard.getDraftPool());
         Assertions.assertEquals(7,gameBoard.getDraftPool().size());
         size -= 7;
