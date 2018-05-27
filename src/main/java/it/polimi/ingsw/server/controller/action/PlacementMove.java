@@ -10,7 +10,6 @@ import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 public class PlacementMove {
 
     private Player player;
-    private GameBoard gameboard;
     private int row;
     private int column;
     private Die die;

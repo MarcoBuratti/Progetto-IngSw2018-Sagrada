@@ -140,18 +140,25 @@ public class Turn extends Observable {
             if(!isWaitMove()) {
                 if (typeMove.equals("PlaceDie") && !placementDone) {
                     this.setMove(this.playerMove);
-                    setTurnIsOver(false);
-                } else if (typeMove.equals("UseTool") && !usedTool) {
-                    //codice dei tool
-                    if (isPlacementDone() && isUsedTool()) {
+                    if(placementDone && usedTool)
                         setTurnIsOver(true);
-                        waitMove = false;
-                    }
+                    else
+                        setTurnIsOver(false);
+
+                } else if (typeMove.equals("UseTool") && !usedTool) {
+
+
+                    //codice dei tool
+                    if (placementDone && usedTool)
+                        setTurnIsOver(true);
+                    else
+                        setTurnIsOver(false);
 
                 } else if (typeMove.equals("GoThrough")) {
                     setTurnIsOver(true);
-                    waitMove = false;
                 }
+
+                this.waitMove = true;
             }
         }
     }
@@ -159,13 +166,11 @@ public class Turn extends Observable {
 
     public void setMove(PlayerMove playerMove){
         try {
-            PlacementMove placementMove=new PlacementMove(player,playerMove.getIntParameters(0),
-                    playerMove.getIntParameters(1),gameBoard.getDraftPool().get(playerMove.getIndexDie()));
+            PlacementMove placementMove = new PlacementMove(player, playerMove.getIntParameters(0),
+                    playerMove.getIntParameters(1), gameBoard.getDraftPool().get(playerMove.getIndexDie()));
             this.placementDone = placementMove.placeDie();
             if(isPlacementDone()) {
                 this.gameBoard.removeDieFromDraftPool(placementMove.getDie());
-                if (isUsedTool())
-                    this.turnIsOver = true;
             }
         }catch (OccupiedCellException | NotValidParametersException e) {
             e.printStackTrace();

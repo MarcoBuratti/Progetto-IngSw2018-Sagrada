@@ -64,7 +64,6 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
 
 
     public void update(String str) throws RemoteException{ //NOTIFICA LA VIEW
-
         if(getIsOn()) {
             setChanged();
             notifyObservers(str);

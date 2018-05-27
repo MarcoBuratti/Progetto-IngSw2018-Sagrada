@@ -44,9 +44,8 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
     @Override
     public void setDashboard(Message message) throws RemoteException {
         try {
-            send(this.player.getNickname());
+            System.out.println(message.getMessage());
             this.player.setDashboard(message.getMessage());
-
         } catch (NotValidValueException e) {
             System.err.println(e.toString());
         }
