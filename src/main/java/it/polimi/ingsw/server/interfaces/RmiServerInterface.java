@@ -7,7 +7,6 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface RmiServerInterface extends Remote {
-    void update(Message message) throws RemoteException;
     void setPlayerAndAskScheme(Message message) throws RemoteException;
     void setDashboard (Message message) throws RemoteException;
     void sendMove (PlayerMove playerMove) throws RemoteException;

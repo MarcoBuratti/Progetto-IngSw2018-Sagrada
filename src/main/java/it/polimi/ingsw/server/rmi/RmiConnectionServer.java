@@ -114,10 +114,6 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
             notifyObservers(playerMove);
         }
 
-        private void sendMessage (Message message) {
-            setChanged();
-            notifyObservers(message);
-        }
 
     }
 
@@ -139,9 +135,6 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         this.send("Please choose one of these schemes in a minute: insert a number between 1 and 4.\n" + message);
     }
 
-    public void update(Message message) throws RemoteException{ //NOTIFICA LA REMOTE VIEW
-        messageSender.sendMessage(message);
-    }
 
     @Override
     public void update(Observable o, Object arg) {

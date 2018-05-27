@@ -43,19 +43,6 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
     }
 
 
-    @Override
-    public void send(String message) {
-        if (getIsOn()) {
-            try {
-                channel.update(new Message(message));
-            } catch (RemoteException e) {
-                System.err.println(e.toString());
-                close();
-            }
-
-        }
-    }
-
 
     private void close() {
         setOff();

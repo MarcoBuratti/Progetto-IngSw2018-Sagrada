@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.socket;
 
 
 import it.polimi.ingsw.client.interfaces.ClientInterface;
+import it.polimi.ingsw.server.socket.SocketConnectionServer;
 import it.polimi.ingsw.util.MessageHandler;
 
 import java.util.StringTokenizer;
@@ -42,7 +43,8 @@ public class SocketMessageHandler implements MessageHandler {
             default:
                 chosenScheme = schemes[0];
         }
-        clientInterface.send(chosenScheme);
+        SocketConnectionClient client = (SocketConnectionClient) clientInterface;
+        client.send(chosenScheme);
     }
 
     private void placeDieHandler (String fromClient){
@@ -60,15 +62,18 @@ public class SocketMessageHandler implements MessageHandler {
             i++;
         }
         json_translation = bld.toString();
-        clientInterface.send(json_translation);
+        SocketConnectionClient client = (SocketConnectionClient) clientInterface;
+        client.send(json_translation);
     }
 
     private void goThroughHandler (){
-        clientInterface.send("type_playerMove GoThrough");
+        SocketConnectionClient client = (SocketConnectionClient) clientInterface;
+        client.send("type_playerMove GoThrough");
     }
 
     private void quitHandler () {
-        clientInterface.send("/quit");
+        SocketConnectionClient client = (SocketConnectionClient) clientInterface;
+        client.send("/quit");
     }
 
     private void useToolHandler (String fromClient) {
@@ -108,6 +113,7 @@ public class SocketMessageHandler implements MessageHandler {
 
     @Override
     public void handleName(String name) {
-        this.clientInterface.send(name);
+        SocketConnectionClient client = (SocketConnectionClient) clientInterface;
+        client.send(name);
     }
 }
