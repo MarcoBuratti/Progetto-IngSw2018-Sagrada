@@ -113,11 +113,11 @@ public class RoundTrack {
         String myRoundTrack = "Round track:\n\n";
         StringBuilder bld = new StringBuilder();
         for (int i = 0; i < NUMBER_OF_ROUNDS; i++) {
-            bld.append("Round ");
+            bld.append("\nRound ");
             bld.append(i + 1);
             bld.append(" :\n");
             for (Object die : diceList[i])
-                bld.append(die.toString());
+                bld.append(die.toString()+" ");
         }
         return myRoundTrack + bld.toString();
     }

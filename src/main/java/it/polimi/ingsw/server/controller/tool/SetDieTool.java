@@ -35,7 +35,9 @@ public class SetDieTool implements Tool {
     }
 
     public boolean toolEffect(Turn turn, PlayerMove playerMove) {
-        if (!turn.isPlacementDone()) {
+        if (toolName.equals(ToolNames.FLUX_BRUSH)&&turn.isPlacementDone()) {
+            return false;
+        }
             die = turn.getGameBoard().getDraftPool().get(playerMove.getIndexDie());
             int oldValue = die.getNumber();
             try {
@@ -56,7 +58,6 @@ public class SetDieTool implements Tool {
             {
                 System.out.println(e.toString());
             }
-        }
         return false;
     }
 
@@ -85,6 +86,10 @@ public class SetDieTool implements Tool {
                 die.equals(turn.getGameBoard().getDraftPool().get(turn.getPlayerMove().getIndexDie()))) {
             turn.setMove(turn.getPlayerMove());
         }
+    }
+
+    public ToolNames getToolName() {
+        return this.toolName;
     }
 
 }

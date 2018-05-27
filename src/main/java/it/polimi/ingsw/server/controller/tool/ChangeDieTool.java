@@ -67,7 +67,6 @@ public class ChangeDieTool implements Tool {
         return this.needPlacement;
     }
 
-
     public void placementDie(Turn turn) {
         if (turn.getTypeMove().equals("PlaceDie") && !turn.isPlacementDone() &&
                 dieDraftPool.equals(turn.getGameBoard().getDraftPool().get(turn.getPlayerMove().getIndexDie()))) {
@@ -81,6 +80,10 @@ public class ChangeDieTool implements Tool {
             turn.setMove(turn.getPlayerMove());
 
         }
+    }
+
+    public ToolNames getToolName() {
+        return this.toolName;
     }
 
 }

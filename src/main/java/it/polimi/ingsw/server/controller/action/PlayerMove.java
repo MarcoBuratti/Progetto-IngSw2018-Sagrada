@@ -79,7 +79,7 @@ public class PlayerMove implements Serializable {
             throw new IllegalArgumentException();
     }
 
-    //tool 7 e 8
+    //tool 7(OK) e 8
     public PlayerMove(String typeMove,ToolNames toolName){
         if((typeMove.equals("GoThrough"))||
                 (typeMove.equals("UseTool")&&(toolName.equals(ToolNames.GLAZING_HAMMER)||toolName.equals(ToolNames.RUNNING_PLIERS)))) {
@@ -126,7 +126,7 @@ public class PlayerMove implements Serializable {
             throw new IllegalArgumentException();
     }
 
-    //tool 1
+    //tool 1(OK)
     public PlayerMove(String typeMove,ToolNames toolName,int indexDie,boolean addOne) {
         if (typeMove.equals("UseTool")&&toolName.equals(ToolNames.GROZING_PLIERS)) {
             this.toolName=Optional.of(toolName);

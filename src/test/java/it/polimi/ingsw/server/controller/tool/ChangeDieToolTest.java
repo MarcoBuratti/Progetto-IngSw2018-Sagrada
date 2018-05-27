@@ -6,7 +6,6 @@ import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Die;
 import it.polimi.ingsw.server.model.GameBoard;
-import it.polimi.ingsw.server.model.RoundTrack;
 import it.polimi.ingsw.server.model.exception.NotValidRoundException;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import org.junit.jupiter.api.Assertions;
@@ -63,5 +62,6 @@ class ChangeDieToolTest {
         PlayerMove playerMove1 = new PlayerMove("UseTool",ToolNames.FLUX_REMOVER,2);
         Assertions.assertTrue(changeDieTool1.toolEffect(turn,playerMove1));
         System.out.println(gameBoard.getDraftPool());
+        System.out.println(gameBoard.getRoundTrack());
     }
 }

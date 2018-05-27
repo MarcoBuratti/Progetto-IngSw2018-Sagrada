@@ -1,5 +1,8 @@
 package it.polimi.ingsw.server.model;
 
+import it.polimi.ingsw.server.controller.tool.Tool;
+import it.polimi.ingsw.server.controller.tool.ToolFactory;
+import it.polimi.ingsw.server.controller.tool.ToolNames;
 import it.polimi.ingsw.server.model.achievement.*;
 
 import java.util.*;
@@ -10,6 +13,7 @@ public class GameBoard extends Observable{
     private ArrayList<Player> players;
     private DiceBag diceBag;
     private ArrayList<CardAchievement> publicAchievements;
+    private ArrayList<Tool> tools;
     private ArrayList<Die> draftPool;
     private Player currentPlayer;
 
@@ -28,6 +32,7 @@ public class GameBoard extends Observable{
 
         players = new ArrayList<>();
         publicAchievements = new ArrayList<>();
+        tools = new ArrayList<>();
 
         this.roundTrack = new RoundTrack();
         this.diceBag = new DiceBag();
@@ -39,6 +44,15 @@ public class GameBoard extends Observable{
             CardAchievement publicAchievementsFactory = abstractFactory.extractCardAchievement(publicAchievementList.get(i));
             this.publicAchievements.add(publicAchievementsFactory);
         }
+
+        List<ToolNames> toolList = Arrays.asList(ToolNames.values());
+        Collections.shuffle(toolList);
+        ToolFactory abstractToolFactory = new ToolFactory();
+        for ( int i = 0; i < NUMBER_OF_PUBLIC_ACHIEVEMENTS; i++ ) {
+            Tool toolFactory = abstractToolFactory.getTool(toolList.get(i));
+            this.tools.add(toolFactory);
+        }
+
 
         List<Color> privateAchievementsList = Arrays.asList(Color.values());
         Collections.shuffle(privateAchievementsList);
@@ -120,6 +134,14 @@ public class GameBoard extends Observable{
         return publicAchievements;
     }
 
+
+
+
+
+    public ArrayList<Tool> getTools() {
+        return this.tools;
+    }
+
     /**
      * Returns an ArrayList containing Die objects. The ArrayList represent the draft pool used
      * for the current round (updated at the start of every round during the game).
@@ -185,7 +207,7 @@ public class GameBoard extends Observable{
         return currentPlayer;
     }
 
-    public String toString(){
-        return "Ciaooo";
+    public void setTools(ArrayList<Tool> tools) {
+        this.tools=tools;
     }
 }

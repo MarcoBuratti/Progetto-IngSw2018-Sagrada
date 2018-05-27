@@ -47,4 +47,10 @@ public class RerollTool implements Tool {
     public boolean needPlacement() {
         return this.needPlacement;
     }
+
+    public void placementDie(Turn turn) {}
+
+    public ToolNames getToolName() {
+        return this.toolName;
+    }
 }

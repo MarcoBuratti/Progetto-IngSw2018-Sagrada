@@ -3,6 +3,9 @@ package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.server.controller.Round;
 import it.polimi.ingsw.server.controller.Turn;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
+import it.polimi.ingsw.server.controller.tool.Tool;
+import it.polimi.ingsw.server.controller.tool.ToolFactory;
+import it.polimi.ingsw.server.controller.tool.ToolNames;
 import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Die;
 import it.polimi.ingsw.server.model.GameBoard;
@@ -21,7 +24,7 @@ class TurnTest {
         map.put("marco", "Fulgor del Cielo");
         GameBoard gameBoard = new GameBoard(map);
 
-        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false, new Round(gameBoard.getPlayers(), gameBoard));
+        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, true, new Round(gameBoard.getPlayers(), gameBoard));
 
         ArrayList<Die> testDraftPool= new ArrayList<>();
         Die die1 =new Die(Color.BLUE);
@@ -36,6 +39,19 @@ class TurnTest {
         testDraftPool.add(die3);
 
         gameBoard.setDraftPool(testDraftPool);
+       ;
+
+        List<ToolNames> toolList = Arrays.asList(ToolNames.values());
+        ToolFactory abstractToolFactory = new ToolFactory();
+         ArrayList<Tool> tools = new ArrayList<>();
+
+        for (ToolNames t:toolList) {
+
+            Tool toolFactory = abstractToolFactory.getTool(t);
+            tools.add(toolFactory);
+        }
+
+        gameBoard.setTools(tools);
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -61,7 +77,22 @@ class TurnTest {
                 turn.newMove(new PlayerMove("PlaceDie",2,new int[] {0, 1}));
             }
         }, 1500);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                turn.newMove(new PlayerMove("UseTool",ToolNames.FLUX_BRUSH,1));
+            }
+        }, 900);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                turn.newMove(new PlayerMove("UseTool",ToolNames.FLUX_BRUSH,0));
+            }
+        }, 1900);
+
         turn.turnManager();
+
+
 
         System.out.println(gameBoard.getPlayers().get(0).getDashboard().getMatrixScheme()[1][1].toString());
         System.out.println(gameBoard.getPlayers().get(0).getDashboard().getMatrixScheme()[0][0].toString());

@@ -56,6 +56,12 @@ public class ReplaceDieTool implements Tool {
         return this.needPlacement;
     }
 
+    public void placementDie(Turn turn) {}
+
+    public ToolNames getToolName() {
+        return this.toolName;
+    }
+
     public boolean specialCheck(Turn turn, int row, int column, Die myDie, Cell[][] matrixScheme) {
 
         PlacementCheck placementCheck = new PlacementCheck();
