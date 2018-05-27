@@ -34,8 +34,10 @@ public class Round implements Observer {
         while (iterator.hasNext()) {
             currentPlayer = iterator.next();
             this.gameBoard.setCurrentPlayer(currentPlayer);
-            this.currentTurn = new Turn(currentPlayer, gameBoard, false, this);
-            currentTurn.turnManager();
+            if(currentPlayer.getServerInterface() != null) {
+                this.currentTurn = new Turn(currentPlayer, gameBoard, false, this);
+                currentTurn.turnManager();
+            }
             secondTurnPlayed.put(currentPlayer, currentTurn.isHasSecondTurn());
         }
         while (iterator.hasPrevious()) {
@@ -44,6 +46,7 @@ public class Round implements Observer {
                 this.gameBoard.setCurrentPlayer(currentPlayer);
                 if (currentPlayer.getServerInterface() != null) {
                     this.currentTurn = new Turn(currentPlayer, gameBoard, true, this);
+                    currentTurn.turnManager();
                 }
             }
         }

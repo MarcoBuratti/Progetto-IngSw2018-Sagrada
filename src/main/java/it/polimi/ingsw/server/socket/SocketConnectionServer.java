@@ -45,6 +45,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
 
     public void setOff(){
         this.isOn = false;
+        server.deregisterConnection(this);
     }
 
     @Override

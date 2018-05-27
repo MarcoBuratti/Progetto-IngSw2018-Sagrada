@@ -19,10 +19,10 @@ public class RemoteView extends Observable implements Observer {
         modelView.addObserver(this);
     }
 
-    public void ChangeConnection(ServerInterface serverAbstractClass){
-        this.serverInterface = serverAbstractClass;
-        Observable serverConnection = (Observable) this.serverInterface;
-        serverConnection.addObserver(new MessageReceiver());
+    public void ChangeConnection(ServerInterface serverInterface){
+        this.serverInterface = serverInterface;
+        this.serverInterface.getMessageSender().addObserver(new MessageReceiver());
+        this.serverInterface.send("You've logged in as: " + player.getNickname());
     }
 
     public Player getPlayer () {
