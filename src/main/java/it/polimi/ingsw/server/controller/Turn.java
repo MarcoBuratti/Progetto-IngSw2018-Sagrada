@@ -40,20 +40,22 @@ public class Turn extends Observable {
         this.player = player;
         this.gameBoard = gameBoard;
         this.round = round;
-        this.timeTurn = 1*1000;
+        this.timeTurn = 60*1000;
+        this.setObserver();
     }
 
-    public void setObserver(){
-        this.addObserver(player.getServerInterface());
-        setChanged();
-        notifyObservers(true);
+    private synchronized void setObserver(){
+        if(player.getServerInterface()!=null) {
+            this.addObserver(player.getServerInterface());
+            setTurnIsOver(false);
+        }
     }
 
-    public synchronized void setTurnIsOver(boolean turnIsOver) {
-        this.turnIsOver = turnIsOver;
+    public synchronized void setTurnIsOver(boolean bool) {
+        this.turnIsOver = bool;
         notifyAll();
         setChanged();
-        notifyObservers(turnIsOver);
+        notifyObservers(!bool);
     }
 
     public synchronized void setWaitMove(boolean waitMove) {
@@ -138,18 +140,18 @@ public class Turn extends Observable {
             if(!isWaitMove()) {
                 if (typeMove.equals("PlaceDie") && !placementDone) {
                     this.setMove(this.playerMove);
-
+                    setTurnIsOver(false);
                 } else if (typeMove.equals("UseTool") && !usedTool) {
                     //codice dei tool
                     if (isPlacementDone() && isUsedTool()) {
                         setTurnIsOver(true);
+                        waitMove = false;
                     }
 
                 } else if (typeMove.equals("GoThrough")) {
                     setTurnIsOver(true);
+                    waitMove = false;
                 }
-
-                this.waitMove = true;
             }
         }
     }

@@ -21,6 +21,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
     private Player player;
     private boolean isYourTurn;
     private boolean isOn;
+    private MessageSender messageSender;
 
     public SocketConnectionServer(Socket socket, Server server) throws IOException {
         this.socket = socket;
@@ -29,6 +30,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         out = new PrintStream(socket.getOutputStream());
         isYourTurn = false;
         isOn = true;
+        messageSender = new MessageSender();
     }
 
     @Override
@@ -63,6 +65,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
     @Override
     public synchronized void setYourTurn(boolean bool) {
         this.isYourTurn = bool;
+        notifyAll();
     }
 
     @Override
@@ -122,21 +125,37 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
                 this.player.setDashboard(chosenScheme);
                 this.send("You have chosen the following scheme: " + chosenScheme + "\n" + this.player.getDashboard().toString());
             }
-            while(getIsOn()) {
-                while (getYourTurn()) {
-                    send("Make your move now.");
-                    String message = in.readLine();
-                    if (message.equals("/quit"))
-                        setOff();
-                    else {
-                        read(message);
-                        PlayerMove newMove = PlayerMove.PlayerMoveConstructor();
-                        setChanged();
-                        notifyObservers(newMove);
+            isOn = true;
+            while(isOn) {
+                synchronized (this) {
+                    if (getYourTurn()) {
+                        send("Make your move now.");
+                        String message = in.readLine();
+                        if (message.equals("/quit"))
+                            setOff();
+                        else {
+                            read(message);
+                            PlayerMove newMove = PlayerMove.PlayerMoveConstructor();
+                            send(newMove.toString());
+                            messageSender.send(newMove);
+                            try {
+                                wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                           /* setChanged();
+                            notifyObservers(newMove);
+                            */
+                        }
+                    } else {
+                        send("Please wait your turn.");
+                        try {
+                            wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-                if(in.readLine() != null)
-                    notYourTurn();
             }
         } catch (IOException | NotValidValueException e) {
             System.out.println("Connection expired.");
@@ -148,9 +167,25 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
     }
 
 
+    private class MessageSender extends Observable {
+
+        private void send(PlayerMove playerMove){
+            setChanged();
+            notifyObservers(playerMove);
+        }
+
+    }
+
+    @Override
+    public Observable getMessageSender() {
+        return messageSender;
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         boolean bool = (boolean) arg;
-        this.setYourTurn(bool);
+        setYourTurn(bool);
+        if(bool == false)
+            send("Your turn has ended.");
     }
 }

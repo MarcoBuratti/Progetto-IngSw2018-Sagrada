@@ -126,7 +126,9 @@ public class GameBoard extends Observable{
      * @return the draft pool used for the current round
      */
     public ArrayList<Die> getDraftPool() {
-        return new ArrayList<>(this.draftPool);
+         ArrayList draftpoolCopy = new ArrayList<>();
+         draftpoolCopy.addAll(this.draftPool);
+         return draftpoolCopy;
     }
 
     /**
@@ -186,6 +188,9 @@ public class GameBoard extends Observable{
     }
 
     public String toString(){
-        return "Ciaooo";
+        StringBuilder bld = new StringBuilder();
+        for (Player p: players)
+            bld.append(p.getDashboard().toString());
+        return bld.toString();
     }
 }

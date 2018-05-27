@@ -21,11 +21,13 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
     private Player player;
     private RmiClientInterface client;
     private boolean isYourTurn;
+    private MessageSender messageSender;
 
 
     public RmiConnectionServer(RmiClientInterface connectionClientRMI, Server server) {
         this.client = connectionClientRMI;
         this.server = server;
+        this.messageSender = new MessageSender();
     }
 
     @Override
@@ -55,8 +57,7 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
     @Override
     public void sendMove(PlayerMove playerMove) throws RemoteException {
         if(getYourTurn()) {
-            setChanged();
-            notifyObservers(playerMove);
+            messageSender.sendMove(playerMove);
         } else notYourTurn();
     }
 
@@ -107,6 +108,26 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         server.deregisterConnection(this);
     }
 
+    private class MessageSender extends Observable {
+
+        private void sendMove (PlayerMove playerMove){
+            setChanged();
+            notifyObservers(playerMove);
+        }
+
+        private void sendMessage (Message message) {
+            setChanged();
+            notifyObservers(message);
+        }
+
+    }
+
+    @Override
+    public Observable getMessageSender() {
+        return messageSender;
+    }
+
+
 
     public void askForChosenScheme() throws IOException {
         StringBuilder bld = new StringBuilder();
@@ -120,8 +141,7 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
     }
 
     public void update(Message message) throws RemoteException{ //NOTIFICA LA REMOTE VIEW
-        setChanged();
-        notifyObservers(message);
+        messageSender.sendMessage(message);
     }
 
     @Override
