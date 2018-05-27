@@ -35,6 +35,7 @@ public class SetDieTool implements Tool {
     }
 
     public boolean toolEffect(Turn turn, PlayerMove playerMove) {
+
         if (toolName.equals(ToolNames.FLUX_BRUSH)&&turn.isPlacementDone()) {
             return false;
         }
@@ -82,10 +83,11 @@ public class SetDieTool implements Tool {
     }
 
     public void placementDie(Turn turn) {
-        if (turn.getTypeMove().equals("PlaceDie") && !turn.isPlacementDone() &&
+        if (turn.getTypeMove().equals("PlaceDie")&&!turn.isPlacementDone()&&
                 die.equals(turn.getGameBoard().getDraftPool().get(turn.getPlayerMove().getIndexDie()))) {
             turn.setMove(turn.getPlayerMove());
-        }
+        }else
+            turn.setWaitMove(true);
     }
 
     public ToolNames getToolName() {

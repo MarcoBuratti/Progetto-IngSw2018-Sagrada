@@ -41,6 +41,10 @@ public class ReplaceDieTool implements Tool {
 
     public boolean toolEffect(Turn turn, PlayerMove playerMove) {
         boolean ret;
+        if(toolName.equals(ToolNames.TAP_WHEEL)&&playerMove.getTwoReplace())
+            if(!turn.getPlayer().getDashboard().getMatrixScheme()[playerMove.getIntParameters(0)][playerMove.getIntParameters(1)].getDie().getColor().
+                    equals(turn.getPlayer().getDashboard().getMatrixScheme()[playerMove.getIntParameters(4)][playerMove.getIntParameters(5)].getDie().getColor()))
+                return false;
         ret = replaceDie(turn, playerMove.getIntParameters(0), playerMove.getIntParameters(1), playerMove.getIntParameters(2), playerMove.getIntParameters(3));
         if (playerMove.getTwoReplace() && ret)
             ret = replaceDie(turn, playerMove.getIntParameters(4), playerMove.getIntParameters(5), playerMove.getIntParameters(6), playerMove.getIntParameters(7));
@@ -67,36 +71,36 @@ public class ReplaceDieTool implements Tool {
         PlacementCheck placementCheck = new PlacementCheck();
 
         if (checkColor)
-            if (!(matrixScheme[row][column].getRestriction() instanceof ColorRestriction))
-                if (!matrixScheme[row][column].allowedMove(myDie))
-                    return false;
+            if (!(matrixScheme[row][column].getRestriction() instanceof ValueRestriction))
+                if (!matrixScheme[row][column].allowedMove(myDie)){
+                    return false;}
 
         if (checkValue)
-            if (!(matrixScheme[row][column].getRestriction() instanceof ValueRestriction))
-                if (!matrixScheme[row][column].allowedMove(myDie)) {
+            if (!(matrixScheme[row][column].getRestriction() instanceof ColorRestriction))
+                 if (!matrixScheme[row][column].allowedMove(myDie)) {
                     return false;
                 }
         if (needRoundTrack)
             if (!turn.getGameBoard().getRoundTrack().isColorOnRoundTrack(myDie.getColor()) && !matrixScheme[row][column].allowedMove(myDie))
                 return false;
-        if ((!placementCheck.nearBy(row, column, matrixScheme)) && (!placementCheck.allowedNeighbours(row, column, myDie, matrixScheme)))
+
+        if ((!placementCheck.nearBy(row, column, matrixScheme)) || (!placementCheck.allowedNeighbours(row, column, myDie, matrixScheme)))
             return false;
         return true;
     }
 
     private boolean replaceDie(Turn turn, int oldRow, int oldColumn, int newRow, int newColumn) {
         Die die = turn.getPlayer().getDashboard().getMatrixScheme()[oldRow][oldColumn].getDie();
-        if (!specialCheck(turn, newRow, newColumn, die, turn.getPlayer().getDashboard().getMatrixScheme()))
+        try {
+            turn.getPlayer().getDashboard().removeDieFromCell(oldRow, oldColumn);
+        if (!specialCheck(turn, newRow, newColumn, die, turn.getPlayer().getDashboard().getMatrixScheme())) {
+            turn.getPlayer().getDashboard().setDieOnCell(oldRow, oldColumn, die);
             return false;
-        else {
-
-            try {
-                turn.getPlayer().getDashboard().removeDieFromCell(oldRow, oldColumn);
-                turn.getPlayer().getDashboard().setDieOnCell(newRow, newColumn, die);
+        }else
+            turn.getPlayer().getDashboard().setDieOnCell(newRow, newColumn, die);
             } catch (NotValidParametersException | OccupiedCellException e) {
                 e.printStackTrace();
             }
-        }
 
         return true;
 

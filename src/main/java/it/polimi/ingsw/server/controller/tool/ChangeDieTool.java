@@ -18,6 +18,7 @@ public class ChangeDieTool implements Tool {
 
     private Die secondDie;
     private Die dieDraftPool;
+    private int index;
 
     public ChangeDieTool(boolean needPlacement, ToolNames toolName) {
         this.color = toolName.getColor();
@@ -51,6 +52,7 @@ public class ChangeDieTool implements Tool {
             dieDraftPool = turn.getGameBoard().getDraftPool().get(playerMove.getIndexDie());
             secondDie = turn.getGameBoard().getDiceBag().changeDie(dieDraftPool);
             turn.getGameBoard().changeDie(secondDie,playerMove.getIndexDie());
+            index=playerMove.getIndexDie();
 
             return true;
         }
@@ -68,11 +70,10 @@ public class ChangeDieTool implements Tool {
     }
 
     public void placementDie(Turn turn) {
-        if (turn.getTypeMove().equals("PlaceDie") && !turn.isPlacementDone() &&
-                dieDraftPool.equals(turn.getGameBoard().getDraftPool().get(turn.getPlayerMove().getIndexDie()))) {
-            if (toolName.equals("Flux Remover")) {
+        if (turn.getTypeMove().equals("PlaceDie") && !turn.isPlacementDone() && (index == turn.getPlayerMove().getIndexDie())) {
+            if (toolName.equals(ToolNames.FLUX_REMOVER)) {
                 try {
-                    dieDraftPool.setNumber(turn.getPlayerMove().getSetOnDie());
+                    turn.getGameBoard().getDraftPool().get(index).setNumber(turn.getPlayerMove().getIntParameters(2));
                 } catch (NotValidValueException e) {
                     e.printStackTrace();
                 }
@@ -80,6 +81,8 @@ public class ChangeDieTool implements Tool {
             turn.setMove(turn.getPlayerMove());
 
         }
+        else
+            turn.setWaitMove(true);
     }
 
     public ToolNames getToolName() {

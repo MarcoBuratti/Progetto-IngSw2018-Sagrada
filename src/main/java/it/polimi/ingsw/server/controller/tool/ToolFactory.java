@@ -25,7 +25,7 @@ public class ToolFactory extends AbstarctToolFactory {
             case GRINDING_STONE:
                 return new SetDieTool(false, ToolNames.GRINDING_STONE);
             case FLUX_REMOVER:
-                return new ChangeDieTool(true, ToolNames.FLUX_BRUSH);
+                return new ChangeDieTool(true, ToolNames.FLUX_REMOVER);
             case TAP_WHEEL:
                 return new ReplaceDieTool(true, true, true, false, ToolNames.TAP_WHEEL);
             default:

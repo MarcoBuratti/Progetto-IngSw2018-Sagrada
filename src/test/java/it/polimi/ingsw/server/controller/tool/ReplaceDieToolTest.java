@@ -30,7 +30,7 @@ class ReplaceDieToolTest {
         GameBoard gameBoard = new GameBoard(map);
 
         Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false, new Round(gameBoard.getPlayers(), gameBoard));
-        ReplaceDieTool replaceDieTool= new ReplaceDieTool(true, false, false,false, ToolNames.EGLOMISE_BRUSH);
+        ReplaceDieTool replaceDieTool= new ReplaceDieTool(false, true, false,false, ToolNames.EGLOMISE_BRUSH);
         Dashboard dashboard =gameBoard.getPlayers().get(0).getDashboard();
         dashboard.setDieOnCell(0,0,new Die(Color.VIOLET));
         dashboard.getMatrixScheme()[0][0].getDie().setNumber(2);
@@ -43,7 +43,7 @@ class ReplaceDieToolTest {
 
         PlayerMove playerMove = new PlayerMove("UseTool",ToolNames.EGLOMISE_BRUSH,new int[]{0,0,0,2});
         Assertions.assertTrue(replaceDieTool.toolEffect(turn,playerMove));
-        ReplaceDieTool replaceDieTool1= new ReplaceDieTool(false, true, false,false,ToolNames.COPPER_FOIL_BURNISHER);
+        ReplaceDieTool replaceDieTool1= new ReplaceDieTool(true, false, false,false,ToolNames.COPPER_FOIL_BURNISHER);
 
         PlayerMove playerMove1 = new PlayerMove("UseTool",ToolNames.COPPER_FOIL_BURNISHER,new int[]{1,0,1,2});
         Assertions.assertTrue(replaceDieTool1.toolEffect(turn,playerMove1));

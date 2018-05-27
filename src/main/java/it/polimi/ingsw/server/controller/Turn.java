@@ -2,8 +2,10 @@ package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.server.controller.action.PlacementMove;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
+import it.polimi.ingsw.server.controller.tool.Tool;
 import it.polimi.ingsw.server.model.GameBoard;
 import it.polimi.ingsw.server.model.Player;
+import it.polimi.ingsw.server.model.exception.NotEnoughFavourTokensLeft;
 import it.polimi.ingsw.server.model.exception.NotValidParametersException;
 import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 
@@ -148,7 +150,7 @@ public class Turn extends Observable {
                 } else if (typeMove.equals("UseTool") && !usedTool) {
 
 
-                    //codice dei tool
+                    this.useTool();
                     if (placementDone && usedTool)
                         setTurnIsOver(true);
                     else
@@ -175,6 +177,34 @@ public class Turn extends Observable {
         }catch (OccupiedCellException | NotValidParametersException e) {
             e.printStackTrace();
         }
+    }
+
+    public void useTool(){
+
+        Tool tool = gameBoard.getTools().stream().filter(t -> (t.getToolName().equals(playerMove.getToolName()))).findAny().get();
+
+
+        try {
+            this.player.useToken(tool.isAlreadyUsed());
+            usedTool=tool.toolEffect(this, playerMove);
+            if (tool.needPlacement()) {
+                setWaitMove(true);
+                synchronized (this) {
+                    while (!isTurnIsOver() && isWaitMove()) {
+                        wait();
+                        tool.placementDie(this);
+                    }
+
+                }
+            }
+
+        } catch (NotEnoughFavourTokensLeft | InterruptedException e) {
+            //risposta per mosse errate
+
+        }
+
+
+
     }
 
 }

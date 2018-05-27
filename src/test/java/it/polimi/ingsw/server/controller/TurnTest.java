@@ -39,7 +39,6 @@ class TurnTest {
         testDraftPool.add(die3);
 
         gameBoard.setDraftPool(testDraftPool);
-       ;
 
         List<ToolNames> toolList = Arrays.asList(ToolNames.values());
         ToolFactory abstractToolFactory = new ToolFactory();
@@ -80,13 +79,13 @@ class TurnTest {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove(new PlayerMove("UseTool",ToolNames.FLUX_BRUSH,1));
+                turn.newMove(new PlayerMove("UseTool",ToolNames.GRINDING_STONE,1));
             }
         }, 900);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove(new PlayerMove("UseTool",ToolNames.FLUX_BRUSH,0));
+                turn.newMove(new PlayerMove("UseTool",ToolNames.GRINDING_STONE,0));
             }
         }, 1900);
 

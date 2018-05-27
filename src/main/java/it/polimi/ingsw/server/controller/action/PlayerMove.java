@@ -18,8 +18,6 @@ public class PlayerMove implements Serializable {
     private Optional<Boolean> addOne;
 
     private Optional<Integer> indexDie;
-    private Optional<Die> die2;
-    private Optional<Integer> setOnDie;
 
     private String typeMove;
     private Optional<ToolNames> toolName;
@@ -79,10 +77,9 @@ public class PlayerMove implements Serializable {
             throw new IllegalArgumentException();
     }
 
-    //tool 7(OK) e 8
+    //tool 7(OK)
     public PlayerMove(String typeMove,ToolNames toolName){
-        if((typeMove.equals("GoThrough"))||
-                (typeMove.equals("UseTool")&&(toolName.equals(ToolNames.GLAZING_HAMMER)||toolName.equals(ToolNames.RUNNING_PLIERS)))) {
+        if(typeMove.equals("UseTool")&&(toolName.equals(ToolNames.GLAZING_HAMMER))) {
             this.typeMove = typeMove;
             this.toolName = Optional.of(toolName);
         }
@@ -90,17 +87,21 @@ public class PlayerMove implements Serializable {
             throw new IllegalArgumentException();
     }
 
+    //usato anche da 11 per set dado(OK)
     public PlayerMove(String typeMove, int indexDie, int[] intParameters){
         if(typeMove.equals("PlaceDie")){
             this.typeMove=typeMove;
             this.intMatrixParameters=intParameters.clone();
             this.indexDie=Optional.of(indexDie);
         }
+        else
+            throw new IllegalArgumentException();
     }
 
-    //tool 5 ,9 e 11
+    //tool 5 ,9(OK) e 8(OK ma dubbio su come segnarlo)
     public PlayerMove(String typeMove, ToolNames toolName, int indexDie, int[] intParameters){
-        if(typeMove.equals("UseTool")&&((toolName.equals(ToolNames.LENS_CUTTER)||toolName.equals(ToolNames.CORK_BAKED_STRAIGHTEDGE)))){
+        if(typeMove.equals("UseTool")&&((toolName.equals(ToolNames.LENS_CUTTER)||toolName.equals(ToolNames.CORK_BAKED_STRAIGHTEDGE)||
+                toolName.equals(ToolNames.RUNNING_PLIERS)))){
             this.typeMove=typeMove;
             this.toolName=Optional.of(toolName);
             this.intMatrixParameters=intParameters.clone();
@@ -138,9 +139,11 @@ public class PlayerMove implements Serializable {
             throw new IllegalArgumentException();
     }
 
-    //tool 6 e 10
+    //tool 6(OK), 10(OK) e 11(OK)
     public PlayerMove(String typeMove,ToolNames toolName,int indexDie) {
-        if (typeMove.equals("UseTool")&&(toolName.equals(ToolNames.GRINDING_STONE)||toolName.equals(ToolNames.FLUX_BRUSH)||toolName.equals(ToolNames.FLUX_REMOVER))) {
+
+        if ((typeMove.equals("UseTool"))&&(toolName.equals(ToolNames.GRINDING_STONE)||toolName.equals(ToolNames.FLUX_BRUSH)
+                || toolName.equals(ToolNames.FLUX_REMOVER))){
             this.toolName=Optional.of(toolName);
             this.typeMove = typeMove;
             this.indexDie=Optional.of(indexDie);
@@ -186,16 +189,6 @@ public class PlayerMove implements Serializable {
             throw new IllegalArgumentException();
     }
 
-    public Optional<Die> getDie2() {
-        return die2;
-    }
-
-    public Integer getSetOnDie() {
-        if(setOnDie.isPresent())
-            return setOnDie.get();
-        else
-            throw new IllegalArgumentException();
-    }
 
     public String getTypeMove() {
         return typeMove;

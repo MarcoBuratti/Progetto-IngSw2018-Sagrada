@@ -62,6 +62,6 @@ class ChangeDieToolTest {
         PlayerMove playerMove1 = new PlayerMove("UseTool",ToolNames.FLUX_REMOVER,2);
         Assertions.assertTrue(changeDieTool1.toolEffect(turn,playerMove1));
         System.out.println(gameBoard.getDraftPool());
-        System.out.println(gameBoard.getRoundTrack());
+        //System.out.println(gameBoard.getRoundTrack());
     }
 }
