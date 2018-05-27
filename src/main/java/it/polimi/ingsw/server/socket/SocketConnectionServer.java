@@ -43,9 +43,9 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         return isOn;
     }
 
-    public void setOff(){
+    public synchronized void setOff(){
+        send("You've been disconnected successfully.");
         this.isOn = false;
-        server.deregisterConnection(this);
     }
 
     @Override
@@ -132,8 +132,10 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
                     if (getYourTurn()) {
                         send("Make your move now.");
                         String message = in.readLine();
-                        if (message.equals("/quit"))
+                        if (message.equals("/quit")) {
                             setOff();
+                            close();
+                        }
                         else {
                             read(message);
                             PlayerMove newMove = PlayerMove.PlayerMoveConstructor();
@@ -160,8 +162,6 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
             }
         } catch (IOException | NotValidValueException e) {
             System.out.println("Connection expired.");
-        } finally {
-            server.deregisterConnection(this);
             this.send("Terminate.");
             close();
         }

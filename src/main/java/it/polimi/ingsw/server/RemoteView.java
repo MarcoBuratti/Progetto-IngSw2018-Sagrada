@@ -22,7 +22,6 @@ public class RemoteView extends Observable implements Observer {
     public void ChangeConnection(ServerInterface serverInterface){
         this.serverInterface = serverInterface;
         this.serverInterface.getMessageSender().addObserver(new MessageReceiver());
-        this.serverInterface.send("You've logged in as: " + player.getNickname());
     }
 
     public Player getPlayer () {
