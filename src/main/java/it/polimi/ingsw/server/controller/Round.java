@@ -9,7 +9,7 @@ import it.polimi.ingsw.server.model.exception.NotEnoughDiceLeftException;
 import java.util.*;
 
 public class Round implements Observer {
-    private static int DRAFT_POOL_CAPACITY;
+    private int DRAFT_POOL_CAPACITY;
     private Turn currentTurn;
     private GameBoard gameBoard;
     private ArrayList<Player> players;
@@ -34,9 +34,10 @@ public class Round implements Observer {
         while (iterator.hasNext()) {
             currentPlayer = iterator.next();
             this.gameBoard.setCurrentPlayer(currentPlayer);
-            this.currentTurn = new Turn(currentPlayer, gameBoard, false, this);
-            currentTurn.setObserver();
-            currentTurn.turnManager();
+            if(currentPlayer.getServerInterface() != null) {
+                this.currentTurn = new Turn(currentPlayer, gameBoard, false, this);
+                currentTurn.turnManager();
+            }
             secondTurnPlayed.put(currentPlayer, currentTurn.isHasSecondTurn());
         }
         while (iterator.hasPrevious()) {
@@ -45,7 +46,6 @@ public class Round implements Observer {
                 this.gameBoard.setCurrentPlayer(currentPlayer);
                 if (currentPlayer.getServerInterface() != null) {
                     this.currentTurn = new Turn(currentPlayer, gameBoard, true, this);
-                    currentTurn.setObserver();
                     currentTurn.turnManager();
                 }
             }

@@ -46,7 +46,7 @@ public class SocketMessageHandler implements MessageHandler {
     }
 
     private void placeDieHandler (String fromClient){
-        StringTokenizer strtok = new StringTokenizer(fromClient);
+        StringTokenizer strtok = new StringTokenizer(fromClient, " ");
         String move = strtok.nextToken();
 
         StringBuilder bld = new StringBuilder();

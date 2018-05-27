@@ -52,7 +52,7 @@ public class PlayerMove implements Serializable {
                 int[] coordinates = new int[]{row, column};
                 return new PlayerMove("PlaceDie", die, coordinates);
 
-            case "UseTool":
+           /* case "UseTool":
                 String toolName = (String) jsonObject.get("tool");
                 try {
                     switch (toolName) {
@@ -64,7 +64,7 @@ public class PlayerMove implements Serializable {
                     System.out.println(e.toString());
                 }
 
-            case "GoThrough":
+           */ case "GoThrough":
                 return new PlayerMove("GoThrough");
 
             default:
@@ -199,6 +199,20 @@ public class PlayerMove implements Serializable {
 
     public String getTypeMove() {
         return typeMove;
+    }
+
+    public String toString(){
+        switch (typeMove){
+            case "PlaceDie":
+                return "dado:" + this.indexDie + " " + "coordinate:" + this.intMatrixParameters[0] + this.intMatrixParameters[1];
+            case "GoThrough":
+                return "go through";
+            case "UseTool":
+                return "use tool";
+            default:
+                return "default";
+        }
+
     }
 }
 

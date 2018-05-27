@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.model.GameBoard;
 import it.polimi.ingsw.server.model.Player;
+import it.polimi.ingsw.server.model.exception.NotEnoughDiceLeftException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +34,11 @@ public class Controller extends Observable implements Observer {
         for ( int i = 0 ; i < NUMBER_OF_ROUNDS ; i++ ) {
             currentRound = new Round(players, gameBoard);
             this.addObserver(currentRound);
+            try {
+                currentRound.initializeDraftPool();
+            } catch (NotEnoughDiceLeftException e) {
+                e.printStackTrace();
+            }
             currentRound.roundManager();
             currentRound.endRound();
             Collections.rotate(players, 1);

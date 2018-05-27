@@ -88,7 +88,7 @@ public class Server extends UnicastRemoteObject {
         }
     }
 
-    private synchronized void startGame() {
+    private void startGame() {
         this.timer.cancel();
         this.controller = new Controller(this);
         modelView = new ModelView(controller.getGameBoard());
