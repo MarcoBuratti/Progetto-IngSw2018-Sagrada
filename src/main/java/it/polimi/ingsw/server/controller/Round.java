@@ -6,7 +6,10 @@ import it.polimi.ingsw.server.model.GameBoard;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.exception.NotEnoughDiceLeftException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.ListIterator;
+import java.util.Observable;
+import java.util.Observer;
 
 public class Round implements Observer {
     private int DRAFT_POOL_CAPACITY;
@@ -28,27 +31,30 @@ public class Round implements Observer {
 
     public void roundManager() {
         ListIterator<Player> iterator = players.listIterator();
-       // Map<Player, Boolean> secondTurnPlayed = new HashMap<>(players.size());
+
         Player currentPlayer;
 
         while (iterator.hasNext()) {
             currentPlayer = iterator.next();
             this.gameBoard.setCurrentPlayer(currentPlayer);
-            if(currentPlayer.getServerInterface() != null) {
-                this.currentTurn = new Turn(currentPlayer, gameBoard, false, this);
+            if (currentPlayer.getServerInterface() != null) {
+                this.currentTurn = new Turn(currentPlayer, gameBoard, false);
                 currentTurn.turnManager();
             }
-//            secondTurnPlayed.put(currentPlayer, currentTurn.isHasSecondTurn());
+
         }
+
         while (iterator.hasPrevious()) {
             currentPlayer = iterator.previous();
-          //  if (!secondTurnPlayed.get(currentPlayer)) {
+            if (currentPlayer.skipSecondTurn())
+                currentPlayer.setSkipSecondTurn(false);
+            else {
                 this.gameBoard.setCurrentPlayer(currentPlayer);
                 if (currentPlayer.getServerInterface() != null) {
-                    this.currentTurn = new Turn(currentPlayer, gameBoard, true, this);
+                    this.currentTurn = new Turn(currentPlayer, gameBoard, true);
                     currentTurn.turnManager();
                 }
-           // }
+            }
         }
     }
 

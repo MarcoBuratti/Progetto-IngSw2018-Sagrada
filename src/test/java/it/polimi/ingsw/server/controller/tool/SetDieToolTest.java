@@ -41,7 +41,7 @@ class SetDieToolTest {
 
         gameBoard.setDraftPool(testDraftPool);
 
-        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false, new Round(gameBoard.getPlayers(), gameBoard));
+        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
         SetDieTool setDieTool = new SetDieTool(true, ToolNames.GROZING_PLIERS);
         Dashboard dashboard = gameBoard.getPlayers().get(0).getDashboard();
         dashboard.setDieOnCell(0, 0, new Die(Color.GREEN));

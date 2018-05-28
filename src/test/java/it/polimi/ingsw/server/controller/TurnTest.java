@@ -24,7 +24,7 @@ class TurnTest {
         map.put("marco", "Fulgor del Cielo");
         GameBoard gameBoard = new GameBoard(map);
 
-        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, true, new Round(gameBoard.getPlayers(), gameBoard));
+        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, true);
 
         ArrayList<Die> testDraftPool= new ArrayList<>();
         Die die1 =new Die(Color.BLUE);

@@ -51,7 +51,7 @@ class ChangeDieToolTest {
         diceList2.add(d3);
         gameBoard.getRoundTrack().setNextRound(diceList2);
 
-        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false, new Round(gameBoard.getPlayers(), gameBoard));
+        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
 
         System.out.println(gameBoard.getDraftPool());
         ChangeDieTool changeDieTool=new ChangeDieTool(false,ToolNames.LENS_CUTTER);

@@ -27,6 +27,7 @@ public class TwoTurnTool implements Tool {
     public boolean toolEffect(Turn turn, PlayerMove playerMove) {
         if (!turn.isSecondTurn() && turn.isPlacementDone()) {
             turn.setPlacementDone(false);
+            turn.getPlayer().setSkipSecondTurn(true);
             return true;
         }
         return false;

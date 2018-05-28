@@ -10,12 +10,14 @@ public class Player {
     private int currentFavourToken;
     private Dashboard dashboard;
     private PrivateAchievement privateAchievement;
+    private boolean skipSecondTurn;
     private ServerInterface serverInterface;
 
 
     public Player (String nickname, ServerInterface serverInterface){
         this.nickname = nickname;
         this.serverInterface = serverInterface;
+        this.skipSecondTurn=false;
     }
 
     public ServerInterface getServerInterface() {
@@ -110,6 +112,14 @@ public class Player {
                 else throw new NotEnoughFavourTokensLeft();
             }
         }else throw new NotEnoughFavourTokensLeft();
+    }
+
+    public boolean skipSecondTurn() {
+        return skipSecondTurn;
+    }
+
+    public void setSkipSecondTurn(boolean skipSecondTurn) {
+        this.skipSecondTurn = skipSecondTurn;
     }
 
     @Override

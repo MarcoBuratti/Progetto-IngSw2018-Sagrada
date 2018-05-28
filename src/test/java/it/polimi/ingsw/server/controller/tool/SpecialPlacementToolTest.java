@@ -38,8 +38,8 @@ class SpecialPlacementToolTest {
         testDraftPool.add(die3);
 
         gameBoard.setDraftPool(testDraftPool);
-        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false, new Round(gameBoard.getPlayers(), gameBoard));
-        Turn turn1 = new Turn(gameBoard.getPlayers().get(0), gameBoard, false, new Round(gameBoard.getPlayers(), gameBoard));
+        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
+        Turn turn1 = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
         SpecialPlacementTool specialPlacementTool= new SpecialPlacementTool(true,true,false, ToolNames.CORK_BAKED_STRAIGHTEDGE);
         PlayerMove playerMove = new PlayerMove("UseTool",ToolNames.CORK_BAKED_STRAIGHTEDGE,0,new int[]{2,3});
         Assertions.assertTrue(specialPlacementTool.toolEffect(turn,playerMove));

@@ -29,7 +29,7 @@ class ReplaceDieToolTest {
         map.put("christian", "Chromatic Splendor");
         GameBoard gameBoard = new GameBoard(map);
 
-        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false, new Round(gameBoard.getPlayers(), gameBoard));
+        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
         ReplaceDieTool replaceDieTool= new ReplaceDieTool(false, true, false,false, ToolNames.EGLOMISE_BRUSH);
         Dashboard dashboard =gameBoard.getPlayers().get(0).getDashboard();
         dashboard.setDieOnCell(0,0,new Die(Color.VIOLET));

@@ -44,8 +44,8 @@ class TwoTurnToolTest {
         PlayerMove playerMove1= new PlayerMove("PlaceDie",0,new int[]{0,1});
         PlayerMove playerMove2= new PlayerMove("UseTool", ToolNames.RUNNING_PLIERS,0,new int[]{0,1});
         TwoTurnTool twoTurnTool=new TwoTurnTool(false,ToolNames.RUNNING_PLIERS);
-        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false, new Round(gameBoard.getPlayers(), gameBoard));
-        Turn turn1 = new Turn(gameBoard.getPlayers().get(0), gameBoard, true, new Round(gameBoard.getPlayers(), gameBoard));
+        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
+        Turn turn1 = new Turn(gameBoard.getPlayers().get(0), gameBoard, true);
         turn.setMove(playerMove);
         Assertions.assertTrue(turn.isPlacementDone());
         Assertions.assertTrue(twoTurnTool.toolEffect(turn,playerMove2));

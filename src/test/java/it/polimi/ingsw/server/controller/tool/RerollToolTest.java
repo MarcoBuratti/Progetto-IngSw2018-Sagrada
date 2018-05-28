@@ -39,10 +39,10 @@ class RerollToolTest {
         System.out.println(gameBoard.getDraftPool());
 
         RerollTool rerollTool =new RerollTool(false, ToolNames.GLAZING_HAMMER);
-        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false, new Round(gameBoard.getPlayers(), gameBoard));
+        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
         PlayerMove playerMove = new PlayerMove("UseTool",ToolNames.GLAZING_HAMMER);
         Assertions.assertFalse(rerollTool.toolEffect(turn,playerMove));
-        Turn turn1 = new Turn(gameBoard.getPlayers().get(0), gameBoard, true, new Round(gameBoard.getPlayers(), gameBoard));
+        Turn turn1 = new Turn(gameBoard.getPlayers().get(0), gameBoard, true);
         Assertions.assertTrue(rerollTool.toolEffect(turn1,playerMove));
         System.out.println(gameBoard.getDraftPool());
 
