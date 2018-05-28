@@ -3,28 +3,31 @@ package it.polimi.ingsw.server.model.achievement;
 public class CardFactory extends AbstractCardFactory {
 
     @Override
-    public CardAchievement extractCardAchievement (PublicAchievementNames publicAchievementNames) {
+    public CardAchievement extractCardAchievement(PublicAchievementNames publicAchievementNames) {
 
-        if(publicAchievementNames == PublicAchievementNames.COLORDIAGONALS)
-            return new ColorDiagonals();
-        else if(publicAchievementNames == PublicAchievementNames.COLORVARIETY)
-            return new ColorVariety();
-        else if(publicAchievementNames == PublicAchievementNames.COLUMNCOLORVARIETY)
-            return new ColumnColorVariety();
-        else if(publicAchievementNames == PublicAchievementNames.COLUMNSHADEVARIETY)
-            return new ColumnShadeVariety();
-        else if(publicAchievementNames == PublicAchievementNames.ROWCOLORVARIETY)
-            return new RowColorVariety();
-        else if(publicAchievementNames == PublicAchievementNames.ROWSHADEVARIETY)
-            return new RowShadeVariety();
-        else if(publicAchievementNames == PublicAchievementNames.SHADE12)
-            return new Shades(1,2);
-        else if(publicAchievementNames == PublicAchievementNames.SHADE34)
-            return new Shades(3,4);
-        else if(publicAchievementNames == PublicAchievementNames.SHADE56)
-            return new Shades(5,6);
-        else if(publicAchievementNames == PublicAchievementNames.SHADEVARIETY)
-            return new ShadeVariety();
-        return null;
+        switch (publicAchievementNames) {
+            case COLORDIAGONALS:
+                return new ColorDiagonals();
+            case COLORVARIETY:
+                return new ColorVariety();
+            case COLUMNCOLORVARIETY:
+                return new ColumnColorVariety();
+            case COLUMNSHADEVARIETY:
+                return new ColumnShadeVariety();
+            case ROWCOLORVARIETY:
+                return new RowColorVariety();
+            case ROWSHADEVARIETY:
+                return new RowShadeVariety();
+            case SHADE12:
+                return new Shades(1, 2);
+            case SHADE34:
+                return new Shades(3, 4);
+            case SHADE56:
+                return new Shades(5, 6);
+            case SHADEVARIETY:
+                return new ShadeVariety();
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 }

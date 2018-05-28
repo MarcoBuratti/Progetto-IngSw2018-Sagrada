@@ -3,11 +3,10 @@ package it.polimi.ingsw.server.model.achievement;
 import it.polimi.ingsw.server.model.Cell;
 import it.polimi.ingsw.server.model.Dashboard;
 import it.polimi.ingsw.server.model.PlacementCheck;
-import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 
 public class ColorDiagonals implements CardAchievement {
 
-    public int scoreEffect(Dashboard dashboard) throws OccupiedCellException {
+    public int scoreEffect(Dashboard dashboard) {
 
         int score = 0;
         Cell[][] matrixScheme = dashboard.getMatrixScheme();
@@ -41,12 +40,12 @@ public class ColorDiagonals implements CardAchievement {
                         found = false;
                     }
                 }
-        return  score;
+        return score;
 
     }
 
     @Override
-    public String toString (){
+    public String toString() {
         return "Color Diagonals\nCount of diagonally adjacent same color dice.\n";
     }
 }

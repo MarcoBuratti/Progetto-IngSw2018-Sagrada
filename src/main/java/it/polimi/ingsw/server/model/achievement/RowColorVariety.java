@@ -3,7 +3,6 @@ package it.polimi.ingsw.server.model.achievement;
 import it.polimi.ingsw.server.model.Cell;
 import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Dashboard;
-import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -12,7 +11,7 @@ public class RowColorVariety implements CardAchievement {
 
     private Map<Color, Boolean> counter = new EnumMap<>(Color.class);
 
-    public int scoreEffect(Dashboard dashboard) throws OccupiedCellException {
+    public int scoreEffect(Dashboard dashboard) {
 
         int score = 0;
         boolean foundRow = true;
@@ -29,9 +28,8 @@ public class RowColorVariety implements CardAchievement {
                         foundRow = false;
                     else
                         counter.put(color, true);
-                }
-                else
-                    foundRow=false;
+                } else
+                    foundRow = false;
             if (foundRow)
                 score += 6;
             foundRow = true;

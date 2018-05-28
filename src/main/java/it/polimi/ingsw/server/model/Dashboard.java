@@ -127,6 +127,18 @@ public class Dashboard {
         }else return false;
     }
 
+    public int emptyCells(){
+        int ret = 0;
+        for (int i = 0; i < ROW ; i++) {
+            for (int j = 0; j < COLUMN ; j++) {
+                if(!this.matrixScheme[i][j].getUsedCell())
+                    ret++;
+
+            }
+        }
+        return ret;
+    }
+
     @Override
     public String toString() {
         String string = "Dashboard\n\n";

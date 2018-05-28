@@ -145,10 +145,14 @@ class DashboardTest {
         die4.setNumber(4);
         Cell EmptyCell = new Cell(new NoRestriction());
 
+        Assertions.assertEquals(20,dashboard.emptyCells());
+
         dashboard.setDieOnCell(0,0, die1);
         dashboard.setDieOnCell(1,0, die2);
         dashboard.setDieOnCell(2,0, die3);
         dashboard.setDieOnCell(3,3, die4);
+
+        Assertions.assertEquals(16,dashboard.emptyCells());
 
        Assertions.assertThrows(NotValidParametersException.class, () -> dashboard.setDieOnCell(7,0, new Die(Color.GREEN)));
        Assertions.assertThrows(NotValidParametersException.class, () -> dashboard.setDieOnCell(0,8, new Die(Color.GREEN)));

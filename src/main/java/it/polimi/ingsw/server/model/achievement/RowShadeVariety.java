@@ -2,12 +2,11 @@ package it.polimi.ingsw.server.model.achievement;
 
 import it.polimi.ingsw.server.model.Cell;
 import it.polimi.ingsw.server.model.Dashboard;
-import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 
 
 public class RowShadeVariety implements CardAchievement {
 
-    public int scoreEffect(Dashboard dashboard) throws OccupiedCellException {
+    public int scoreEffect(Dashboard dashboard) {
 
         int score = 0;
         boolean foundRow = true;
@@ -16,7 +15,7 @@ public class RowShadeVariety implements CardAchievement {
 
 
         for (int i = 0; i < 4; i++) {
-            for (int j=0; j < 6; j++)
+            for (int j = 0; j < 6; j++)
                 counter[j] = false;
             for (int j = 0; j < 5; j++)
                 if (matrixScheme[i][j].getUsedCell()) {
@@ -25,9 +24,8 @@ public class RowShadeVariety implements CardAchievement {
                         foundRow = false;
                     else
                         counter[numberDie - 1] = true;
-                }
-                else
-                    foundRow=false;
+                } else
+                    foundRow = false;
             if (foundRow)
                 score += 5;
             foundRow = true;

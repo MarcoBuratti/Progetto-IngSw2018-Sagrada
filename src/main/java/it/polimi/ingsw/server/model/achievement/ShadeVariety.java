@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.model.achievement;
 
 import it.polimi.ingsw.server.model.Cell;
 import it.polimi.ingsw.server.model.Dashboard;
-import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,12 +9,12 @@ import java.util.Collections;
 public class ShadeVariety implements CardAchievement {
 
 
-    public int scoreEffect(Dashboard dashboard) throws OccupiedCellException {
+    public int scoreEffect(Dashboard dashboard) {
 
         Cell[][] matrixScheme = dashboard.getMatrixScheme();
         Integer[] counter = new Integer[6];
 
-        for (int i=0; i < 6; i++)
+        for (int i = 0; i < 6; i++)
             counter[i] = 0;
 
         for (int i = 0; i < 4; i++) {
@@ -27,7 +26,7 @@ public class ShadeVariety implements CardAchievement {
 
 
         }
-        return Collections.min(Arrays.asList(counter))*5;
+        return Collections.min(Arrays.asList(counter)) * 5;
 
     }
 

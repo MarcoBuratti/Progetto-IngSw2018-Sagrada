@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.model.achievement;
 
 import it.polimi.ingsw.server.model.Cell;
 import it.polimi.ingsw.server.model.Dashboard;
-import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 
 public class Shades implements CardAchievement {
 
@@ -14,7 +13,7 @@ public class Shades implements CardAchievement {
         this.number2 = number2;
     }
 
-    public int scoreEffect(Dashboard dashboard) throws OccupiedCellException {
+    public int scoreEffect(Dashboard dashboard) {
 
         Cell[][] matrixScheme = dashboard.getMatrixScheme();
         int count1 = 0;
@@ -26,19 +25,19 @@ public class Shades implements CardAchievement {
                     int numberDie = matrixScheme[i][j].getDie().getNumber();
                     if (numberDie == number1)
                         count1++;
-                    else if(numberDie == number2)
+                    else if (numberDie == number2)
                         count2++;
                 }
 
         }
-        return Math.min(count1,count2)*2;
+        return Math.min(count1, count2) * 2;
 
     }
 
     @Override
     public String toString() {
         String string;
-        switch(this.number1) {
+        switch (this.number1) {
             case 1:
                 string = "Light Shades\n";
                 break;
