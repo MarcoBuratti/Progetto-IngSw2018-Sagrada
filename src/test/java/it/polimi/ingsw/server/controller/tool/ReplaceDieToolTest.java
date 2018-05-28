@@ -30,6 +30,7 @@ class ReplaceDieToolTest {
         GameBoard gameBoard = new GameBoard(map);
 
         Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
+        String nickname = gameBoard.getPlayers().get(0).getNickname();
         ReplaceDieTool replaceDieTool= new ReplaceDieTool(false, true, false,false, ToolNames.EGLOMISE_BRUSH);
         Dashboard dashboard =gameBoard.getPlayers().get(0).getDashboard();
         dashboard.setDieOnCell(0,0,new Die(Color.VIOLET));
@@ -41,13 +42,13 @@ class ReplaceDieToolTest {
         dashboard.setDieOnCell(1,1,new Die(Color.RED));
         dashboard.getMatrixScheme()[1][1].getDie().setNumber(6);
 
-        PlayerMove playerMove = new PlayerMove("UseTool",ToolNames.EGLOMISE_BRUSH,new int[]{0,0,0,2});
+        PlayerMove playerMove = new PlayerMove(nickname,"UseTool",ToolNames.EGLOMISE_BRUSH,new int[]{0,0,0,2});
         Assertions.assertTrue(replaceDieTool.toolEffect(turn,playerMove));
         ReplaceDieTool replaceDieTool1= new ReplaceDieTool(true, false, false,false,ToolNames.COPPER_FOIL_BURNISHER);
 
-        PlayerMove playerMove1 = new PlayerMove("UseTool",ToolNames.COPPER_FOIL_BURNISHER,new int[]{1,0,1,2});
+        PlayerMove playerMove1 = new PlayerMove(nickname,"UseTool",ToolNames.COPPER_FOIL_BURNISHER,new int[]{1,0,1,2});
         Assertions.assertTrue(replaceDieTool1.toolEffect(turn,playerMove1));
-        PlayerMove playerMove2 = new PlayerMove("UseTool",ToolNames.LATHEKIN,new int[]{1,2,1,3,0,2,0,1});
+        PlayerMove playerMove2 = new PlayerMove(nickname,"UseTool",ToolNames.LATHEKIN,new int[]{1,2,1,3,0,2,0,1});
         ReplaceDieTool replaceDieTool2= new ReplaceDieTool(true, true, false,false,ToolNames.LATHEKIN);
         Assertions.assertTrue(replaceDieTool2.toolEffect(turn,playerMove2));
 
@@ -60,7 +61,7 @@ class ReplaceDieToolTest {
 
 
         ReplaceDieTool replaceDieTool3= new ReplaceDieTool(true, true, true,false,ToolNames.TAP_WHEEL);
-        PlayerMove playerMove3 = new PlayerMove("UseTool",ToolNames.TAP_WHEEL,new int[]{0,1,0,0,2,0,1,2});
+        PlayerMove playerMove3 = new PlayerMove(nickname,"UseTool",ToolNames.TAP_WHEEL,new int[]{0,1,0,0,2,0,1,2});
         Assertions.assertTrue(replaceDieTool3.toolEffect(turn,playerMove3));
 
         for (int i = 0; i <4 ; i++) {

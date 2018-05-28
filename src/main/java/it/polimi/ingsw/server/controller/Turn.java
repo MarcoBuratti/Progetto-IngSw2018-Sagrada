@@ -9,25 +9,21 @@ import it.polimi.ingsw.server.model.exception.NotEnoughFavourTokensLeft;
 import it.polimi.ingsw.server.model.exception.NotValidParametersException;
 import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 
-import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Turn extends Observable {
+public class Turn {
 
 
     private final boolean secondTurn;
     private int timeTurn;
     private String typeMove;
-
     private boolean turnIsOver;
     private boolean waitMove;
     private boolean placementDone;
     private boolean usedTool;
-
     private Player player;
     private GameBoard gameBoard;
-
     private PlayerMove playerMove;
 
     public Turn(Player player, GameBoard gameBoard,boolean secondTurn) {
@@ -35,26 +31,17 @@ public class Turn extends Observable {
         this.placementDone = false;
         this.turnIsOver = false;
         this.waitMove = true;
-
         this.secondTurn = secondTurn;
         this.player = player;
         this.gameBoard = gameBoard;
-        this.timeTurn = 10*1000;
-        this.setObserver();
+        this.timeTurn = 20*1000;
     }
 
-    private synchronized void setObserver(){
-        if(player.getServerInterface()!=null) {
-            this.addObserver(player.getServerInterface());
-            setTurnIsOver(false);
-        }
-    }
-
-    public synchronized void setTurnIsOver(boolean bool) {
-        this.turnIsOver = bool;
+    public synchronized void setTurnIsOver() {
+        this.turnIsOver = true;
+        if ( this.player.getServerInterface() != null )
+            this.player.getServerInterface().send("Your turn has ended.");
         notifyAll();
-        setChanged();
-        notifyObservers(!bool);
     }
 
     public synchronized void setWaitMove(boolean waitMove) {
@@ -62,11 +49,11 @@ public class Turn extends Observable {
         notifyAll();
     }
 
-    public synchronized boolean isWaitMove() {
+    private synchronized boolean isWaitMove() {
         return waitMove;
     }
 
-    public synchronized boolean isTurnIsOver() {
+    private synchronized boolean isTurnIsOver() {
         return turnIsOver;
     }
 
@@ -90,6 +77,7 @@ public class Turn extends Observable {
     public Player getPlayer() {
         return player;
     }
+
     public GameBoard getGameBoard(){
         return gameBoard;
     }
@@ -110,32 +98,36 @@ public class Turn extends Observable {
     }
 
 
-    private synchronized void endTurn (boolean bool) {
-        this.turnIsOver = bool;
+    private synchronized void timeOut() {
+        this.turnIsOver = true;
+        if ( this.player.getServerInterface() != null )
+            this.player.getServerInterface().send("The time is over! Your turn has ended.");
         notifyAll();
-        setChanged();
-        notifyObservers(!bool);
     }
 
-    private void time(){
+    private void launchTimer (){
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 if(!isTurnIsOver()){
-                    System.out.println("prima di set turn is over");
-                    endTurn(true);
-                    System.out.println("dopo set turn is over");
+                    timeOut();
                 }
             }
         },this.timeTurn);
     }
 
     public void turnManager() {
-        setTurnIsOver(false);
-        this.time();
+
+        this.launchTimer();
+
+        if ( this.player.getServerInterface() != null )
+            this.player.getServerInterface().send("It's your turn! Please make your move.");
+
         while (!isTurnIsOver()) {
+
             synchronized(this){
+
                 while(!isTurnIsOver() && isWaitMove())
                     try {
                         wait();
@@ -143,25 +135,34 @@ public class Turn extends Observable {
                         e.printStackTrace();
                     }
             }
+
             if(!isWaitMove() && typeMove != null) {
+
+                if ( this.player.getServerInterface() != null )
+                    this.player.getServerInterface().send("Please choose one of the following moves:\nSelect 1 to place a die\nSelect 2 to use a tool\nSelect 3 to skip the turn");
+
                 if (typeMove.equals("PlaceDie") && !placementDone) {
-                    this.setMove(this.playerMove);
+                    
+                    this.tryPlacementMove(this.playerMove);
+                    
                     if(placementDone && usedTool)
-                        setTurnIsOver(true);
-                    else
-                        setTurnIsOver(false);
+                        setTurnIsOver();
 
-                } if (typeMove.equals("UseTool") && !usedTool) {
 
+                }
+                else if (typeMove.equals("UseTool") && !usedTool) {
 
                     this.useTool();
-                    if (placementDone && usedTool)
-                        setTurnIsOver(true);
-                    else
-                        setTurnIsOver(false);
 
-                } if (typeMove.equals("GoThrough")) {
-                    setTurnIsOver(true);
+                    if (placementDone && usedTool)
+                        setTurnIsOver();
+
+
+                }
+                else if (typeMove.equals("GoThrough")) {
+
+                    setTurnIsOver();
+
                 }
 
                 this.waitMove = true;
@@ -170,27 +171,31 @@ public class Turn extends Observable {
     }
 
 
-    public void setMove(PlayerMove playerMove){
+    public void tryPlacementMove (PlayerMove playerMove){
         try {
             PlacementMove placementMove = new PlacementMove(player, playerMove.getIntParameters(0),
                     playerMove.getIntParameters(1), gameBoard.getDraftPool().get(playerMove.getIndexDie()));
             this.placementDone = placementMove.placeDie();
             if(isPlacementDone()) {
                 this.gameBoard.removeDieFromDraftPool(placementMove.getDie());
+                if ( this.player.getServerInterface() != null )
+                    this.player.getServerInterface().send("The die has been placed on the selected cell.");
             }
+            else if ( this.player.getServerInterface() != null )
+                this.player.getServerInterface().send("Incorrect move! Please try again.");
         }catch (OccupiedCellException | NotValidParametersException e) {
             e.printStackTrace();
         }
     }
 
-    public void useTool(){
+    private void useTool(){
 
         Tool tool = gameBoard.getTools().stream().filter(t -> (t.getToolName().equals(playerMove.getToolName()))).findAny().get();
 
 
         try {
             this.player.useToken(tool.isAlreadyUsed());
-            usedTool=tool.toolEffect(this, playerMove);
+            usedTool = tool.toolEffect(this, playerMove);
             if (tool.needPlacement()) {
                 setWaitMove(true);
                 synchronized (this) {
@@ -201,6 +206,12 @@ public class Turn extends Observable {
 
                 }
             }
+            if(isUsedTool()) {
+                if ( this.player.getServerInterface() != null )
+                    this.player.getServerInterface().send("The selected tool has been used successfully");
+            }
+            else if ( this.player.getServerInterface() != null )
+                this.player.getServerInterface().send("Incorrect move! Please try again.");
 
         } catch (NotEnoughFavourTokensLeft | InterruptedException e) {
             //risposta per mosse errate

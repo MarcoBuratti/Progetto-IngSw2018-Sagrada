@@ -40,10 +40,11 @@ class SpecialPlacementToolTest {
         gameBoard.setDraftPool(testDraftPool);
         Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
         Turn turn1 = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
+        String nickname = gameBoard.getPlayers().get(0).getNickname();
         SpecialPlacementTool specialPlacementTool= new SpecialPlacementTool(true,true,false, ToolNames.CORK_BAKED_STRAIGHTEDGE);
-        PlayerMove playerMove = new PlayerMove("UseTool",ToolNames.CORK_BAKED_STRAIGHTEDGE,0,new int[]{2,3});
+        PlayerMove playerMove = new PlayerMove(nickname,"UseTool",ToolNames.CORK_BAKED_STRAIGHTEDGE,0,new int[]{2,3});
         Assertions.assertTrue(specialPlacementTool.toolEffect(turn,playerMove));
-        PlayerMove playerMove1 = new PlayerMove("UseTool",ToolNames.CORK_BAKED_STRAIGHTEDGE,0,new int[]{1,2});
+        PlayerMove playerMove1 = new PlayerMove(nickname,"UseTool",ToolNames.CORK_BAKED_STRAIGHTEDGE,0,new int[]{1,2});
         Assertions.assertTrue(specialPlacementTool.toolEffect(turn1,playerMove1));
 
     }

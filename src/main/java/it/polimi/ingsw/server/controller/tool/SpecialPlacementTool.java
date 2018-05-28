@@ -48,7 +48,7 @@ public class SpecialPlacementTool implements Tool {
                 try {
                     turn.getPlayer().getDashboard().setDieOnCell(row, column, die);
                     turn.getGameBoard().removeDieFromDraftPool(die);
-                    turn.setTurnIsOver(true);
+                    turn.setTurnIsOver();
                     return true;
                 } catch (NotValidParametersException | OccupiedCellException e) {
                     e.printStackTrace();

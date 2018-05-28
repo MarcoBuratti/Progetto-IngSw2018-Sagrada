@@ -19,27 +19,19 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
     private PrintStream out;
     private BufferedReader in;
     private Player player;
-    private boolean isYourTurn;
+    private boolean firstLog;
     private boolean isOn;
-    private MessageSender messageSender;
 
     public SocketConnectionServer(Socket socket, Server server) throws IOException {
         this.socket = socket;
         this.server = server;
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintStream(socket.getOutputStream());
-        isYourTurn = false;
+        firstLog = true;
         isOn = true;
-        messageSender = new MessageSender();
     }
 
-    @Override
-    public void send(String message) {
-        out.println(message);
-        out.flush();
-    }
-
-    public boolean getIsOn() {
+    private synchronized boolean getIsOn() {
         return isOn;
     }
 
@@ -48,42 +40,8 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         this.isOn = false;
     }
 
-    @Override
-    public Player getPlayer() {
-        return player;
-    }
 
-    @Override
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    @Override
-    public boolean getYourTurn() {
-        return isYourTurn;
-    }
-
-    @Override
-    public synchronized void setYourTurn(boolean bool) {
-        this.isYourTurn = bool;
-        notifyAll();
-    }
-
-    @Override
-    public void close() {
-
-        send("Connection expired.");
-        send("Terminate.");
-        try {
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        isYourTurn = false;
-        server.deregisterConnection(this);
-    }
-
-    public synchronized void read (String jsonContent){
+    private synchronized void read (String jsonContent){
         StringTokenizer strtok = new StringTokenizer(jsonContent);
         String key, value;
         JSONObject jsonObject = new JSONObject();
@@ -101,62 +59,44 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
 
     private synchronized String askForChosenScheme () throws IOException {
         StringBuilder bld = new StringBuilder();
-        bld.append(server.getSchemes().get(0).getFirstScheme() + "," + server.getSchemes().get(0).getSecondScheme());
+        bld.append(server.getSchemes().get(0).getFirstScheme());
+        bld.append(",");
+        bld.append(server.getSchemes().get(0).getSecondScheme());
         bld.append(",");
         server.getSchemes().remove(0);
-        bld.append(server.getSchemes().get(0).getFirstScheme() + "," + server.getSchemes().get(0).getSecondScheme());
+        bld.append(server.getSchemes().get(0).getFirstScheme());
+        bld.append(",");
+        bld.append(server.getSchemes().get(0).getSecondScheme());
         String message = bld.toString();
         server.getSchemes().remove(0);
         this.send("Please choose one of these schemes in a minute: insert a number between 1 and 4. " + message);
-        String chosenScheme = in.readLine();
-        return chosenScheme;
-    }
-
-    public void notYourTurn (){
-        send("It's not your turn! Please wait.");
+        return in.readLine();
     }
 
     @Override
     public void run() {
         try {
             this.player = new Player(in.readLine(), this);
-            server.registerConnection(this);
-            if ( this.player.getDashboard() == null ) {
+            firstLog = !server.alreadyLoggedIn(this);
+            if(firstLog) {
                 String chosenScheme = askForChosenScheme();
                 this.player.setDashboard(chosenScheme);
-                this.send("You have chosen the following scheme: " + chosenScheme + "\n" + this.player.getDashboard().toString());
+                this.send("You have chosen the following scheme: " + chosenScheme + "\n" + this.player.getDashboard().toString() + "\nPlease wait, the game will start soon.");
             }
+            server.registerConnection(this);
             isOn = true;
+
             while(isOn) {
-                synchronized (this) {
-                    if (getYourTurn()) {
-                        send("Make your move now.");
-                        String message = in.readLine();
-                        if (message.equals("/quit")) {
-                            setOff();
-                            close();
-                        }
-                        else {
-                            read(message);
-                            PlayerMove newMove = PlayerMove.PlayerMoveConstructor();
-                            send(newMove.toString());
-                            messageSender.send(newMove);
-                            try {
-                                wait();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-
-
-                        }
-                    } else {
-                        send("Please wait your turn.");
-                        try {
-                            wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                String message = in.readLine();
+                if (message.equals("/quit")) {
+                    setOff();
+                    close();
+                } else {
+                    read(message);
+                    PlayerMove newMove = PlayerMove.PlayerMoveConstructor();
+                    send("Trying to make the following move: " + newMove.toString() + " ...");
+                    setChanged();
+                    notifyObservers(newMove);
                 }
             }
         } catch (IOException | NotValidValueException e) {
@@ -166,26 +106,33 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         }
     }
 
+    @Override
+    public Player getPlayer() {
+        return player;
+    }
 
-    private class MessageSender extends Observable {
+    @Override
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 
-        private void send(PlayerMove playerMove){
-            setChanged();
-            notifyObservers(playerMove);
+    @Override
+    public void send(String message) {
+        out.println(message);
+        out.flush();
+    }
+
+    @Override
+    public void close() {
+
+        send("Connection expired.");
+        send("Terminate.");
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
+        server.deregisterConnection(this);
     }
 
-    @Override
-    public Observable getMessageSender() {
-        return messageSender;
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-        boolean bool = (boolean) arg;
-        setYourTurn(bool);
-        if(bool == false)
-            send("Your turn has ended.");
-    }
 }

@@ -18,44 +18,53 @@ public class RemoteView extends Observable implements Observer {
         this.serverInterface = serverInterface;
         player = serverInterface.getPlayer();
         messageReceiver = new MessageReceiver();
-        this.serverInterface.getMessageSender().addObserver(this.messageReceiver);
+        Observable serverConnection = (Observable) this.serverInterface;
+        serverConnection.addObserver(this.messageReceiver);
         modelView.addObserver(this);
     }
 
-    public synchronized void ChangeConnection(ServerInterface serverInterface){
+    synchronized void changeConnection (ServerInterface serverInterface){
         this.serverInterface = serverInterface;
         this.serverInterface.setPlayer(player);
         this.player.setServerInterface(this.serverInterface);
         messageReceiver = new MessageReceiver();
-        this.serverInterface.getMessageSender().addObserver(this.messageReceiver);
+        Observable serverConnection = (Observable) this.serverInterface;
+        serverConnection.addObserver(this.messageReceiver);
     }
 
     public Player getPlayer () {
         return player;
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-        showGameboard((ModelView) o);
-    }
 
-    public void showGameboard (ModelView modelView){
+    private void showGameboard (ModelView modelView){
         serverInterface.send(modelView.toString());
     }
 
-    public void process(PlayerMove playerMove){
+    public void send (String string) {
+        serverInterface.send(string);
+    }
+
+    public void notYourTurn () {
+        serverInterface.send("It's not your turn. Please wait.");
+    }
+
+    private void process(PlayerMove playerMove){
         setChanged();
         notifyObservers(playerMove);
     }
 
     private class MessageReceiver implements Observer {
-
         @Override
         public void update(Observable o, Object arg) {
             PlayerMove playerMove = (PlayerMove) arg;
             process(playerMove);
 
         }
+    }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        showGameboard((ModelView) o);
     }
 }

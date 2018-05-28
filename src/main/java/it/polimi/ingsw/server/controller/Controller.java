@@ -52,14 +52,7 @@ public class Controller extends Observable implements Observer {
         return gameBoard;
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-        PlayerMove playerMove = (PlayerMove) arg;
-        setChanged();
-        notifyObservers(playerMove);
-    }
-
-    public void calculateFinalScores() {
+    private void calculateFinalScores() {
 
         finalscore = new ArrayList<>();
         Collections.rotate(players, players.size()-1);
@@ -99,7 +92,7 @@ public class Controller extends Observable implements Observer {
 
     }
 
-    public int calculateFinalScorePlayer(Player player) {
+    private int calculateFinalScorePlayer(Player player) {
         int score = 0;
         score += player.getPrivateAchievement().scoreEffect(player.getDashboard());
         for (CardAchievement c : gameBoard.getPublicAchievements()) {
@@ -109,6 +102,19 @@ public class Controller extends Observable implements Observer {
         score += player.getCurrentFavourToken();
         score -= player.getDashboard().emptyCells();
         return score;
+    }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        PlayerMove playerMove = (PlayerMove) arg;
+        if(playerMove.getPlayerNickname().equals(currentRound.getCurrentPlayer().getNickname())) {
+            setChanged();
+            notifyObservers(playerMove);
+        }
+        else {
+            RemoteView remoteView = (RemoteView) o;
+            remoteView.send(playerMove.getPlayerNickname() + " " + currentRound.getCurrentPlayer().getNickname());
+            remoteView.notYourTurn();
+        }
     }
 }

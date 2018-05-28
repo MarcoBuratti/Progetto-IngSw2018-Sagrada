@@ -7,8 +7,6 @@ import it.polimi.ingsw.server.model.Die;
 import it.polimi.ingsw.server.model.exception.NotValidRoundException;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
 
-import java.util.ArrayList;
-
 public class ChangeDieTool implements Tool {
 
     private boolean isAlreadyUsed;
@@ -78,7 +76,7 @@ public class ChangeDieTool implements Tool {
                     e.printStackTrace();
                 }
             }
-            turn.setMove(turn.getPlayerMove());
+            turn.tryPlacementMove(turn.getPlayerMove());
 
         }
         else

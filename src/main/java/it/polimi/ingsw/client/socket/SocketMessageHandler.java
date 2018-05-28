@@ -47,13 +47,15 @@ public class SocketMessageHandler implements MessageHandler {
         client.send(chosenScheme);
     }
 
+
     private void placeDieHandler (String fromClient){
         StringTokenizer strtok = new StringTokenizer(fromClient, " ");
-        String move = strtok.nextToken();
-
+        strtok.nextToken();
         StringBuilder bld = new StringBuilder();
+        bld.append("playerID ");
+        bld.append(this.clientInterface.getPlayerNickname());
         String json_translation;
-        bld.append("type_playerMove PlaceDie");
+        bld.append(" type_playerMove PlaceDie");
         int i = 1;
         while(strtok.hasMoreTokens()){
             String key = "Key" + i;
@@ -68,7 +70,11 @@ public class SocketMessageHandler implements MessageHandler {
 
     private void goThroughHandler (){
         SocketConnectionClient client = (SocketConnectionClient) clientInterface;
-        client.send("type_playerMove GoThrough");
+        StringBuilder bld = new StringBuilder();
+        bld.append("playerID ");
+        bld.append(this.clientInterface.getPlayerNickname());
+        bld.append(" type_playerMove GoThrough");
+        client.send(bld.toString());
     }
 
     private void quitHandler () {
@@ -78,11 +84,12 @@ public class SocketMessageHandler implements MessageHandler {
 
     private void useToolHandler (String fromClient) {
         StringTokenizer strtok = new StringTokenizer(fromClient);
-        String move = strtok.nextToken();
-
+        strtok.nextToken();
         StringBuilder bld = new StringBuilder();
+        bld.append("playerID ");
+        bld.append(this.clientInterface.getPlayerNickname());
         String json_translation;
-        bld.append("type_playerMove UseTool");
+        bld.append(" type_playerMove UseTool");
         int i = 1;
         while(strtok.hasMoreTokens()){
             //DA IMPLEMENTARE

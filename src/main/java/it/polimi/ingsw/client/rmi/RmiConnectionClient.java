@@ -20,12 +20,14 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
     RmiControllerInterface server;
     RmiServerInterface channel;
     private boolean isOn = true;
+    private String playerNickname;
 
     public RmiConnectionClient(View view) {
         addObserver(view);
         try {
             server = (RmiControllerInterface) Naming.lookup("//localhost/Server");
             channel = server.addClient((RmiClientInterface) UnicastRemoteObject.exportObject(this, 0));
+            playerNickname = view.getNickname();
         } catch (MalformedURLException e) {
             System.err.println("URL non trovato!");
         } catch (RemoteException e) {
@@ -98,6 +100,17 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
     @Override
     public synchronized boolean getIsOn() {
         return isOn;
+    }
+
+    @Override
+    public String getPlayerNickname() {
+        return playerNickname;
+    }
+
+    @Override
+    public void setPlayerNickname(String nickname) {
+        this.playerNickname = nickname;
+
     }
 
 }

@@ -52,14 +52,14 @@ class ChangeDieToolTest {
         gameBoard.getRoundTrack().setNextRound(diceList2);
 
         Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
-
+        String nickname = gameBoard.getPlayers().get(0).getNickname();
         System.out.println(gameBoard.getDraftPool());
         ChangeDieTool changeDieTool=new ChangeDieTool(false,ToolNames.LENS_CUTTER);
-        PlayerMove playerMove = new PlayerMove("UseTool",ToolNames.LENS_CUTTER,0,new int[]{1,0});
+        PlayerMove playerMove = new PlayerMove(nickname, "UseTool",ToolNames.LENS_CUTTER,0,new int[]{1,0});
         Assertions.assertTrue(changeDieTool.toolEffect(turn,playerMove));
         System.out.println(gameBoard.getDraftPool());
         ChangeDieTool changeDieTool1=new ChangeDieTool(true,ToolNames.FLUX_REMOVER);
-        PlayerMove playerMove1 = new PlayerMove("UseTool",ToolNames.FLUX_REMOVER,2);
+        PlayerMove playerMove1 = new PlayerMove(nickname, "UseTool",ToolNames.FLUX_REMOVER,2);
         Assertions.assertTrue(changeDieTool1.toolEffect(turn,playerMove1));
         System.out.println(gameBoard.getDraftPool());
         //System.out.println(gameBoard.getRoundTrack());

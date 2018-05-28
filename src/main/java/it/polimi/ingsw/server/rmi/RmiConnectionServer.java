@@ -21,22 +21,20 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
     private Player player;
     private RmiClientInterface client;
     private boolean isYourTurn;
-    private MessageSender messageSender;
 
 
     public RmiConnectionServer(RmiClientInterface connectionClientRMI, Server server) {
         this.client = connectionClientRMI;
         this.server = server;
-        this.messageSender = new MessageSender();
     }
 
     @Override
-    public void setPlayerAndAskScheme(Message message) throws RemoteException{
+    public void setPlayerAndAskScheme(Message message) throws RemoteException {
         this.setPlayer(new Player(message.getMessage(), this));
         server.registerConnection(this);
         try {
             askForChosenScheme();
-        }catch (Exception e){
+        } catch (Exception e) {
             System.err.println(e.toString());
         }
     }
@@ -51,13 +49,13 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         }
     }
 
-    public void notYourTurn () { send("It's not your turn! Please wait.");}
+    public void notYourTurn() {
+        send("It's not your turn! Please wait.");
+    }
 
     @Override
     public void sendMove(PlayerMove playerMove) throws RemoteException {
-        if(getYourTurn()) {
-            messageSender.sendMove(playerMove);
-        } else notYourTurn();
+            sendMove(playerMove);
     }
 
     @Override
@@ -70,21 +68,12 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         return player;
     }
 
-    @Override
-    public synchronized boolean getYourTurn() {
-        return isYourTurn;
-    }
-
-    @Override
-    public synchronized void setYourTurn(boolean bool) {
-        this.isYourTurn = bool;
-    }
 
     @Override
     public void send(String string) {
-        try{
+        try {
             client.update(string);
-        }catch(ConnectException e) {
+        } catch (ConnectException e) {
             e.printStackTrace();
             System.out.println("Client rimosso! - 1");
             close();
@@ -107,21 +96,6 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         server.deregisterConnection(this);
     }
 
-    private class MessageSender extends Observable {
-
-        private void sendMove (PlayerMove playerMove){
-            setChanged();
-            notifyObservers(playerMove);
-        }
-
-
-    }
-
-    @Override
-    public Observable getMessageSender() {
-        return messageSender;
-    }
-
     public void askForChosenScheme() throws IOException {
         StringBuilder bld = new StringBuilder();
         bld.append(server.getSchemes().get(0).getFirstScheme() + "," + server.getSchemes().get(0).getSecondScheme());
@@ -131,11 +105,5 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         String message = bld.toString();
         server.getSchemes().remove(0);
         this.send("Please choose one of these schemes in a minute: insert a number between 1 and 4.\n" + message);
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-        boolean bool = (boolean) arg;
-        this.setYourTurn(bool);
     }
 }

@@ -5,12 +5,9 @@ import it.polimi.ingsw.server.model.Player;
 import java.util.Observable;
 import java.util.Observer;
 
-public interface ServerInterface extends Observer {
+public interface ServerInterface {
     void setPlayer(Player player);
     Player getPlayer();
-    boolean getYourTurn();
-    void setYourTurn(boolean bool);
     void send(String message);
     void close();
-    Observable getMessageSender();
 }

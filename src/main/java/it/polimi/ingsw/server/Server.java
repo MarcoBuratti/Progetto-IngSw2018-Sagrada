@@ -60,7 +60,7 @@ public class Server extends UnicastRemoteObject {
         }
     }
 
-    public void start() {
+    private void start() {
         try {
             LocateRegistry.createRegistry(1099);//Creo un registy sulla porta 1099 (quella di default).
         } catch (RemoteException e) {
@@ -124,19 +124,21 @@ public class Server extends UnicastRemoteObject {
         return this.schemes;
     }
 
-    public ArrayList<String> getNicknames() {
-        return nicknames;
-    }
-
     public ArrayList<Player> getPlayers() {return players;}
 
     public ArrayList<RemoteView> getRemoteViews() {
         return remoteViews;
     }
 
+    public synchronized boolean alreadyLoggedIn(ServerInterface newServerInterface) {
+        if (nicknames.contains(newServerInterface.getPlayer().getNickname()))
+            return true;
+        else return false;
+    }
+
     public synchronized void registerConnection(ServerInterface newServerInterface) {
 
-        if (nicknames.contains(newServerInterface.getPlayer().getNickname())){
+        if (alreadyLoggedIn(newServerInterface)){
             Player oldPlayer;
             for (Player p: players) {
                 if (p.getNickname().equals(newServerInterface.getPlayer().getNickname())) {
@@ -145,7 +147,7 @@ public class Server extends UnicastRemoteObject {
                         serverInterfaces.add(newServerInterface);
                         for (RemoteView r : remoteViews) {
                             if (r.getPlayer().getNickname().equals(newServerInterface.getPlayer().getNickname()))
-                                r.ChangeConnection(newServerInterface);
+                                r.changeConnection(newServerInterface);
                         }
                         System.out.println(oldPlayer.getNickname() + " has logged in again.");
                         newServerInterface.send("You have logged in again as: " + newServerInterface.getPlayer().getNickname());
@@ -154,11 +156,10 @@ public class Server extends UnicastRemoteObject {
                         newServerInterface.send("This nickname has been already used! Please try again.");
                         newServerInterface.send("Terminate.");
                     }
-
                 }
             }
-
         }
+
         else if (!playersConnected && nicknames.size()<4) {
             serverInterfaces.add(newServerInterface);
             try {

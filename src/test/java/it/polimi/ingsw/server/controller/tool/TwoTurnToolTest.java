@@ -1,10 +1,7 @@
 package it.polimi.ingsw.server.controller.tool;
 
-import it.polimi.ingsw.server.controller.Round;
 import it.polimi.ingsw.server.controller.Turn;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
-import it.polimi.ingsw.server.controller.tool.ToolNames;
-import it.polimi.ingsw.server.controller.tool.TwoTurnTool;
 import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Dashboard;
 import it.polimi.ingsw.server.model.Die;
@@ -40,18 +37,19 @@ class TwoTurnToolTest {
 
         gameBoard.setDraftPool(testDraftPool);
 
-        PlayerMove playerMove= new PlayerMove("PlaceDie",0,new int[]{0,0});
-        PlayerMove playerMove1= new PlayerMove("PlaceDie",0,new int[]{0,1});
-        PlayerMove playerMove2= new PlayerMove("UseTool", ToolNames.RUNNING_PLIERS,0,new int[]{0,1});
-        TwoTurnTool twoTurnTool=new TwoTurnTool(false,ToolNames.RUNNING_PLIERS);
         Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
         Turn turn1 = new Turn(gameBoard.getPlayers().get(0), gameBoard, true);
-        turn.setMove(playerMove);
+        String nickname = gameBoard.getPlayers().get(0).getNickname();
+        PlayerMove playerMove= new PlayerMove(nickname,"PlaceDie",0,new int[]{0,0});
+        PlayerMove playerMove1= new PlayerMove(nickname,"PlaceDie",0,new int[]{0,1});
+        PlayerMove playerMove2= new PlayerMove(nickname,"UseTool", ToolNames.RUNNING_PLIERS,0,new int[]{0,1});
+        TwoTurnTool twoTurnTool=new TwoTurnTool(false,ToolNames.RUNNING_PLIERS);
+        turn.tryPlacementMove(playerMove);
         Assertions.assertTrue(turn.isPlacementDone());
         Assertions.assertTrue(twoTurnTool.toolEffect(turn,playerMove2));
         Assertions.assertFalse(twoTurnTool.toolEffect(turn1,playerMove2));
         Assertions.assertFalse(turn.isPlacementDone());
-        turn.setMove(playerMove1);
+        turn.tryPlacementMove(playerMove1);
 
         Dashboard dashboard =gameBoard.getPlayers().get(0).getDashboard();
         for (int i = 0; i <4 ; i++) {

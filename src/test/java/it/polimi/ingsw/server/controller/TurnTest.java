@@ -25,7 +25,7 @@ class TurnTest {
         GameBoard gameBoard = new GameBoard(map);
 
         Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, true);
-
+        String nickname = gameBoard.getPlayers().get(0).getNickname();
         ArrayList<Die> testDraftPool= new ArrayList<>();
         Die die1 =new Die(Color.BLUE);
         die1.setNumber(1);
@@ -55,37 +55,37 @@ class TurnTest {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove(new PlayerMove("GoThrough"));
+                turn.newMove(new PlayerMove(nickname,"GoThrough"));
             }
         }, 2000);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove(new PlayerMove("PlaceDie", 2, new int[]{ 1,1}));
+                turn.newMove(new PlayerMove(nickname,"PlaceDie", 2, new int[]{ 1,1}));
             }
         }, 500);
        timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove(new PlayerMove("PlaceDie",1, new int[]{0, 0}));
+                turn.newMove(new PlayerMove(nickname,"PlaceDie",1, new int[]{0, 0}));
             }
         }, 1000);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove(new PlayerMove("PlaceDie",2,new int[] {0, 1}));
+                turn.newMove(new PlayerMove(nickname,"PlaceDie",2,new int[] {0, 1}));
             }
         }, 1500);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove(new PlayerMove("UseTool",ToolNames.GRINDING_STONE,1));
+                turn.newMove(new PlayerMove(nickname,"UseTool",ToolNames.GRINDING_STONE,1));
             }
         }, 900);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove(new PlayerMove("UseTool",ToolNames.GRINDING_STONE,0));
+                turn.newMove(new PlayerMove(nickname,"UseTool",ToolNames.GRINDING_STONE,0));
             }
         }, 1900);
 

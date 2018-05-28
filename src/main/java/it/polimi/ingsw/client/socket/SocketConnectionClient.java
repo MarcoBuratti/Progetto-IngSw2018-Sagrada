@@ -21,6 +21,7 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
     private PrintStream out;
     private boolean isOn = true;
     private ExecutorService executor = Executors.newCachedThreadPool();
+    private String playerNickname;
 
     public SocketConnectionClient(View view) {
         this.addObserver(view);
@@ -61,6 +62,15 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
     }
 
 
+    @Override
+    public String getPlayerNickname() {
+        return playerNickname;
+    }
+
+    @Override
+    public void setPlayerNickname(String nickname) {
+        this.playerNickname = nickname;
+    }
 
     @Override
     public void run() {

@@ -13,6 +13,7 @@ import java.util.Observer;
 
 public class Round implements Observer {
     private int DRAFT_POOL_CAPACITY;
+    private Player currentPlayer;
     private Turn currentTurn;
     private GameBoard gameBoard;
     private ArrayList<Player> players;
@@ -32,8 +33,6 @@ public class Round implements Observer {
     public void roundManager() {
         ListIterator<Player> iterator = players.listIterator();
 
-        Player currentPlayer;
-
         while (iterator.hasNext()) {
             currentPlayer = iterator.next();
             this.gameBoard.setCurrentPlayer(currentPlayer);
@@ -52,7 +51,6 @@ public class Round implements Observer {
                 this.gameBoard.setCurrentPlayer(currentPlayer);
                 if (currentPlayer.getServerInterface() != null) {
                     this.currentTurn = new Turn(currentPlayer, gameBoard, true);
-                    currentTurn.turnManager();
                 }
             }
         }
@@ -68,7 +66,9 @@ public class Round implements Observer {
 
     }
 
-    public Turn getCurrentTurn() {
+    public synchronized Player getCurrentPlayer() { return currentPlayer; }
+
+    public synchronized Turn getCurrentTurn() {
         return currentTurn;
     }
 
