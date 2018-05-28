@@ -146,9 +146,8 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                           /* setChanged();
-                            notifyObservers(newMove);
-                            */
+
+
                         }
                     } else {
                         send("Please wait your turn.");

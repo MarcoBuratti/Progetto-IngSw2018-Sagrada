@@ -39,7 +39,7 @@ public class Turn extends Observable {
         this.secondTurn = secondTurn;
         this.player = player;
         this.gameBoard = gameBoard;
-        this.timeTurn = 20*1000;
+        this.timeTurn = 10*1000;
         this.setObserver();
     }
 
@@ -110,6 +110,13 @@ public class Turn extends Observable {
     }
 
 
+    private synchronized void endTurn (boolean bool) {
+        this.turnIsOver = bool;
+        notifyAll();
+        setChanged();
+        notifyObservers(!bool);
+    }
+
     private void time(){
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -117,7 +124,7 @@ public class Turn extends Observable {
             public void run() {
                 if(!isTurnIsOver()){
                     System.out.println("prima di set turn is over");
-                    setTurnIsOver(true);
+                    endTurn(true);
                     System.out.println("dopo set turn is over");
                 }
             }

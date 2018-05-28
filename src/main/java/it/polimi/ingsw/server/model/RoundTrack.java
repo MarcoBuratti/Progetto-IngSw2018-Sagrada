@@ -110,7 +110,7 @@ public class RoundTrack {
      * Returns a string representing the round track, specifying the dice placed on every round's cell.
      */
     public String toString() {
-        String myRoundTrack = "Round track:\n\n";
+        String myRoundTrack = "Round track:\n";
         StringBuilder bld = new StringBuilder();
         for (int i = 0; i < NUMBER_OF_ROUNDS; i++) {
             bld.append("\nRound ");
