@@ -69,7 +69,11 @@ public class View implements Observer {
                 String fromClient = bufferedReader.readLine();
                 messageHandler.handleScheme(fromServer, fromClient);
                 hasChosenScheme = true;
-            } else System.out.println(fromServer);
+            } else if (fromServer.startsWith("You have logged in again as")) {
+                System.out.println(fromServer);
+                hasChosenScheme = true;
+            } else
+                System.out.println(fromServer);
         } catch (Exception e) {
             System.err.println(e.toString());
         }

@@ -141,11 +141,21 @@ public class Dashboard {
 
     @Override
     public String toString() {
-        String string = "Dashboard\n\n";
+        String string = "\nDashboard: " + this.owner.getNickname() + "\n\n";
         StringBuilder bld = new StringBuilder();
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COLUMN; j++) {
-                bld.append(this.matrixScheme[i][j].toString());
+                bld.append(this.matrixScheme[i][j].getRestriction().toString());
+                bld.append(" ");
+            }
+            bld.append("\n");
+        }
+        for (int i = 0; i < ROW; i++) {
+            for (int j = 0; j < COLUMN; j++) {
+                if(this.matrixScheme[i][j].getUsedCell())
+                    bld.append(this.matrixScheme[i][j].getDie().toString());
+                else
+                    bld.append("Empty Cell");
                 bld.append(" ");
             }
             bld.append("\n");

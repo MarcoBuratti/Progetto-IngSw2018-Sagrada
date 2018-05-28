@@ -203,6 +203,11 @@ public class GameBoard extends Observable{
 
     public String toString(){
         StringBuilder bld = new StringBuilder();
+        for (Die die: draftPool) {
+            bld.append(die.toString());
+            bld.append(" ");
+        }
+        bld.append("\n");
         for (Player p: players)
             bld.append(p.getDashboard().toString());
         return bld.toString();

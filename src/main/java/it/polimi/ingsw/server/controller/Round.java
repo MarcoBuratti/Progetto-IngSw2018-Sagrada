@@ -28,7 +28,7 @@ public class Round implements Observer {
 
     public void roundManager() {
         ListIterator<Player> iterator = players.listIterator();
-        Map<Player, Boolean> secondTurnPlayed = new HashMap<>(players.size());
+       // Map<Player, Boolean> secondTurnPlayed = new HashMap<>(players.size());
         Player currentPlayer;
 
         while (iterator.hasNext()) {
@@ -38,17 +38,17 @@ public class Round implements Observer {
                 this.currentTurn = new Turn(currentPlayer, gameBoard, false, this);
                 currentTurn.turnManager();
             }
-            secondTurnPlayed.put(currentPlayer, currentTurn.isHasSecondTurn());
+//            secondTurnPlayed.put(currentPlayer, currentTurn.isHasSecondTurn());
         }
         while (iterator.hasPrevious()) {
             currentPlayer = iterator.previous();
-            if (!secondTurnPlayed.get(currentPlayer)) {
+          //  if (!secondTurnPlayed.get(currentPlayer)) {
                 this.gameBoard.setCurrentPlayer(currentPlayer);
                 if (currentPlayer.getServerInterface() != null) {
                     this.currentTurn = new Turn(currentPlayer, gameBoard, true, this);
                     currentTurn.turnManager();
                 }
-            }
+           // }
         }
     }
 

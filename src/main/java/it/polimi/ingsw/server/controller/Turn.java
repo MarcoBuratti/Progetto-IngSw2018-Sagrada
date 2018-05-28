@@ -42,7 +42,7 @@ public class Turn extends Observable {
         this.player = player;
         this.gameBoard = gameBoard;
         this.round = round;
-        this.timeTurn = 60*1000;
+        this.timeTurn = 20*1000;
         this.setObserver();
     }
 
@@ -110,19 +110,22 @@ public class Turn extends Observable {
 
     public synchronized void newMove(PlayerMove playerMove) {
         this.typeMove = playerMove.getTypeMove();
-        this.playerMove=playerMove;
+        this.playerMove = playerMove;
         this.waitMove = false;
         notifyAll();
     }
 
 
-    public void time(){
+    private void time(){
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if(!isTurnIsOver())
+                if(!isTurnIsOver()){
+                    System.out.println("prima di set turn is over");
                     setTurnIsOver(true);
+                    System.out.println("dopo set turn is over");
+                }
             }
         },this.timeTurn);
     }
@@ -130,6 +133,7 @@ public class Turn extends Observable {
     public void turnManager() {
         setTurnIsOver(false);
         this.time();
+        player.getServerInterface().send("sono in turn manager");
         while (!isTurnIsOver()) {
             synchronized(this){
                 while(!isTurnIsOver() && isWaitMove())
@@ -139,7 +143,7 @@ public class Turn extends Observable {
                         e.printStackTrace();
                     }
             }
-            if(!isWaitMove()) {
+            if(!isWaitMove() && typeMove != null) {
                 if (typeMove.equals("PlaceDie") && !placementDone) {
                     this.setMove(this.playerMove);
                     if(placementDone && usedTool)
@@ -147,7 +151,7 @@ public class Turn extends Observable {
                     else
                         setTurnIsOver(false);
 
-                } else if (typeMove.equals("UseTool") && !usedTool) {
+                } if (typeMove.equals("UseTool") && !usedTool) {
 
 
                     this.useTool();
@@ -156,7 +160,7 @@ public class Turn extends Observable {
                     else
                         setTurnIsOver(false);
 
-                } else if (typeMove.equals("GoThrough")) {
+                } if (typeMove.equals("GoThrough")) {
                     setTurnIsOver(true);
                 }
 

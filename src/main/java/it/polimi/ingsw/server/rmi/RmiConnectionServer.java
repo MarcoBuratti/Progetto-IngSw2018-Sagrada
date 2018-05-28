@@ -122,8 +122,6 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         return messageSender;
     }
 
-
-
     public void askForChosenScheme() throws IOException {
         StringBuilder bld = new StringBuilder();
         bld.append(server.getSchemes().get(0).getFirstScheme() + "," + server.getSchemes().get(0).getSecondScheme());
@@ -134,7 +132,6 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         server.getSchemes().remove(0);
         this.send("Please choose one of these schemes in a minute: insert a number between 1 and 4.\n" + message);
     }
-
 
     @Override
     public void update(Observable o, Object arg) {

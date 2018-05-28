@@ -47,7 +47,7 @@ public class ValueRestriction implements Restriction {
      * Returns a string which specifies the restriction's kind and value.
      */
     public String toString() {
-        return "Value Restriction: " + number;
+        return "Restriction: " + number;
     }
 
     @Override
