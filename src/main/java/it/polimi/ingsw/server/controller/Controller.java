@@ -44,7 +44,7 @@ public class Controller extends Observable implements Observer {
             }
             currentRound.roundManager();
             currentRound.endRound();
-            Collections.rotate(players, 1);
+            Collections.rotate(players, players.size()-1);
         }
     }
 
