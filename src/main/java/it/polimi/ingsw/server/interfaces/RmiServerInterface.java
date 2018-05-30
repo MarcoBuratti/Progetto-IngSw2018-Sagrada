@@ -10,4 +10,5 @@ public interface RmiServerInterface extends Remote {
     void setPlayerAndAskScheme(Message message) throws RemoteException;
     void setDashboard (Message message) throws RemoteException;
     void sendMove (PlayerMove playerMove) throws RemoteException;
+    void quit () throws RemoteException;
 }

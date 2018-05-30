@@ -21,6 +21,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
     private Player player;
     private boolean firstLog;
     private boolean isOn;
+    private boolean gameStarted;
 
     public SocketConnectionServer(Socket socket, Server server) throws IOException {
         this.socket = socket;
@@ -69,7 +70,9 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         bld.append(server.getSchemes().get(0).getSecondScheme());
         String message = bld.toString();
         server.getSchemes().remove(0);
-        this.send("Please choose one of these schemes in a minute: insert a number between 1 and 4. " + message);
+        String privateAchievement = server.getPrivateAchievements().get(0).toString();
+        this.send("This is your private achievement: " + privateAchievement);
+        this.send("Please choose one of these schemes: insert a number between 1 and 4. " + message);
         return in.readLine();
     }
 
@@ -78,12 +81,13 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         try {
             this.player = new Player(in.readLine(), this);
             firstLog = !server.alreadyLoggedIn(this);
-            if(firstLog) {
+            gameStarted = server.isGameStarted();
+            server.registerConnection(this);
+            if(firstLog && !gameStarted) {
                 String chosenScheme = askForChosenScheme();
                 this.player.setDashboard(chosenScheme);
                 this.send("You have chosen the following scheme: " + chosenScheme + "\n" + this.player.getDashboard().toString() + "\nPlease wait, the game will start soon.");
             }
-            server.registerConnection(this);
             isOn = true;
 
             while(isOn) {

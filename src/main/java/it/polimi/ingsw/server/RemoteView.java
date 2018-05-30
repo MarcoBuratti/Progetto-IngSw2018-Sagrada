@@ -3,7 +3,6 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.interfaces.ServerInterface;
 import it.polimi.ingsw.server.model.Player;
-import it.polimi.ingsw.util.Message;
 
 import java.util.Observable;
 import java.util.Observer;

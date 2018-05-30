@@ -10,6 +10,7 @@ import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Observable;
+import java.util.StringTokenizer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -70,6 +71,98 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
     @Override
     public void setPlayerNickname(String nickname) {
         this.playerNickname = nickname;
+    }
+
+    @Override
+    public void handleScheme (String fromServer, String fromClient) {
+        int choice = Integer.parseInt(fromClient);
+        String substringSchemes = fromServer.substring(fromServer.indexOf(".") + 2);
+        StringTokenizer strtok = new StringTokenizer(substringSchemes, ",");
+        String[] schemes = new String[4];
+        int i = 0;
+        while(strtok.hasMoreTokens()){
+            schemes[i] = strtok.nextToken();
+            i++;
+        }
+        String chosenScheme;
+        if(choice > 0 && choice <= 4)
+            chosenScheme = schemes[choice-1];
+        else
+            chosenScheme = schemes[0];
+        send(chosenScheme);
+    }
+
+
+    private void placeDieHandler (String fromClient){
+        StringTokenizer strtok = new StringTokenizer(fromClient, " ");
+        strtok.nextToken();
+        StringBuilder bld = new StringBuilder();
+        bld.append("playerID ");
+        bld.append(this.playerNickname);
+        String json_translation;
+        bld.append(" type_playerMove PlaceDie");
+        int i = 1;
+        while(strtok.hasMoreTokens()){
+            String key = "Key" + i;
+            String value = strtok.nextToken();
+            bld.append(" " + key + " " + value);
+            i++;
+        }
+        json_translation = bld.toString();
+        send(json_translation);
+    }
+
+    private void goThroughHandler (){
+        StringBuilder bld = new StringBuilder();
+        bld.append("playerID ");
+        bld.append(this.playerNickname);
+        bld.append(" type_playerMove GoThrough");
+        send(bld.toString());
+    }
+
+    private void quitHandler () {
+        send("/quit");
+    }
+
+    private void useToolHandler (String fromClient) {
+        StringTokenizer strtok = new StringTokenizer(fromClient);
+        strtok.nextToken();
+        StringBuilder bld = new StringBuilder();
+        bld.append("playerID ");
+        bld.append(this.playerNickname);
+        String json_translation;
+        bld.append(" type_playerMove UseTool");
+        int i = 1;
+        while(strtok.hasMoreTokens()){
+            //DA IMPLEMENTARE
+        }
+    }
+
+    @Override
+    public void handleMove(String fromClient) {
+        StringTokenizer strtok = new StringTokenizer(fromClient);
+        int moveChoice = Integer.parseInt(strtok.nextToken());
+        switch (moveChoice){
+            case 1:
+                placeDieHandler(fromClient);
+                break;
+            case 2:
+                useToolHandler(fromClient);
+                break;
+            case 3:
+                goThroughHandler();
+                break;
+            case 4:
+                quitHandler();
+                break;
+            default:
+                goThroughHandler();
+        }
+    }
+
+    @Override
+    public void handleName(String name) {
+        send(name);
     }
 
     @Override

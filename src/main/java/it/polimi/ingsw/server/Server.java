@@ -2,6 +2,7 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.interfaces.ServerInterface;
+import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.SchemeCardsEnum;
 import it.polimi.ingsw.server.rmi.RmiController;
@@ -32,8 +33,10 @@ public class Server extends UnicastRemoteObject {
     private Controller controller;
     private ModelView modelView;
     private ArrayList<SchemeCardsEnum> schemes;
+    private ArrayList<Color> privateAchievements;
     private final int lobbyTime = 5 * 1000;
     private ArrayList<RemoteView> remoteViews;
+    boolean gameStarted;
     private Timer timer;
 
     public Server() throws IOException {
@@ -48,6 +51,8 @@ public class Server extends UnicastRemoteObject {
         remoteViews = new ArrayList<>();
         schemes = new ArrayList<>(Arrays.asList(SchemeCardsEnum.values()));
         Collections.shuffle(schemes);
+        privateAchievements = new ArrayList<>(Arrays.asList(Color.values()));
+        Collections.shuffle(privateAchievements);
     }
 
     public static void main(String[] args) {
@@ -71,7 +76,7 @@ public class Server extends UnicastRemoteObject {
             Naming.rebind("Server", rmicontroller);
 
         } catch (MalformedURLException e) {
-            System.err.println("The selected object cannot be registered!");
+            System.err.println("The selected object cannot be read!");
         } catch (RemoteException e) {
             System.err.println("Connection error: " + e.getMessage() + "!");
         }
@@ -90,6 +95,7 @@ public class Server extends UnicastRemoteObject {
 
     private void startGame() {
         this.timer.cancel();
+        this.setGameStarted(true);
         this.controller = new Controller(this);
         modelView = new ModelView(controller.getGameBoard());
         for (ServerInterface s: serverInterfaces)
@@ -124,6 +130,8 @@ public class Server extends UnicastRemoteObject {
         return this.schemes;
     }
 
+    public ArrayList<Color> getPrivateAchievements () { return this.privateAchievements; }
+
     public ArrayList<Player> getPlayers() {return players;}
 
     public ArrayList<RemoteView> getRemoteViews() {
@@ -134,6 +142,14 @@ public class Server extends UnicastRemoteObject {
         if (nicknames.contains(newServerInterface.getPlayer().getNickname()))
             return true;
         else return false;
+    }
+
+    public synchronized boolean isGameStarted() {
+        return gameStarted;
+    }
+
+    public synchronized void setGameStarted(boolean bool) {
+        this.gameStarted = bool;
     }
 
     public synchronized void registerConnection(ServerInterface newServerInterface) {
@@ -162,6 +178,7 @@ public class Server extends UnicastRemoteObject {
 
         else if (!playersConnected && nicknames.size()<4) {
             serverInterfaces.add(newServerInterface);
+            timer.cancel();
             try {
                 players.add(newServerInterface.getPlayer());
                 nicknames.add(newServerInterface.getPlayer().getNickname());
@@ -170,11 +187,9 @@ public class Server extends UnicastRemoteObject {
             } catch(Exception e) {
                 System.out.println("Client Connection Error!");
             }
-            if(serverInterfaces.size()==2) {
+
+            if(serverInterfaces.size()>=2) {
                 this.gameStartTimer();
-            }
-            else if( ((serverInterfaces.size()==4)) ) {
-                this.startGame();
             }
 
         } else{
