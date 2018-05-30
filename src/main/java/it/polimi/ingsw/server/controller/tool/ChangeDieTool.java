@@ -37,25 +37,28 @@ public class ChangeDieTool implements Tool {
     }
 
     public boolean toolEffect(Turn turn, PlayerMove playerMove) {
-        if (toolName.equals(ToolNames.LENS_CUTTER)) {
-            try {
-                secondDie = (Die) turn.getGameBoard().getRoundTrack().getDiceList(playerMove.getIntParameters(0)).get(playerMove.getIntParameters(1));
-                dieDraftPool =turn.getGameBoard().changeDie(secondDie,playerMove.getIndexDie());
-                turn.getGameBoard().getRoundTrack().changeDie(dieDraftPool,playerMove.getIntParameters(0),playerMove.getIntParameters(1));
+        if(playerMove.getIndexDie().isPresent()) {
+            if (toolName.equals(ToolNames.LENS_CUTTER)) {
+                try {
+                    secondDie = (Die) turn.getGameBoard().getRoundTrack().getDiceList(playerMove.getIntParameters(0)).get(playerMove.getIntParameters(1));
+                    dieDraftPool = turn.getGameBoard().changeDie(secondDie, playerMove.getIndexDie().get());
+                    turn.getGameBoard().getRoundTrack().changeDie(dieDraftPool, playerMove.getIntParameters(0), playerMove.getIntParameters(1));
+                    return true;
+                } catch (NotValidRoundException e) {
+                    e.printStackTrace();
+                }
+            } else if (toolName.equals(ToolNames.FLUX_REMOVER)) {
+                dieDraftPool = turn.getGameBoard().getDraftPool().get(playerMove.getIndexDie().get());
+                secondDie = turn.getGameBoard().getDiceBag().changeDie(dieDraftPool);
+                turn.getGameBoard().changeDie(secondDie, playerMove.getIndexDie().get());
+                index = playerMove.getIndexDie().get();
+
                 return true;
-            } catch (NotValidRoundException e) {
-                e.printStackTrace();
             }
-        } else if (toolName.equals(ToolNames.FLUX_REMOVER)) {
-            dieDraftPool = turn.getGameBoard().getDraftPool().get(playerMove.getIndexDie());
-            secondDie = turn.getGameBoard().getDiceBag().changeDie(dieDraftPool);
-            turn.getGameBoard().changeDie(secondDie,playerMove.getIndexDie());
-            index=playerMove.getIndexDie();
 
-            return true;
-        }
-
-        return false;
+            return false;
+        }else
+            throw new IllegalArgumentException();
 
     }
 
@@ -68,19 +71,21 @@ public class ChangeDieTool implements Tool {
     }
 
     public void placementDie(Turn turn) {
-        if (turn.getTypeMove().equals("PlaceDie") && !turn.isPlacementDone() && (index == turn.getPlayerMove().getIndexDie())) {
-            if (toolName.equals(ToolNames.FLUX_REMOVER)) {
-                try {
-                    turn.getGameBoard().getDraftPool().get(index).setNumber(turn.getPlayerMove().getIntParameters(2));
-                } catch (NotValidValueException e) {
-                    e.printStackTrace();
+        if(turn.getPlayerMove().getIndexDie().isPresent()) {
+            if (turn.getTypeMove().equals("PlaceDie") && !turn.isPlacementDone() && (index == turn.getPlayerMove().getIndexDie().get())) {
+                if (toolName.equals(ToolNames.FLUX_REMOVER)) {
+                    try {
+                        turn.getGameBoard().getDraftPool().get(index).setNumber(turn.getPlayerMove().getIntParameters(2));
+                    } catch (NotValidValueException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-            turn.tryPlacementMove(turn.getPlayerMove());
+                turn.tryPlacementMove(turn.getPlayerMove());
 
-        }
-        else
-            turn.setWaitMove(true);
+            } else
+                turn.setWaitMove(true);
+        }else
+            throw new IllegalArgumentException();
     }
 
     public ToolNames getToolName() {

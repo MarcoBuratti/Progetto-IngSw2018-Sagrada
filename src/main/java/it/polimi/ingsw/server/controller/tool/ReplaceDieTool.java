@@ -41,14 +41,18 @@ public class ReplaceDieTool implements Tool {
 
     public boolean toolEffect(Turn turn, PlayerMove playerMove) {
         boolean ret;
-        if(toolName.equals(ToolNames.TAP_WHEEL)&&playerMove.getTwoReplace())
-            if(!turn.getPlayer().getDashboard().getMatrixScheme()[playerMove.getIntParameters(0)][playerMove.getIntParameters(1)].getDie().getColor().
-                    equals(turn.getPlayer().getDashboard().getMatrixScheme()[playerMove.getIntParameters(4)][playerMove.getIntParameters(5)].getDie().getColor()))
-                return false;
-        ret = replaceDie(turn, playerMove.getIntParameters(0), playerMove.getIntParameters(1), playerMove.getIntParameters(2), playerMove.getIntParameters(3));
-        if (playerMove.getTwoReplace() && ret)
-            ret = replaceDie(turn, playerMove.getIntParameters(4), playerMove.getIntParameters(5), playerMove.getIntParameters(6), playerMove.getIntParameters(7));
-        return ret;
+        if(playerMove.getTwoReplace().isPresent()) {
+            if (toolName.equals(ToolNames.TAP_WHEEL) && playerMove.getTwoReplace().get())
+                if (!turn.getPlayer().getDashboard().getMatrixScheme()[playerMove.getIntParameters(0)][playerMove.getIntParameters(1)].getDie().getColor().
+                        equals(turn.getPlayer().getDashboard().getMatrixScheme()[playerMove.getIntParameters(4)][playerMove.getIntParameters(5)].getDie().getColor()))
+                    return false;
+            ret = replaceDie(turn, playerMove.getIntParameters(0), playerMove.getIntParameters(1), playerMove.getIntParameters(2), playerMove.getIntParameters(3));
+            if (playerMove.getTwoReplace().get() && ret)
+                ret = replaceDie(turn, playerMove.getIntParameters(4), playerMove.getIntParameters(5), playerMove.getIntParameters(6), playerMove.getIntParameters(7));
+            return ret;
+        }
+        else
+            throw new IllegalArgumentException();
 
     }
 
@@ -70,10 +74,11 @@ public class ReplaceDieTool implements Tool {
 
         PlacementCheck placementCheck = new PlacementCheck();
 
-        if (checkColor)
-            if (!(matrixScheme[row][column].getRestriction() instanceof ValueRestriction))
-                if (!matrixScheme[row][column].allowedMove(myDie)){
-                    return false;}
+        if (checkColor &&
+            !(matrixScheme[row][column].getRestriction() instanceof ValueRestriction) &&
+            !matrixScheme[row][column].allowedMove(myDie))
+            return false;
+
 
         if (checkValue)
             if (!(matrixScheme[row][column].getRestriction() instanceof ColorRestriction))

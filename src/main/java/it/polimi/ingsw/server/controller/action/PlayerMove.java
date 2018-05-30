@@ -16,10 +16,10 @@ public class PlayerMove implements Serializable {
     private String playerNickname;
     private String typeMove;
     private int[] intMatrixParameters;
-    private Optional<Boolean> twoReplace;
-    private Optional<Boolean> addOne;
-    private Optional<Integer> indexDie;
-    private Optional<ToolNames> toolName;
+    private Boolean twoReplace;
+    private Boolean addOne;
+    private Integer indexDie;
+    private ToolNames toolName;
 
 
 
@@ -84,7 +84,7 @@ public class PlayerMove implements Serializable {
         this.playerNickname = playerNickname;
         if(typeMove.equals("UseTool")&&(toolName.equals(ToolNames.GLAZING_HAMMER))) {
             this.typeMove = typeMove;
-            this.toolName = Optional.of(toolName);
+            this.toolName = toolName;
         }
         else
             throw new IllegalArgumentException();
@@ -96,7 +96,7 @@ public class PlayerMove implements Serializable {
         if(typeMove.equals("PlaceDie")){
             this.typeMove=typeMove;
             this.intMatrixParameters=intParameters.clone();
-            this.indexDie=Optional.of(indexDie);
+            this.indexDie = indexDie;
         }
         else
             throw new IllegalArgumentException();
@@ -108,9 +108,9 @@ public class PlayerMove implements Serializable {
         if(typeMove.equals("UseTool")&&((toolName.equals(ToolNames.LENS_CUTTER)||toolName.equals(ToolNames.CORK_BAKED_STRAIGHTEDGE)||
                 toolName.equals(ToolNames.RUNNING_PLIERS)))){
             this.typeMove=typeMove;
-            this.toolName=Optional.of(toolName);
+            this.toolName = toolName;
             this.intMatrixParameters=intParameters.clone();
-            this.indexDie=Optional.of(indexDie);
+            this.indexDie = indexDie;
         }
         else
             throw new IllegalArgumentException();
@@ -122,12 +122,12 @@ public class PlayerMove implements Serializable {
         if (typeMove.equals("UseTool")&&(toolName.equals(ToolNames.EGLOMISE_BRUSH)||toolName.equals(ToolNames.COPPER_FOIL_BURNISHER)||
                 toolName.equals(ToolNames.LATHEKIN)||toolName.equals(ToolNames.TAP_WHEEL))){
             this.typeMove = typeMove;
-            this.toolName=Optional.of(toolName);
+            this.toolName = toolName;
             this.intMatrixParameters = intParameters.clone();
             if (intParameters.length > 4) {
-                this.twoReplace = Optional.of(true);
+                this.twoReplace = true;
             } else
-                this.twoReplace = Optional.of(false);
+                this.twoReplace = false;
         }
         else
             throw new IllegalArgumentException();
@@ -137,10 +137,10 @@ public class PlayerMove implements Serializable {
     public PlayerMove(String playerNickname, String typeMove,ToolNames toolName,int indexDie,boolean addOne) {
         this.playerNickname = playerNickname;
         if (typeMove.equals("UseTool")&&toolName.equals(ToolNames.GROZING_PLIERS)) {
-            this.toolName=Optional.of(toolName);
+            this.toolName= toolName;
             this.typeMove = typeMove;
-            this.indexDie=Optional.of(indexDie);
-            this.addOne=Optional.of(addOne);
+            this.indexDie=indexDie;
+            this.addOne = addOne;
         }
         else
             throw new IllegalArgumentException();
@@ -151,9 +151,9 @@ public class PlayerMove implements Serializable {
 
         if ((typeMove.equals("UseTool"))&&(toolName.equals(ToolNames.GRINDING_STONE)||toolName.equals(ToolNames.FLUX_BRUSH)
                 || toolName.equals(ToolNames.FLUX_REMOVER))){
-            this.toolName=Optional.of(toolName);
+            this.toolName= toolName;
             this.typeMove = typeMove;
-            this.indexDie=Optional.of(indexDie);
+            this.indexDie= indexDie;
         }
         else
             throw new IllegalArgumentException();
@@ -171,34 +171,20 @@ public class PlayerMove implements Serializable {
     }
 
 
-    public Boolean getTwoReplace() {
-        if(twoReplace.isPresent())
-            return twoReplace.get();
-        else
-            throw new IllegalArgumentException();
+    public Optional<Boolean> getTwoReplace() {
+            return Optional.ofNullable(twoReplace);
     }
 
-    public Integer getIndexDie() {
-        if(indexDie.isPresent())
-            return indexDie.get();
-        else
-            throw new IllegalArgumentException();
+    public Optional<Integer> getIndexDie() {
+            return Optional.ofNullable(indexDie);
     }
 
-    public boolean getAddOne() {
-        if(this.addOne.isPresent())
-            return addOne.get();
-        else
-            throw new IllegalArgumentException();
-
+    public Optional<Boolean> getAddOne() {
+            return Optional.ofNullable(addOne);
     }
 
-    public ToolNames getToolName() {
-        if(this.toolName.isPresent())
-            return toolName.get();
-        else
-            throw new IllegalArgumentException();
-    }
+    public Optional<ToolNames> getToolName() {
+            return Optional.ofNullable(toolName); }
 
 
     public String getTypeMove() {
