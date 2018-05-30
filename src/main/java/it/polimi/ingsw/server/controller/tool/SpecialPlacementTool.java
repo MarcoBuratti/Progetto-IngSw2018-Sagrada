@@ -40,23 +40,26 @@ public class SpecialPlacementTool implements Tool {
     }
 
     public boolean toolEffect(Turn turn, PlayerMove playerMove) {
-        if (!turn.isPlacementDone()) {
-            int row = playerMove.getIntParameters(0);
-            int column = playerMove.getIntParameters(1);
-            Die die = turn.getGameBoard().getDraftPool().get(playerMove.getIndexDie());
-            if (specialCheck(row, column, die, turn.getPlayer().getDashboard().getMatrixScheme())) {
-                try {
-                    turn.getPlayer().getDashboard().setDieOnCell(row, column, die);
-                    turn.getGameBoard().removeDieFromDraftPool(die);
-                    turn.setTurnIsOver();
-                    return true;
-                } catch (NotValidParametersException | OccupiedCellException e) {
-                    e.printStackTrace();
-                }
+        if(playerMove.getIndexDie().isPresent()) {
+            if (!turn.isPlacementDone()) {
+                int row = playerMove.getIntParameters(0);
+                int column = playerMove.getIntParameters(1);
+                Die die = turn.getGameBoard().getDraftPool().get(playerMove.getIndexDie().get());
+                if (specialCheck(row, column, die, turn.getPlayer().getDashboard().getMatrixScheme())) {
+                    try {
+                        turn.getPlayer().getDashboard().setDieOnCell(row, column, die);
+                        turn.getGameBoard().removeDieFromDraftPool(die);
+                        turn.setTurnIsOver();
+                        return true;
+                    } catch (NotValidParametersException | OccupiedCellException e) {
+                        e.printStackTrace();
+                    }
 
+                }
             }
-        }
-        return false;
+            return false;
+        }else
+            throw new IllegalArgumentException();
     }
 
     public Color getColor() {
