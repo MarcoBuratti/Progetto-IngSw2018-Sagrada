@@ -145,18 +145,14 @@ public class Dashboard {
         StringBuilder bld = new StringBuilder();
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COLUMN; j++) {
-                bld.append(this.matrixScheme[i][j].getRestriction().toString());
-                bld.append(" ");
-            }
-            bld.append("\n");
-        }
-        for (int i = 0; i < ROW; i++) {
-            for (int j = 0; j < COLUMN; j++) {
-                if(this.matrixScheme[i][j].getUsedCell())
-                    bld.append(this.matrixScheme[i][j].getDie().toString());
-                else
-                    bld.append("Empty Cell");
-                bld.append(" ");
+                if(this.matrixScheme[i][j].getUsedCell()) {
+                    bld.append(this.matrixScheme[i][j].getRestriction().toString()+"[" +this.matrixScheme[i][j].getDie().toString()+ "]");
+                    bld.append(" ");
+                }
+                else{
+                    bld.append(this.matrixScheme[i][j].getRestriction().toString()+ "\033[0m" + "[  ]");
+                    bld.append(" ");
+                }
             }
             bld.append("\n");
         }

@@ -16,7 +16,6 @@ import java.util.concurrent.Executors;
 
 public class SocketConnectionClient extends Observable implements Runnable, ClientInterface {
 
-
     private Socket socket;
     private BufferedReader in;
     private PrintStream out;
@@ -45,13 +44,11 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
         isOn = false;
     }
 
-    public void send(String message) {
+    private void send(String message) {
         out.println(message);
     }
 
-
-
-    public synchronized void close() {
+    private synchronized void close() {
         try {
             socket.close();
         } catch (IOException e) {
@@ -61,7 +58,6 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
         executor.shutdown();
 
     }
-
 
     @Override
     public String getPlayerNickname() {
@@ -91,7 +87,6 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
             chosenScheme = schemes[0];
         send(chosenScheme);
     }
-
 
     private void placeDieHandler (String fromClient){
         StringTokenizer strtok = new StringTokenizer(fromClient, " ");

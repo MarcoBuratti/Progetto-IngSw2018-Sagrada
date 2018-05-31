@@ -1,7 +1,8 @@
 package it.polimi.ingsw.server.model;
 
 public enum Color {
-    GREEN("Green"), YELLOW("Yellow"), BLUE("Blue"), RED("Red"), VIOLET("Violet");
+    GREEN("\u001B[32mG"), YELLOW("\u001B[33mY"), BLUE("\u001B[34mB"),
+        RED("\u001B[31mR"), VIOLET("\u001B[35mV");
     private String name;
 
     /**
@@ -22,6 +23,7 @@ public enum Color {
 
     @Override
     public String toString(){
-        return this.getName();
+        String firstChar = "";
+        return  firstChar + this.getName();
     }
 }

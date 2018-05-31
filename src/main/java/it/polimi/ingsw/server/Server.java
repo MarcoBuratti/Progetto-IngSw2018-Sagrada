@@ -132,7 +132,7 @@ public class Server extends UnicastRemoteObject {
 
     public ArrayList<Color> getPrivateAchievements () { return this.privateAchievements; }
 
-    public ArrayList<Player> getPlayers() {return players;}
+    public ArrayList<Player> getPlayers() { return players; }
 
     public ArrayList<RemoteView> getRemoteViews() {
         return remoteViews;
@@ -178,7 +178,6 @@ public class Server extends UnicastRemoteObject {
 
         else if (!playersConnected && nicknames.size()<4) {
             serverInterfaces.add(newServerInterface);
-            timer.cancel();
             try {
                 players.add(newServerInterface.getPlayer());
                 nicknames.add(newServerInterface.getPlayer().getNickname());
@@ -187,9 +186,11 @@ public class Server extends UnicastRemoteObject {
             } catch(Exception e) {
                 System.out.println("Client Connection Error!");
             }
-
-            if(serverInterfaces.size()>=2) {
+            if(serverInterfaces.size()==2) {
                 this.gameStartTimer();
+            }
+            else if( ((serverInterfaces.size()==4)) ) {
+                this.startGame();
             }
 
         } else{
@@ -197,7 +198,6 @@ public class Server extends UnicastRemoteObject {
             newServerInterface.send("Terminate.");
         }
     }
-
 
     public synchronized void deregisterConnection(ServerInterface serverInterface) {
         serverInterfaces.remove(serverInterface);

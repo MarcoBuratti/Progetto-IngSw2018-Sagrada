@@ -65,7 +65,7 @@ public class Die {
      * Returns a string which represents the die, specifying its colour and the number on its side facing upwards.
      */
     public String toString(){
-        return "Die: Color " + this.color + " , Number: " + this.number;
+        return this.color + "" + this.number + "\033[0m";
     }
 
     @Override

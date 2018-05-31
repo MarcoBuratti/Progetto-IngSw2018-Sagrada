@@ -21,7 +21,7 @@ public class CliGraphicsClient implements GraphicsInterface {
 
     public void printMatrix(String s){
 
-        StringTokenizer strtok = new StringTokenizer(s, " ");
+        /*StringTokenizer strtok = new StringTokenizer(s, " ");
         StringBuilder bld = new StringBuilder();
         while(strtok.hasMoreTokens()){
             String myToken = strtok.nextToken();
@@ -31,7 +31,7 @@ public class CliGraphicsClient implements GraphicsInterface {
                 bld.append(" [ ] ");
             else
                 bld.append(myToken + "[ ] ");
-        }
-        System.out.println(bld.toString());
+        }*/
+        System.out.println(s);
     }
 }

@@ -4,7 +4,6 @@ import it.polimi.ingsw.server.controller.tool.Tool;
 import it.polimi.ingsw.server.controller.tool.ToolFactory;
 import it.polimi.ingsw.server.controller.tool.ToolNames;
 import it.polimi.ingsw.server.model.achievement.*;
-
 import java.util.*;
 
 public class GameBoard extends Observable{
@@ -205,6 +204,7 @@ public class GameBoard extends Observable{
         StringBuilder bld = new StringBuilder();
         bld.append(roundTrack.toString());
         bld.append("\n");
+        bld.append("the dice you can draw are: ");
         for (Die die: draftPool) {
             bld.append(die.toString());
             bld.append(" ");

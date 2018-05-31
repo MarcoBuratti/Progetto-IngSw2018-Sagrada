@@ -172,20 +172,23 @@ public class Turn {
 
 
     public void tryPlacementMove (PlayerMove playerMove){
-        try {
-            PlacementMove placementMove = new PlacementMove(player, playerMove.getIntParameters(0),
-                    playerMove.getIntParameters(1), gameBoard.getDraftPool().get(playerMove.getIndexDie()));
-            this.placementDone = placementMove.placeDie();
-            if(isPlacementDone()) {
-                this.gameBoard.removeDieFromDraftPool(placementMove.getDie());
-                if ( this.player.getServerInterface() != null )
-                    this.player.getServerInterface().send("The die has been placed on the selected cell.");
+
+        if(playerMove.getIndexDie().isPresent()) {
+            try {
+                PlacementMove placementMove = new PlacementMove(player, playerMove.getIntParameters(0),
+                        playerMove.getIntParameters(1), gameBoard.getDraftPool().get(playerMove.getIndexDie().get()));
+                this.placementDone = placementMove.placeDie();
+                if (isPlacementDone()) {
+                    this.gameBoard.removeDieFromDraftPool(placementMove.getDie());
+                    if (this.player.getServerInterface() != null)
+                        this.player.getServerInterface().send("The die has been placed on the selected cell.");
+                } else if (this.player.getServerInterface() != null)
+                    this.player.getServerInterface().send("Incorrect move! Please try again.");
+            } catch (OccupiedCellException | NotValidParametersException e) {
+                e.printStackTrace();
             }
-            else if ( this.player.getServerInterface() != null )
-                this.player.getServerInterface().send("Incorrect move! Please try again.");
-        }catch (OccupiedCellException | NotValidParametersException e) {
-            e.printStackTrace();
-        }
+        }else
+            throw new IllegalArgumentException();
     }
 
     private void useTool(){

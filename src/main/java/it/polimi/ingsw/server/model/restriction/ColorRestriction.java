@@ -36,7 +36,7 @@ public class ColorRestriction implements Restriction {
      * Returns a string which specifies the restriction's kind and color.
      */
     public String toString() {
-        return "Restriction: " + color;
+        return  color.toString();
     }
 
     @Override

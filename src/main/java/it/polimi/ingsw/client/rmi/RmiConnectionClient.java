@@ -46,13 +46,9 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
         isOn = false;
     }
 
-
-
     private void close() {
         setOff();
-
     }
-
 
     public void update(String str) throws RemoteException{ //NOTIFICA LA VIEW
         if(getIsOn()) {
@@ -62,7 +58,6 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
                 close();
         }
     }
-
 
     private void sendName(Message message) {
         if(getIsOn()) {
@@ -86,7 +81,6 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
         }
     }
 
-
     private void sendMove(PlayerMove playerMove) {
         if(getIsOn()) {
             try {
@@ -107,7 +101,6 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
         this.close();
     }
 
-
     @Override
     public synchronized boolean getIsOn() {
         return isOn;
@@ -121,7 +114,6 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
     @Override
     public void setPlayerNickname(String nickname) {
         this.playerNickname = nickname;
-
     }
 
     @Override
@@ -181,5 +173,4 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
     public void handleName(String name) {
         sendName(new Message(name));
     }
-
 }

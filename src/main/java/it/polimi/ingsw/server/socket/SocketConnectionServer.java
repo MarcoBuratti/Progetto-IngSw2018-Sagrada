@@ -70,8 +70,8 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         bld.append(server.getSchemes().get(0).getSecondScheme());
         String message = bld.toString();
         server.getSchemes().remove(0);
-        String privateAchievement = server.getPrivateAchievements().get(0).toString();
-        this.send("This is your private achievement: " + privateAchievement);
+        /*String privateAchievement = server.getPrivateAchievements().get(0).toString();
+        this.send("This is your private achievement: " + privateAchievement);*/
         this.send("Please choose one of these schemes: insert a number between 1 and 4. " + message);
         return in.readLine();
     }

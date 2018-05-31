@@ -90,7 +90,7 @@ public class View implements Observer {
             }
 
             else {
-                graphicsInterface.printGeneric(fromServer);              //todo STAMPA DELLA MATRICE
+                graphicsInterface.printGeneric(fromServer);
             }
 
         } catch (Exception e) {

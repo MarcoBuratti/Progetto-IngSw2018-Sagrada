@@ -18,7 +18,7 @@ public class NoRestriction implements Restriction {
      * Returns a string telling there are no restriction on the cell.
      */
     public String toString() {
-        return "No restrictions";
+        return " ";
     }
 
     @Override
