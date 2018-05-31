@@ -15,10 +15,6 @@ public class ModelView extends Observable implements Observer {
         this.model.addObserver(this);
     }
 
-    public Player getCurrentPlayer() {
-        return this.model.getCurrentPlayer();
-    }
-
     @Override
     public void update(Observable o, Object arg) {
         this.model = (GameBoard) o;

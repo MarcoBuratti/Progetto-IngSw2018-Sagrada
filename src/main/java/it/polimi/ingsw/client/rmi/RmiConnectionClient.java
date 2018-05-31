@@ -30,24 +30,15 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
             server = (RmiControllerInterface) Naming.lookup("//localhost/Server");
             channel = server.addClient((RmiClientInterface) UnicastRemoteObject.exportObject(this, 0));
             playerNickname = view.getNickname();
-        } catch (MalformedURLException e) {
-            System.err.println("URL not found.");
-        } catch (RemoteException e) {
-            System.err.println("Connection error: " + e.getMessage() + "!");
-        } catch (NotBoundException e) {
-            System.err.println("The reference is bound to nothing.");
+        } catch (Exception e) {
+            System.out.println("Connection error: " + e.toString());
         }
 
-        //DEVI CREARE IL PLAYER SULLA SERVER CONNECTION, RICORDANDOTI DI ASSOCIARE LE CONNESSIONI SUL SERVER
     }
 
 
-    private synchronized void setOff() {
-        isOn = false;
-    }
-
-    private void close() {
-        setOff();
+    private synchronized void close() {
+        this.isOn = false;
     }
 
     public void update(String str) throws RemoteException{ //NOTIFICA LA VIEW
@@ -58,6 +49,7 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
                 close();
         }
     }
+
 
     private void sendName(Message message) {
         if(getIsOn()) {
@@ -104,11 +96,6 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
     @Override
     public synchronized boolean getIsOn() {
         return isOn;
-    }
-
-    @Override
-    public String getPlayerNickname() {
-        return playerNickname;
     }
 
     @Override

@@ -79,19 +79,15 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         try {
             client.update(string);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Qui sono nel catch");
             System.out.println("Client doesn't exist.");
-            close();
+            server.deregisterConnection(this);
         }
 
-
-        //connectionClientRMI.
-        //sendback to client
     }
 
     @Override
     public void close() {
-
         send("Connection expired.");
         send("Terminate.");
         server.deregisterConnection(this);

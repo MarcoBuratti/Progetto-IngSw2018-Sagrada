@@ -36,6 +36,7 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
 
     }
 
+    @Override
     public synchronized boolean getIsOn() {
         return isOn;
     }
@@ -59,10 +60,6 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
 
     }
 
-    @Override
-    public String getPlayerNickname() {
-        return playerNickname;
-    }
 
     @Override
     public void setPlayerNickname(String nickname) {

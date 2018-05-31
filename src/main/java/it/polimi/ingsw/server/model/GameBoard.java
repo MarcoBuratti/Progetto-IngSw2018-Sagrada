@@ -180,10 +180,6 @@ public class GameBoard extends Observable{
         notifyObservers(this);
     }
 
-    public void addDieToDraftPool ( Die die ){
-        this.draftPool.add( die);
-    }
-
     public Die changeDie ( Die die, int dieIndex ) {
         Die myDie = this.draftPool.remove(dieIndex);
         this.draftPool.add( dieIndex , die );
@@ -196,9 +192,6 @@ public class GameBoard extends Observable{
         notifyObservers(this);
     }
 
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
 
     public String toString(){
         StringBuilder bld = new StringBuilder();
