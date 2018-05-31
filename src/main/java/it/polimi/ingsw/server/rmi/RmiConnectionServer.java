@@ -34,17 +34,11 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         this.setPlayer(new Player(message.getMessage(), this));
         this.gameStarted = server.isGameStarted();
         this.firstLog = !server.alreadyLoggedIn(this);
-        System.out.println("prima del blocco try in setPlayerAndAskScheme");
         try {
-            System.out.println(firstLog + "&&" + !gameStarted);
             if(firstLog && !gameStarted)
                 askForChosenScheme();
-            else {
-                System.out.println("prima di registerConnection");
+            else
                 server.registerConnection(this);
-                System.out.println("dopo registerConnection");
-            }
-            System.out.println("dopo l'if");
         } catch (Exception e) {
             System.err.println(e.toString());
         }
@@ -53,13 +47,9 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
     @Override
     public synchronized void setDashboard(Message message) throws RemoteException {
         try {
-            System.out.println("prima di set dashboard");
             this.player.setDashboard(message.getMessage());
-            System.out.println("dopo set dashboard e prima di fare send");
             send("You have chosen the following scheme: " + message.getMessage() + "\n" + this.player.getDashboard().toString() + "\nPlease wait, the game will start soon.");
-            System.out.println("prima di register");
             server.registerConnection(this);
-            System.out.println("dopo register");
 
         } catch (NotValidValueException e) {
             System.err.println(e.toString());
