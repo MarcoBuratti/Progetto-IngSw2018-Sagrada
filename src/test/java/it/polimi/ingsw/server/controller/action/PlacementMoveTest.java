@@ -20,9 +20,9 @@ class PlacementMoveTest {
     void positionDie() throws NotValidValueException, NotEnoughDiceLeftException, NotValidParametersException, OccupiedCellException {
 
         Map<String, String> map = new HashMap<>();
-        map.put("sergio", "Aurora Sagradis");
-        map.put("christian", "Scheme Test");
-        map.put("marco", "Fulgor del Cielo");
+        map.put("sergio", "Aurora_Sagradis");
+        map.put("christian", "Scheme_Test");
+        map.put("marco", "Fulgor_del_Cielo");
         GameBoard gameBoard = new GameBoard(map);
 
         Die die1 = new Die(Color.BLUE);

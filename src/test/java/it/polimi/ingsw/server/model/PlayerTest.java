@@ -15,7 +15,7 @@ class PlayerTest {
     public void playerTest() throws NotEnoughFavourTokensLeft, NotValidValueException {
 
         String nickname = "tester";
-        Dashboard dashboard = new Dashboard("Scheme Test");
+        Dashboard dashboard = new Dashboard("Scheme_Test");
         PrivateAchievement privateAchievement = new PrivateAchievement(Color.GREEN);
         Player player = new Player(nickname, dashboard,privateAchievement);
         assertEquals(nickname, player.getNickname());

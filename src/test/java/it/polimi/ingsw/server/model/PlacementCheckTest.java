@@ -16,7 +16,7 @@ class PlacementCheckTest {
     void isEmpty() throws NotValidParametersException, OccupiedCellException, NotValidValueException {
 
 
-        Dashboard dashboard = new Dashboard("Scheme Test");
+        Dashboard dashboard = new Dashboard("Scheme_Test");
 
         Assertions.assertTrue(new PlacementCheck().isEmpty(dashboard.getMatrixScheme()));
 
@@ -55,7 +55,7 @@ class PlacementCheckTest {
     void allowedNeighbours() throws NotValidValueException, NotValidParametersException, OccupiedCellException {
 
 
-        Dashboard dashboard = new Dashboard("Scheme Test");
+        Dashboard dashboard = new Dashboard("Scheme_Test");
 
         Die die1 = new Die(Color.GREEN);
         Die die2 = new Die(Color.RED);
@@ -83,7 +83,7 @@ class PlacementCheckTest {
     @Test
     void nearBy() throws NotValidValueException, NotValidParametersException, OccupiedCellException {
 
-        Dashboard dashboard = new Dashboard("Scheme Test");
+        Dashboard dashboard = new Dashboard("Scheme_Test");
         Die die1 = new Die(Color.GREEN);
         Die die2 = new Die(Color.RED);
         Die die3 = new Die(Color.YELLOW);
@@ -123,7 +123,7 @@ class PlacementCheckTest {
     void genericCheck() throws NotValidParametersException, NotValidValueException, OccupiedCellException {
 
 
-        Dashboard dashboard = new Dashboard("Scheme Test");
+        Dashboard dashboard = new Dashboard("Scheme_Test");
         Die die1 = new Die(Color.GREEN);
         Die die2 = new Die(Color.BLUE);
         Die die3 = new Die(Color.GREEN);

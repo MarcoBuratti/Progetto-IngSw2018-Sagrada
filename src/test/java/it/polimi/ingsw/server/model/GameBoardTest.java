@@ -17,9 +17,9 @@ class GameBoardTest {
     @Test
     public void gameBoardTest() throws NotValidValueException {
         Map<String, String> map = new HashMap<>();
-        map.put("sergio", "Aurora Sagradis");
-        map.put("christian", "Chromatic Splendor");
-        map.put("marco", "Fulgor del Cielo");
+        map.put("sergio", "Aurora_Sagradis");
+        map.put("christian", "Chromatic_Splendor");
+        map.put("marco", "Fulgor_del_Cielo");
         GameBoard gameBoard = new GameBoard(map);
         ArrayList<Die> draftPool = new ArrayList<>();
         Die d1, d2, d3;
@@ -36,9 +36,9 @@ class GameBoardTest {
         assertEquals("sergio", gameBoard.getPlayers().get(2).getNickname());
         assertEquals("christian", gameBoard.getPlayers().get(0).getNickname());
         assertEquals("marco", gameBoard.getPlayers().get(1).getNickname());
-        assertTrue(new Dashboard("Aurora Sagradis").equalsScheme(gameBoard.getPlayers().get(2).getDashboard()));
-        assertTrue(new Dashboard("Chromatic Splendor").equalsScheme(gameBoard.getPlayers().get(0).getDashboard()));
-        assertTrue(new Dashboard("Fulgor del Cielo").equalsScheme(gameBoard.getPlayers().get(1).getDashboard()));
+        assertTrue(new Dashboard("Aurora_Sagradis").equalsScheme(gameBoard.getPlayers().get(2).getDashboard()));
+        assertTrue(new Dashboard("Chromatic_Splendor").equalsScheme(gameBoard.getPlayers().get(0).getDashboard()));
+        assertTrue(new Dashboard("Fulgor_del_Cielo").equalsScheme(gameBoard.getPlayers().get(1).getDashboard()));
         assertNotNull(gameBoard.getPlayers().get(0).getPrivateAchievement());
         assertEquals(4, gameBoard.getPlayers().get(0).getCurrentFavourToken());
         assertEquals(3, gameBoard.getPublicAchievements().size());

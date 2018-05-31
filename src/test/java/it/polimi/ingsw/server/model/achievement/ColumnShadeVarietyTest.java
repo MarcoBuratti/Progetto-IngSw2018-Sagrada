@@ -15,7 +15,7 @@ class ColumnShadeVarietyTest {
     @Test
     void scoreEffect() throws NotValidValueException, NotValidParametersException, OccupiedCellException {
 
-        Dashboard dashboard = new Dashboard("Scheme Test");
+        Dashboard dashboard = new Dashboard("Scheme_Test");
         Assertions.assertEquals(0, new ColumnShadeVariety().scoreEffect(dashboard));
 
         dashboard.setDieOnCell(0,0,new Die(Color.GREEN));

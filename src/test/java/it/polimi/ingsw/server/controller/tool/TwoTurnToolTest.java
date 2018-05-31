@@ -19,8 +19,8 @@ class TwoTurnToolTest {
     @Test
     void toolEffect() throws NotValidValueException {
         Map<String, String> map = new HashMap<>();
-        map.put("sergio", "Aurora Sagradis");
-        map.put("christian", "Chromatic Splendor");
+        map.put("sergio", "Aurora_Sagradis");
+        map.put("christian", "Chromatic_Splendor");
         GameBoard gameBoard = new GameBoard(map);
 
         ArrayList<Die> testDraftPool= new ArrayList<>();

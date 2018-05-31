@@ -25,8 +25,8 @@ class ReplaceDieToolTest {
     @Test
     void toolEffect() throws NotValidValueException, OccupiedCellException, NotValidParametersException, NotValidRoundException {
         Map<String, String> map = new HashMap<>();
-        map.put("sergio", "Aurora Sagradis");
-        map.put("christian", "Chromatic Splendor");
+        map.put("sergio", "Aurora_Sagradis");
+        map.put("christian", "Chromatic_Splendor");
         GameBoard gameBoard = new GameBoard(map);
 
         Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);

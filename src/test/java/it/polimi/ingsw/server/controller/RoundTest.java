@@ -16,9 +16,9 @@ class RoundTest {
     void testInizializeAndCloseRound() throws NotValidValueException, NotEnoughDiceLeftException {
 
         Map<String, String> map = new HashMap<>();
-        map.put("sergio", "Aurora Sagradis");
-        map.put("christian", "Chromatic Splendor");
-        map.put("marco", "Fulgor del Cielo");
+        map.put("sergio", "Aurora_Sagradis");
+        map.put("christian", "Chromatic_Splendor");
+        map.put("marco", "Fulgor_del_Cielo");
         GameBoard gameBoard = new GameBoard(map);
 
         Round round =new Round(gameBoard.getPlayers(),gameBoard);

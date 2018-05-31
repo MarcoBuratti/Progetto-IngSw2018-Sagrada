@@ -21,7 +21,7 @@ class PrivateAchievementTest {
     PrivateAchievement greenAchievement =new PrivateAchievement(Color.GREEN);
     PrivateAchievement blueAchievement =new PrivateAchievement(Color.BLUE);
 
-        Dashboard dashboard = new Dashboard("Scheme Test");
+        Dashboard dashboard = new Dashboard("Scheme_Test");
         Assertions.assertEquals(0, redAchievement.scoreEffect(dashboard));
         Assertions.assertEquals(0, greenAchievement.scoreEffect(dashboard));
 

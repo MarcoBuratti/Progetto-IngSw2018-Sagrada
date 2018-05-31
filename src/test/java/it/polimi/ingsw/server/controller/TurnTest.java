@@ -19,9 +19,9 @@ class TurnTest {
     @Test
     void turnManager() throws NotValidValueException {
         Map<String, String> map = new HashMap<>();
-        map.put("sergio", "Aurora Sagradis");
-        map.put("christian", "Chromatic Splendor");
-        map.put("marco", "Fulgor del Cielo");
+        map.put("sergio", "Aurora_Sagradis");
+        map.put("christian", "Chromatic_Splendor");
+        map.put("marco", "Fulgor_del_Cielo");
         GameBoard gameBoard = new GameBoard(map);
 
         Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, true);
@@ -76,18 +76,18 @@ class TurnTest {
                 turn.newMove(new PlayerMove(nickname,"PlaceDie",2,new int[] {0, 1}));
             }
         }, 1500);
-        timer.schedule(new TimerTask() {
+       timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 turn.newMove(new PlayerMove(nickname,"UseTool",ToolNames.GRINDING_STONE,1));
             }
         }, 900);
-        timer.schedule(new TimerTask() {
+        /*timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 turn.newMove(new PlayerMove(nickname,"UseTool",ToolNames.GRINDING_STONE,0));
             }
-        }, 1900);
+        }, 1900);*/
 
         turn.turnManager();
 

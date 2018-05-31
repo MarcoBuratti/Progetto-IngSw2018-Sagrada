@@ -16,7 +16,7 @@ class ColorDiagonalsTest {
     void scoreEffect() throws NotValidParametersException, OccupiedCellException, NotValidValueException {
 
 
-        Dashboard dashboard = new Dashboard("Scheme Test");
+        Dashboard dashboard = new Dashboard("Scheme_Test");
 
         Assertions.assertEquals(0, new ColorDiagonals().scoreEffect(dashboard));
 

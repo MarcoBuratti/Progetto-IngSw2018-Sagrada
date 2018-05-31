@@ -17,7 +17,7 @@ class DashboardTest {
     @Test
     void getMatrixScheme() throws NotValidParametersException, NotValidValueException, OccupiedCellException {
 
-        Dashboard dashboard = new Dashboard("Scheme Test");
+        Dashboard dashboard = new Dashboard("Scheme_Test");
 
         Cell[][] matrixScheme2 = new Cell[4][5];
         for (int i = 0; i < 4; i++) {
@@ -133,7 +133,7 @@ class DashboardTest {
     @Test
     void setDieOnCell() throws NotValidParametersException, NotValidValueException, OccupiedCellException {
 
-        Dashboard dashboard = new Dashboard("Scheme Test");
+        Dashboard dashboard = new Dashboard("Scheme_Test");
 
         Die die1 = new Die(Color.GREEN);
         die1.setNumber(1);
