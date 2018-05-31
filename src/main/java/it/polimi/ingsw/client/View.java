@@ -1,8 +1,10 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.interfaces.ClientInterface;
+import it.polimi.ingsw.client.interfaces.GraphicsInterface;
 import it.polimi.ingsw.client.rmi.RmiConnectionClient;
 import it.polimi.ingsw.client.socket.SocketConnectionClient;
+import it.polimi.ingsw.util.CliGraphicsClient;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -15,19 +17,19 @@ public class View implements Observer {
     private Boolean hasChosenScheme;
     private String nickname;
     private String schemes;
+    private GraphicsInterface graphicsInterface;
 
 
     public View(InputStreamReader input){
         bufferedReader = new BufferedReader(input);
     }
 
-
-
     public void start() {
         try {
-            System.out.println("Please insert your nickname: ");
+            graphicsInterface = new CliGraphicsClient();
+            graphicsInterface.insert();
             String nickname = bufferedReader.readLine();
-            System.out.println("Press 1 to use Socket, 2 to use RMI.");
+            graphicsInterface.printConnection();
             int choice = Integer.parseInt(bufferedReader.readLine());
             hasChosenScheme = false;
 
@@ -74,16 +76,21 @@ public class View implements Observer {
                 if (fromServer.startsWith("You have logged in again as")) {
                     hasChosenScheme = true;
                 }
-                System.out.println(fromServer);
+
+                graphicsInterface.printGeneric(fromServer);
             }
             else if (fromServer.startsWith("Please choose one of these schemes")) {
-                System.out.println(fromServer);
+                graphicsInterface.printGeneric(fromServer);
                 schemes = fromServer;
                 hasChosenScheme = false;
             }
 
+            else if (fromServer.startsWith("matrix")) {
+                graphicsInterface.printMatrix(fromServer);
+            }
+
             else {
-                System.out.println(fromServer);
+                graphicsInterface.printGeneric(fromServer);              //todo STAMPA DELLA MATRICE
             }
 
         } catch (Exception e) {
