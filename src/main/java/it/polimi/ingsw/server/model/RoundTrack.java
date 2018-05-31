@@ -113,7 +113,7 @@ public class RoundTrack {
         String myRoundTrack = "Round track:";
         StringBuilder bld = new StringBuilder();
         int i = 0;
-        for ( ; !diceList[i].isEmpty(); i++) {
+        for ( ; i < NUMBER_OF_ROUNDS && !diceList[i].isEmpty(); i++) {
             bld.append("\nRound ");
             bld.append(i + 1);
             bld.append(" : ");

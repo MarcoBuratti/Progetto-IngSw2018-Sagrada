@@ -192,34 +192,35 @@ public class Turn {
     }
 
     private void useTool(){
+if(playerMove.getToolName().isPresent()) {
+    Tool tool = gameBoard.getTools().stream().filter(t -> (t.getToolName().equals(playerMove.getToolName().get()))).findAny().get();
 
-        Tool tool = gameBoard.getTools().stream().filter(t -> (t.getToolName().equals(playerMove.getToolName()))).findAny().get();
 
-
-        try {
-            this.player.useToken(tool.isAlreadyUsed());
-            usedTool = tool.toolEffect(this, playerMove);
-            if (tool.needPlacement()) {
-                setWaitMove(true);
-                synchronized (this) {
-                    while (!isTurnIsOver() && isWaitMove()) {
-                        wait();
-                        tool.placementDie(this);
-                    }
-
+    try {
+        this.player.useToken(tool.isAlreadyUsed());
+        usedTool = tool.toolEffect(this, playerMove);
+        if (tool.needPlacement()) {
+            setWaitMove(true);
+            synchronized (this) {
+                while (!isTurnIsOver() && isWaitMove()) {
+                    wait();
+                    tool.placementDie(this);
                 }
-            }
-            if(isUsedTool()) {
-                if ( this.player.getServerInterface() != null )
-                    this.player.getServerInterface().send("The selected tool has been used successfully");
-            }
-            else if ( this.player.getServerInterface() != null )
-                this.player.getServerInterface().send("Incorrect move! Please try again.");
 
-        } catch (NotEnoughFavourTokensLeft | InterruptedException e) {
-            //risposta per mosse errate
-
+            }
         }
+        if (isUsedTool()) {
+            if (this.player.getServerInterface() != null)
+                this.player.getServerInterface().send("The selected tool has been used successfully");
+        } else if (this.player.getServerInterface() != null)
+            this.player.getServerInterface().send("Incorrect move! Please try again.");
+
+    } catch (NotEnoughFavourTokensLeft | InterruptedException e) {
+        //risposta per mosse errate
+
+    }
+}else
+    throw new IllegalArgumentException();
 
 
 

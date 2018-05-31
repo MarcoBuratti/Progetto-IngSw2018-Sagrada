@@ -7,6 +7,7 @@ import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.SchemeCardsEnum;
 import it.polimi.ingsw.server.rmi.RmiController;
 import it.polimi.ingsw.server.socket.SocketConnectionServer;
+import it.polimi.ingsw.util.CliGraphicsServer;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -38,6 +39,7 @@ public class Server extends UnicastRemoteObject {
     private ArrayList<RemoteView> remoteViews;
     boolean gameStarted;
     private Timer timer;
+    private CliGraphicsServer cliGraphicsServer = new CliGraphicsServer();
 
     public Server() throws IOException {
         this.serverSocket = new ServerSocket(PORT_NUMBER);
@@ -102,7 +104,7 @@ public class Server extends UnicastRemoteObject {
             remoteViews.add(new RemoteView(s, modelView));
         this.controller.setRemoteViews(this);
         setPlayersConnected(true);
-        System.out.println("Game started!");
+        cliGraphicsServer.printStart();
         for(ServerInterface s: serverInterfaces)
             s.send("The game has started!");
         this.controller.startGame();
@@ -165,7 +167,7 @@ public class Server extends UnicastRemoteObject {
                             if (r.getPlayer().getNickname().equals(newServerInterface.getPlayer().getNickname()))
                                 r.changeConnection(newServerInterface);
                         }
-                        System.out.println(oldPlayer.getNickname() + " has logged in again.");
+                        cliGraphicsServer.printLogged( oldPlayer.getNickname() );
                         newServerInterface.send("You have logged in again as: " + newServerInterface.getPlayer().getNickname());
                     }
                     else {
@@ -182,9 +184,9 @@ public class Server extends UnicastRemoteObject {
                 players.add(newServerInterface.getPlayer());
                 nicknames.add(newServerInterface.getPlayer().getNickname());
                 newServerInterface.send("You have logged in as: " + newServerInterface.getPlayer().getNickname());
-                System.out.println(newServerInterface.getPlayer().getNickname() + " has logged in.");
+                cliGraphicsServer.printLoggedIn( newServerInterface.getPlayer().getNickname() );
             } catch(Exception e) {
-                System.out.println("Client Connection Error!");
+                cliGraphicsServer.printErr();
             }
             if(serverInterfaces.size()==2) {
                 this.gameStartTimer();
@@ -201,7 +203,7 @@ public class Server extends UnicastRemoteObject {
 
     public synchronized void deregisterConnection(ServerInterface serverInterface) {
         serverInterfaces.remove(serverInterface);
-        System.out.println(serverInterface.getPlayer().getNickname() + " has disconnected from the server.");
+        cliGraphicsServer.printDereg( serverInterface.getPlayer().getNickname() );
         serverInterface.getPlayer().removeServerInterface();
     }
 }
