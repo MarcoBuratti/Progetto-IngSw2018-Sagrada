@@ -27,6 +27,7 @@ public class View implements Observer {
     public void start() {
         try {
             graphicsInterface = new CliGraphicsClient();
+            graphicsInterface.start();
             graphicsInterface.insert();
             String nickname = bufferedReader.readLine();
             graphicsInterface.printConnection();
@@ -83,10 +84,6 @@ public class View implements Observer {
                 graphicsInterface.printGeneric(fromServer);
                 schemes = fromServer;
                 hasChosenScheme = false;
-            }
-
-            else if (fromServer.startsWith("matrix")) {
-                graphicsInterface.printMatrix(fromServer);
             }
 
             else {

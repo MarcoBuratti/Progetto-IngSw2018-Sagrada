@@ -204,7 +204,7 @@ public class GameBoard extends Observable{
         StringBuilder bld = new StringBuilder();
         bld.append(roundTrack.toString());
         bld.append("\n");
-        bld.append("the dice you can draw are: ");
+        bld.append("\nThe dice you can draw are: ");
         for (Die die: draftPool) {
             bld.append(die.toString());
             bld.append(" ");
