@@ -112,15 +112,15 @@ public class RoundTrack {
     public String toString() {
         String myRoundTrack = "Round track:";
         StringBuilder bld = new StringBuilder();
-        int i = 0;
-        for ( ; i < NUMBER_OF_ROUNDS && !diceList[i].isEmpty(); i++) {
+        int i;
+        for ( i = 0 ; i < NUMBER_OF_ROUNDS && !diceList[i].isEmpty(); i++) {
             bld.append("\nRound ");
             bld.append(i + 1);
             bld.append(" : ");
             for (Object die : diceList[i])
                 bld.append(die.toString()+" ");
         }
-        if(i == 0) myRoundTrack += " is empty";
+        if (i == 0) myRoundTrack += " is empty";
         return myRoundTrack + bld.toString();
     }
 }

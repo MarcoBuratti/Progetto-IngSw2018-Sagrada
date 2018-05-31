@@ -31,13 +31,21 @@ public class RemoteView extends Observable implements Observer {
         serverConnection.addObserver(this.messageReceiver);
     }
 
+    synchronized void removeConnection () {
+        this.serverInterface = null;
+    }
+
     public Player getPlayer () {
         return player;
     }
 
+    public ServerInterface getServerInterface() {
+        return serverInterface;
+    }
 
     private void showGameboard (ModelView modelView){
-        serverInterface.send(modelView.toString());
+        if(serverInterface != null)
+            serverInterface.send(modelView.toString());
     }
 
     public void send (String string) {

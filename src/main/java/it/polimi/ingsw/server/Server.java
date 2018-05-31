@@ -69,7 +69,7 @@ public class Server extends UnicastRemoteObject {
 
     private void start() {
         try {
-            LocateRegistry.createRegistry(1099);//Creo un registy sulla porta 1099 (quella di default).
+            LocateRegistry.createRegistry(1099);
         } catch (RemoteException e) {
             System.out.println("The registry has already been created!");
         }
@@ -86,9 +86,9 @@ public class Server extends UnicastRemoteObject {
 
         while (isServerOn) {
             try {
-                Socket newSocket = serverSocket.accept();                //attende nuovi utenti
-                SocketConnectionServer connectionServer = new SocketConnectionServer(newSocket, this); //Crea un oggetto connessione
-                executor.submit(connectionServer);//Crea un thread per la singola connessione
+                Socket newSocket = serverSocket.accept();
+                SocketConnectionServer connectionServer = new SocketConnectionServer(newSocket, this);
+                executor.submit(connectionServer);
             } catch (IOException e) {
                 System.out.println("Connection error!");
             }
@@ -167,7 +167,7 @@ public class Server extends UnicastRemoteObject {
                             if (r.getPlayer().getNickname().equals(newServerInterface.getPlayer().getNickname()))
                                 r.changeConnection(newServerInterface);
                         }
-                        cliGraphicsServer.printLogged( oldPlayer.getNickname() );
+                        cliGraphicsServer.printLoggedAgain( oldPlayer.getNickname() );
                         newServerInterface.send("You have logged in again as: " + newServerInterface.getPlayer().getNickname());
                     }
                     else {
@@ -201,9 +201,14 @@ public class Server extends UnicastRemoteObject {
         }
     }
 
-    public synchronized void deregisterConnection(ServerInterface serverInterface) {
+    public void deregisterConnection(ServerInterface serverInterface) {
+        for (RemoteView r: remoteViews)
+            if(r.getServerInterface() != null)
+                if (r.getServerInterface().equals(serverInterface))
+                    r.removeConnection();
         serverInterfaces.remove(serverInterface);
         cliGraphicsServer.printDereg( serverInterface.getPlayer().getNickname() );
         serverInterface.getPlayer().removeServerInterface();
     }
+
 }

@@ -21,6 +21,7 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
     private Player player;
     private RmiClientInterface client;
     private boolean gameStarted;
+    private boolean firstLog = true;
 
 
     public RmiConnectionServer(RmiClientInterface connectionClientRMI, Server server) {
@@ -31,11 +32,19 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
     @Override
     public synchronized void setPlayerAndAskScheme(Message message) throws RemoteException {
         this.setPlayer(new Player(message.getMessage(), this));
-        server.registerConnection(this);
         this.gameStarted = server.isGameStarted();
+        this.firstLog = !server.alreadyLoggedIn(this);
+        System.out.println("prima del blocco try in setPlayerAndAskScheme");
         try {
-            if(!gameStarted)
+            System.out.println(firstLog + "&&" + !gameStarted);
+            if(firstLog && !gameStarted)
                 askForChosenScheme();
+            else {
+                System.out.println("prima di registerConnection");
+                server.registerConnection(this);
+                System.out.println("dopo registerConnection");
+            }
+            System.out.println("dopo l'if");
         } catch (Exception e) {
             System.err.println(e.toString());
         }
@@ -44,8 +53,13 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
     @Override
     public synchronized void setDashboard(Message message) throws RemoteException {
         try {
+            System.out.println("prima di set dashboard");
             this.player.setDashboard(message.getMessage());
-            send("You have chosen the following scheme: " + message.getMessage() + "\n" + this.player.getDashboard().toString());
+            System.out.println("dopo set dashboard e prima di fare send");
+            send("You have chosen the following scheme: " + message.getMessage() + "\n" + this.player.getDashboard().toString() + "\nPlease wait, the game will start soon.");
+            System.out.println("prima di register");
+            server.registerConnection(this);
+            System.out.println("dopo register");
 
         } catch (NotValidValueException e) {
             System.err.println(e.toString());
@@ -54,6 +68,7 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
 
     @Override
     public void sendMove(PlayerMove playerMove) throws RemoteException {
+        send("Trying to make the following move: " + playerMove.toString() + " ...");
         setChanged();
         notifyObservers(playerMove);
     }
@@ -79,8 +94,6 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         try {
             client.update(string);
         } catch (Exception e) {
-            System.out.println("Qui sono nel catch");
-            System.out.println("Client doesn't exist.");
             server.deregisterConnection(this);
         }
 

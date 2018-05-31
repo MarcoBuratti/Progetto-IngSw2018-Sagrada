@@ -55,6 +55,7 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
         if(getIsOn()) {
             try {
                 this.channel.setPlayerAndAskScheme(message);
+                System.out.println("in sendName (Client RMI) dopo la chiamata al server");
             } catch (RemoteException e) {
                 System.err.println(e.toString());
                 close();
@@ -65,6 +66,7 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
     private void sendScheme(Message message) {
         if(getIsOn()) {
             try {
+                System.out.println("sono dentro sendScheme");
                 this.channel.setDashboard(message);
             } catch (RemoteException e) {
                 System.err.println(e.toString());

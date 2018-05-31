@@ -20,8 +20,8 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
     private BufferedReader in;
     private Player player;
     private boolean firstLog;
-    private boolean isOn;
     private boolean gameStarted;
+    private boolean isOn;
 
     public SocketConnectionServer(Socket socket, Server server) throws IOException {
         this.socket = socket;
@@ -70,8 +70,6 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         bld.append(server.getSchemes().get(0).getSecondScheme());
         String message = bld.toString();
         server.getSchemes().remove(0);
-        /*String privateAchievement = server.getPrivateAchievements().get(0).toString();
-        this.send("This is your private achievement: " + privateAchievement);*/
         this.send("Please choose one of these schemes: insert a number between 1 and 4. " + message);
         return in.readLine();
     }
@@ -80,14 +78,14 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
     public void run() {
         try {
             this.player = new Player(in.readLine(), this);
-            firstLog = !server.alreadyLoggedIn(this);
             gameStarted = server.isGameStarted();
-            server.registerConnection(this);
+            firstLog = !server.alreadyLoggedIn(this);
             if(firstLog && !gameStarted) {
                 String chosenScheme = askForChosenScheme();
                 this.player.setDashboard(chosenScheme);
                 this.send("You have chosen the following scheme: " + chosenScheme + "\n" + this.player.getDashboard().toString() + "\nPlease wait, the game will start soon.");
             }
+            server.registerConnection(this);
             isOn = true;
 
             while(isOn) {
@@ -104,9 +102,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
                 }
             }
         } catch (IOException | NotValidValueException e) {
-            System.out.println("Connection expired.");
-            this.send("Terminate.");
-            close();
+            server.deregisterConnection(this);
         }
     }
 

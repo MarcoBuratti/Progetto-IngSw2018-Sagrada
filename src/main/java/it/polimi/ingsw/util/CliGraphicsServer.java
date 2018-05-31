@@ -6,7 +6,7 @@ public class CliGraphicsServer {
         System.out.println("Game started!");
     }
 
-    public void printLogged(String s){
+    public void printLoggedAgain(String s){
         System.out.println(s + " has logged in again.");
     }
 
