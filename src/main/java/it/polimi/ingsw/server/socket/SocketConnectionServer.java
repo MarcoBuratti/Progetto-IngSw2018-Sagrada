@@ -3,7 +3,9 @@ package it.polimi.ingsw.server.socket;
 import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.interfaces.ServerInterface;
+import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Player;
+import it.polimi.ingsw.server.model.achievement.PrivateAchievement;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import org.json.simple.JSONObject;
 
@@ -82,7 +84,10 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
             if(firstLog && !gameStarted) {
                 String schemes = server.selectSchemes();
                 defaultScheme(schemes);
+                Color privateAchievementColor = server.selectPrivateAchievement();
+                this.player.setPrivateAchievement(new PrivateAchievement(privateAchievementColor));
                 server.registerConnection(this);
+                this.send("Your private achievement is: " + privateAchievementColor);
                 String chosenScheme = askForChosenScheme(schemes);
                 this.player.setDashboard(chosenScheme);
                 this.send("You have chosen the following scheme: " + chosenScheme + "\n" + this.player.getDashboard().toString() + "\nPlease wait, the game will start soon.");

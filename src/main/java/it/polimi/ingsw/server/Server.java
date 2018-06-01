@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.interfaces.ServerInterface;
 import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.SchemeCardsEnum;
+import it.polimi.ingsw.server.model.achievement.PrivateAchievement;
 import it.polimi.ingsw.server.rmi.RmiController;
 import it.polimi.ingsw.server.socket.SocketConnectionServer;
 import it.polimi.ingsw.util.CliGraphicsServer;
@@ -166,6 +167,12 @@ public class Server extends UnicastRemoteObject {
         bld.append( this.schemes.get(0).getSecondScheme() );
         this.schemes.remove(0);
         return bld.toString();
+    }
+
+    public synchronized Color selectPrivateAchievement () {
+        Color privateAchievement = this.privateAchievements.get(0);
+        this.privateAchievements.remove(0);
+        return privateAchievement;
     }
 
     public synchronized void registerConnection(ServerInterface newServerInterface) {

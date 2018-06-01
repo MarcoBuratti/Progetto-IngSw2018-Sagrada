@@ -3,7 +3,9 @@ package it.polimi.ingsw.server.rmi;
 import it.polimi.ingsw.client.interfaces.RmiClientInterface;
 import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.interfaces.*;
+import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Player;
+import it.polimi.ingsw.server.model.achievement.PrivateAchievement;
 import it.polimi.ingsw.util.Message;
 
 import java.io.IOException;
@@ -39,7 +41,10 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
             if(firstLog && !gameStarted) {
                 String schemes = server.selectSchemes();
                 defaultScheme(schemes);
+                Color privateAchievementColor = server.selectPrivateAchievement();
+                this.player.setPrivateAchievement(new PrivateAchievement(privateAchievementColor));
                 server.registerConnection(this);
+                this.send("Your private achievement is: " + privateAchievementColor);
                 askForChosenScheme(schemes);
             }
             else

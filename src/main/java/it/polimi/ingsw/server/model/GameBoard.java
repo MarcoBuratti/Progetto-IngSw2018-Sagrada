@@ -8,7 +8,7 @@ import java.util.*;
 
 public class GameBoard extends Observable{
     private static final int NUMBER_OF_PUBLIC_ACHIEVEMENTS = 3;
-    private static final int NUMBER_OF_TOOL = 3;
+    private static final int NUMBER_OF_TOOLS = 3;
     private RoundTrack roundTrack;
     private ArrayList<Player> players;
     private DiceBag diceBag;
@@ -48,7 +48,7 @@ public class GameBoard extends Observable{
         List<ToolNames> toolList = Arrays.asList(ToolNames.values());
         Collections.shuffle(toolList);
         ToolFactory abstractToolFactory = new ToolFactory();
-        for ( int i = 0; i < NUMBER_OF_TOOL; i++ ) {
+        for (int i = 0; i < NUMBER_OF_TOOLS; i++ ) {
             Tool toolFactory = abstractToolFactory.getTool(toolList.get(i));
             this.tools.add(toolFactory);
         }
@@ -72,6 +72,7 @@ public class GameBoard extends Observable{
 
         this.players = players;
         publicAchievements = new ArrayList<>();
+        tools = new ArrayList<>();
 
         this.roundTrack = new RoundTrack();
         this.diceBag = new DiceBag();
@@ -82,6 +83,14 @@ public class GameBoard extends Observable{
         for ( int i = 0; i < NUMBER_OF_PUBLIC_ACHIEVEMENTS; i++ ) {
             CardAchievement publicAchievementsFactory = abstractFactory.extractCardAchievement(publicAchievementList.get(i));
             this.publicAchievements.add(publicAchievementsFactory);
+        }
+
+        List<ToolNames> toolList = Arrays.asList(ToolNames.values());
+        Collections.shuffle(toolList);
+        ToolFactory abstractToolFactory = new ToolFactory();
+        for (int i = 0; i < NUMBER_OF_TOOLS; i++ ) {
+            Tool toolFactory = abstractToolFactory.getTool(toolList.get(i));
+            this.tools.add(toolFactory);
         }
 
         List<Color> privateAchievementsList = Arrays.asList(Color.values());
@@ -196,6 +205,14 @@ public class GameBoard extends Observable{
     public String toString(){
         StringBuilder bld = new StringBuilder();
         bld.append(roundTrack.toString());
+        bld.append("\n\nTools:\n");
+        for (Tool t: tools) {
+            bld.append(t.getToolName());
+            bld.append("\n");
+        }
+        bld.append("\nPublic Achievements:\n");
+        for (CardAchievement p: publicAchievements)
+            bld.append(p.toString());
         bld.append("\n");
         bld.append("\nThe dice you can draw are: ");
         for (Die die: draftPool) {
