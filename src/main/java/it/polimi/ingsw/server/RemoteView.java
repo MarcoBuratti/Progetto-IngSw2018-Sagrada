@@ -13,13 +13,12 @@ public class RemoteView extends Observable implements Observer {
     private ServerInterface serverInterface;
     private MessageReceiver messageReceiver;
 
-    public RemoteView(ServerInterface serverInterface, ModelView modelView){
+    public RemoteView(ServerInterface serverInterface){
         this.serverInterface = serverInterface;
         player = serverInterface.getPlayer();
         messageReceiver = new MessageReceiver();
         Observable serverConnection = (Observable) this.serverInterface;
         serverConnection.addObserver(this.messageReceiver);
-        modelView.addObserver(this);
     }
 
     synchronized void changeConnection (ServerInterface serverInterface){
@@ -29,6 +28,10 @@ public class RemoteView extends Observable implements Observer {
         messageReceiver = new MessageReceiver();
         Observable serverConnection = (Observable) this.serverInterface;
         serverConnection.addObserver(this.messageReceiver);
+    }
+
+    synchronized void setModelView (ModelView modelView){
+        modelView.addObserver(this);
     }
 
     synchronized void removeConnection () {

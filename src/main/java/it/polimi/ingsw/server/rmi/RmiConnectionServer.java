@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 import java.util.Observable;
+import java.util.StringTokenizer;
 
 import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.interfaces.RmiServerInterface;
@@ -35,8 +36,12 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         this.gameStarted = server.isGameStarted();
         this.firstLog = !server.alreadyLoggedIn(this);
         try {
-            if(firstLog && !gameStarted)
-                askForChosenScheme();
+            if(firstLog && !gameStarted) {
+                String schemes = server.selectSchemes();
+                defaultScheme(schemes);
+                server.registerConnection(this);
+                askForChosenScheme(schemes);
+            }
             else
                 server.registerConnection(this);
         } catch (Exception e) {
@@ -49,7 +54,6 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         try {
             this.player.setDashboard(message.getMessage());
             send("You have chosen the following scheme: " + message.getMessage() + "\n" + this.player.getDashboard().toString() + "\nPlease wait, the game will start soon.");
-            server.registerConnection(this);
 
         } catch (NotValidValueException e) {
             System.err.println(e.toString());
@@ -96,17 +100,18 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         server.deregisterConnection(this);
     }
 
-    public synchronized void askForChosenScheme() throws IOException {
+    public synchronized void askForChosenScheme(String schemes) throws IOException {
+        this.send("Please choose one of these schemes: insert a number between 1 and 4. " + schemes);
+    }
 
 
-        StringBuilder bld = new StringBuilder();
-        bld.append(server.getSchemes().get(0).getFirstScheme() + "," + server.getSchemes().get(0).getSecondScheme());
-        bld.append(",");
-        server.getSchemes().remove(0);
-        bld.append(server.getSchemes().get(0).getFirstScheme() + "," + server.getSchemes().get(0).getSecondScheme());
-        String message = bld.toString();
-        server.getSchemes().remove(0);
-        this.send("Please choose one of these schemes: insert a number between 1 and 4. " + message);
+    private void defaultScheme (String schemes) {
+        StringTokenizer strtok = new StringTokenizer(schemes, ",");
+        try {
+            this.player.setDashboard(strtok.nextToken());
+        } catch (NotValidValueException e) {
+            e.printStackTrace();
+        }
     }
 
 }

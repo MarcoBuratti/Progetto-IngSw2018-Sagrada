@@ -100,8 +100,8 @@ public class Server extends UnicastRemoteObject {
         this.setGameStarted(true);
         this.controller = new Controller(this);
         modelView = new ModelView(controller.getGameBoard());
-        for (ServerInterface s: serverInterfaces)
-            remoteViews.add(new RemoteView(s, modelView));
+        for (RemoteView r: remoteViews)
+            r.setModelView(modelView);
         this.controller.setRemoteViews(this);
         setPlayersConnected(true);
         cliGraphicsServer.printStart();
@@ -154,6 +154,20 @@ public class Server extends UnicastRemoteObject {
         this.gameStarted = bool;
     }
 
+    public synchronized String selectSchemes () {
+        StringBuilder bld = new StringBuilder();
+        bld.append( this.schemes.get(0).getFirstScheme() );
+        bld.append(",");
+        bld.append( this.schemes.get(0).getSecondScheme() );
+        bld.append(",");
+        this.schemes.remove(0);
+        bld.append( this.schemes.get(0).getFirstScheme() );
+        bld.append(",");
+        bld.append( this.schemes.get(0).getSecondScheme() );
+        this.schemes.remove(0);
+        return bld.toString();
+    }
+
     public synchronized void registerConnection(ServerInterface newServerInterface) {
 
         if (alreadyLoggedIn(newServerInterface)){
@@ -180,18 +194,19 @@ public class Server extends UnicastRemoteObject {
 
         else if (!playersConnected && nicknames.size()<4) {
             serverInterfaces.add(newServerInterface);
+            remoteViews.add(new RemoteView(newServerInterface));
+            players.add(newServerInterface.getPlayer());
+            nicknames.add(newServerInterface.getPlayer().getNickname());
+            newServerInterface.send("You have logged in as: " + newServerInterface.getPlayer().getNickname());
             try {
-                players.add(newServerInterface.getPlayer());
-                nicknames.add(newServerInterface.getPlayer().getNickname());
-                newServerInterface.send("You have logged in as: " + newServerInterface.getPlayer().getNickname());
                 cliGraphicsServer.printLoggedIn( newServerInterface.getPlayer().getNickname() );
             } catch(Exception e) {
                 cliGraphicsServer.printErr();
             }
-            if(serverInterfaces.size()==2) {
+            if(remoteViews.size()==2) {
                 this.gameStartTimer();
             }
-            else if( ((serverInterfaces.size()==4)) ) {
+            else if( ((remoteViews.size()==4)) ) {
                 this.startGame();
             }
 
@@ -201,7 +216,7 @@ public class Server extends UnicastRemoteObject {
         }
     }
 
-    public void deregisterConnection(ServerInterface serverInterface) {
+    public synchronized void deregisterConnection(ServerInterface serverInterface) {
         for (RemoteView r: remoteViews)
             if(r.getServerInterface() != null)
                 if (r.getServerInterface().equals(serverInterface))

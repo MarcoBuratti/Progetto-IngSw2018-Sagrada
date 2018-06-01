@@ -58,20 +58,19 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         }
     }
 
-    private synchronized String askForChosenScheme () throws IOException {
-        StringBuilder bld = new StringBuilder();
-        bld.append(server.getSchemes().get(0).getFirstScheme());
-        bld.append(",");
-        bld.append(server.getSchemes().get(0).getSecondScheme());
-        bld.append(",");
-        server.getSchemes().remove(0);
-        bld.append(server.getSchemes().get(0).getFirstScheme());
-        bld.append(",");
-        bld.append(server.getSchemes().get(0).getSecondScheme());
-        String message = bld.toString();
-        server.getSchemes().remove(0);
-        this.send("Please choose one of these schemes: insert a number between 1 and 4. " + message);
+    private synchronized String askForChosenScheme (String schemes) throws IOException {
+        this.send("Please choose one of these schemes: insert a number between 1 and 4. " + schemes);
         return in.readLine();
+    }
+
+
+    private void defaultScheme (String schemes) {
+        StringTokenizer strtok = new StringTokenizer(schemes, ",");
+        try {
+            this.player.setDashboard(strtok.nextToken());
+        } catch (NotValidValueException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -81,11 +80,15 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
             gameStarted = server.isGameStarted();
             firstLog = !server.alreadyLoggedIn(this);
             if(firstLog && !gameStarted) {
-                String chosenScheme = askForChosenScheme();
+                String schemes = server.selectSchemes();
+                defaultScheme(schemes);
+                server.registerConnection(this);
+                String chosenScheme = askForChosenScheme(schemes);
                 this.player.setDashboard(chosenScheme);
                 this.send("You have chosen the following scheme: " + chosenScheme + "\n" + this.player.getDashboard().toString() + "\nPlease wait, the game will start soon.");
             }
-            server.registerConnection(this);
+            else
+                server.registerConnection(this);
             isOn = true;
 
             while(isOn) {
