@@ -206,15 +206,19 @@ public class GameBoard extends Observable{
         StringBuilder bld = new StringBuilder();
         bld.append(roundTrack.toString());
         bld.append("\n\nTools:\n");
+        int i = 1;
         for (Tool t: tools) {
+            bld.append(i + ") ");
+            i++;
             bld.append(t.getToolName());
-            bld.append("\n");
+            bld.append(" ");
         }
-        bld.append("\nPublic Achievements:\n");
+        bld.append("\n\nPublic Achievements:\n");
         for (CardAchievement p: publicAchievements)
             bld.append(p.toString());
         bld.append("\n");
-        bld.append("\nThe dice you can draw are: ");
+        bld.append("Number of the die on the DraftPool: 0  1  2  3  4  5  6  7  8  9  10");
+        bld.append("\nThe dice you can draw are:          ");
         for (Die die: draftPool) {
             bld.append(die.toString());
             bld.append(" ");

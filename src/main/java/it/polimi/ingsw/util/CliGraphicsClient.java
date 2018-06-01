@@ -10,8 +10,8 @@ public class CliGraphicsClient implements GraphicsInterface {
         System.out.println("More information about the game and the");
         System.out.println("rules of Sagrada at the following link:");
         System.out.println(" http://www.craniocreations.it/prodotto/sagrada/");
-        System.out.println("Press 1 if you want to place a die");
-        System.out.println("Press 2 if you want to use a tool");
+        System.out.println("Press 1 followed by the die index and\nthe row and column number to place a die");
+        System.out.println("Press 2 followed...");
         System.out.println("Press 3 if you want to go through");
         System.out.println("Press 4 if you want to quit the game");
         System.out.println("\n");
@@ -27,6 +27,15 @@ public class CliGraphicsClient implements GraphicsInterface {
     }
 
     public void printGeneric(String s){
+        System.out.println(s);
+    }
+
+    public void printPrivate(String s){
+        System.out.println(s + "\033[0m");
+    }
+
+    public void printDraftPool(String s) {
+
         System.out.println(s);
     }
 

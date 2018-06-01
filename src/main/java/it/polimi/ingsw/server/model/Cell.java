@@ -118,9 +118,9 @@ public class Cell {
      */
     public String toString(){
         if (this.usedCell)
-            return "This cell has the following Restriction: << " + this.restriction.toString () + " >> and contains the following " + this.die.toString();
+            return "This cell has the following Restriction: << " + this.restriction.toString () + "\033[0m"+ " >> and contains the following " + this.die.toString();
         else
-            return "This cell is empty and has the following Restriction: << " + this.restriction.toString() + " >>";
+            return "This cell is empty and has the following Restriction: << " + this.restriction.toString() + "\033[0m >>";
     }
 
 

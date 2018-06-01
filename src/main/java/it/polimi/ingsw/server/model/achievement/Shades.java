@@ -39,16 +39,16 @@ public class Shades implements CardAchievement {
         String string;
         switch (this.number1) {
             case 1:
-                string = "Light Shades\n";
+                string = "Light Shades: ";
                 break;
             case 3:
-                string = "Medium Shades\n";
+                string = "Medium Shades: ";
                 break;
             case 5:
-                string = "Dark Shades\n";
+                string = "Dark Shades: ";
                 break;
             default:
-                string = "Shades\n";
+                string = "Shades: ";
                 break;
         }
         string += "Sets of " + this.number1 + " & " + this.number2 + " values anywhere.\n";

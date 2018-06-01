@@ -98,6 +98,13 @@ public class View implements Observer {
                 schemes = fromServer;
                 setHasChosenScheme(false);
             }
+            else if(fromServer.startsWith("Number of the die on the DraftPool:"))
+                graphicsInterface.printDraftPool(fromServer);
+            else if(fromServer.startsWith("Your private achievement is:"))
+                graphicsInterface.printPrivate(fromServer);
+            else if(fromServer.startsWith("Tools:")) {
+                graphicsInterface.printGeneric(fromServer);
+            }
 
             else {
                 graphicsInterface.printGeneric(fromServer);
