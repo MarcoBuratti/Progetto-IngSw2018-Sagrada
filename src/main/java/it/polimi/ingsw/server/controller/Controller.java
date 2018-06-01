@@ -20,7 +20,7 @@ public class Controller extends Observable implements Observer {
     private GameBoard gameBoard;
     private ArrayList<RemoteView> remoteViews;
     private ArrayList<Player> players;
-    private ArrayList<Pair<Player, Integer>> finalscore;
+    private ArrayList<Pair<Player, Integer>> finalScore;
 
     public Controller(Server server) {
         gameBoard = new GameBoard(server.getPlayers());
@@ -54,34 +54,34 @@ public class Controller extends Observable implements Observer {
 
     private void calculateFinalScores() {
 
-        finalscore = new ArrayList<>();
+        finalScore = new ArrayList<>();
         Collections.rotate(players, players.size()-1);
 
         for (Player p : this.players) {
             Pair<Player, Integer> pair = new Pair<>(p, calculateFinalScorePlayer(p));
             boolean added = false;
-            for (int i = 0; i < finalscore.size() && !added; i++) {
-                Player p1 = finalscore.get(i).getKey();
+            for (int i = 0; i < finalScore.size() && !added; i++) {
+                Player p1 = finalScore.get(i).getKey();
                 Player p2 = pair.getKey();
-                if (finalscore.get(i).getValue() < pair.getValue()) {
-                    finalscore.add(i, pair);
+                if (finalScore.get(i).getValue() < pair.getValue()) {
+                    finalScore.add(i, pair);
                     added = true;
-                } else if (finalscore.get(i).getValue() == pair.getValue())
+                } else if (finalScore.get(i).getValue() == pair.getValue())
                     if (p1.getPrivateAchievement().scoreEffect(p1.getDashboard()) < p2.getPrivateAchievement().scoreEffect(p2.getDashboard())) {
-                        finalscore.add(i, pair);
+                        finalScore.add(i, pair);
                         added = true;
                     } else if (p1.getPrivateAchievement().scoreEffect(p1.getDashboard()) == p2.getPrivateAchievement().scoreEffect(p2.getDashboard()))
                         if (p1.getCurrentFavourToken() < p2.getCurrentFavourToken()) {
-                            finalscore.add(i, pair);
+                            finalScore.add(i, pair);
                             added = true;
                         } else if (p1.getCurrentFavourToken() == p2.getCurrentFavourToken())
                             if (this.players.indexOf(p1) > this.players.indexOf(p2)) {
-                                finalscore.add(i, pair);
+                                finalScore.add(i, pair);
                                 added = true;
                             }
 
                 if (!added) {
-                    finalscore.add(pair);
+                    finalScore.add(pair);
                 }
 
             }

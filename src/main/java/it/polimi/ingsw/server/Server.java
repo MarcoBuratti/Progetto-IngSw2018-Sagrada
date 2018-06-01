@@ -224,12 +224,15 @@ public class Server extends UnicastRemoteObject {
     }
 
     public synchronized void deregisterConnection(ServerInterface serverInterface) {
-        for (RemoteView r: remoteViews)
-            if(r.getServerInterface() != null)
+        cliGraphicsServer.printDereg( serverInterface.getPlayer().getNickname() );
+        for (RemoteView r: remoteViews) {
+            if (r.getServerInterface() != null) {
                 if (r.getServerInterface().equals(serverInterface))
                     r.removeConnection();
+                else r.send(serverInterface.getPlayer().getNickname() + " has disconnected from the server.");
+            }
+        }
         serverInterfaces.remove(serverInterface);
-        cliGraphicsServer.printDereg( serverInterface.getPlayer().getNickname() );
         serverInterface.getPlayer().removeServerInterface();
     }
 
