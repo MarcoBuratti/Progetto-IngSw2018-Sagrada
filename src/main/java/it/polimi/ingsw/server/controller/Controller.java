@@ -21,6 +21,7 @@ public class Controller extends Observable implements Observer {
     private ArrayList<RemoteView> remoteViews;
     private ArrayList<Player> players;
     private ArrayList<Pair<Player, Integer>> finalScore;
+    private boolean onePlayerLeft = false;
 
     public Controller(Server server) {
         gameBoard = new GameBoard(server.getPlayers());
@@ -34,7 +35,7 @@ public class Controller extends Observable implements Observer {
     }
 
     public void startGame() {
-        for (int i = 0; i < NUMBER_OF_ROUNDS; i++) {
+        for (int i = 0; i < NUMBER_OF_ROUNDS && !onePlayerLeft ; i++) {
             currentRound = new Round(players, gameBoard);
             this.addObserver(currentRound);
             try {
@@ -43,7 +44,8 @@ public class Controller extends Observable implements Observer {
                 e.printStackTrace();
             }
             currentRound.roundManager();
-            currentRound.endRound();
+            if(!onePlayerLeft)
+                 currentRound.endRound();
             Collections.rotate(players, players.size()-1);
         }
     }
@@ -102,6 +104,11 @@ public class Controller extends Observable implements Observer {
         score += player.getCurrentFavourToken();
         score -= player.getDashboard().emptyCells();
         return score;
+    }
+
+    public synchronized void onePlayerLeftEnd () {
+        this.onePlayerLeft = true;
+        this.currentRound.onePlayerLeftEnd();
     }
 
     @Override

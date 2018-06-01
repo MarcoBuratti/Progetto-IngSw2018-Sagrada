@@ -17,6 +17,7 @@ public class Round implements Observer {
     private Turn currentTurn;
     private GameBoard gameBoard;
     private ArrayList<Player> players;
+    private boolean onePlayerLeft = false;
 
     public Round(ArrayList<Player> players, GameBoard gameBoard) {
         this.gameBoard = gameBoard;
@@ -33,26 +34,33 @@ public class Round implements Observer {
     public void roundManager() {
         ListIterator<Player> iterator = players.listIterator();
 
-        while (iterator.hasNext()) {
+        while (iterator.hasNext() && !onePlayerLeft) {
             currentPlayer = iterator.next();
             this.gameBoard.setCurrentPlayer(currentPlayer);
-            if (currentPlayer.getServerInterface() != null) {
-                this.currentTurn = new Turn(currentPlayer, gameBoard, false);
-                currentTurn.turnManager();
-            }
-
+            createTurn();
         }
 
-        while (iterator.hasPrevious()) {
+        while (iterator.hasPrevious() && !onePlayerLeft) {
             currentPlayer = iterator.previous();
             if (currentPlayer.skipSecondTurn())
                 currentPlayer.setSkipSecondTurn(false);
             else {
                 this.gameBoard.setCurrentPlayer(currentPlayer);
-                if (currentPlayer.getServerInterface() != null) {
-                    this.currentTurn = new Turn(currentPlayer, gameBoard, true);
-                    currentTurn.turnManager();
-                }
+                createTurn();
+            }
+        }
+    }
+
+    private void createTurn() {
+        for (Player p: players)
+            if ( ( !p.equals(currentPlayer) ) && ( p.getServerInterface() != null ))
+                p.getServerInterface().send("It's " + currentPlayer.getNickname() + "'s turn. Please wait.");
+
+        if (currentPlayer.getServerInterface() != null) {
+            this.currentPlayer.getServerInterface().send("It's your turn! Please make your move.");
+            if (!onePlayerLeft) {
+                this.currentTurn = new Turn(currentPlayer, gameBoard, false);
+                currentTurn.turnManager();
             }
         }
     }
@@ -67,11 +75,13 @@ public class Round implements Observer {
 
     }
 
+    public synchronized void onePlayerLeftEnd(){
+        this.onePlayerLeft = true;
+        this.currentTurn.onePlayerLeft();
+    }
+
     public synchronized Player getCurrentPlayer() { return currentPlayer; }
 
-    public synchronized Turn getCurrentTurn() {
-        return currentTurn;
-    }
 
     @Override
     public void update(Observable o, Object arg) {

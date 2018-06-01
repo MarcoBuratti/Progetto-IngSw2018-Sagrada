@@ -196,11 +196,11 @@ public class PlayerMove implements Serializable {
             case "PlaceDie":
                 return "dado:" + this.indexDie + " " + "coordinate:" + this.intMatrixParameters[0] + this.intMatrixParameters[1];
             case "GoThrough":
-                return "go through";
+                return "Go Through";
             case "UseTool":
-                return "use tool";
+                return "Use Tool";
             default:
-                return "default";
+                return "";
         }
 
     }

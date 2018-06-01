@@ -44,6 +44,11 @@ public class Turn {
         notifyAll();
     }
 
+    public synchronized void onePlayerLeft() {
+        this.turnIsOver = true;
+        notifyAll();
+    }
+
     public synchronized void setWaitMove(boolean waitMove) {
         this.waitMove = waitMove;
         notifyAll();
@@ -121,8 +126,9 @@ public class Turn {
 
         this.launchTimer();
 
-        if ( this.player.getServerInterface() != null )
-            this.player.getServerInterface().send("It's your turn! Please make your move.");
+        if ( this.player.getServerInterface() != null ) {
+            this.player.getServerInterface().send("Please choose one of the following moves:\nSelect 1 to place a die\nSelect 2 to use a tool\nSelect 3 to skip the turn\nSelect 4 to quit");
+        }
 
         while (!isTurnIsOver()) {
 
@@ -137,9 +143,6 @@ public class Turn {
             }
 
             if(!isWaitMove() && typeMove != null) {
-
-                if ( this.player.getServerInterface() != null )
-                    this.player.getServerInterface().send("Please choose one of the following moves:\nSelect 1 to place a die\nSelect 2 to use a tool\nSelect 3 to skip the turn\nSelect 4 to quit");
 
                 if (typeMove.equals("PlaceDie") && !placementDone) {
                     
@@ -193,7 +196,7 @@ public class Turn {
 
     private void useTool(){
 
-        Tool tool = gameBoard.getTools().stream().filter(t -> (t.getToolName().equals(playerMove.getToolName()))).findAny().get();
+        Tool tool = gameBoard.getTools().stream().filter(t -> (t.getToolName().equals(playerMove.getToolName()))).findAny().orElseThrow(IllegalMonitorStateException::new);
 
 
         try {

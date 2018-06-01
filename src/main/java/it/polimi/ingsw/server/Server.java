@@ -232,8 +232,16 @@ public class Server extends UnicastRemoteObject {
                 else r.send(serverInterface.getPlayer().getNickname() + " has disconnected from the server.");
             }
         }
+
         serverInterfaces.remove(serverInterface);
         serverInterface.getPlayer().removeServerInterface();
+
+        if (serverInterfaces.size() == 1) {
+            this.controller.onePlayerLeftEnd();
+            serverInterfaces.get(0).send("You win!");
+            cliGraphicsServer.printWinner (serverInterfaces.get(0).getPlayer().getNickname());
+        }
+
     }
 
 }

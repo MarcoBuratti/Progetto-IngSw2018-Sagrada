@@ -21,4 +21,8 @@ public class CliGraphicsServer {
     public void printDereg(String s){
         System.out.println(s + " has disconnected from the server.");
     }
+
+    public void printWinner(String s) {
+        System.out.println(s + " is the winner!");
+    }
 }
