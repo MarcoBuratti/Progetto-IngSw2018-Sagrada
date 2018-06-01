@@ -25,6 +25,7 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
     private RmiClientInterface client;
     private boolean gameStarted;
     private boolean firstLog = true;
+    private String defaultScheme;
 
 
     public RmiConnectionServer(RmiClientInterface connectionClientRMI, Server server) {
@@ -40,7 +41,7 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         try {
             if(firstLog && !gameStarted) {
                 String schemes = server.selectSchemes();
-                defaultScheme(schemes);
+                this.defaultScheme = defaultScheme(schemes);
                 Color privateAchievementColor = server.selectPrivateAchievement();
                 this.player.setPrivateAchievement(new PrivateAchievement(privateAchievementColor));
                 server.registerConnection(this);
@@ -57,9 +58,14 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
     @Override
     public synchronized void setDashboard(Message message) throws RemoteException {
         try {
-            this.player.setDashboard(message.getMessage());
-            send("You have chosen the following scheme: " + message.getMessage() + "\n" + this.player.getDashboard().toString() + "\nPlease wait, the game will start soon.");
-
+            gameStarted = server.isGameStarted();
+            if (!gameStarted) {
+                this.player.setDashboard(message.getMessage());
+                this.send("You have chosen the following scheme: " + message.getMessage() + "\n" + this.player.getDashboard().toString() + "\nPlease wait, the game will start soon.");
+            }
+            else {
+                this.send("Too late! Your scheme is: " + defaultScheme + "\n" + this.player.getDashboard().toString() + "\nThe game has already started!");
+            }
         } catch (NotValidValueException e) {
             System.err.println(e.toString());
         }
@@ -110,13 +116,15 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
     }
 
 
-    private void defaultScheme (String schemes) {
+    private String defaultScheme (String schemes) {
         StringTokenizer strtok = new StringTokenizer(schemes, ",");
+        String defaultScheme = strtok.nextToken();
         try {
-            this.player.setDashboard(strtok.nextToken());
+            this.player.setDashboard(defaultScheme);
         } catch (NotValidValueException e) {
             e.printStackTrace();
         }
+        return defaultScheme;
     }
 
 }

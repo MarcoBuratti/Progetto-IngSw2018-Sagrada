@@ -66,13 +66,15 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
     }
 
 
-    private void defaultScheme (String schemes) {
+    private String defaultScheme (String schemes) {
         StringTokenizer strtok = new StringTokenizer(schemes, ",");
+        String defaultScheme = strtok.nextToken();
         try {
-            this.player.setDashboard(strtok.nextToken());
+            this.player.setDashboard(defaultScheme);
         } catch (NotValidValueException e) {
             e.printStackTrace();
         }
+        return defaultScheme;
     }
 
     @Override
@@ -83,14 +85,19 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
             firstLog = !server.alreadyLoggedIn(this);
             if(firstLog && !gameStarted) {
                 String schemes = server.selectSchemes();
-                defaultScheme(schemes);
+                String defaultScheme = defaultScheme(schemes);
                 Color privateAchievementColor = server.selectPrivateAchievement();
                 this.player.setPrivateAchievement(new PrivateAchievement(privateAchievementColor));
                 server.registerConnection(this);
                 this.send("Your private achievement is: " + privateAchievementColor);
                 String chosenScheme = askForChosenScheme(schemes);
-                this.player.setDashboard(chosenScheme);
-                this.send("You have chosen the following scheme: " + chosenScheme + "\n" + this.player.getDashboard().toString() + "\nPlease wait, the game will start soon.");
+                gameStarted = server.isGameStarted();
+                if (!gameStarted) {
+                    this.player.setDashboard(chosenScheme);
+                    this.send("You have chosen the following scheme: " + chosenScheme + "\n" + this.player.getDashboard().toString() + "\nPlease wait, the game will start soon.");
+                }
+                else
+                    this.send("Too late! Your scheme is: " + defaultScheme + "\n" + this.player.getDashboard().toString() + "\nThe game has already started!");
             }
             else
                 server.registerConnection(this);
