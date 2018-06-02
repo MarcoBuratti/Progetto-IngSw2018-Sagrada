@@ -6,5 +6,6 @@ public interface GraphicsInterface {
     void printConnection();
     void printGeneric(String s);
     void printPrivate(String s);
-    void printDraftPool(String s);
+    void printTool(String s);
+    void printRules();
 }

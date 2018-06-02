@@ -127,7 +127,7 @@ public class Turn {
         this.launchTimer();
 
         if ( this.player.getServerInterface() != null ) {
-            this.player.getServerInterface().send("Please choose one of the following moves:\nSelect 1 to place a die\nSelect 2 to use a tool\nSelect 3 to skip the turn\nSelect 4 to quit");
+            this.player.getServerInterface().send("UpdateFromServer");
         }
 
         while (!isTurnIsOver()) {

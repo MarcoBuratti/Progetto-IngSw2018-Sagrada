@@ -2,11 +2,11 @@ package it.polimi.ingsw.server.model;
 
 public enum SchemesEnum {
 
-    AURORA_SAGRADIS("Aurora Sagradis"), AURORAE_MAGNIFICUS("Aurorae Magnificus"), BATLLO("Batllo"), BELLESGUARD("Bellesguard"),
-    CHROMATIC_SPLENDOR("Chromatic Splendor"), COMITAS("Comitas"), FIRELIGHT("Firelight"), FIRMITAS("Firmitas"), FRACTAL_DROPS("Fractal Drops"),
-    FULGOR_DEL_CIELO("Fulgor del Cielo"), GRAVITAS("Gravitas"), INDUSTRIA("Industria"), KALEIDOSCOPIC_DREAM("Kaleidoscopic Dream"), LUX_ASTRAM("Lux Astram"), LUX_MUNDI("Lux Mundi"),
-    LUX_CELESTIAL("Lux Celestial"), RIPPLES_OF_LIGHT("Ripples of Light"), SHADOW_THIEF("Shadow Thief"), SUNS_GLORY("Sun's Glory"),
-    SYMPHONY_OF_LIGHT("Symphony of Light"), VIA_LUX("Via Lux"), VIRTUS("Virtus"), WATER_OF_LIFE("Water of Life");
+    AURORA_SAGRADIS("Aurora_Sagradis"), AURORAE_MAGNIFICUS("Aurorae_Magnificus"), BATLLO("Batllo"), BELLESGUARD("Bellesguard"),
+    CHROMATIC_SPLENDOR("Chromatic_Splendor"), COMITAS("Comitas"), FIRELIGHT("Firelight"), FIRMITAS("Firmitas"), FRACTAL_DROPS("Fractal_Drops"),
+    FULGOR_DEL_CIELO("Fulgor_del_Cielo"), GRAVITAS("Gravitas"), INDUSTRIA("Industria"), KALEIDOSCOPIC_DREAM("Kaleidoscopic_Dream"), LUX_ASTRAM("Lux_Astram"), LUX_MUNDI("Lux Mundi"),
+    LUX_CELESTIAL("Lux_Celestial"), RIPPLES_OF_LIGHT("Ripples_of_Light"), SHADOW_THIEF("Shadow_Thief"), SUNS_GLORY("Sun's_Glory"),
+    SYMPHONY_OF_LIGHT("Symphony_of_Light"), VIA_LUX("Via_Lux"), VIRTUS("Virtus"), WATER_OF_LIFE("Water_of_Life");
 
     private String name;
 

@@ -10,12 +10,7 @@ public class CliGraphicsClient implements GraphicsInterface {
         System.out.println("More information about the game and the");
         System.out.println("rules of Sagrada at the following link:");
         System.out.println(" http://www.craniocreations.it/prodotto/sagrada/");
-        System.out.println("Press 1 followed by the die index and\nthe row and column number to place a die");
-        System.out.println("Press 2 followed by the parameters\nshown on the cards to use the tools");
-        System.out.println("Press 3 if you want to go through");
-        System.out.println("Press 4 if you want to quit the game");
         System.out.println("\n");
-
     }
 
     public void insert() {
@@ -34,9 +29,16 @@ public class CliGraphicsClient implements GraphicsInterface {
         System.out.println(s + "\033[0m");
     }
 
-    public void printDraftPool(String s) {
+    public void printTool(String s){
+        System.out.println(s);                  //todo DA IMPLEMENTARE JSON CHE STAMPA LE CARTE
+    }
 
-        System.out.println(s);
+    public void printRules(){
+        System.out.println("\n");
+        System.out.println("Press 1 followed by the die index and\nthe row and column number to place a die");
+        System.out.println("Press 2 followed by the parameters\nshown on the cards to use the tools");
+        System.out.println("Press 3 if you want to go through");
+        System.out.println("Press 4 if you want to quit the game");
     }
 
 }

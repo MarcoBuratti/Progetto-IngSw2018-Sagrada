@@ -9,9 +9,7 @@ import it.polimi.ingsw.server.interfaces.RmiServerInterface;
 import it.polimi.ingsw.util.Message;
 import org.json.simple.JSONObject;
 
-import java.net.MalformedURLException;
 import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Observable;

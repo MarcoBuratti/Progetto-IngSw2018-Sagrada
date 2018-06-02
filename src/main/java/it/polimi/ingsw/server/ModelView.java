@@ -1,14 +1,17 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.server.model.GameBoard;
-import it.polimi.ingsw.server.model.Player;
 
 import java.util.Observable;
 import java.util.Observer;
 
 public class ModelView extends Observable implements Observer {
 
-    private GameBoard model;
+    public GameBoard model;
+
+    public void setModel(GameBoard model) {
+        this.model = model;
+    }
 
     public ModelView (GameBoard gameBoard){
         this.model = gameBoard;

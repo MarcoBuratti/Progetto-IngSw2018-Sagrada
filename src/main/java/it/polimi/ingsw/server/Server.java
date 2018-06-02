@@ -43,7 +43,7 @@ public class Server extends UnicastRemoteObject {
     private Timer timer;
     private CliGraphicsServer cliGraphicsServer = new CliGraphicsServer();
 
-    public Server() throws IOException {
+    private Server() throws IOException {
         this.serverSocket = new ServerSocket(PORT_NUMBER);
         executor = Executors.newCachedThreadPool();
         serverInterfaces = new ArrayList<>();
@@ -152,7 +152,7 @@ public class Server extends UnicastRemoteObject {
         return gameStarted;
     }
 
-    public synchronized void setGameStarted(boolean bool) {
+    private synchronized void setGameStarted(boolean bool) {
         this.gameStarted = bool;
     }
 

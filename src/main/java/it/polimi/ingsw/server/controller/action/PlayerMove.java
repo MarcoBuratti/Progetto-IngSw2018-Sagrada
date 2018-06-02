@@ -1,16 +1,14 @@
 package it.polimi.ingsw.server.controller.action;
 
 import it.polimi.ingsw.server.controller.tool.ToolNames;
-import it.polimi.ingsw.server.model.Die;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Optional;
-
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 public class PlayerMove implements Serializable {
     private String playerNickname;

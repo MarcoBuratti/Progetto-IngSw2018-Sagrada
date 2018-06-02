@@ -1,10 +1,9 @@
 package it.polimi.ingsw.server.model;
 
-import it.polimi.ingsw.server.model.Color;
-import it.polimi.ingsw.server.model.Die;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class DieTest {

@@ -47,8 +47,13 @@ public class RemoteView extends Observable implements Observer {
     }
 
     private void showGameboard (ModelView modelView){
-        if(serverInterface != null)
-            serverInterface.send(modelView.toString());
+        if(serverInterface != null) {
+            serverInterface.send(modelView.model.sendTool());
+            serverInterface.send(modelView.model.sendAchievement());
+            serverInterface.send(modelView.model.sendRundTrack());
+            serverInterface.send(modelView.model.sendDraft());
+            serverInterface.send(modelView.model.toString());
+        }
     }
 
     public void send (String string) {

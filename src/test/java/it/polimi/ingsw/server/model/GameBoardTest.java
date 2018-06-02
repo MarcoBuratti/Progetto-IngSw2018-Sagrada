@@ -1,9 +1,5 @@
 package it.polimi.ingsw.server.model;
 
-import it.polimi.ingsw.server.model.Color;
-import it.polimi.ingsw.server.model.Dashboard;
-import it.polimi.ingsw.server.model.Die;
-import it.polimi.ingsw.server.model.GameBoard;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import org.junit.jupiter.api.Test;
 

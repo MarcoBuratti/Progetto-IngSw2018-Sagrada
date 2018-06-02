@@ -1,9 +1,8 @@
 
 package it.polimi.ingsw.server.model;
 
-import it.polimi.ingsw.server.model.*;
-import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import it.polimi.ingsw.server.model.exception.NotValidParametersException;
+import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 import it.polimi.ingsw.server.model.restriction.NoRestriction;
 import org.junit.jupiter.api.Assertions;

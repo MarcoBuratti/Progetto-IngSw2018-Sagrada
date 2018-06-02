@@ -1,10 +1,6 @@
 package it.polimi.ingsw.server.model.restriction;
 
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
-import it.polimi.ingsw.server.model.restriction.AbstractRestriction;
-import it.polimi.ingsw.server.model.restriction.Restriction;
-import it.polimi.ingsw.server.model.restriction.RestrictionEnum;
-import it.polimi.ingsw.server.model.restriction.RestrictionFactory;
 import org.junit.jupiter.api.Test;
 
 class RestrictionFactoryTest {
