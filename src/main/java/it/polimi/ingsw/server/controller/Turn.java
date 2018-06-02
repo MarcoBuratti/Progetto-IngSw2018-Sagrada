@@ -34,7 +34,7 @@ public class Turn {
         this.secondTurn = secondTurn;
         this.player = player;
         this.gameBoard = gameBoard;
-        this.timeTurn = 60*1000;
+        this.timeTurn = 30*1000;
     }
 
     public synchronized void setTurnIsOver() {

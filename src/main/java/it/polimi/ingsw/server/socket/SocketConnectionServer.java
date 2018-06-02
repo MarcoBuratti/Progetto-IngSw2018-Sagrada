@@ -140,6 +140,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
     @Override
     public void close() {
 
+        setOff();
         send("Connection expired.");
         send("Terminate.");
         try {
