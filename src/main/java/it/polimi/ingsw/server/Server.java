@@ -36,9 +36,8 @@ public class Server extends UnicastRemoteObject {
     private ModelView modelView;
     private ArrayList<SchemeCardsEnum> schemes;
     private ArrayList<Color> privateAchievements;
-    private final int lobbyTime = 8 * 1000;
+    private final int lobbyTime = 5 * 1000;
     private ArrayList<RemoteView> remoteViews;
-    private boolean gameFailed = false;
     boolean gameStarted;
     private Timer timer;
     private CliGraphicsServer cliGraphicsServer = new CliGraphicsServer();
@@ -100,22 +99,27 @@ public class Server extends UnicastRemoteObject {
     }
 
     private void startGame() {
-        if (!gameFailed) {
-            System.out.println("A new game is about to start!");
-            this.timer.cancel();
+
+        System.out.println("A new game is about to start!");
+        this.timer.cancel();
+        this.controller = new Controller(this);
+        modelView = new ModelView(controller.getGameBoard());
+        for (RemoteView r : remoteViews)
+            r.setModelView(modelView);
+        this.controller.setRemoteViews(this);
+        setPlayersConnected(true);
+        ArrayList<ServerInterface> tempServerInterfaces = new ArrayList<>(serverInterfaces);
+        for (ServerInterface s : tempServerInterfaces)
+            s.send("The game has started!");
+        if (serverInterfaces.size() > 1) {
             this.setGameStarted(true);
-            this.controller = new Controller(this);
-            modelView = new ModelView(controller.getGameBoard());
-            for (RemoteView r : remoteViews)
-                r.setModelView(modelView);
-            this.controller.setRemoteViews(this);
-            setPlayersConnected(true);
-            cliGraphicsServer.printStart();
-            for (ServerInterface s : serverInterfaces)
-                s.send("The game has started!");
             this.controller.startGame();
+            cliGraphicsServer.printStart();
         }
-        else gameFailed = false;
+        else {
+            this.setGameStarted(false);
+            gameFailed();
+        }
     }
 
     private synchronized boolean getPlayersConnected() { return this.playersConnected; }
@@ -174,6 +178,24 @@ public class Server extends UnicastRemoteObject {
         Color privateAchievement = this.privateAchievements.get(0);
         this.privateAchievements.remove(0);
         return privateAchievement;
+    }
+
+    private synchronized void gameFailed() {
+        if (this.controller != null)
+            this.controller.onePlayerLeftEnd();
+        if(isGameStarted()) {
+            serverInterfaces.get(0).send("You win!");
+            cliGraphicsServer.printWinner(serverInterfaces.get(0).getPlayer().getNickname());
+            System.out.println("Game ended!");
+            serverInterfaces.get(0).close();
+            this.restartServer();
+        }
+        else {
+            System.out.println("Game start failed because some of the players disconnected! Waiting for the next game to start...");
+            serverInterfaces.get(0).send("Sorry! Other players disconnected before the game started. Please try again.");
+            serverInterfaces.get(0).close();
+            this.restartServer();
+        }
     }
 
     public synchronized void registerConnection(ServerInterface newServerInterface) {
@@ -238,20 +260,8 @@ public class Server extends UnicastRemoteObject {
             serverInterfaces.remove(serverInterface);
             serverInterface.getPlayer().removeServerInterface();
 
-            if (serverInterfaces.size() == 1) {
-                if(!isGameStarted())
-                    gameFailed = true;
-                if (this.controller != null)
-                    this.controller.onePlayerLeftEnd();
-                serverInterfaces.get(0).send("You win!");
-                if (!gameFailed) {
-                    cliGraphicsServer.printWinner(serverInterfaces.get(0).getPlayer().getNickname());
-                    System.out.println("Game ended!");
-                }
-                else
-                    System.out.println("Game start failed!");
-                serverInterfaces.get(0).close();
-                this.restartServer();
+            if (serverInterfaces.size() == 1 && isGameStarted()) {
+                gameFailed();
             }
         }
     }
