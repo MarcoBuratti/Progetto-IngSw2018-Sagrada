@@ -106,7 +106,6 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
             while(isOn) {
                 String message = in.readLine();
                 if (message.equals("/quit")) {
-                    setOff();
                     close();
                 } else {
                     read(message);
