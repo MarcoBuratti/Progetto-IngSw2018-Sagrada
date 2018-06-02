@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.server.model.GameBoard;
-import it.polimi.ingsw.server.model.Player;
 
 import java.util.Observable;
 import java.util.Observer;

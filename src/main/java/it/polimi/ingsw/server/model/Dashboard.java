@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.model;
 
-import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import it.polimi.ingsw.server.model.exception.NotValidParametersException;
+import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 import it.polimi.ingsw.server.model.restriction.AbstractRestriction;
 import it.polimi.ingsw.server.model.restriction.RestrictionEnum;

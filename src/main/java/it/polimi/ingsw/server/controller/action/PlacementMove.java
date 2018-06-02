@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.controller.action;
 
 import it.polimi.ingsw.server.model.Die;
-import it.polimi.ingsw.server.model.GameBoard;
 import it.polimi.ingsw.server.model.PlacementCheck;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.exception.NotValidParametersException;

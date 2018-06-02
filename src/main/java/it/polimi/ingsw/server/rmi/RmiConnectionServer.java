@@ -2,21 +2,19 @@ package it.polimi.ingsw.server.rmi;
 
 import it.polimi.ingsw.client.interfaces.RmiClientInterface;
 import it.polimi.ingsw.server.Server;
-import it.polimi.ingsw.server.interfaces.*;
+import it.polimi.ingsw.server.controller.action.PlayerMove;
+import it.polimi.ingsw.server.interfaces.RmiServerInterface;
+import it.polimi.ingsw.server.interfaces.ServerInterface;
 import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.achievement.PrivateAchievement;
+import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import it.polimi.ingsw.util.Message;
 
 import java.io.IOException;
-import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 import java.util.Observable;
 import java.util.StringTokenizer;
-
-import it.polimi.ingsw.server.controller.action.PlayerMove;
-import it.polimi.ingsw.server.interfaces.RmiServerInterface;
-import it.polimi.ingsw.server.model.exception.NotValidValueException;
 
 public class RmiConnectionServer extends Observable implements RmiServerInterface, ServerInterface {
 
