@@ -20,6 +20,11 @@ public class Player {
         this.skipSecondTurn=false;
     }
 
+    public void sendGameStarted() {
+        if (this.serverInterface != null)
+            serverInterface.send("The game has started!");
+    }
+
     public ServerInterface getServerInterface() {
         return this.serverInterface;
     }

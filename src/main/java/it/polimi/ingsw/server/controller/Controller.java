@@ -108,7 +108,8 @@ public class Controller extends Observable implements Observer {
 
     public synchronized void onePlayerLeftEnd () {
         this.onePlayerLeft = true;
-        this.currentRound.onePlayerLeftEnd();
+        if(this.currentRound != null)
+            this.currentRound.onePlayerLeftEnd();
     }
 
     @Override

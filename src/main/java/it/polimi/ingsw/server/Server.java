@@ -5,7 +5,6 @@ import it.polimi.ingsw.server.interfaces.ServerInterface;
 import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.SchemeCardsEnum;
-import it.polimi.ingsw.server.model.achievement.PrivateAchievement;
 import it.polimi.ingsw.server.rmi.RmiController;
 import it.polimi.ingsw.server.socket.SocketConnectionServer;
 import it.polimi.ingsw.util.CliGraphicsServer;
@@ -21,6 +20,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Server extends UnicastRemoteObject {
 
@@ -36,8 +36,9 @@ public class Server extends UnicastRemoteObject {
     private ModelView modelView;
     private ArrayList<SchemeCardsEnum> schemes;
     private ArrayList<Color> privateAchievements;
-    private final int lobbyTime = 5 * 1000;
+    private final int lobbyTime = 8 * 1000;
     private ArrayList<RemoteView> remoteViews;
+    private boolean gameFailed = false;
     boolean gameStarted;
     private Timer timer;
     private CliGraphicsServer cliGraphicsServer = new CliGraphicsServer();
@@ -69,6 +70,8 @@ public class Server extends UnicastRemoteObject {
     }
 
     private void start() {
+        System.out.println("Server is on!");
+
         try {
             LocateRegistry.createRegistry(1099);
         } catch (RemoteException e) {
@@ -97,18 +100,22 @@ public class Server extends UnicastRemoteObject {
     }
 
     private void startGame() {
-        this.timer.cancel();
-        this.setGameStarted(true);
-        this.controller = new Controller(this);
-        modelView = new ModelView(controller.getGameBoard());
-        for (RemoteView r: remoteViews)
-            r.setModelView(modelView);
-        this.controller.setRemoteViews(this);
-        setPlayersConnected(true);
-        cliGraphicsServer.printStart();
-        for(ServerInterface s: serverInterfaces)
-            s.send("The game has started!");
-        this.controller.startGame();
+        if (!gameFailed) {
+            System.out.println("A new game is about to start!");
+            this.timer.cancel();
+            this.setGameStarted(true);
+            this.controller = new Controller(this);
+            modelView = new ModelView(controller.getGameBoard());
+            for (RemoteView r : remoteViews)
+                r.setModelView(modelView);
+            this.controller.setRemoteViews(this);
+            setPlayersConnected(true);
+            cliGraphicsServer.printStart();
+            for (ServerInterface s : serverInterfaces)
+                s.send("The game has started!");
+            this.controller.startGame();
+        }
+        else gameFailed = false;
     }
 
     private synchronized boolean getPlayersConnected() { return this.playersConnected; }
@@ -128,12 +135,6 @@ public class Server extends UnicastRemoteObject {
             }
         },this.lobbyTime);
     }
-
-    public ArrayList<SchemeCardsEnum> getSchemes (){
-        return this.schemes;
-    }
-
-    public ArrayList<Color> getPrivateAchievements () { return this.privateAchievements; }
 
     public ArrayList<Player> getPlayers() { return players; }
 
@@ -224,24 +225,56 @@ public class Server extends UnicastRemoteObject {
     }
 
     public synchronized void deregisterConnection(ServerInterface serverInterface) {
-        cliGraphicsServer.printDereg( serverInterface.getPlayer().getNickname() );
-        for (RemoteView r: remoteViews) {
-            if (r.getServerInterface() != null) {
-                if (r.getServerInterface().equals(serverInterface))
-                    r.removeConnection();
-                else r.send(serverInterface.getPlayer().getNickname() + " has disconnected from the server.");
+        if (this.serverInterfaces.contains(serverInterface)) {
+            cliGraphicsServer.printDereg(serverInterface.getPlayer().getNickname());
+            for (RemoteView r : remoteViews) {
+                if (r.getServerInterface() != null) {
+                    if (r.getServerInterface().equals(serverInterface))
+                        r.removeConnection();
+                    else r.send(serverInterface.getPlayer().getNickname() + " has disconnected from the server.");
+                }
+            }
+
+            serverInterfaces.remove(serverInterface);
+            serverInterface.getPlayer().removeServerInterface();
+
+            if (serverInterfaces.size() == 1) {
+                if(!isGameStarted())
+                    gameFailed = true;
+                if (this.controller != null)
+                    this.controller.onePlayerLeftEnd();
+                serverInterfaces.get(0).send("You win!");
+                if (!gameFailed) {
+                    cliGraphicsServer.printWinner(serverInterfaces.get(0).getPlayer().getNickname());
+                    System.out.println("Game ended!");
+                }
+                else
+                    System.out.println("Game start failed!");
+                serverInterfaces.get(0).close();
+                this.restartServer();
             }
         }
+    }
 
-        serverInterfaces.remove(serverInterface);
-        serverInterface.getPlayer().removeServerInterface();
-
-        if (serverInterfaces.size() == 1) {
-            this.controller.onePlayerLeftEnd();
-            serverInterfaces.get(0).send("You win!");
-            cliGraphicsServer.printWinner (serverInterfaces.get(0).getPlayer().getNickname());
+    private synchronized void restartServer() {
+        try {
+            executor.awaitTermination(100, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-
+        serverInterfaces.clear();
+        nicknames.clear();
+        players.clear();
+        playersConnected = false;
+        controller = null;
+        modelView = null;
+        schemes = new ArrayList<>(Arrays.asList(SchemeCardsEnum.values()));
+        Collections.shuffle(schemes);
+        privateAchievements = new ArrayList<>(Arrays.asList(Color.values()));
+        Collections.shuffle(privateAchievements);
+        remoteViews.clear();
+        gameStarted = false;
+        System.out.println("Waiting for the next game to start...");
     }
 
 }

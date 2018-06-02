@@ -109,6 +109,7 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         send("Connection expired.");
         send("Terminate.");
         server.deregisterConnection(this);
+        send("You've been disconnected successfully.");
     }
 
     public synchronized void askForChosenScheme(String schemes) throws IOException {
