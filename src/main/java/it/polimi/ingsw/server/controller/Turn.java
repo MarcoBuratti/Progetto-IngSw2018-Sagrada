@@ -194,16 +194,15 @@ public class Turn {
             throw new IllegalArgumentException();
     }
 
-    private void useTool(){
-
-        Tool tool = gameBoard.getTools().stream().filter(t -> (t.getToolName().equals(playerMove.getToolName()))).findAny().orElseThrow(IllegalMonitorStateException::new);
-
+    private void useTool() {
+        if (playerMove.getToolName().isPresent()){
+            Tool tool = gameBoard.getTools().stream().filter(t -> (t.getToolName().equals(playerMove.getToolName().get()))).findAny().orElseThrow(IllegalMonitorStateException::new);
 
         try {
 
             this.player.useToken(tool.isAlreadyUsed());
             usedTool = tool.toolEffect(this, playerMove);
-            if ( tool.needPlacement() ) {
+            if (tool.needPlacement()) {
                 setWaitMove(true);
                 synchronized (this) {
                     while (!isTurnIsOver() && isWaitMove()) {
@@ -213,19 +212,19 @@ public class Turn {
 
                 }
             }
-            if ( isUsedTool() ) {
-                if ( this.player.getServerInterface() != null )
+            if (isUsedTool()) {
+                if (this.player.getServerInterface() != null)
                     this.player.getServerInterface().send("The selected tool has been used successfully");
-            }
-            else if ( this.player.getServerInterface() != null )
+            } else if (this.player.getServerInterface() != null)
                 this.player.getServerInterface().send("Incorrect move! Please try again.");
 
-        }
-
-        catch (NotEnoughFavourTokensLeft | InterruptedException e) {
+        } catch (NotEnoughFavourTokensLeft | InterruptedException e) {
             //risposta per mosse errate
 
         }
+    }else
+        throw new IllegalArgumentException();
+
 
 
 

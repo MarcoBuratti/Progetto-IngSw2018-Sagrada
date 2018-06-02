@@ -8,8 +8,10 @@ import it.polimi.ingsw.server.model.Die;
 import it.polimi.ingsw.server.model.PlacementCheck;
 import it.polimi.ingsw.server.model.exception.NotValidParametersException;
 import it.polimi.ingsw.server.model.exception.OccupiedCellException;
-import it.polimi.ingsw.server.model.restriction.ColorRestriction;
-import it.polimi.ingsw.server.model.restriction.ValueRestriction;
+import it.polimi.ingsw.server.model.restriction.RestrictionEnum;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class ReplaceDieTool implements Tool {
 
@@ -41,7 +43,7 @@ public class ReplaceDieTool implements Tool {
 
     public boolean toolEffect(Turn turn, PlayerMove playerMove) {
         boolean ret;
-        if(playerMove.getTwoReplace().isPresent()) {
+        if (playerMove.getTwoReplace().isPresent()) {
             if (toolName.equals(ToolNames.TAP_WHEEL) && playerMove.getTwoReplace().get())
                 if (!turn.getPlayer().getDashboard().getMatrixScheme()[playerMove.getIntParameters(0)][playerMove.getIntParameters(1)].getDie().getColor().
                         equals(turn.getPlayer().getDashboard().getMatrixScheme()[playerMove.getIntParameters(4)][playerMove.getIntParameters(5)].getDie().getColor()))
@@ -50,8 +52,7 @@ public class ReplaceDieTool implements Tool {
             if (playerMove.getTwoReplace().get() && ret)
                 ret = replaceDie(turn, playerMove.getIntParameters(4), playerMove.getIntParameters(5), playerMove.getIntParameters(6), playerMove.getIntParameters(7));
             return ret;
-        }
-        else
+        } else
             throw new IllegalArgumentException();
 
     }
@@ -64,7 +65,8 @@ public class ReplaceDieTool implements Tool {
         return this.needPlacement;
     }
 
-    public void placementDie(Turn turn) {}
+    public void placementDie(Turn turn) {
+    }
 
     public ToolNames getToolName() {
         return this.toolName;
@@ -73,18 +75,20 @@ public class ReplaceDieTool implements Tool {
     public boolean specialCheck(Turn turn, int row, int column, Die myDie, Cell[][] matrixScheme) {
 
         PlacementCheck placementCheck = new PlacementCheck();
+        List<RestrictionEnum> restrictions = Arrays.asList(RestrictionEnum.values());
 
         if (checkColor &&
-            !(matrixScheme[row][column].getRestriction() instanceof ValueRestriction) &&
-            !matrixScheme[row][column].allowedMove(myDie))
+                restrictions.indexOf(matrixScheme[row][column].getRestriction()) > 6 &&
+                !matrixScheme[row][column].allowedMove(myDie))
             return false;
 
 
-        if (checkValue)
-            if (!(matrixScheme[row][column].getRestriction() instanceof ColorRestriction))
-                 if (!matrixScheme[row][column].allowedMove(myDie)) {
-                    return false;
-                }
+        if (checkValue &&
+                restrictions.indexOf(matrixScheme[row][column].getRestriction()) <= 6 &&
+                restrictions.indexOf(matrixScheme[row][column].getRestriction()) > 0 &&
+                !matrixScheme[row][column].allowedMove(myDie)) {
+            return false;
+        }
         if (needRoundTrack)
             if (!turn.getGameBoard().getRoundTrack().isColorOnRoundTrack(myDie.getColor()) && !matrixScheme[row][column].allowedMove(myDie))
                 return false;
@@ -98,14 +102,14 @@ public class ReplaceDieTool implements Tool {
         Die die = turn.getPlayer().getDashboard().getMatrixScheme()[oldRow][oldColumn].getDie();
         try {
             turn.getPlayer().getDashboard().removeDieFromCell(oldRow, oldColumn);
-        if (!specialCheck(turn, newRow, newColumn, die, turn.getPlayer().getDashboard().getMatrixScheme())) {
-            turn.getPlayer().getDashboard().setDieOnCell(oldRow, oldColumn, die);
-            return false;
-        }else
-            turn.getPlayer().getDashboard().setDieOnCell(newRow, newColumn, die);
-            } catch (NotValidParametersException | OccupiedCellException e) {
-                e.printStackTrace();
-            }
+            if (!specialCheck(turn, newRow, newColumn, die, turn.getPlayer().getDashboard().getMatrixScheme())) {
+                turn.getPlayer().getDashboard().setDieOnCell(oldRow, oldColumn, die);
+                return false;
+            } else
+                turn.getPlayer().getDashboard().setDieOnCell(newRow, newColumn, die);
+        } catch (NotValidParametersException | OccupiedCellException e) {
+            e.printStackTrace();
+        }
 
         return true;
 
