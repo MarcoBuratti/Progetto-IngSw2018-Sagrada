@@ -216,7 +216,7 @@ public class GameBoard extends Observable{
         bld.append("Tools: ");
         for (Tool t: tools) {
             bld.append(t.getToolName());
-            bld.append(" ");
+            bld.append(",");
         }
         bld.append("\n");
         return bld.toString();
@@ -224,7 +224,7 @@ public class GameBoard extends Observable{
 
     public String sendAchievement(){
         StringBuilder bld = new StringBuilder();
-        bld.append("Public Achievements:\n");
+        bld.append("\u001B[32mPublic Achievements:\033[0m\n");
         for (CardAchievement p: publicAchievements)
             bld.append(p.toString());
         bld.append("\n");
@@ -241,8 +241,8 @@ public class GameBoard extends Observable{
     public String sendDraft(){
         StringBuilder bld = new StringBuilder();
 
-        bld.append("\nNumber of the die on the DraftPool: 0  1  2  3  4  5  6  7  8  9");
-        bld.append("\nThe dice you can draw are:          ");
+        bld.append("\n\u001B[33mNumber of the die on the DraftPool: 0  1  2  3  4  5  6  7  8");
+        bld.append("\nThe dice you can draw are:\033[0m          ");
         for (Die die: draftPool) {
             bld.append(die.toString());
             bld.append(" ");

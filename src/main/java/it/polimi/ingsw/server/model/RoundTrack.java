@@ -110,17 +110,17 @@ public class RoundTrack {
      * Returns a string representing the round track, specifying the dice placed on every round's cell.
      */
     public String toString() {
-        String myRoundTrack = "Round track:";
+        String myRoundTrack = "\n\u001B[35mRound track:\033[0m";
         StringBuilder bld = new StringBuilder();
         int i;
         for ( i = 0 ; i < NUMBER_OF_ROUNDS && !diceList[i].isEmpty(); i++) {
-            bld.append("\nRound ");
+            bld.append("\n\u001B[35mRound\033[0m ");
             bld.append(i + 1);
             bld.append(" : ");
             for (Object die : diceList[i])
                 bld.append(die.toString()+" ");
         }
-        if (i == 0) myRoundTrack += " is empty";
+        if (i == 0) myRoundTrack += " \u001B[35mis empty\033[0m";
         return myRoundTrack + bld.toString();
     }
 }

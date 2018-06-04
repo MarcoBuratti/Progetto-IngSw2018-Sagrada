@@ -54,8 +54,16 @@ public class CliGraphicsClient implements GraphicsInterface {
         System.out.println(s + "\033[0m");
     }
 
-    public void printTool(String s){
-        System.out.println(s);                  //todo DA IMPLEMENTARE JSON CHE STAMPA LE CARTE
+    public void printTool(String s) throws IOException, ParseException  {
+        String substringSchemes = s.substring(s.indexOf(":") + 2);
+        String[] tool = substringSchemes.split(",");
+        JSONParser parser = new JSONParser();
+        System.out.println("\n\u001B[34mTool:\033[0m");
+        for(int i = 0; i<3; i++) {
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/tool/" + tool[i] + ".json"));
+            System.out.println(i+1 + ") " + "Nome: " + jsonObject.get("Name"));
+            System.out.println(jsonObject.get("String"));
+        }
     }
 
     public void printRules(){
