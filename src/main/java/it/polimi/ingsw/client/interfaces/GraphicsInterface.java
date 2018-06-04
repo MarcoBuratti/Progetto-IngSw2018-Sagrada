@@ -1,5 +1,10 @@
 package it.polimi.ingsw.client.interfaces;
 
+import org.json.simple.parser.ParseException;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 public interface GraphicsInterface {
     void start();
     void insert();
@@ -8,4 +13,5 @@ public interface GraphicsInterface {
     void printPrivate(String s);
     void printTool(String s);
     void printRules();
+    void printChoice(String s) throws IOException, ParseException;
 }

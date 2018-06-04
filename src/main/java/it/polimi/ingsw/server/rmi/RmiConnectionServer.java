@@ -111,7 +111,7 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
     }
 
     public synchronized void askForChosenScheme(String schemes) throws IOException {
-        this.send("Please choose one of these schemes: insert a number between 1 and 4. " + schemes);
+        this.send("schemes. " + schemes);
     }
 
 

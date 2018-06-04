@@ -5,11 +5,20 @@ import it.polimi.ingsw.server.model.exception.NotValidParametersException;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 import it.polimi.ingsw.server.model.restriction.NoRestriction;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.time.MonthDay;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
 
 class DashboardTest {
 
@@ -179,6 +188,22 @@ class DashboardTest {
 
         }
     }
+
+
+    /*Da eliminare*/
+    @Test
+    void prova() throws IOException, ParseException {
+
+        List<SchemesEnum> schemesEnum = Arrays.asList(SchemesEnum.values());
+        JSONParser parser = new JSONParser();
+        for(int i = 0; i< 24; i++) {
+            String e =  schemesEnum.get(i).getName();
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/dashboard_client/" + e + ".json"));
+            System.out.println("Nome: " + jsonObject.get("Name"));
+            System.out.println(jsonObject.get("String"));
+        }
+    }
+
 }
 
 

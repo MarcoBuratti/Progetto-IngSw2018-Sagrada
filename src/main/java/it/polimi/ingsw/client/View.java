@@ -92,8 +92,8 @@ public class View implements Observer {
                 }
                 graphicsInterface.printGeneric(fromServer);
             }
-            else if (fromServer.startsWith("Please choose one of these schemes")) {
-                graphicsInterface.printGeneric(fromServer);
+            else if (fromServer.startsWith("schemes. ")) {
+                graphicsInterface.printChoice(fromServer);
                 schemes = fromServer;
                 setHasChosenScheme(false);
             }

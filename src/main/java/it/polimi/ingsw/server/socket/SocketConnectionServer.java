@@ -61,7 +61,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
     }
 
     private synchronized String askForChosenScheme (String schemes) throws IOException {
-        this.send("Please choose one of these schemes: insert a number between 1 and 4. " + schemes);
+        this.send("schemes. " + schemes);
         return in.readLine();
     }
 
