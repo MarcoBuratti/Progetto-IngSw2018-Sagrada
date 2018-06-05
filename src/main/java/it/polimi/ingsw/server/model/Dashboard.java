@@ -26,7 +26,7 @@ public class Dashboard {
         JSONParser parser = new JSONParser();
 
         try {
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/dashboard/"+schemeName+".json"));
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/resources/dashboard/"+schemeName+".json"));
 
             this.favourToken = (Long) jsonObject.get("favourToken");
 

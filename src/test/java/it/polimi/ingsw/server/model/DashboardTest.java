@@ -198,7 +198,7 @@ class DashboardTest {
         JSONParser parser = new JSONParser();
         for(int i = 0; i< 24; i++) {
             String e =  schemesEnum.get(i).getName();
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/dashboard_client/" + e + ".json"));
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/resources/dashboard_client/" + e + ".json"));
             System.out.println("Nome: " + jsonObject.get("Name"));
             System.out.println(jsonObject.get("String"));
         }
