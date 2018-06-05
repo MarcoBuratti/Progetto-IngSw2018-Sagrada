@@ -175,7 +175,7 @@ class DashboardTest {
     }
 
     @Test
-    void jsonTester() throws NotValidValueException, OccupiedCellException {
+    void jsonTester() throws NotValidValueException, OccupiedCellException, IOException, ParseException {
         List<SchemesEnum> schemesEnum = Arrays.asList(SchemesEnum.values());
 
         Dashboard dashboard = new Dashboard(schemesEnum.get(8).getName());
@@ -184,17 +184,7 @@ class DashboardTest {
             for (int j = 0; j < 5; j++) {
                 System.out.println(dashboard.getMatrixScheme()[i][j].getRestriction().toString());
             }
-            System.out.println("\n");
-
         }
-    }
-
-
-    /*Da eliminare*/
-    @Test
-    void prova() throws IOException, ParseException {
-
-        List<SchemesEnum> schemesEnum = Arrays.asList(SchemesEnum.values());
         JSONParser parser = new JSONParser();
         for(int i = 0; i< 24; i++) {
             String e =  schemesEnum.get(i).getName();

@@ -12,7 +12,7 @@ public enum ToolNames {
     GRINDING_STONE("Tampone_Diamantato", Color.GREEN),
     GROZING_PLIERS("Pinza_Sgrossatrice", Color.VIOLET),
     LATHEKIN("Lathekin", Color.YELLOW),
-    LENS_CUTTER("Taglierina_circolarer", Color.GREEN),
+    LENS_CUTTER("Taglierina_circolare", Color.GREEN),
     RUNNING_PLIERS("Tenaglia_a_Rotelle", Color.RED),
     TAP_WHEEL("Taglierina_Manuale", Color.BLUE);
 

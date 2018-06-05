@@ -22,11 +22,11 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
     private boolean isOn = true;
     private String playerNickname;
 
-    public RmiConnectionClient(View view) {
+    public RmiConnectionClient(View view, String address, int port) {
         addObserver(view);
         try {
-            server = (RmiControllerInterface) Naming.lookup("//localhost/Server");
-            channel = server.addClient((RmiClientInterface) UnicastRemoteObject.exportObject(this, 0));
+            server = (RmiControllerInterface) Naming.lookup("//"+ address +"/Server");
+            channel = server.addClient((RmiClientInterface) UnicastRemoteObject.exportObject(this, port));
         } catch (Exception e) {
             System.out.println("Connection error: " + e.toString());
         }

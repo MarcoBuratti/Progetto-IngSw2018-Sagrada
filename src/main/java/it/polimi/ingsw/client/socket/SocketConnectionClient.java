@@ -23,10 +23,10 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
     private ExecutorService executor = Executors.newCachedThreadPool();
     private String playerNickname;
 
-    public SocketConnectionClient(View view) {
+    public SocketConnectionClient(View view, String s, int port) {
         this.addObserver(view);
         try {
-            socket = new Socket(InetAddress.getByName(null), 1996);
+            socket = new Socket(s,port);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintStream(socket.getOutputStream());
             executor.submit(this);

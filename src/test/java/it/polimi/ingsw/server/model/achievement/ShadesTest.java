@@ -24,7 +24,7 @@ class ShadesTest {
             }
         }
 
-        Dashboard dashboard = new Dashboard("Scheme_test");
+        Dashboard dashboard = new Dashboard("Scheme_Test");
         Assertions.assertEquals(0, new Shades(1,2).scoreEffect(dashboard));
         Assertions.assertEquals(0, new Shades(5,6).scoreEffect(dashboard));
 

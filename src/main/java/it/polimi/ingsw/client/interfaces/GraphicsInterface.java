@@ -14,4 +14,6 @@ public interface GraphicsInterface {
     void printTool(String s) throws FileNotFoundException, IOException, ParseException;
     void printRules();
     void printChoice(String s) throws IOException, ParseException;
+    void printIP();
+    void printPort();
 }

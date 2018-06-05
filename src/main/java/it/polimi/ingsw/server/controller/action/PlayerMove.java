@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.action;
 
+import it.polimi.ingsw.server.controller.tool.Tool;
 import it.polimi.ingsw.server.controller.tool.ToolNames;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -8,6 +9,9 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public class PlayerMove implements Serializable {
@@ -49,8 +53,11 @@ public class PlayerMove implements Serializable {
                 int[] coordinates = new int[]{row, column};
                 return new PlayerMove(playerNickname, moveType, die, coordinates);
 
-           /* case "UseTool":
+            /*case "UseTool":
+                List<ToolNames> toolNames = Arrays.asList(ToolNames.values());
                 String toolName = (String) jsonObject.get("tool");
+                ToolNames tool = toolNames.stream().filter(t -> (t.getName().equals(toolName))).findAny().orElseThrow(IllegalMonitorStateException::new);
+
                 try {
                     switch (toolName) {
                         default:
@@ -60,8 +67,8 @@ public class PlayerMove implements Serializable {
                 } catch (Exception e) {
                     System.out.println(e.toString());
                 }
-
-           */ case "GoThrough":
+               */
+             case "GoThrough":
                 return new PlayerMove(playerNickname, moveType);
 
             default:

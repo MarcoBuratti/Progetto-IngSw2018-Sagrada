@@ -1,10 +1,11 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.client.interfaces.CliController;
 import it.polimi.ingsw.client.interfaces.ClientInterface;
 import it.polimi.ingsw.client.interfaces.GraphicsInterface;
 import it.polimi.ingsw.client.rmi.RmiConnectionClient;
 import it.polimi.ingsw.client.socket.SocketConnectionClient;
-import it.polimi.ingsw.util.CliGraphicsClient;
+import it.polimi.ingsw.util.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -17,8 +18,12 @@ public class View implements Observer {
     private Boolean hasChosenScheme;
     private String nickname;
     private String schemes;
+    private String address;
+    private int port;
     private GraphicsInterface graphicsInterface;
     private boolean connectionType; //true for socket, false for rmi
+    private boolean inputCtrl;
+    private CliController cliController;
 
 
     public View(InputStreamReader input){
@@ -28,23 +33,47 @@ public class View implements Observer {
     public void start() {
         try {
             graphicsInterface = new CliGraphicsClient();
+            cliController = new CliInputController();
             graphicsInterface.start();
-            graphicsInterface.insert();
-            String nickname = bufferedReader.readLine();
-            graphicsInterface.printConnection();
-            int choice = Integer.parseInt(bufferedReader.readLine());
+            inputCtrl = true;
+            do {
+                graphicsInterface.insert();
+                nickname = bufferedReader.readLine();
+                inputCtrl = cliController.nameController(nickname);
+            }while (inputCtrl);
+            inputCtrl = true;
+            do{
+                graphicsInterface.printIP();
+                address = bufferedReader.readLine();
+                inputCtrl = cliController.ipController(address);
+            }while (inputCtrl);
+            inputCtrl = true;
+            do{
+                graphicsInterface.printPort();
+                port = Integer.parseInt( bufferedReader.readLine() );
+                inputCtrl = cliController.portController(port);
+
+            }while (inputCtrl);
+            inputCtrl = true;
+            int choice;
+            do {
+                graphicsInterface.printConnection();
+                choice = Integer.parseInt(bufferedReader.readLine());
+                inputCtrl = cliController.connecionController(choice);
+            }while (inputCtrl);
+
             hasChosenScheme = true;
 
             if (choice == 1) {
                 connectionType = true;
-                connectionClient = new SocketConnectionClient(this);
+                connectionClient = new SocketConnectionClient(this, address, port);
             }
             else {
                 connectionType = false;
-                connectionClient = new RmiConnectionClient(this);
+                connectionClient = new RmiConnectionClient(this, address, port);
             }
 
-            connectionClient.handleName(nickname);
+            connectionClient.handleName( nickname );
 
 
             if (connectionType) {

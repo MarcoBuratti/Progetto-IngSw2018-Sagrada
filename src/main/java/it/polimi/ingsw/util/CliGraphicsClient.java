@@ -25,7 +25,7 @@ public class CliGraphicsClient implements GraphicsInterface {
     }
 
     public void insert() {
-        System.out.println("Please insert your nickname: ");
+        System.out.println("Please insert your nickname with no spaces: ");
     }
 
     public void printConnection(){
@@ -38,7 +38,7 @@ public class CliGraphicsClient implements GraphicsInterface {
         String[] choice = substringSchemes.split(",");
         JSONParser parser = new JSONParser();
         for(int i = 0; i<4; i++) {
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/dashboard_client/" + choice[i] + ".json"));
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/resources/dashboard_client/" + choice[i] + ".json"));
             System.out.println(i+1 + ") " + "Nome: " + jsonObject.get("Name"));
             System.out.println(jsonObject.get("String"));
             System.out.println("\n");
@@ -60,7 +60,7 @@ public class CliGraphicsClient implements GraphicsInterface {
         JSONParser parser = new JSONParser();
         System.out.println("\n\u001B[34mTool:\033[0m");
         for(int i = 0; i<3; i++) {
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/tool/" + tool[i] + ".json"));
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/resources/tool/" + tool[i] + ".json"));
             System.out.println(i+1 + ") " + "Nome: " + jsonObject.get("Name"));
             System.out.println(jsonObject.get("String"));
         }
@@ -72,6 +72,14 @@ public class CliGraphicsClient implements GraphicsInterface {
         System.out.println("Press 2 followed by the parameters\nshown on the cards to use the tools");
         System.out.println("Press 3 if you want to go through");
         System.out.println("Press 4 if you want to quit the game");
+    }
+
+    public void printIP(){
+        System.out.println("Please insert the IP Server's address");
+    }
+
+    public void printPort(){
+        System.out.println("Please insert your local port, choose a number between 1024 and 65535");
     }
 
 }
