@@ -1,12 +1,9 @@
 package it.polimi.ingsw.server.model;
 
-import it.polimi.ingsw.server.model.Cell;
-import it.polimi.ingsw.server.model.Color;
-import it.polimi.ingsw.server.model.Die;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import it.polimi.ingsw.server.model.exception.OccupiedCellException;
-import it.polimi.ingsw.server.model.restriction.ValueRestriction;
 import it.polimi.ingsw.server.model.restriction.Restriction;
+import it.polimi.ingsw.server.model.restriction.ValueRestriction;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

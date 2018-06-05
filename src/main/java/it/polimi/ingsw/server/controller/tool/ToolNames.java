@@ -3,18 +3,18 @@ package it.polimi.ingsw.server.controller.tool;
 import it.polimi.ingsw.server.model.Color;
 
 public enum ToolNames {
-    COPPER_FOIL_BURNISHER("Copper Foil Burnisher", Color.RED),
-    CORK_BAKED_STRAIGHTEDGE("Cork Baked Straightedge", Color.YELLOW),
-    EGLOMISE_BRUSH("Eglomise Brush", Color.BLUE),
-    FLUX_BRUSH("Flux Brush", Color.VIOLET),
-    FLUX_REMOVER("Flux Remover", Color.VIOLET),
-    GLAZING_HAMMER("Glazing Hammer", Color.BLUE),
-    GRINDING_STONE("Grinding Stone", Color.GREEN),
-    GROZING_PLIERS("Grozing Pliers", Color.VIOLET),
+    COPPER_FOIL_BURNISHER("Alesatore_per_lamina_di_rame", Color.RED),
+    CORK_BAKED_STRAIGHTEDGE("Riga_in_Sughero", Color.YELLOW),
+    EGLOMISE_BRUSH("Pennello_per_Eglomise", Color.BLUE),
+    FLUX_BRUSH("Pennello_per_Pasta_Salda", Color.VIOLET),
+    FLUX_REMOVER("Diluente_per_Pasta_Salda", Color.VIOLET),
+    GLAZING_HAMMER("Martelletto", Color.BLUE),
+    GRINDING_STONE("Tampone_Diamantato", Color.GREEN),
+    GROZING_PLIERS("Pinza_Sgrossatrice", Color.VIOLET),
     LATHEKIN("Lathekin", Color.YELLOW),
-    LENS_CUTTER("Lens Cutter", Color.GREEN),
-    RUNNING_PLIERS("Running Pliers", Color.RED),
-    TAP_WHEEL("Tap Wheel", Color.BLUE);
+    LENS_CUTTER("Taglierina_circolarer", Color.GREEN),
+    RUNNING_PLIERS("Tenaglia_a_Rotelle", Color.RED),
+    TAP_WHEEL("Taglierina_Manuale", Color.BLUE);
 
     private final Color color;
     private final String name;

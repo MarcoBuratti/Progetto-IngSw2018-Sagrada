@@ -7,7 +7,11 @@ import java.util.Observer;
 
 public class ModelView extends Observable implements Observer {
 
-    private GameBoard model;
+    public GameBoard model;
+
+    public void setModel(GameBoard model) {
+        this.model = model;
+    }
 
     public ModelView (GameBoard gameBoard){
         this.model = gameBoard;

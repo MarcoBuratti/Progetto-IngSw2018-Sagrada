@@ -1,10 +1,7 @@
 package it.polimi.ingsw.server.controller.tool;
 
-import it.polimi.ingsw.server.controller.Round;
 import it.polimi.ingsw.server.controller.Turn;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
-import it.polimi.ingsw.server.controller.tool.SetDieTool;
-import it.polimi.ingsw.server.controller.tool.ToolNames;
 import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Dashboard;
 import it.polimi.ingsw.server.model.Die;
@@ -15,7 +12,9 @@ import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 class SetDieToolTest {
 

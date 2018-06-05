@@ -141,7 +141,7 @@ public class Dashboard {
 
     @Override
     public String toString() {
-        String string = "\nDashboard: " + this.owner.getNickname() + "\n\n";
+        String string = "\nDashboard: " +  this.owner.getNickname() + "\n\n";
         StringBuilder bld = new StringBuilder();
         bld.append("     0     1     2     3     4\n");
         for (int i = 0; i < ROW; i++) {

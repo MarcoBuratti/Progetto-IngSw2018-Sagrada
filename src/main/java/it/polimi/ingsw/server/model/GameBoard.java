@@ -200,34 +200,54 @@ public class GameBoard extends Observable{
         this.currentPlayer = currentPlayer;
     }
 
-
     public String toString(){
         StringBuilder bld = new StringBuilder();
-        bld.append(roundTrack.toString());
-        bld.append("\n\nTools:\n");
-        int i = 1;
-        for (Tool t: tools) {
-            bld.append(i);
-            bld.append(") ");
-            i++;
-            bld.append(t.getToolName());
-            bld.append(" ");
-        }
-        bld.append("\n\nPublic Achievements:\n");
-        for (CardAchievement p: publicAchievements)
-            bld.append(p.toString());
-        bld.append("\nNumber of the die on the DraftPool: 0  1  2  3  4  5  6  7  8  9  10");
-        bld.append("\nThe dice you can draw are:          ");
-        for (Die die: draftPool) {
-            bld.append(die.toString());
-            bld.append(" ");
-        }
-        bld.append("\n");
+
         for (Player p: players)
             bld.append(p.getDashboard().toString());
 
         if(currentPlayer != null)
             bld.append("\nNow it's " + currentPlayer.getNickname() + "'s turn.");
+        return bld.toString();
+    }
+
+    public String sendTool(){
+        StringBuilder bld = new StringBuilder();
+        bld.append("Tools: ");
+        for (Tool t: tools) {
+            bld.append(t.getToolName());
+            bld.append(",");
+        }
+        bld.append("\n");
+        return bld.toString();
+    }
+
+    public String sendAchievement(){
+        StringBuilder bld = new StringBuilder();
+        bld.append("\u001B[32mPublic Achievements:\033[0m\n");
+        for (CardAchievement p: publicAchievements)
+            bld.append(p.toString());
+        bld.append("\n");
+        return bld.toString();
+    }
+
+    public String sendRundTrack(){
+        StringBuilder bld = new StringBuilder();
+        bld.append(roundTrack.toString());
+        bld.append("\n");
+        return bld.toString();
+    }
+
+    public String sendDraft(){
+        StringBuilder bld = new StringBuilder();
+
+        bld.append("\n\u001B[33mNumber of the die on the DraftPool: 0  1  2  3  4  5  6  7  8");
+        bld.append("\nThe dice you can draw are:\033[0m          ");
+        for (Die die: draftPool) {
+            bld.append(die.toString());
+            bld.append(" ");
+        }
+        bld.append("\n");
         return bld.toString();
     }
 

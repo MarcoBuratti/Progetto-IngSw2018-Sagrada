@@ -3,10 +3,6 @@ package it.polimi.ingsw.server.model.restriction;
 import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Die;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
-import it.polimi.ingsw.server.model.restriction.ColorRestriction;
-import it.polimi.ingsw.server.model.restriction.NoRestriction;
-import it.polimi.ingsw.server.model.restriction.Restriction;
-import it.polimi.ingsw.server.model.restriction.ValueRestriction;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

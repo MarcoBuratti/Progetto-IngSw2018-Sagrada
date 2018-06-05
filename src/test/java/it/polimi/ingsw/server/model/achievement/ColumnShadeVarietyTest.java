@@ -3,7 +3,6 @@ package it.polimi.ingsw.server.model.achievement;
 import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Dashboard;
 import it.polimi.ingsw.server.model.Die;
-import it.polimi.ingsw.server.model.achievement.ColumnShadeVariety;
 import it.polimi.ingsw.server.model.exception.NotValidParametersException;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import it.polimi.ingsw.server.model.exception.OccupiedCellException;

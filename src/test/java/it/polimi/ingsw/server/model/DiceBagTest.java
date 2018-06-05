@@ -1,13 +1,12 @@
 package it.polimi.ingsw.server.model;
 
-import it.polimi.ingsw.server.model.Color;
-import it.polimi.ingsw.server.model.DiceBag;
-import it.polimi.ingsw.server.model.Die;
 import it.polimi.ingsw.server.model.exception.NotEnoughDiceLeftException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DiceBagTest {
 

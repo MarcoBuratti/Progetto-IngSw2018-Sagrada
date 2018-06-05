@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.controller.action;
 
-import it.polimi.ingsw.server.controller.action.PlacementMove;
 import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Die;
 import it.polimi.ingsw.server.model.GameBoard;

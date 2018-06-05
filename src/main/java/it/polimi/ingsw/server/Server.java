@@ -36,13 +36,13 @@ public class Server extends UnicastRemoteObject {
     private ModelView modelView;
     private ArrayList<SchemeCardsEnum> schemes;
     private ArrayList<Color> privateAchievements;
-    private final int lobbyTime = 5 * 1000;
+    private final int lobbyTime = 20 * 1000;
     private ArrayList<RemoteView> remoteViews;
     boolean gameStarted;
     private Timer timer;
     private CliGraphicsServer cliGraphicsServer = new CliGraphicsServer();
 
-    public Server() throws IOException {
+    private Server() throws IOException {
         this.serverSocket = new ServerSocket(PORT_NUMBER);
         executor = Executors.newCachedThreadPool();
         serverInterfaces = new ArrayList<>();
@@ -156,7 +156,7 @@ public class Server extends UnicastRemoteObject {
         return gameStarted;
     }
 
-    public synchronized void setGameStarted(boolean bool) {
+    private synchronized void setGameStarted(boolean bool) {
         this.gameStarted = bool;
     }
 

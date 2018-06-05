@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.controller;
 
-import it.polimi.ingsw.server.controller.Round;
 import it.polimi.ingsw.server.model.GameBoard;
 import it.polimi.ingsw.server.model.exception.NotEnoughDiceLeftException;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;

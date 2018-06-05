@@ -192,7 +192,7 @@ public class PlayerMove implements Serializable {
     public String toString(){
         switch (typeMove){
             case "PlaceDie":
-                return "dado:" + this.indexDie + " " + "coordinate:" + this.intMatrixParameters[0] + this.intMatrixParameters[1];
+                return "Die:" + this.indexDie + " " + "coordinates:" + this.intMatrixParameters[0] + this.intMatrixParameters[1];
             case "GoThrough":
                 return "Go Through";
             case "UseTool":

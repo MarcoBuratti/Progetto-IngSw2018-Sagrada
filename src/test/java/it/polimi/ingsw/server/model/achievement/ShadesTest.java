@@ -4,7 +4,6 @@ import it.polimi.ingsw.server.model.Cell;
 import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Dashboard;
 import it.polimi.ingsw.server.model.Die;
-import it.polimi.ingsw.server.model.achievement.Shades;
 import it.polimi.ingsw.server.model.exception.NotValidParametersException;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import it.polimi.ingsw.server.model.exception.OccupiedCellException;

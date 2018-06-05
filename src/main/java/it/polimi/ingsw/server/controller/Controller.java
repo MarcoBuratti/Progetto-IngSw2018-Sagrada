@@ -63,33 +63,39 @@ public class Controller extends Observable implements Observer {
             Pair<Player, Integer> pair = new Pair<>(p, calculateFinalScorePlayer(p));
             boolean added = false;
             for (int i = 0; i < finalScore.size() && !added; i++) {
-                Player p1 = finalScore.get(i).getKey();
-                Player p2 = pair.getKey();
-                if (finalScore.get(i).getValue() < pair.getValue()) {
+                if (compare(finalScore.get(i), pair)) {
                     finalScore.add(i, pair);
                     added = true;
-                } else if (finalScore.get(i).getValue() == pair.getValue())
-                    if (p1.getPrivateAchievement().scoreEffect(p1.getDashboard()) < p2.getPrivateAchievement().scoreEffect(p2.getDashboard())) {
-                        finalScore.add(i, pair);
-                        added = true;
-                    } else if (p1.getPrivateAchievement().scoreEffect(p1.getDashboard()) == p2.getPrivateAchievement().scoreEffect(p2.getDashboard()))
-                        if (p1.getCurrentFavourToken() < p2.getCurrentFavourToken()) {
-                            finalScore.add(i, pair);
-                            added = true;
-                        } else if (p1.getCurrentFavourToken() == p2.getCurrentFavourToken())
-                            if (this.players.indexOf(p1) > this.players.indexOf(p2)) {
-                                finalScore.add(i, pair);
-                                added = true;
-                            }
-
+                }
                 if (!added) {
                     finalScore.add(pair);
                 }
-
             }
 
 
+
         }
+
+
+    }
+
+    private boolean compare(Pair<Player,Integer> pair1,Pair<Player,Integer> pair2){
+
+        Player p1 = pair1.getKey();
+        Player p2 = pair2.getKey();
+        if (pair1.getValue() < pair2.getValue())
+            return true;
+        else if (pair1.getValue().equals(pair2.getValue()) &&
+                p1.getPrivateAchievement().scoreEffect(p1.getDashboard()) < p2.getPrivateAchievement().scoreEffect(p2.getDashboard()))
+                return true;
+        else if (p1.getPrivateAchievement().scoreEffect(p1.getDashboard()) == p2.getPrivateAchievement().scoreEffect(p2.getDashboard()) &&
+            p1.getCurrentFavourToken() < p2.getCurrentFavourToken())
+                return true;
+        else if (p1.getCurrentFavourToken() == p2.getCurrentFavourToken() &&
+                this.players.indexOf(p1) > this.players.indexOf(p2))
+                return true;
+        return false;
+
 
 
     }

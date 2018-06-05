@@ -90,22 +90,19 @@ public class View implements Observer {
                 if (fromServer.startsWith("You have logged in again as")) {
                     setHasChosenScheme(true);
                 }
-
                 graphicsInterface.printGeneric(fromServer);
             }
-            else if (fromServer.startsWith("Please choose one of these schemes")) {
-                graphicsInterface.printGeneric(fromServer);
+            else if (fromServer.startsWith("schemes. ")) {
+                graphicsInterface.printChoice(fromServer);
                 schemes = fromServer;
                 setHasChosenScheme(false);
             }
-            else if(fromServer.startsWith("Number of the die on the DraftPool:"))
-                graphicsInterface.printDraftPool(fromServer);
             else if(fromServer.startsWith("Your private achievement is:"))
                 graphicsInterface.printPrivate(fromServer);
-            else if(fromServer.startsWith("Tools:")) {
-                graphicsInterface.printGeneric(fromServer);
-            }
-
+            else if(fromServer.startsWith("Tools:"))
+                graphicsInterface.printTool(fromServer);
+            else if(fromServer.startsWith("UpdateFromServer"))
+                graphicsInterface.printRules();
             else {
                 graphicsInterface.printGeneric(fromServer);
             }

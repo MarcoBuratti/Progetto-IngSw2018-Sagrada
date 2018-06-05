@@ -9,7 +9,11 @@ import it.polimi.ingsw.server.model.PlacementCheck;
 import it.polimi.ingsw.server.model.exception.NotValidParametersException;
 import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 import it.polimi.ingsw.server.model.restriction.ColorRestriction;
+import it.polimi.ingsw.server.model.restriction.RestrictionEnum;
 import it.polimi.ingsw.server.model.restriction.ValueRestriction;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class SpecialPlacementTool implements Tool {
 
@@ -82,16 +86,20 @@ public class SpecialPlacementTool implements Tool {
     public boolean specialCheck(int row, int column, Die myDie, Cell[][] matrixScheme) {
 
         PlacementCheck placementCheck = new PlacementCheck();
+        List<RestrictionEnum> restrictions = Arrays.asList(RestrictionEnum.values());
 
-        if (checkColor)
-            if (!(matrixScheme[row][column].getRestriction() instanceof ColorRestriction))
-                if (!matrixScheme[row][column].allowedMove(myDie))
-                    return false;
+        if (checkColor &&
+                restrictions.indexOf(matrixScheme[row][column].getRestriction()) > 6 &&
+                !matrixScheme[row][column].allowedMove(myDie))
+            return false;
 
-        if (checkValue)
-            if (!(matrixScheme[row][column].getRestriction() instanceof ValueRestriction))
-                if (!matrixScheme[row][column].allowedMove(myDie))
-                    return false;
+
+        if (checkValue &&
+                restrictions.indexOf(matrixScheme[row][column].getRestriction()) <= 6 &&
+                restrictions.indexOf(matrixScheme[row][column].getRestriction()) > 0 &&
+                !matrixScheme[row][column].allowedMove(myDie)) {
+            return false;
+        }
         if (placementCheck.allowedNeighbours(row, column, myDie, matrixScheme))
             if (checkNeighbours) {
                 if (placementCheck.nearBy(row, column, matrixScheme))
