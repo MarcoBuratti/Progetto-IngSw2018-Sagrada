@@ -10,23 +10,25 @@ public class ValueRestriction implements Restriction {
 
     /**
      * Creates a ValueRestriction Object representing a cell's value restriction.
+     *
      * @param value the value the die placed on the cell must have.
      * @throws NotValidValueException whether the user tries to create a restriction using a value
-     * that is not allowed (lesser than 1 or greater than the number of sides of the dice)
+     *                                that is not allowed (lesser than 1 or greater than the number of sides of the dice)
      */
     public ValueRestriction(int value) throws NotValidValueException {
-        try{
-            if(value>0 && value<=NUMBER_OF_SIDES)
-                this.number=value;
+        try {
+            if (value > 0 && value <= NUMBER_OF_SIDES)
+                this.number = value;
             else
                 throw new NotValidValueException();
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
 
     /**
      * Returns an int specifying the value of the restriction.
+     *
      * @return the value the die placed on the cell must have.
      */
     public int getRestriction() {
@@ -38,7 +40,7 @@ public class ValueRestriction implements Restriction {
      * Returns a Boolean object which specifies if the die can be set on the cell having that
      * restriction (the die must have the same value as the restriction).
      */
-    public Boolean restrictionCheck (Die die) {
+    public Boolean restrictionCheck(Die die) {
         return (die.getNumber() == this.number);
     }
 
@@ -51,12 +53,12 @@ public class ValueRestriction implements Restriction {
     }
 
     @Override
-    public boolean equals (Object myObject) {
-        if( myObject != null ) {
+    public boolean equals(Object myObject) {
+        if (myObject != null) {
             if (this.getClass() == myObject.getClass()) {
                 ValueRestriction valueRestriction = (ValueRestriction) myObject;
                 return (this.number == valueRestriction.number);
             } else return false;
-        }else return false;
+        } else return false;
     }
 }

@@ -52,8 +52,8 @@ public class Round implements Observer {
     }
 
     private void createTurn() {
-        for (Player p: players)
-            if ( ( !p.equals(currentPlayer) ) && ( p.getServerInterface() != null ) && ( currentPlayer.getServerInterface() != null ))
+        for (Player p : players)
+            if ((!p.equals(currentPlayer)) && (p.getServerInterface() != null) && (currentPlayer.getServerInterface() != null))
                 p.getServerInterface().send("It's " + currentPlayer.getNickname() + "'s turn. Please wait.");
 
         if (currentPlayer.getServerInterface() != null) {
@@ -75,13 +75,15 @@ public class Round implements Observer {
 
     }
 
-    public synchronized void onePlayerLeftEnd(){
+    public synchronized void onePlayerLeftEnd() {
         this.onePlayerLeft = true;
         if (this.currentTurn != null)
             this.currentTurn.onePlayerLeft();
     }
 
-    public synchronized Player getCurrentPlayer() { return currentPlayer; }
+    public synchronized Player getCurrentPlayer() {
+        return currentPlayer;
+    }
 
 
     @Override

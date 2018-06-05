@@ -9,16 +9,16 @@ public enum SchemeCardsEnum {
     private String firstScheme;
     private String secondScheme;
 
-    SchemeCardsEnum (String name1, String name2) {
+    SchemeCardsEnum(String name1, String name2) {
         this.firstScheme = name1;
         this.secondScheme = name2;
     }
 
-    public String getFirstScheme () {
+    public String getFirstScheme() {
         return this.firstScheme;
     }
 
-    public String getSecondScheme () {
+    public String getSecondScheme() {
         return this.secondScheme;
     }
 

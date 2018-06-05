@@ -37,7 +37,7 @@ public class ChangeDieTool implements Tool {
     }
 
     public boolean toolEffect(Turn turn, PlayerMove playerMove) {
-        if(playerMove.getIndexDie().isPresent()) {
+        if (playerMove.getIndexDie().isPresent()) {
             if (toolName.equals(ToolNames.LENS_CUTTER)) {
                 try {
                     secondDie = (Die) turn.getGameBoard().getRoundTrack().getDiceList(playerMove.getIntParameters(0)).get(playerMove.getIntParameters(1));
@@ -57,7 +57,7 @@ public class ChangeDieTool implements Tool {
             }
 
             return false;
-        }else
+        } else
             throw new IllegalArgumentException();
 
     }
@@ -71,7 +71,7 @@ public class ChangeDieTool implements Tool {
     }
 
     public void placementDie(Turn turn) {
-        if(turn.getPlayerMove().getIndexDie().isPresent()) {
+        if (turn.getPlayerMove().getIndexDie().isPresent()) {
             if (turn.getTypeMove().equals("PlaceDie") && !turn.isPlacementDone() && (index == turn.getPlayerMove().getIndexDie().get())) {
                 if (toolName.equals(ToolNames.FLUX_REMOVER)) {
                     try {
@@ -84,7 +84,7 @@ public class ChangeDieTool implements Tool {
 
             } else
                 turn.setWaitMove(true);
-        }else
+        } else
             throw new IllegalArgumentException();
     }
 

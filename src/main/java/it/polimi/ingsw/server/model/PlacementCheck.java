@@ -95,7 +95,7 @@ public class PlacementCheck {
         if (!matrixScheme[row][column].allowedMove(myDie))
             return false;
         if (!nearBy(row, column, matrixScheme))
-                return false;
+            return false;
 
         if (!allowedNeighbours(row, column, myDie, matrixScheme))
             return false;

@@ -115,32 +115,35 @@ public class Server extends UnicastRemoteObject {
             this.setGameStarted(true);
             cliGraphicsServer.printStart();
             this.controller.startGame();
-        }
-        else {
+        } else {
             this.setGameStarted(false);
             gameFailed();
         }
     }
 
-    private synchronized boolean getPlayersConnected() { return this.playersConnected; }
+    private synchronized boolean getPlayersConnected() {
+        return this.playersConnected;
+    }
 
-    private synchronized void setPlayersConnected(boolean bool){
+    private synchronized void setPlayersConnected(boolean bool) {
         this.playersConnected = bool;
     }
 
-    private void gameStartTimer(){
+    private void gameStartTimer() {
         this.timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if(!getPlayersConnected()) {
-                        startGame();
+                if (!getPlayersConnected()) {
+                    startGame();
                 }
             }
-        },this.lobbyTime);
+        }, this.lobbyTime);
     }
 
-    public ArrayList<Player> getPlayers() { return players; }
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
 
     public ArrayList<RemoteView> getRemoteViews() {
         return remoteViews;
@@ -160,21 +163,21 @@ public class Server extends UnicastRemoteObject {
         this.gameStarted = bool;
     }
 
-    public synchronized String selectSchemes () {
+    public synchronized String selectSchemes() {
         StringBuilder bld = new StringBuilder();
-        bld.append( this.schemes.get(0).getFirstScheme() );
+        bld.append(this.schemes.get(0).getFirstScheme());
         bld.append(",");
-        bld.append( this.schemes.get(0).getSecondScheme() );
+        bld.append(this.schemes.get(0).getSecondScheme());
         bld.append(",");
         this.schemes.remove(0);
-        bld.append( this.schemes.get(0).getFirstScheme() );
+        bld.append(this.schemes.get(0).getFirstScheme());
         bld.append(",");
-        bld.append( this.schemes.get(0).getSecondScheme() );
+        bld.append(this.schemes.get(0).getSecondScheme());
         this.schemes.remove(0);
         return bld.toString();
     }
 
-    public synchronized Color selectPrivateAchievement () {
+    public synchronized Color selectPrivateAchievement() {
         Color privateAchievement = this.privateAchievements.get(0);
         this.privateAchievements.remove(0);
         return privateAchievement;
@@ -183,14 +186,13 @@ public class Server extends UnicastRemoteObject {
     private synchronized void gameFailed() {
         if (this.controller != null)
             this.controller.onePlayerLeftEnd();
-        if(isGameStarted()) {
+        if (isGameStarted()) {
             serverInterfaces.get(0).send("You win!");
             cliGraphicsServer.printWinner(serverInterfaces.get(0).getPlayer().getNickname());
             System.out.println("Game ended!");
             serverInterfaces.get(0).close();
             this.restartServer();
-        }
-        else {
+        } else {
             System.out.println("Game start failed because some of the players disconnected!");
             serverInterfaces.get(0).send("Sorry! Other players disconnected before the game started. Please try again.");
             serverInterfaces.get(0).close();
@@ -200,47 +202,43 @@ public class Server extends UnicastRemoteObject {
 
     public synchronized void registerConnection(ServerInterface newServerInterface) {
 
-        if (alreadyLoggedIn(newServerInterface)){
+        if (alreadyLoggedIn(newServerInterface)) {
             Player oldPlayer;
-            for (Player p: players) {
+            for (Player p : players) {
                 if (p.getNickname().equals(newServerInterface.getPlayer().getNickname())) {
                     oldPlayer = p;
-                    if(p.getServerInterface() == null) {
+                    if (p.getServerInterface() == null) {
                         serverInterfaces.add(newServerInterface);
                         for (RemoteView r : remoteViews) {
                             if (r.getPlayer().getNickname().equals(newServerInterface.getPlayer().getNickname()))
                                 r.changeConnection(newServerInterface);
                         }
-                        cliGraphicsServer.printLoggedAgain( oldPlayer.getNickname() );
+                        cliGraphicsServer.printLoggedAgain(oldPlayer.getNickname());
                         newServerInterface.send("You have logged in again as: " + newServerInterface.getPlayer().getNickname());
-                    }
-                    else {
+                    } else {
                         newServerInterface.send("This nickname has been already used! Please try again.");
                         newServerInterface.send("Terminate.");
                     }
                 }
             }
-        }
-
-        else if (!playersConnected && nicknames.size()<4) {
+        } else if (!playersConnected && nicknames.size() < 4) {
             serverInterfaces.add(newServerInterface);
             remoteViews.add(new RemoteView(newServerInterface));
             players.add(newServerInterface.getPlayer());
             nicknames.add(newServerInterface.getPlayer().getNickname());
             newServerInterface.send("You have logged in as: " + newServerInterface.getPlayer().getNickname());
             try {
-                cliGraphicsServer.printLoggedIn( newServerInterface.getPlayer().getNickname() );
-            } catch(Exception e) {
+                cliGraphicsServer.printLoggedIn(newServerInterface.getPlayer().getNickname());
+            } catch (Exception e) {
                 cliGraphicsServer.printErr();
             }
-            if(remoteViews.size()==2) {
+            if (remoteViews.size() == 2) {
                 this.gameStartTimer();
-            }
-            else if( ((remoteViews.size()==4)) ) {
+            } else if (((remoteViews.size() == 4))) {
                 this.startGame();
             }
 
-        } else{
+        } else {
             newServerInterface.send("Game has already started! Please try again later.");
             newServerInterface.send("Terminate.");
         }

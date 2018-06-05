@@ -6,7 +6,7 @@ public class Message implements Serializable {
 
     private String message;
 
-    public Message(String message){
+    public Message(String message) {
         this.message = message;
     }
 

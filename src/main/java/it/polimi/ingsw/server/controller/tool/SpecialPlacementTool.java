@@ -8,9 +8,7 @@ import it.polimi.ingsw.server.model.Die;
 import it.polimi.ingsw.server.model.PlacementCheck;
 import it.polimi.ingsw.server.model.exception.NotValidParametersException;
 import it.polimi.ingsw.server.model.exception.OccupiedCellException;
-import it.polimi.ingsw.server.model.restriction.ColorRestriction;
 import it.polimi.ingsw.server.model.restriction.RestrictionEnum;
-import it.polimi.ingsw.server.model.restriction.ValueRestriction;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +42,7 @@ public class SpecialPlacementTool implements Tool {
     }
 
     public boolean toolEffect(Turn turn, PlayerMove playerMove) {
-        if(playerMove.getIndexDie().isPresent()) {
+        if (playerMove.getIndexDie().isPresent()) {
             if (!turn.isPlacementDone()) {
                 int row = playerMove.getIntParameters(0);
                 int column = playerMove.getIntParameters(1);
@@ -62,7 +60,7 @@ public class SpecialPlacementTool implements Tool {
                 }
             }
             return false;
-        }else
+        } else
             throw new IllegalArgumentException();
     }
 
@@ -104,7 +102,7 @@ public class SpecialPlacementTool implements Tool {
             if (checkNeighbours) {
                 if (placementCheck.nearBy(row, column, matrixScheme))
                     return true;
-            }else
+            } else
                 return true;
         return false;
     }

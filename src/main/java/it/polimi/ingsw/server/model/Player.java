@@ -14,10 +14,10 @@ public class Player {
     private ServerInterface serverInterface;
 
 
-    public Player (String nickname, ServerInterface serverInterface){
+    public Player(String nickname, ServerInterface serverInterface) {
         this.nickname = nickname;
         this.serverInterface = serverInterface;
-        this.skipSecondTurn=false;
+        this.skipSecondTurn = false;
     }
 
     public void sendGameStarted() {
@@ -42,9 +42,10 @@ public class Player {
         this.dashboard.setOwner(this);
     }
 
-    public void setPrivateAchievement (PrivateAchievement privateAchievement) {
+    public void setPrivateAchievement(PrivateAchievement privateAchievement) {
         this.privateAchievement = privateAchievement;
     }
+
     /**
      * Creates a Player object, which represent a player, having his own nickname and having his dashboard
      * and private achievement randomly assigned by the Game board.
@@ -53,11 +54,12 @@ public class Player {
      * The currentFavourToken attribute specifies the number of token left and is initialized as
      * the number of favour token associated with the scheme chosen from the player at the
      * start of the game.
-     * @param nickname the player's nickname, chosen during the log in session
-     * @param dashboard the player's dashboard, containing the chosen scheme and the initial number of favour tokens
+     *
+     * @param nickname           the player's nickname, chosen during the log in session
+     * @param dashboard          the player's dashboard, containing the chosen scheme and the initial number of favour tokens
      * @param privateAchievement the player's private achievement, associated with one of the available colours
      */
-    public Player (String nickname, Dashboard dashboard, PrivateAchievement privateAchievement) {
+    public Player(String nickname, Dashboard dashboard, PrivateAchievement privateAchievement) {
         this.nickname = nickname;
         this.dashboard = dashboard;
         this.currentFavourToken = this.dashboard.getFavourToken();
@@ -66,6 +68,7 @@ public class Player {
 
     /**
      * Returns the player's nickname attribute as a String object.
+     *
      * @return a String object representing the nickname
      */
     public String getNickname() {
@@ -75,6 +78,7 @@ public class Player {
     /**
      * Returns a Dashboard object representing the player's dashboard attribute and containing the chosen scheme
      * and the initial number of token.
+     *
      * @return a Dashboard object representing the player's dashboard
      */
     public Dashboard getDashboard() {
@@ -83,6 +87,7 @@ public class Player {
 
     /**
      * Returns an int representing the number of favour tokens that the player currently owns.
+     *
      * @return an int which represents the number of favour tokens left.
      */
     public int getCurrentFavourToken() {
@@ -92,6 +97,7 @@ public class Player {
     /**
      * Returns a PrivateAchievement object representing the player's private achievement and associated
      * with one of the available colours.
+     *
      * @return the player's private achievement as a Private Achievement object.
      */
     public PrivateAchievement getPrivateAchievement() {
@@ -104,19 +110,20 @@ public class Player {
      * or 2 favour tokens if it has already been used.
      * The argument usedTool must specify if the tool has already been used by
      * any of the players.
+     *
      * @param usedTool specifies whether the tool has been used at least once
      * @throws NotEnoughFavourTokensLeft if the player does not have enough tokens left
      */
-    public void useToken (Boolean usedTool) throws NotEnoughFavourTokensLeft {
+    public void useToken(Boolean usedTool) throws NotEnoughFavourTokensLeft {
         if (this.currentFavourToken > 0) {
-            if(!usedTool)
+            if (!usedTool)
                 this.currentFavourToken--;
             else {
-                if(this.currentFavourToken > 1)
+                if (this.currentFavourToken > 1)
                     this.currentFavourToken -= 2;
                 else throw new NotEnoughFavourTokensLeft();
             }
-        }else throw new NotEnoughFavourTokensLeft();
+        } else throw new NotEnoughFavourTokensLeft();
     }
 
     public boolean skipSecondTurn() {
@@ -132,7 +139,7 @@ public class Player {
      * Returns a string which represent the Player object, specifying the player's user name, his dashboard,
      * how many favour tokens he/she currently has and his/her private achievement.
      */
-    public String toString(){
+    public String toString() {
         String string = "Player:\n";
         string += "Nickname: " + this.nickname + "\n";
         string += this.dashboard.toString() + "\n";

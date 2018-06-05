@@ -37,7 +37,7 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         this.gameStarted = server.isGameStarted();
         this.firstLog = !server.alreadyLoggedIn(this);
         try {
-            if(firstLog && !gameStarted) {
+            if (firstLog && !gameStarted) {
                 String schemes = server.selectSchemes();
                 this.defaultScheme = defaultScheme(schemes);
                 Color privateAchievementColor = server.selectPrivateAchievement();
@@ -45,8 +45,7 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
                 server.registerConnection(this);
                 this.send("Your private achievement is: " + privateAchievementColor);
                 askForChosenScheme(schemes);
-            }
-            else
+            } else
                 server.registerConnection(this);
         } catch (Exception e) {
             System.err.println(e.toString());
@@ -60,8 +59,7 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
             if (!gameStarted) {
                 this.player.setDashboard(message.getMessage());
                 this.send("You have chosen the following scheme: " + message.getMessage() + "\n" + this.player.getDashboard().toString() + "\nPlease wait, the game will start soon.");
-            }
-            else {
+            } else {
                 this.send("Too late! Your scheme is: " + defaultScheme + "\n" + this.player.getDashboard().toString() + "\nThe game has already started!");
             }
         } catch (NotValidValueException e) {
@@ -115,7 +113,7 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
     }
 
 
-    private String defaultScheme (String schemes) {
+    private String defaultScheme(String schemes) {
         StringTokenizer strtok = new StringTokenizer(schemes, ",");
         String defaultScheme = strtok.nextToken();
         try {

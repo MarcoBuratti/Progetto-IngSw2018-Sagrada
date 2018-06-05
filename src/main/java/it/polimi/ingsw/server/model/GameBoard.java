@@ -7,7 +7,7 @@ import it.polimi.ingsw.server.model.achievement.*;
 
 import java.util.*;
 
-public class GameBoard extends Observable{
+public class GameBoard extends Observable {
     private static final int NUMBER_OF_PUBLIC_ACHIEVEMENTS = 3;
     private static final int NUMBER_OF_TOOLS = 3;
     private RoundTrack roundTrack;
@@ -26,10 +26,11 @@ public class GameBoard extends Observable{
      * - The players list containing the references to the Player Objects;
      * - The public achievements list containing the randomly extracted CardAchievement Objects.
      * The schemes argument must specify the players' user names and chosen window schemes.
+     *
      * @param schemes a map in which keys represent the players' user names and
-     * values represent the names of the chosen window schemes
+     *                values represent the names of the chosen window schemes
      */
-    public GameBoard (Map<String, String> schemes) {
+    public GameBoard(Map<String, String> schemes) {
 
         players = new ArrayList<>();
         publicAchievements = new ArrayList<>();
@@ -41,7 +42,7 @@ public class GameBoard extends Observable{
         List<PublicAchievementNames> publicAchievementList = Arrays.asList(PublicAchievementNames.values());
         Collections.shuffle(publicAchievementList);
         AbstractCardFactory abstractFactory = new CardFactory();
-        for ( int i = 0; i < NUMBER_OF_PUBLIC_ACHIEVEMENTS; i++ ) {
+        for (int i = 0; i < NUMBER_OF_PUBLIC_ACHIEVEMENTS; i++) {
             CardAchievement publicAchievementsFactory = abstractFactory.extractCardAchievement(publicAchievementList.get(i));
             this.publicAchievements.add(publicAchievementsFactory);
         }
@@ -49,7 +50,7 @@ public class GameBoard extends Observable{
         List<ToolNames> toolList = Arrays.asList(ToolNames.values());
         Collections.shuffle(toolList);
         ToolFactory abstractToolFactory = new ToolFactory();
-        for (int i = 0; i < NUMBER_OF_TOOLS; i++ ) {
+        for (int i = 0; i < NUMBER_OF_TOOLS; i++) {
             Tool toolFactory = abstractToolFactory.getTool(toolList.get(i));
             this.tools.add(toolFactory);
         }
@@ -64,12 +65,12 @@ public class GameBoard extends Observable{
                 players.get(i).getDashboard().setOwner(players.get(i));
                 i++;
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.toString());
         }
     }
 
-    public GameBoard (ArrayList<Player> players) {
+    public GameBoard(ArrayList<Player> players) {
 
         this.players = players;
         publicAchievements = new ArrayList<>();
@@ -81,7 +82,7 @@ public class GameBoard extends Observable{
         List<PublicAchievementNames> publicAchievementList = Arrays.asList(PublicAchievementNames.values());
         Collections.shuffle(publicAchievementList);
         AbstractCardFactory abstractFactory = new CardFactory();
-        for ( int i = 0; i < NUMBER_OF_PUBLIC_ACHIEVEMENTS; i++ ) {
+        for (int i = 0; i < NUMBER_OF_PUBLIC_ACHIEVEMENTS; i++) {
             CardAchievement publicAchievementsFactory = abstractFactory.extractCardAchievement(publicAchievementList.get(i));
             this.publicAchievements.add(publicAchievementsFactory);
         }
@@ -89,7 +90,7 @@ public class GameBoard extends Observable{
         List<ToolNames> toolList = Arrays.asList(ToolNames.values());
         Collections.shuffle(toolList);
         ToolFactory abstractToolFactory = new ToolFactory();
-        for (int i = 0; i < NUMBER_OF_TOOLS; i++ ) {
+        for (int i = 0; i < NUMBER_OF_TOOLS; i++) {
             Tool toolFactory = abstractToolFactory.getTool(toolList.get(i));
             this.tools.add(toolFactory);
         }
@@ -99,11 +100,11 @@ public class GameBoard extends Observable{
         int i = 0;
 
         try {
-            for (Player p: players) {
+            for (Player p : players) {
                 p.setPrivateAchievement(new PrivateAchievement(privateAchievementsList.get(i)));
                 i++;
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.toString());
         }
         setChanged();
@@ -112,6 +113,7 @@ public class GameBoard extends Observable{
 
     /**
      * Returns a RoundTrack object representing the current game's round track.
+     *
      * @return the round track used in the current game
      */
     public RoundTrack getRoundTrack() {
@@ -120,6 +122,7 @@ public class GameBoard extends Observable{
 
     /**
      * Returns a DiceBag object representing the current game's dice bag.
+     *
      * @return the dice bag used in the current game
      */
     public DiceBag getDiceBag() {
@@ -128,6 +131,7 @@ public class GameBoard extends Observable{
 
     /**
      * Returns an ArrayList containing Player objects which represent the players.
+     *
      * @return the players list
      */
     public ArrayList<Player> getPlayers() {
@@ -137,6 +141,7 @@ public class GameBoard extends Observable{
     /**
      * Returns an ArrayList containing CardAchievements objects which represent the public achievement extracted
      * for the current game.
+     *
      * @return the public achievements list
      */
     public ArrayList<CardAchievement> getPublicAchievements() {
@@ -146,17 +151,19 @@ public class GameBoard extends Observable{
     /**
      * Returns an ArrayList containing Die objects. The ArrayList represent the draft pool used
      * for the current round (updated at the start of every round during the game).
+     *
      * @return the draft pool used for the current round
      */
     public ArrayList<Die> getDraftPool() {
-         ArrayList draftpoolCopy = new ArrayList<>();
-         draftpoolCopy.addAll(this.draftPool);
-         return draftpoolCopy;
+        ArrayList draftpoolCopy = new ArrayList<>();
+        draftpoolCopy.addAll(this.draftPool);
+        return draftpoolCopy;
     }
 
     /**
      * Allows the user to change the reference for the draftPool attribute, in order to
      * initialize a new draft pool at the start of each round.
+     *
      * @param draftPool the new draft pool created at the start of the round
      */
     public void setDraftPool(ArrayList<Die> draftPool) {
@@ -168,8 +175,8 @@ public class GameBoard extends Observable{
     /**
      * Allows the user to remove all the Die objects from the draftPool in order to empty it.
      */
-    public void emptyDraftPool () {
-        if(this.draftPool != null)
+    public void emptyDraftPool() {
+        if (this.draftPool != null)
             this.draftPool.clear();
         setChanged();
         notifyObservers(this);
@@ -178,43 +185,44 @@ public class GameBoard extends Observable{
     /**
      * Allows the user to remove a Die object from the draftPool.
      * The die argument must specify which Die object the user wants to remove from the draftPool.
+     *
      * @param die the die the user wants to remove from the draft pool
      */
-    public void removeDieFromDraftPool ( Die die ){
+    public void removeDieFromDraftPool(Die die) {
         try {
             this.draftPool.remove(draftPool.indexOf(die));
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.toString());
         }
         setChanged();
         notifyObservers(this);
     }
 
-    public Die changeDie ( Die die, int dieIndex ) {
+    public Die changeDie(Die die, int dieIndex) {
         Die myDie = this.draftPool.remove(dieIndex);
-        this.draftPool.add( dieIndex , die );
+        this.draftPool.add(dieIndex, die);
         return myDie;
     }
 
-    public void setCurrentPlayer (Player currentPlayer) {
+    public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
 
-    public String toString(){
+    public String toString() {
         StringBuilder bld = new StringBuilder();
 
-        for (Player p: players)
+        for (Player p : players)
             bld.append(p.getDashboard().toString());
 
-        if(currentPlayer != null)
+        if (currentPlayer != null)
             bld.append("\nNow it's " + currentPlayer.getNickname() + "'s turn.");
         return bld.toString();
     }
 
-    public String sendTool(){
+    public String sendTool() {
         StringBuilder bld = new StringBuilder();
         bld.append("Tools: ");
-        for (Tool t: tools) {
+        for (Tool t : tools) {
             bld.append(t.getToolName());
             bld.append(",");
         }
@@ -222,28 +230,28 @@ public class GameBoard extends Observable{
         return bld.toString();
     }
 
-    public String sendAchievement(){
+    public String sendAchievement() {
         StringBuilder bld = new StringBuilder();
         bld.append("\u001B[32mPublic Achievements:\033[0m\n");
-        for (CardAchievement p: publicAchievements)
+        for (CardAchievement p : publicAchievements)
             bld.append(p.toString());
         bld.append("\n");
         return bld.toString();
     }
 
-    public String sendRundTrack(){
+    public String sendRoundTrack() {
         StringBuilder bld = new StringBuilder();
         bld.append(roundTrack.toString());
         bld.append("\n");
         return bld.toString();
     }
 
-    public String sendDraft(){
+    public String sendDraft() {
         StringBuilder bld = new StringBuilder();
 
         bld.append("\n\u001B[33mNumber of the die on the DraftPool: 0  1  2  3  4  5  6  7  8");
         bld.append("\nThe dice you can draw are:\033[0m          ");
-        for (Die die: draftPool) {
+        for (Die die : draftPool) {
             bld.append(die.toString());
             bld.append(" ");
         }
@@ -256,7 +264,7 @@ public class GameBoard extends Observable{
     }
 
     public void setTools(ArrayList<Tool> tools) {
-        this.tools=tools;
+        this.tools = tools;
 
     }
 

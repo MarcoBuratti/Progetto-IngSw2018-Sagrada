@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Observable;
 import java.util.StringTokenizer;
@@ -26,7 +25,7 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
     public SocketConnectionClient(View view, String s, int port) {
         this.addObserver(view);
         try {
-            socket = new Socket(s,port);
+            socket = new Socket(s, port);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintStream(socket.getOutputStream());
             executor.submit(this);
@@ -67,25 +66,25 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
     }
 
     @Override
-    public void handleScheme (String fromServer, String fromClient) {
+    public void handleScheme(String fromServer, String fromClient) {
         int choice = Integer.parseInt(fromClient);
         String substringSchemes = fromServer.substring(fromServer.indexOf(".") + 2);
         StringTokenizer strtok = new StringTokenizer(substringSchemes, ",");
         String[] schemes = new String[4];
         int i = 0;
-        while(strtok.hasMoreTokens()){
+        while (strtok.hasMoreTokens()) {
             schemes[i] = strtok.nextToken();
             i++;
         }
         String chosenScheme;
-        if(choice > 0 && choice <= 4)
-            chosenScheme = schemes[choice-1];
+        if (choice > 0 && choice <= 4)
+            chosenScheme = schemes[choice - 1];
         else
             chosenScheme = schemes[0];
         send(chosenScheme);
     }
 
-    private void placeDieHandler (String fromClient){
+    private void placeDieHandler(String fromClient) {
         StringTokenizer strtok = new StringTokenizer(fromClient, " ");
         strtok.nextToken();
         StringBuilder bld = new StringBuilder();
@@ -94,7 +93,7 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
         String json_translation;
         bld.append(" type_playerMove PlaceDie");
         int i = 1;
-        while(strtok.hasMoreTokens()){
+        while (strtok.hasMoreTokens()) {
             String key = "Key" + i;
             String value = strtok.nextToken();
             bld.append(" " + key + " " + value);
@@ -104,7 +103,7 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
         send(json_translation);
     }
 
-    private void goThroughHandler (){
+    private void goThroughHandler() {
         StringBuilder bld = new StringBuilder();
         bld.append("playerID ");
         bld.append(this.playerNickname);
@@ -112,11 +111,11 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
         send(bld.toString());
     }
 
-    private void quitHandler () {
+    private void quitHandler() {
         send("/quit");
     }
 
-    private void useToolHandler (String fromClient) {
+    private void useToolHandler(String fromClient) {
         StringTokenizer strtok = new StringTokenizer(fromClient);
         strtok.nextToken();
         StringBuilder bld = new StringBuilder();
@@ -125,7 +124,7 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
         String json_translation;
         bld.append(" type_playerMove UseTool");
         int i = 1;
-        while(strtok.hasMoreTokens()){
+        while (strtok.hasMoreTokens()) {
             //DA IMPLEMENTARE
         }
     }
@@ -134,7 +133,7 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
     public void handleMove(String fromClient) {
         StringTokenizer strtok = new StringTokenizer(fromClient);
         int moveChoice = Integer.parseInt(strtok.nextToken());
-        switch (moveChoice){
+        switch (moveChoice) {
             case 1:
                 placeDieHandler(fromClient);
                 break;
@@ -160,11 +159,11 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
     @Override
     public void run() {
         try {
-            while(getIsOn()) {
+            while (getIsOn()) {
                 String message = in.readLine();
                 setChanged();
                 notifyObservers(message);
-                if(message.equals("Terminate."))
+                if (message.equals("Terminate."))
                     close();
             }
         } catch (IOException e) {

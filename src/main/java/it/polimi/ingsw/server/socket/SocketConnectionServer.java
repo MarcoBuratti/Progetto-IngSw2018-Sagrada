@@ -38,35 +38,35 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         return isOn;
     }
 
-    public synchronized void setOff(){
+    public synchronized void setOff() {
         send("You've been disconnected successfully.");
         this.isOn = false;
     }
 
 
-    private synchronized void read (String jsonContent){
+    private synchronized void read(String jsonContent) {
         StringTokenizer strtok = new StringTokenizer(jsonContent);
         String key, value;
         JSONObject jsonObject = new JSONObject();
-        while(strtok.hasMoreTokens()){
+        while (strtok.hasMoreTokens()) {
             key = strtok.nextToken();
             value = strtok.nextToken();
             jsonObject.put(key, value);
         }
         try (FileWriter lastPlayerMove = new FileWriter("src/main/files/LastPlayerMove.json")) {
             lastPlayerMove.write(jsonObject.toJSONString());
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println(e.toString());
         }
     }
 
-    private synchronized String askForChosenScheme (String schemes) throws IOException {
+    private synchronized String askForChosenScheme(String schemes) throws IOException {
         this.send("schemes. " + schemes);
         return in.readLine();
     }
 
 
-    private String defaultScheme (String schemes) {
+    private String defaultScheme(String schemes) {
         StringTokenizer strtok = new StringTokenizer(schemes, ",");
         String defaultScheme = strtok.nextToken();
         try {
@@ -83,7 +83,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
             this.player = new Player(in.readLine(), this);
             gameStarted = server.isGameStarted();
             firstLog = !server.alreadyLoggedIn(this);
-            if(firstLog && !gameStarted) {
+            if (firstLog && !gameStarted) {
                 String schemes = server.selectSchemes();
                 String defaultScheme = defaultScheme(schemes);
                 Color privateAchievementColor = server.selectPrivateAchievement();
@@ -95,15 +95,13 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
                 if (!gameStarted) {
                     this.player.setDashboard(chosenScheme);
                     this.send("You have chosen the following scheme: " + chosenScheme + "\n" + this.player.getDashboard().toString() + "\nPlease wait, the game will start soon.");
-                }
-                else
+                } else
                     this.send("Too late! Your scheme is: " + defaultScheme + "\n" + this.player.getDashboard().toString() + "\nThe game has already started!");
-            }
-            else
+            } else
                 server.registerConnection(this);
             isOn = true;
 
-            while(isOn) {
+            while (isOn) {
                 String message = in.readLine();
                 if (message.equals("/quit")) {
                     close();

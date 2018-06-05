@@ -13,7 +13,7 @@ public class RemoteView extends Observable implements Observer {
     private ServerInterface serverInterface;
     private MessageReceiver messageReceiver;
 
-    public RemoteView(ServerInterface serverInterface){
+    public RemoteView(ServerInterface serverInterface) {
         this.serverInterface = serverInterface;
         player = serverInterface.getPlayer();
         messageReceiver = new MessageReceiver();
@@ -21,7 +21,7 @@ public class RemoteView extends Observable implements Observer {
         serverConnection.addObserver(this.messageReceiver);
     }
 
-    synchronized void changeConnection (ServerInterface serverInterface){
+    synchronized void changeConnection(ServerInterface serverInterface) {
         this.serverInterface = serverInterface;
         this.serverInterface.setPlayer(player);
         this.player.setServerInterface(this.serverInterface);
@@ -30,15 +30,15 @@ public class RemoteView extends Observable implements Observer {
         serverConnection.addObserver(this.messageReceiver);
     }
 
-    synchronized void setModelView (ModelView modelView){
+    synchronized void setModelView(ModelView modelView) {
         modelView.addObserver(this);
     }
 
-    synchronized void removeConnection () {
+    synchronized void removeConnection() {
         this.serverInterface = null;
     }
 
-    public Player getPlayer () {
+    public Player getPlayer() {
         return player;
     }
 
@@ -46,25 +46,25 @@ public class RemoteView extends Observable implements Observer {
         return serverInterface;
     }
 
-    private void showGameboard (ModelView modelView){
-        if(serverInterface != null) {
+    private void showGameboard(ModelView modelView) {
+        if (serverInterface != null) {
             serverInterface.send(modelView.model.sendTool());
             serverInterface.send(modelView.model.sendAchievement());
-            serverInterface.send(modelView.model.sendRundTrack());
+            serverInterface.send(modelView.model.sendRoundTrack());
             serverInterface.send(modelView.model.sendDraft());
             serverInterface.send(modelView.model.toString());
         }
     }
 
-    public void send (String string) {
+    public void send(String string) {
         serverInterface.send(string);
     }
 
-    public void notYourTurn () {
+    public void notYourTurn() {
         serverInterface.send("It's not your turn. Please wait.");
     }
 
-    private void process(PlayerMove playerMove){
+    private void process(PlayerMove playerMove) {
         setChanged();
         notifyObservers(playerMove);
     }

@@ -26,7 +26,7 @@ public class Turn {
     private GameBoard gameBoard;
     private PlayerMove playerMove;
 
-    public Turn(Player player, GameBoard gameBoard,boolean secondTurn) {
+    public Turn(Player player, GameBoard gameBoard, boolean secondTurn) {
         this.usedTool = false;
         this.placementDone = false;
         this.turnIsOver = false;
@@ -34,12 +34,12 @@ public class Turn {
         this.secondTurn = secondTurn;
         this.player = player;
         this.gameBoard = gameBoard;
-        this.timeTurn = 30*1000;
+        this.timeTurn = 30 * 1000;
     }
 
     public synchronized void setTurnIsOver() {
         this.turnIsOver = true;
-        if ( this.player.getServerInterface() != null )
+        if (this.player.getServerInterface() != null)
             this.player.getServerInterface().send("Your turn has ended.");
         notifyAll();
     }
@@ -83,11 +83,11 @@ public class Turn {
         return player;
     }
 
-    public GameBoard getGameBoard(){
+    public GameBoard getGameBoard() {
         return gameBoard;
     }
 
-    public String getTypeMove(){
+    public String getTypeMove() {
         return this.typeMove;
     }
 
@@ -105,36 +105,36 @@ public class Turn {
 
     private synchronized void timeOut() {
         this.turnIsOver = true;
-        if ( this.player.getServerInterface() != null )
+        if (this.player.getServerInterface() != null)
             this.player.getServerInterface().send("The time is over! Your turn has ended.");
         notifyAll();
     }
 
-    private void launchTimer (){
+    private void launchTimer() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if(!isTurnIsOver()){
+                if (!isTurnIsOver()) {
                     timeOut();
                 }
             }
-        },this.timeTurn);
+        }, this.timeTurn);
     }
 
     public void turnManager() {
 
         this.launchTimer();
 
-        if ( this.player.getServerInterface() != null ) {
+        if (this.player.getServerInterface() != null) {
             this.player.getServerInterface().send("UpdateFromServer");
         }
 
         while (!isTurnIsOver()) {
 
-            synchronized(this){
+            synchronized (this) {
 
-                while(!isTurnIsOver() && isWaitMove())
+                while (!isTurnIsOver() && isWaitMove())
                     try {
                         wait();
                     } catch (InterruptedException e) {
@@ -142,18 +142,17 @@ public class Turn {
                     }
             }
 
-            if(!isWaitMove() && typeMove != null) {
+            if (!isWaitMove() && typeMove != null) {
 
                 if (typeMove.equals("PlaceDie") && !placementDone) {
-                    
+
                     this.tryPlacementMove(this.playerMove);
-                    
-                    if(placementDone && usedTool)
+
+                    if (placementDone && usedTool)
                         setTurnIsOver();
 
 
-                }
-                else if (typeMove.equals("UseTool") && !usedTool) {
+                } else if (typeMove.equals("UseTool") && !usedTool) {
 
                     this.useTool();
 
@@ -161,8 +160,7 @@ public class Turn {
                         setTurnIsOver();
 
 
-                }
-                else if (typeMove.equals("GoThrough")) {
+                } else if (typeMove.equals("GoThrough")) {
 
                     setTurnIsOver();
 
@@ -174,9 +172,9 @@ public class Turn {
     }
 
 
-    public void tryPlacementMove (PlayerMove playerMove){
+    public void tryPlacementMove(PlayerMove playerMove) {
 
-        if(playerMove.getIndexDie().isPresent()) {
+        if (playerMove.getIndexDie().isPresent()) {
             try {
                 PlacementMove placementMove = new PlacementMove(player, playerMove.getIntParameters(0),
                         playerMove.getIntParameters(1), gameBoard.getDraftPool().get(playerMove.getIndexDie().get()));
@@ -190,42 +188,40 @@ public class Turn {
             } catch (OccupiedCellException | NotValidParametersException e) {
                 e.printStackTrace();
             }
-        }else
+        } else
             throw new IllegalArgumentException();
     }
 
     private void useTool() {
-        if (playerMove.getToolName().isPresent()){
+        if (playerMove.getToolName().isPresent()) {
             Tool tool = gameBoard.getTools().stream().filter(t -> (t.getToolName().equals(playerMove.getToolName().get()))).findAny().orElseThrow(IllegalMonitorStateException::new);
 
-        try {
+            try {
 
-            this.player.useToken(tool.isAlreadyUsed());
-            usedTool = tool.toolEffect(this, playerMove);
-            if (tool.needPlacement()) {
-                setWaitMove(true);
-                synchronized (this) {
-                    while (!isTurnIsOver() && isWaitMove()) {
-                        wait();
-                        tool.placementDie(this);
+                this.player.useToken(tool.isAlreadyUsed());
+                usedTool = tool.toolEffect(this, playerMove);
+                if (tool.needPlacement()) {
+                    setWaitMove(true);
+                    synchronized (this) {
+                        while (!isTurnIsOver() && isWaitMove()) {
+                            wait();
+                            tool.placementDie(this);
+                        }
+
                     }
-
                 }
+                if (isUsedTool()) {
+                    if (this.player.getServerInterface() != null)
+                        this.player.getServerInterface().send("The selected tool has been used successfully");
+                } else if (this.player.getServerInterface() != null)
+                    this.player.getServerInterface().send("Incorrect move! Please try again.");
+
+            } catch (NotEnoughFavourTokensLeft | InterruptedException e) {
+                //risposta per mosse errate
+
             }
-            if (isUsedTool()) {
-                if (this.player.getServerInterface() != null)
-                    this.player.getServerInterface().send("The selected tool has been used successfully");
-            } else if (this.player.getServerInterface() != null)
-                this.player.getServerInterface().send("Incorrect move! Please try again.");
-
-        } catch (NotEnoughFavourTokensLeft | InterruptedException e) {
-            //risposta per mosse errate
-
-        }
-    }else
-        throw new IllegalArgumentException();
-
-
+        } else
+            throw new IllegalArgumentException();
 
 
     }

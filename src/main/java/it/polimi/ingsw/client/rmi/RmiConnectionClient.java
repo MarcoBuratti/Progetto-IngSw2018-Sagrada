@@ -25,7 +25,7 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
     public RmiConnectionClient(View view, String address, int port) {
         addObserver(view);
         try {
-            server = (RmiControllerInterface) Naming.lookup("//"+ address +"/Server");
+            server = (RmiControllerInterface) Naming.lookup("//" + address + "/Server");
             channel = server.addClient((RmiClientInterface) UnicastRemoteObject.exportObject(this, port));
         } catch (Exception e) {
             System.out.println("Connection error: " + e.toString());
@@ -38,8 +38,8 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
         this.isOn = false;
     }
 
-    public void update(String str) throws RemoteException{ //NOTIFICA LA VIEW
-        if(getIsOn()) {
+    public void update(String str) throws RemoteException { //NOTIFICA LA VIEW
+        if (getIsOn()) {
             setChanged();
             notifyObservers(str);
             if (str.equals("Terminate."))
@@ -49,7 +49,7 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
 
 
     private void sendName(Message message) {
-        if(getIsOn()) {
+        if (getIsOn()) {
             try {
                 this.channel.setPlayerAndAskScheme(message);
             } catch (RemoteException e) {
@@ -60,7 +60,7 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
     }
 
     private void sendScheme(Message message) {
-        if(getIsOn()) {
+        if (getIsOn()) {
             try {
                 this.channel.setDashboard(message);
             } catch (RemoteException e) {
@@ -71,7 +71,7 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
     }
 
     private void sendMove(PlayerMove playerMove) {
-        if(getIsOn()) {
+        if (getIsOn()) {
             try {
                 this.channel.sendMove(playerMove);
             } catch (RemoteException e) {
@@ -81,7 +81,7 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
         }
     }
 
-    public void quit(){
+    public void quit() {
         try {
             this.channel.quit();
         } catch (RemoteException e) {
@@ -107,13 +107,13 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
         StringTokenizer strtok = new StringTokenizer(substringSchemes, ",");
         String[] schemes = new String[4];
         int i = 0;
-        while(strtok.hasMoreTokens()){
+        while (strtok.hasMoreTokens()) {
             schemes[i] = strtok.nextToken();
             i++;
         }
         String chosenScheme;
-        if(choice > 0 && choice <= 4)
-            chosenScheme = schemes[choice-1];
+        if (choice > 0 && choice <= 4)
+            chosenScheme = schemes[choice - 1];
         else
             chosenScheme = schemes[0];
         sendScheme(new Message(chosenScheme));
@@ -127,7 +127,7 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
         jsonObject.put("playerID", this.playerNickname);
         String moveType = strtok.nextToken();
         int choice = Integer.parseInt(moveType);
-        switch (choice){
+        switch (choice) {
             case 1:
                 jsonObject.put("type_playerMove", "PlaceDie");
                 break;
@@ -138,7 +138,7 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
                 jsonObject.put("type_playerMove", "GoThrough");
                 break;
         }
-        if ( choice > 0 && choice <= 3 ) {
+        if (choice > 0 && choice <= 3) {
             int i = 1;
             while (strtok.hasMoreTokens()) {
                 key = "Key" + i;
@@ -146,9 +146,8 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
                 jsonObject.put(key, value);
                 i++;
             }
-        sendMove(PlayerMove.PlayerMoveReader(jsonObject));
-        }
-        else if ( choice == 4 ){
+            sendMove(PlayerMove.PlayerMoveReader(jsonObject));
+        } else if (choice == 4) {
             quit();
         }
     }

@@ -36,7 +36,7 @@ public class SetDieTool implements Tool {
 
     public boolean toolEffect(Turn turn, PlayerMove playerMove) {
 
-        if(playerMove.getIndexDie().isPresent()) {
+        if (playerMove.getIndexDie().isPresent()) {
 
             if (toolName.equals(ToolNames.FLUX_BRUSH) && turn.isPlacementDone()) {
                 return false;
@@ -44,7 +44,7 @@ public class SetDieTool implements Tool {
             die = turn.getGameBoard().getDraftPool().get(playerMove.getIndexDie().get());
             int oldValue = die.getNumber();
             try {
-                if (toolName.equals(ToolNames.GROZING_PLIERS)&&playerMove.getAddOne().isPresent()) {
+                if (toolName.equals(ToolNames.GROZING_PLIERS) && playerMove.getAddOne().isPresent()) {
                     if (playerMove.getAddOne().get())
                         die.setNumber(oldValue + 1);
                     else
@@ -61,7 +61,7 @@ public class SetDieTool implements Tool {
                 System.out.println(e.toString());
             }
             return false;
-        }else
+        } else
             throw new IllegalArgumentException();
     }
 
@@ -86,13 +86,13 @@ public class SetDieTool implements Tool {
     }
 
     public void placementDie(Turn turn) {
-        if(turn.getPlayerMove().getIndexDie().isPresent()) {
+        if (turn.getPlayerMove().getIndexDie().isPresent()) {
             if (turn.getTypeMove().equals("PlaceDie") && !turn.isPlacementDone() &&
                     die.equals(turn.getGameBoard().getDraftPool().get(turn.getPlayerMove().getIndexDie().get()))) {
                 turn.tryPlacementMove(turn.getPlayerMove());
             } else
                 turn.setWaitMove(true);
-        }else
+        } else
             throw new IllegalArgumentException();
     }
 

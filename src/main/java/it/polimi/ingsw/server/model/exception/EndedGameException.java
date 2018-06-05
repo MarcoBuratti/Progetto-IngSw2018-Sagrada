@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.model.exception;
 
 public class EndedGameException extends Exception {
-    public EndedGameException(){
+    public EndedGameException() {
         super();
     }
 

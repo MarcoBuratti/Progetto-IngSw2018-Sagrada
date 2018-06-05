@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.model.exception;
 
 public class NotEnoughDiceLeftException extends Exception {
-    public NotEnoughDiceLeftException(){
+    public NotEnoughDiceLeftException() {
         super();
     }
 

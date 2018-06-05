@@ -41,7 +41,8 @@ public class TwoTurnTool implements Tool {
         return this.needPlacement;
     }
 
-    public void placementDie(Turn turn) {}
+    public void placementDie(Turn turn) {
+    }
 
     public ToolNames getToolName() {
         return toolName;

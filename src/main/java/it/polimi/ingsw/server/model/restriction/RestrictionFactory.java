@@ -13,12 +13,12 @@ public class RestrictionFactory extends AbstractRestriction {
 
     public Restriction getRestriction(RestrictionEnum restrictionCell) throws NotValidValueException {
 
-        if(0<restriction.indexOf(restrictionCell)&&restriction.indexOf(restrictionCell)<7)
+        if (0 < restriction.indexOf(restrictionCell) && restriction.indexOf(restrictionCell) < 7)
             return new ValueRestriction(restriction.indexOf(restrictionCell));
-        else if(restrictionCell==RestrictionEnum.NO_R)
+        else if (restrictionCell == RestrictionEnum.NO_R)
             return new NoRestriction();
         else
-            return new ColorRestriction(colors.get(restriction.indexOf(restrictionCell)-7));
+            return new ColorRestriction(colors.get(restriction.indexOf(restrictionCell) - 7));
 
     }
 }

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.model.exception;
 
 public class NotValidRoundException extends Exception {
-    public NotValidRoundException(){
+    public NotValidRoundException() {
         super();
     }
 

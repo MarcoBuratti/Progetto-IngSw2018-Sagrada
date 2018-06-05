@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.controller.action;
 
-import it.polimi.ingsw.server.controller.tool.Tool;
 import it.polimi.ingsw.server.controller.tool.ToolNames;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -9,9 +8,6 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 public class PlayerMove implements Serializable {
@@ -22,7 +18,6 @@ public class PlayerMove implements Serializable {
     private Boolean addOne;
     private Integer indexDie;
     private ToolNames toolName;
-
 
 
     public static PlayerMove PlayerMoveConstructor() {
@@ -37,8 +32,7 @@ public class PlayerMove implements Serializable {
     }
 
 
-
-        public static PlayerMove PlayerMoveReader(JSONObject jsonObject) {
+    public static PlayerMove PlayerMoveReader(JSONObject jsonObject) {
 
         String playerNickname = (String) jsonObject.get("playerID");
         String moveType = (String) jsonObject.get("type_playerMove");
@@ -68,7 +62,7 @@ public class PlayerMove implements Serializable {
                     System.out.println(e.toString());
                 }
                */
-             case "GoThrough":
+            case "GoThrough":
                 return new PlayerMove(playerNickname, moveType);
 
             default:
@@ -76,56 +70,53 @@ public class PlayerMove implements Serializable {
         }
     }
 
-    public PlayerMove(String playerNickname, String typeMove){
+    public PlayerMove(String playerNickname, String typeMove) {
         this.playerNickname = playerNickname;
-        if(typeMove.equals("GoThrough"))
+        if (typeMove.equals("GoThrough"))
             this.typeMove = typeMove;
         else
             throw new IllegalArgumentException();
     }
 
     //tool 7(OK)
-    public PlayerMove(String playerNickname, String typeMove,ToolNames toolName){
+    public PlayerMove(String playerNickname, String typeMove, ToolNames toolName) {
         this.playerNickname = playerNickname;
-        if(typeMove.equals("UseTool")&&(toolName.equals(ToolNames.GLAZING_HAMMER))) {
+        if (typeMove.equals("UseTool") && (toolName.equals(ToolNames.GLAZING_HAMMER))) {
             this.typeMove = typeMove;
             this.toolName = toolName;
-        }
-        else
+        } else
             throw new IllegalArgumentException();
     }
 
     //usato anche da 11 per set dado(OK)
-    public PlayerMove(String playerNickname, String typeMove, int indexDie, int[] intParameters){
+    public PlayerMove(String playerNickname, String typeMove, int indexDie, int[] intParameters) {
         this.playerNickname = playerNickname;
-        if(typeMove.equals("PlaceDie")){
-            this.typeMove=typeMove;
-            this.intMatrixParameters=intParameters.clone();
+        if (typeMove.equals("PlaceDie")) {
+            this.typeMove = typeMove;
+            this.intMatrixParameters = intParameters.clone();
             this.indexDie = indexDie;
-        }
-        else
+        } else
             throw new IllegalArgumentException();
     }
 
     //tool 5 ,9(OK) e 8(OK ma dubbio su come segnarlo)
-    public PlayerMove(String playerNickname, String typeMove, ToolNames toolName, int indexDie, int[] intParameters){
+    public PlayerMove(String playerNickname, String typeMove, ToolNames toolName, int indexDie, int[] intParameters) {
         this.playerNickname = playerNickname;
-        if(typeMove.equals("UseTool")&&((toolName.equals(ToolNames.LENS_CUTTER)||toolName.equals(ToolNames.CORK_BAKED_STRAIGHTEDGE)||
-                toolName.equals(ToolNames.RUNNING_PLIERS)))){
-            this.typeMove=typeMove;
+        if (typeMove.equals("UseTool") && ((toolName.equals(ToolNames.LENS_CUTTER) || toolName.equals(ToolNames.CORK_BAKED_STRAIGHTEDGE) ||
+                toolName.equals(ToolNames.RUNNING_PLIERS)))) {
+            this.typeMove = typeMove;
             this.toolName = toolName;
-            this.intMatrixParameters=intParameters.clone();
+            this.intMatrixParameters = intParameters.clone();
             this.indexDie = indexDie;
-        }
-        else
+        } else
             throw new IllegalArgumentException();
     }
 
     //tool 2 3 4 e 12
-    public PlayerMove(String playerNickname, String typeMove,ToolNames toolName,int[] intParameters) {
+    public PlayerMove(String playerNickname, String typeMove, ToolNames toolName, int[] intParameters) {
         this.playerNickname = playerNickname;
-        if (typeMove.equals("UseTool")&&(toolName.equals(ToolNames.EGLOMISE_BRUSH)||toolName.equals(ToolNames.COPPER_FOIL_BURNISHER)||
-                toolName.equals(ToolNames.LATHEKIN)||toolName.equals(ToolNames.TAP_WHEEL))){
+        if (typeMove.equals("UseTool") && (toolName.equals(ToolNames.EGLOMISE_BRUSH) || toolName.equals(ToolNames.COPPER_FOIL_BURNISHER) ||
+                toolName.equals(ToolNames.LATHEKIN) || toolName.equals(ToolNames.TAP_WHEEL))) {
             this.typeMove = typeMove;
             this.toolName = toolName;
             this.intMatrixParameters = intParameters.clone();
@@ -133,71 +124,69 @@ public class PlayerMove implements Serializable {
                 this.twoReplace = true;
             } else
                 this.twoReplace = false;
-        }
-        else
+        } else
             throw new IllegalArgumentException();
     }
 
     //tool 1(OK)
-    public PlayerMove(String playerNickname, String typeMove,ToolNames toolName,int indexDie,boolean addOne) {
+    public PlayerMove(String playerNickname, String typeMove, ToolNames toolName, int indexDie, boolean addOne) {
         this.playerNickname = playerNickname;
-        if (typeMove.equals("UseTool")&&toolName.equals(ToolNames.GROZING_PLIERS)) {
-            this.toolName= toolName;
+        if (typeMove.equals("UseTool") && toolName.equals(ToolNames.GROZING_PLIERS)) {
+            this.toolName = toolName;
             this.typeMove = typeMove;
-            this.indexDie=indexDie;
+            this.indexDie = indexDie;
             this.addOne = addOne;
-        }
-        else
+        } else
             throw new IllegalArgumentException();
     }
 
     //tool 6(OK), 10(OK) e 11(OK)
-    public PlayerMove(String playerNickname, String typeMove,ToolNames toolName,int indexDie) {
+    public PlayerMove(String playerNickname, String typeMove, ToolNames toolName, int indexDie) {
 
-        if ((typeMove.equals("UseTool"))&&(toolName.equals(ToolNames.GRINDING_STONE)||toolName.equals(ToolNames.FLUX_BRUSH)
-                || toolName.equals(ToolNames.FLUX_REMOVER))){
-            this.toolName= toolName;
+        if ((typeMove.equals("UseTool")) && (toolName.equals(ToolNames.GRINDING_STONE) || toolName.equals(ToolNames.FLUX_BRUSH)
+                || toolName.equals(ToolNames.FLUX_REMOVER))) {
+            this.toolName = toolName;
             this.typeMove = typeMove;
-            this.indexDie= indexDie;
-        }
-        else
+            this.indexDie = indexDie;
+        } else
             throw new IllegalArgumentException();
     }
 
-    public String getPlayerNickname(){
+    public String getPlayerNickname() {
         return this.playerNickname;
     }
 
     public Integer getIntParameters(int index) {
-        if(intMatrixParameters.length>0 && index < intMatrixParameters.length)
-                return intMatrixParameters[index];
+        if (intMatrixParameters.length > 0 && index < intMatrixParameters.length)
+            return intMatrixParameters[index];
         else
-           throw new IllegalArgumentException();
+            throw new IllegalArgumentException();
     }
 
 
     public Optional<Boolean> getTwoReplace() {
-            return Optional.ofNullable(twoReplace);
+        return Optional.ofNullable(twoReplace);
     }
 
     public Optional<Integer> getIndexDie() {
-            return Optional.ofNullable(indexDie);
+        return Optional.ofNullable(indexDie);
     }
 
     public Optional<Boolean> getAddOne() {
-            return Optional.ofNullable(addOne);
+        return Optional.ofNullable(addOne);
     }
 
     public Optional<ToolNames> getToolName() {
-            return Optional.ofNullable(toolName); }
+        return Optional.ofNullable(toolName);
+    }
 
 
     public String getTypeMove() {
         return typeMove;
     }
 
-    public String toString(){
-        switch (typeMove){
+    public String toString() {
+        switch (typeMove) {
             case "PlaceDie":
                 return "Die:" + this.indexDie + " " + "coordinates:" + this.intMatrixParameters[0] + this.intMatrixParameters[1];
             case "GoThrough":

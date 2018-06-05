@@ -10,7 +10,7 @@ public class DiceBag {
     private static final int NUMBER_OF_DICE = 90;
     private static final Color[] colorsIndex = Color.values();
 
-    private ArrayList<Die> diceSet = new ArrayList<Die> ();
+    private ArrayList<Die> diceSet = new ArrayList<Die>();
 
     /**
      * Creates a DiceBag object representing a bag containing some dice.
@@ -28,6 +28,7 @@ public class DiceBag {
 
     /**
      * Returns an ArrayList of Die objects representing the dice which are inside the bag.
+     *
      * @return the list of dice inside the bag
      */
     public ArrayList<Die> getDiceSet() {
@@ -39,9 +40,10 @@ public class DiceBag {
      * in the DiceBag object.
      * Even if the extracted die is always the ArrayList's head, the extraction is random because
      * the list is shuffled when the DiceBag object is created.
+     *
      * @return a die that was included in the dice bag and now is no more
      */
-    public Die extract () {
+    public Die extract() {
         Die myDie = diceSet.get(0);
         diceSet.remove(0);
         return myDie;
@@ -51,10 +53,11 @@ public class DiceBag {
      * Gives the user the opportunity to swap a Die Object for another one included in the DiceBag's dice set.
      * The given die's number is randomly selected again before the die is put into the bag.
      * Then the dice set is shuffled again before extracting the new die from it.
+     *
      * @param myDie the die you want to put in the bag once again
      * @return a new die extracted from the dice bag
      */
-    public Die changeDie ( Die myDie ){
+    public Die changeDie(Die myDie) {
         Die myNewDie;
         myDie.extractAgain();
         diceSet.add(myDie);
@@ -68,20 +71,21 @@ public class DiceBag {
      * The ArrayList's size is given from the user through the quantity parameter.
      * The allowed range for the quantity is between 0 (no dice extracted) and the number
      * of dice left in the bag.
+     *
      * @param quantity the number of dice the user wants to extract from the bag
      * @return a dice set containing the required number of dice
      * @throws NotEnoughDiceLeftException if the user requests a quantity of dice that is no available
      */
-    public ArrayList<Die> extractSet (int quantity) throws NotEnoughDiceLeftException {
+    public ArrayList<Die> extractSet(int quantity) throws NotEnoughDiceLeftException {
         ArrayList<Die> mySet = new ArrayList<Die>();
-            if (quantity <= this.diceSet.size()) {
-                Die newDie;
-                for (int i = 0; i < quantity; i++) {
-                    newDie = this.extract();
-                    mySet.add(newDie);
-                }
-            }else
-                throw new NotEnoughDiceLeftException();
+        if (quantity <= this.diceSet.size()) {
+            Die newDie;
+            for (int i = 0; i < quantity; i++) {
+                newDie = this.extract();
+                mySet.add(newDie);
+            }
+        } else
+            throw new NotEnoughDiceLeftException();
         return mySet;
     }
 

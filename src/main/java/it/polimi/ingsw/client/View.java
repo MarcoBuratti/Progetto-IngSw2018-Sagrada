@@ -5,7 +5,8 @@ import it.polimi.ingsw.client.interfaces.ClientInterface;
 import it.polimi.ingsw.client.interfaces.GraphicsInterface;
 import it.polimi.ingsw.client.rmi.RmiConnectionClient;
 import it.polimi.ingsw.client.socket.SocketConnectionClient;
-import it.polimi.ingsw.util.*;
+import it.polimi.ingsw.util.CliGraphicsClient;
+import it.polimi.ingsw.util.CliInputController;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -26,7 +27,7 @@ public class View implements Observer {
     private CliController cliController;
 
 
-    public View(InputStreamReader input){
+    public View(InputStreamReader input) {
         bufferedReader = new BufferedReader(input);
     }
 
@@ -40,40 +41,39 @@ public class View implements Observer {
                 graphicsInterface.insert();
                 nickname = bufferedReader.readLine();
                 inputCtrl = cliController.nameController(nickname);
-            }while (inputCtrl);
+            } while (inputCtrl);
             inputCtrl = true;
-            do{
+            do {
                 graphicsInterface.printIP();
                 address = bufferedReader.readLine();
                 inputCtrl = cliController.ipController(address);
-            }while (inputCtrl);
+            } while (inputCtrl);
             inputCtrl = true;
-            do{
+            do {
                 graphicsInterface.printPort();
-                port = Integer.parseInt( bufferedReader.readLine() );
+                port = Integer.parseInt(bufferedReader.readLine());
                 inputCtrl = cliController.portController(port);
 
-            }while (inputCtrl);
+            } while (inputCtrl);
             inputCtrl = true;
             int choice;
             do {
                 graphicsInterface.printConnection();
                 choice = Integer.parseInt(bufferedReader.readLine());
                 inputCtrl = cliController.connecionController(choice);
-            }while (inputCtrl);
+            } while (inputCtrl);
 
             hasChosenScheme = true;
 
             if (choice == 1) {
                 connectionType = true;
                 connectionClient = new SocketConnectionClient(this, address, port);
-            }
-            else {
+            } else {
                 connectionType = false;
                 connectionClient = new RmiConnectionClient(this, address, port);
             }
 
-            connectionClient.handleName( nickname );
+            connectionClient.handleName(nickname);
 
 
             if (connectionType) {
@@ -82,13 +82,13 @@ public class View implements Observer {
                 }
             }
 
-            if(!hasChosenScheme) {
+            if (!hasChosenScheme) {
                 String fromClient = bufferedReader.readLine();
                 connectionClient.handleScheme(schemes, fromClient);
                 hasChosenScheme = true;
             }
 
-           while (connectionClient.getIsOn()) {
+            while (connectionClient.getIsOn()) {
                 String move = bufferedReader.readLine();
                 connectionClient.handleMove(move);
             }
@@ -99,11 +99,11 @@ public class View implements Observer {
         }
     }
 
-    public String getNickname(){
+    public String getNickname() {
         return this.nickname;
     }
 
-    private synchronized void setHasChosenScheme (boolean bool){
+    private synchronized void setHasChosenScheme(boolean bool) {
         this.hasChosenScheme = bool;
         notifyAll();
     }
@@ -112,7 +112,7 @@ public class View implements Observer {
     public synchronized void update(Observable o, Object arg) {
         try {
             String fromServer = (String) arg;
-            if (fromServer.startsWith("You have logged in")){
+            if (fromServer.startsWith("You have logged in")) {
                 int nicknameStartIndex = fromServer.lastIndexOf(' ') + 1;
                 this.nickname = fromServer.substring(nicknameStartIndex);
                 this.connectionClient.setPlayerNickname(nickname);
@@ -120,17 +120,15 @@ public class View implements Observer {
                     setHasChosenScheme(true);
                 }
                 graphicsInterface.printGeneric(fromServer);
-            }
-            else if (fromServer.startsWith("schemes. ")) {
+            } else if (fromServer.startsWith("schemes. ")) {
                 graphicsInterface.printChoice(fromServer);
                 schemes = fromServer;
                 setHasChosenScheme(false);
-            }
-            else if(fromServer.startsWith("Your private achievement is:"))
+            } else if (fromServer.startsWith("Your private achievement is:"))
                 graphicsInterface.printPrivate(fromServer);
-            else if(fromServer.startsWith("Tools:"))
+            else if (fromServer.startsWith("Tools:"))
                 graphicsInterface.printTool(fromServer);
-            else if(fromServer.startsWith("UpdateFromServer"))
+            else if (fromServer.startsWith("UpdateFromServer"))
                 graphicsInterface.printRules();
             else {
                 graphicsInterface.printGeneric(fromServer);

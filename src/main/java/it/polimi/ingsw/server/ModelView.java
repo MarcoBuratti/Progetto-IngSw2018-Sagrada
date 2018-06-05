@@ -13,7 +13,7 @@ public class ModelView extends Observable implements Observer {
         this.model = model;
     }
 
-    public ModelView (GameBoard gameBoard){
+    public ModelView(GameBoard gameBoard) {
         this.model = gameBoard;
         this.model.addObserver(this);
     }
