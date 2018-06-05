@@ -27,7 +27,6 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
         try {
             server = (RmiControllerInterface) Naming.lookup("//localhost/Server");
             channel = server.addClient((RmiClientInterface) UnicastRemoteObject.exportObject(this, 0));
-            playerNickname = view.getNickname();
         } catch (Exception e) {
             System.out.println("Connection error: " + e.toString());
         }

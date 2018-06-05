@@ -72,7 +72,7 @@ public class PlayerMove implements Serializable {
     public PlayerMove(String playerNickname, String typeMove){
         this.playerNickname = playerNickname;
         if(typeMove.equals("GoThrough"))
-            this.typeMove=typeMove;
+            this.typeMove = typeMove;
         else
             throw new IllegalArgumentException();
     }

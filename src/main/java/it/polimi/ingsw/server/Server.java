@@ -36,7 +36,7 @@ public class Server extends UnicastRemoteObject {
     private ModelView modelView;
     private ArrayList<SchemeCardsEnum> schemes;
     private ArrayList<Color> privateAchievements;
-    private final int lobbyTime = 20 * 1000;
+    private final int lobbyTime = 5 * 1000;
     private ArrayList<RemoteView> remoteViews;
     boolean gameStarted;
     private Timer timer;
@@ -113,8 +113,8 @@ public class Server extends UnicastRemoteObject {
             s.send("The game has started!");
         if (serverInterfaces.size() > 1) {
             this.setGameStarted(true);
-            this.controller.startGame();
             cliGraphicsServer.printStart();
+            this.controller.startGame();
         }
         else {
             this.setGameStarted(false);
@@ -191,7 +191,7 @@ public class Server extends UnicastRemoteObject {
             this.restartServer();
         }
         else {
-            System.out.println("Game start failed because some of the players disconnected! Waiting for the next game to start...");
+            System.out.println("Game start failed because some of the players disconnected!");
             serverInterfaces.get(0).send("Sorry! Other players disconnected before the game started. Please try again.");
             serverInterfaces.get(0).close();
             this.restartServer();
