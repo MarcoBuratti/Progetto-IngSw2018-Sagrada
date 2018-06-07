@@ -6,6 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public interface GraphicsInterface {
+
+    void printGraphics();
+
     void start();
 
     void insert();

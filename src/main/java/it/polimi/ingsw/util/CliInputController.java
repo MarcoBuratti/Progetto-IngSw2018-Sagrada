@@ -9,7 +9,7 @@ public class CliInputController implements CliController {
         return s.contains(" ");
     }
 
-    public boolean connecionController(String s) {
+    public boolean connectionController(String s) {
         if (!s.matches("[0-9]+")) return true;
         else if (Integer.parseInt(s) == 1 || Integer.parseInt(s) == 2) return false;
         else return true;

@@ -11,6 +11,10 @@ import java.io.IOException;
 
 public class CliGraphicsClient implements GraphicsInterface {
 
+    public void printGraphics(){
+        System.out.println("Please insert 1 if you to play with CLI or 2 if you want to play with GUI");
+    }
+
     public void start() {
         System.out.println("        \033[31;1mWelcome To Sagrada\033[0m");
         System.out.println("More information about the game and the");

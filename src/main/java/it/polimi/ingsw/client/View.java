@@ -26,6 +26,8 @@ public class View implements Observer {
     private String choice;
     private int choiceInt;
     private String fromClient;
+    private String move;
+    private String tmpMove;
     private boolean connectionType; //true for socket, false for rmi
     private boolean inputCtrl;
     private CliController cliController;
@@ -63,7 +65,7 @@ public class View implements Observer {
             do {
                 graphicsInterface.printConnection();
                 choice = bufferedReader.readLine();
-                inputCtrl = cliController.connecionController(choice);
+                inputCtrl = cliController.connectionController(choice);
             } while (inputCtrl);
             choiceInt = Integer.parseInt(choice);
             hasChosenScheme = true;
@@ -97,7 +99,11 @@ public class View implements Observer {
             }
 
             while (connectionClient.getIsOn()) {
-                String move = bufferedReader.readLine();
+                /*inputCtrl = true;
+                do{
+                    tmpMove = bufferedReader.readLine();
+                }while (inputCtrl);*/
+                move = bufferedReader.readLine();
                 connectionClient.handleMove(move);
             }
 
@@ -134,8 +140,10 @@ public class View implements Observer {
                 setHasChosenScheme(false);
             } else if (fromServer.startsWith("Your private achievement is:"))
                 graphicsInterface.printPrivate(fromServer);
-            else if (fromServer.startsWith("Tools:"))
+            else if (fromServer.startsWith("Tools:")) {
+                this.connectionClient.setTool(fromServer);
                 graphicsInterface.printTool(fromServer);
+            }
             else if (fromServer.startsWith("UpdateFromServer"))
                 graphicsInterface.printRules();
             else {

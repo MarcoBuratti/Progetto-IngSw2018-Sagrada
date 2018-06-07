@@ -21,6 +21,7 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
     private boolean isOn = true;
     private ExecutorService executor = Executors.newCachedThreadPool();
     private String playerNickname;
+    private String [] tool;
 
     public SocketConnectionClient(View view, String s, int port) {
         this.addObserver(view);
@@ -33,11 +34,6 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
             e.printStackTrace();
         }
 
-    }
-
-    @Override
-    public synchronized boolean getIsOn() {
-        return isOn;
     }
 
     private synchronized void setOff() {
@@ -57,31 +53,6 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
         setOff();
         executor.shutdown();
 
-    }
-
-
-    @Override
-    public void setPlayerNickname(String nickname) {
-        this.playerNickname = nickname;
-    }
-
-    @Override
-    public void handleScheme(String fromServer, String fromClient) {
-        int choice = Integer.parseInt(fromClient);
-        String substringSchemes = fromServer.substring(fromServer.indexOf(".") + 2);
-        StringTokenizer strtok = new StringTokenizer(substringSchemes, ",");
-        String[] schemes = new String[4];
-        int i = 0;
-        while (strtok.hasMoreTokens()) {
-            schemes[i] = strtok.nextToken();
-            i++;
-        }
-        String chosenScheme;
-        if (choice > 0 && choice <= 4)
-            chosenScheme = schemes[choice - 1];
-        else
-            chosenScheme = schemes[0];
-        send(chosenScheme);
     }
 
     private void placeDieHandler(String fromClient) {
@@ -130,6 +101,35 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
     }
 
     @Override
+    public void setPlayerNickname(String nickname) {
+        this.playerNickname = nickname;
+    }
+
+    @Override
+    public void handleScheme(String fromServer, String fromClient) {
+        int choice = Integer.parseInt(fromClient);
+        String substringSchemes = fromServer.substring(fromServer.indexOf(".") + 2);
+        StringTokenizer strtok = new StringTokenizer(substringSchemes, ",");
+        String[] schemes = new String[4];
+        int i = 0;
+        while (strtok.hasMoreTokens()) {
+            schemes[i] = strtok.nextToken();
+            i++;
+        }
+        String chosenScheme;
+        if (choice > 0 && choice <= 4)
+            chosenScheme = schemes[choice - 1];
+        else
+            chosenScheme = schemes[0];
+        send(chosenScheme);
+    }
+
+    @Override
+    public synchronized boolean getIsOn() {
+        return isOn;
+    }
+
+    @Override
     public void handleMove(String fromClient) {
         StringTokenizer strtok = new StringTokenizer(fromClient);
         int moveChoice = Integer.parseInt(strtok.nextToken());
@@ -154,6 +154,12 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
     @Override
     public void handleName(String name) {
         send(name);
+    }
+
+    @Override
+    public void setTool(String s) {
+        s = s.substring(s.indexOf(":") + 2);
+        tool = s.split(",");
     }
 
     @Override

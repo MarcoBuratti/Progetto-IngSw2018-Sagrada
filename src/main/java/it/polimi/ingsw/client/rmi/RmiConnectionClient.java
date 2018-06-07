@@ -21,6 +21,7 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
     RmiServerInterface channel;
     private boolean isOn = true;
     private String playerNickname;
+    private String [] tool;
 
     public RmiConnectionClient(View view, String address, int port) {
         addObserver(view);
@@ -32,7 +33,6 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
         }
 
     }
-
 
     private synchronized void close() {
         this.isOn = false;
@@ -46,7 +46,6 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
                 close();
         }
     }
-
 
     private void sendName(Message message) {
         if (getIsOn()) {
@@ -81,7 +80,7 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
         }
     }
 
-    public void quit() {
+    private void quit() {
         try {
             this.channel.quit();
         } catch (RemoteException e) {
@@ -155,5 +154,11 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
     @Override
     public void handleName(String name) {
         sendName(new Message(name));
+    }
+
+    @Override
+    public void setTool(String s) {
+        s = s.substring(s.indexOf(":") + 2);
+        tool = s.split(",");
     }
 }

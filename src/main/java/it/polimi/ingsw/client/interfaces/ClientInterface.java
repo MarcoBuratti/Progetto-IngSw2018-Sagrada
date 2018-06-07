@@ -10,4 +10,6 @@ public interface ClientInterface {
     void handleMove(String fromClient);
 
     void handleName(String name);
+
+    void setTool(String s);
 }
