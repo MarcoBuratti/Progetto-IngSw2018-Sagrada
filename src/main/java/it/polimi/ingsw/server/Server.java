@@ -210,11 +210,13 @@ public class Server extends UnicastRemoteObject {
                     if (p.getServerInterface() == null) {
                         serverInterfaces.add(newServerInterface);
                         for (RemoteView r : remoteViews) {
-                            if (r.getPlayer().getNickname().equals(newServerInterface.getPlayer().getNickname()))
+                            if (r.getPlayer().getNickname().equals(newServerInterface.getPlayer().getNickname())) {
                                 r.changeConnection(newServerInterface);
+                                cliGraphicsServer.printLoggedAgain(oldPlayer.getNickname());
+                                newServerInterface.send("You have logged in again as: " + newServerInterface.getPlayer().getNickname());
+                                r.showGameboard(modelView);
+                            }
                         }
-                        cliGraphicsServer.printLoggedAgain(oldPlayer.getNickname());
-                        newServerInterface.send("You have logged in again as: " + newServerInterface.getPlayer().getNickname());
                     } else {
                         newServerInterface.send("This nickname has been already used! Please try again.");
                         newServerInterface.send("Terminate.");

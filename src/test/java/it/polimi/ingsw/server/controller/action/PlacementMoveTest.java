@@ -3,6 +3,7 @@ package it.polimi.ingsw.server.controller.action;
 import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Die;
 import it.polimi.ingsw.server.model.GameBoard;
+import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.exception.NotEnoughDiceLeftException;
 import it.polimi.ingsw.server.model.exception.NotValidParametersException;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
@@ -10,6 +11,7 @@ import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,11 +20,18 @@ class PlacementMoveTest {
     @Test
     void positionDie() throws NotValidValueException, NotEnoughDiceLeftException, NotValidParametersException, OccupiedCellException {
 
-        Map<String, String> map = new HashMap<>();
-        map.put("sergio", "Aurora_Sagradis");
-        map.put("christian", "Scheme_Test");
-        map.put("marco", "Fulgor_del_Cielo");
-        GameBoard gameBoard = new GameBoard(map);
+        ArrayList<Player> playersList = new ArrayList<>();
+        Player player;
+        player = new Player ( "christian" , null );
+        player.setDashboard("Scheme_Test");
+        playersList.add( player );
+        player = new Player ( "marco" , null );
+        player.setDashboard("Fulgor_del_Cielo");
+        playersList.add( player );
+        player = new Player ( "sergio" , null );
+        player.setDashboard("Aurora_Sagradis");
+        playersList.add( player );
+        GameBoard gameBoard = new GameBoard(playersList);
 
         Die die1 = new Die(Color.BLUE);
         die1.setNumber(4);

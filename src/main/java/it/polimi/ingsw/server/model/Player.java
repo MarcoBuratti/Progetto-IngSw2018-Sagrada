@@ -40,6 +40,7 @@ public class Player {
     public void setDashboard(String scheme) throws NotValidValueException {
         this.dashboard = new Dashboard(scheme);
         this.dashboard.setOwner(this);
+        this.currentFavourToken = this.dashboard.getFavourToken();
     }
 
     public void setPrivateAchievement(PrivateAchievement privateAchievement) {

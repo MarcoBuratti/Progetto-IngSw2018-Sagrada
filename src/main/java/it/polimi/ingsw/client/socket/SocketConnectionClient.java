@@ -81,17 +81,17 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
         StringBuilder bld = new StringBuilder();
         bld.append("playerID ");
         bld.append(this.playerNickname);
-        String json_translation;
         bld.append(" type_playerMove PlaceDie");
         int i = 1;
+
         while (strtok.hasMoreTokens()) {
             String key = "Key" + i;
             String value = strtok.nextToken();
             bld.append(" " + key + " " + value);
             i++;
         }
-        json_translation = bld.toString();
-        send(json_translation);
+
+        this.send( bld.toString() );
     }
 
     /**
@@ -102,7 +102,7 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
         bld.append("playerID ");
         bld.append(this.playerNickname);
         bld.append(" type_playerMove GoThrough");
-        send(bld.toString());
+        this.send( bld.toString() );
     }
 
     /**
@@ -122,12 +122,26 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
         StringBuilder bld = new StringBuilder();
         bld.append("playerID ");
         bld.append(this.playerNickname);
-        String json_translation;
         bld.append(" type_playerMove UseTool");
         int i = 1;
+        String toolIndex = strtok.nextToken();
+        bld.append( " toolIndex ");
+        bld.append(toolIndex);
+        toolIndex = strtok.nextToken();
+        bld.append( " extractedToolIndex ");
+        bld.append(toolIndex);
+
+
         while (strtok.hasMoreTokens()) {
-            //DA IMPLEMENTARE
+            bld.append(" Key");
+            bld.append(i);
+            bld.append(" ");
+            String parameter = strtok.nextToken();
+            bld.append(parameter);
+            i++;
         }
+
+        this.send( bld.toString() );
     }
 
     /**

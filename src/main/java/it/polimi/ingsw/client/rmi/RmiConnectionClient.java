@@ -188,14 +188,25 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
                 break;
         }
         if (choice > 0 && choice <= 3) {
+
             int i = 1;
+
+            if (choice == 2) {
+                String toolIndex = strtok.nextToken();
+                jsonObject.put( "toolIndex", toolIndex );
+                toolIndex = strtok.nextToken();
+                jsonObject.put( "extractedToolIndex", toolIndex );
+            }
+
             while (strtok.hasMoreTokens()) {
                 key = "Key" + i;
                 value = strtok.nextToken();
                 jsonObject.put(key, value);
                 i++;
             }
+
             sendMove(PlayerMove.playerMoveReader(jsonObject));
+
         } else if (choice == 4) {
             quit();
         }
@@ -228,6 +239,7 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
      * @param str a String containing the message sent by server
      * @throws RemoteException
      */
+
     @Override
     public void update(String str) throws RemoteException {
         if (getIsOn()) {

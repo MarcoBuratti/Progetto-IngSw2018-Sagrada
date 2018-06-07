@@ -12,11 +12,18 @@ import static org.junit.jupiter.api.Assertions.*;
 class GameBoardTest {
     @Test
     public void gameBoardTest() throws NotValidValueException {
-        Map<String, String> map = new HashMap<>();
-        map.put("sergio", "Aurora_Sagradis");
-        map.put("christian", "Chromatic_Splendor");
-        map.put("marco", "Fulgor_del_Cielo");
-        GameBoard gameBoard = new GameBoard(map);
+        ArrayList<Player> playersList = new ArrayList<>();
+        Player player;
+        player = new Player ( "christian" , null );
+        player.setDashboard("Chromatic_Splendor");
+        playersList.add( player );
+        player = new Player ( "marco" , null );
+        player.setDashboard("Fulgor_del_Cielo");
+        playersList.add( player );
+        player = new Player ( "sergio" , null );
+        player.setDashboard("Aurora_Sagradis");
+        playersList.add( player );
+        GameBoard gameBoard = new GameBoard(playersList);
         ArrayList<Die> draftPool = new ArrayList<>();
         Die d1, d2, d3;
         d1 = new Die(Color.VIOLET);
