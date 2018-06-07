@@ -60,7 +60,7 @@ public class View implements Observer {
             do {
                 graphicsInterface.printConnection();
                 choice = Integer.parseInt(bufferedReader.readLine());
-                inputCtrl = cliController.connecionController(choice);
+                inputCtrl = cliController.connectionController(choice);
             } while (inputCtrl);
 
             hasChosenScheme = true;
@@ -97,10 +97,6 @@ public class View implements Observer {
         } catch (Exception e) {
             System.err.println(e.toString());
         }
-    }
-
-    public String getNickname() {
-        return this.nickname;
     }
 
     private synchronized void setHasChosenScheme(boolean bool) {

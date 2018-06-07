@@ -10,9 +10,7 @@ import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 class TwoTurnToolTest {
 
@@ -22,6 +20,14 @@ class TwoTurnToolTest {
         map.put("sergio", "Aurora_Sagradis");
         map.put("christian", "Chromatic_Splendor");
         GameBoard gameBoard = new GameBoard(map);
+        ArrayList<Tool> tools = new ArrayList<>();
+        ToolNames[] toolList = ToolNames.values();
+        ToolFactory abstractToolFactory = new ToolFactory();
+        for (ToolNames aToolList : toolList) {
+            Tool toolFactory = abstractToolFactory.getTool(aToolList);
+            tools.add(toolFactory);
+        }
+        gameBoard.setTools(tools);
 
         ArrayList<Die> testDraftPool= new ArrayList<>();
         Die die1 =new Die(Color.VIOLET);
@@ -36,13 +42,20 @@ class TwoTurnToolTest {
         testDraftPool.add(die3);
 
         gameBoard.setDraftPool(testDraftPool);
+        ArrayList<Integer> intParameters;
 
         Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
         Turn turn1 = new Turn(gameBoard.getPlayers().get(0), gameBoard, true);
         String nickname = gameBoard.getPlayers().get(0).getNickname();
-        PlayerMove playerMove= new PlayerMove(nickname,"PlaceDie",0,new int[]{0,0});
-        PlayerMove playerMove1= new PlayerMove(nickname,"PlaceDie",0,new int[]{0,1});
-        PlayerMove playerMove2= new PlayerMove(nickname,"UseTool", ToolNames.RUNNING_PLIERS,0,new int[]{0,1});
+        intParameters = new ArrayList<>();
+        intParameters.add(0);
+        intParameters.add(0);
+        PlayerMove playerMove= new PlayerMove(nickname,"PlaceDie",0, intParameters);
+        intParameters = new ArrayList<>();
+        intParameters.add(0);
+        intParameters.add(1);
+        PlayerMove playerMove1= new PlayerMove(nickname,"PlaceDie",0,intParameters);
+        PlayerMove playerMove2= new PlayerMove(nickname,"UseTool", 10,0,intParameters);
         TwoTurnTool twoTurnTool=new TwoTurnTool(false,ToolNames.RUNNING_PLIERS);
         turn.tryPlacementMove(playerMove);
         Assertions.assertTrue(turn.isPlacementDone());

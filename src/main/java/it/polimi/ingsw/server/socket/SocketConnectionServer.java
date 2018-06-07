@@ -107,7 +107,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
                     close();
                 } else {
                     read(message);
-                    PlayerMove newMove = PlayerMove.PlayerMoveConstructor();
+                    PlayerMove newMove = PlayerMove.playerMoveConstructor();
                     send("Trying to make the following move: " + newMove.toString() + " ...");
                     setChanged();
                     notifyObservers(newMove);

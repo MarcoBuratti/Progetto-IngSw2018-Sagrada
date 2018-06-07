@@ -21,6 +21,14 @@ class TurnTest {
         map.put("christian", "Chromatic_Splendor");
         map.put("marco", "Fulgor_del_Cielo");
         GameBoard gameBoard = new GameBoard(map);
+        ArrayList<Tool> tools = new ArrayList<>();
+        ToolNames[] toolList = ToolNames.values();
+        ToolFactory abstractToolFactory = new ToolFactory();
+        for (ToolNames aToolList : toolList) {
+            Tool toolFactory = abstractToolFactory.getTool(aToolList);
+            tools.add(toolFactory);
+        }
+        gameBoard.setTools(tools);
 
         Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, true);
         String nickname = gameBoard.getPlayers().get(0).getNickname();
@@ -38,17 +46,6 @@ class TurnTest {
 
         gameBoard.setDraftPool(testDraftPool);
 
-        List<ToolNames> toolList = Arrays.asList(ToolNames.values());
-        ToolFactory abstractToolFactory = new ToolFactory();
-         ArrayList<Tool> tools = new ArrayList<>();
-
-        for (ToolNames t:toolList) {
-
-            Tool toolFactory = abstractToolFactory.getTool(t);
-            tools.add(toolFactory);
-        }
-
-        gameBoard.setTools(tools);
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -59,33 +56,37 @@ class TurnTest {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove(new PlayerMove(nickname,"PlaceDie", 2, new int[]{ 1,1}));
+                ArrayList<Integer> intParameters = new ArrayList<>();
+                intParameters.add(1);
+                intParameters.add(1);
+                turn.newMove(new PlayerMove(nickname,"PlaceDie", 2, intParameters));
             }
         }, 500);
+
        timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove(new PlayerMove(nickname,"PlaceDie",1, new int[]{0, 0}));
+                ArrayList<Integer> intParameters = new ArrayList<>();
+                intParameters.add(0);
+                intParameters.add(0);
+                turn.newMove(new PlayerMove(nickname,"PlaceDie",1, intParameters));
             }
         }, 1000);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove(new PlayerMove(nickname,"PlaceDie",2,new int[] {0, 1}));
+                ArrayList<Integer> intParameters = new ArrayList<>();
+                intParameters.add(0);
+                intParameters.add(1);
+                turn.newMove(new PlayerMove(nickname,"PlaceDie",2, intParameters));
             }
         }, 1500);
        timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove(new PlayerMove(nickname,"UseTool",ToolNames.GRINDING_STONE,1));
+                turn.newMove(new PlayerMove(nickname,"UseTool", 6,1));
             }
         }, 900);
-        /*timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                turn.newMove(new PlayerMove(nickname,"UseTool",ToolNames.GRINDING_STONE,0));
-            }
-        }, 1900);*/
 
         turn.turnManager();
 

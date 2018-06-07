@@ -13,11 +13,10 @@ import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 class ReplaceDieToolTest {
+    private final static String USE_TOOL = "UseTool";
 
     @Test
     void toolEffect() throws NotValidValueException, OccupiedCellException, NotValidParametersException, NotValidRoundException {
@@ -25,6 +24,14 @@ class ReplaceDieToolTest {
         map.put("sergio", "Aurora_Sagradis");
         map.put("christian", "Chromatic_Splendor");
         GameBoard gameBoard = new GameBoard(map);
+        ArrayList<Tool> tools = new ArrayList<>();
+        ToolNames[] toolList = ToolNames.values();
+        ToolFactory abstractToolFactory = new ToolFactory();
+        for (ToolNames aToolList : toolList) {
+            Tool toolFactory = abstractToolFactory.getTool(aToolList);
+            tools.add(toolFactory);
+        }
+        gameBoard.setTools(tools);
 
         Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
         String nickname = gameBoard.getPlayers().get(0).getNickname();
@@ -39,13 +46,34 @@ class ReplaceDieToolTest {
         dashboard.setDieOnCell(1,1,new Die(Color.RED));
         dashboard.getMatrixScheme()[1][1].getDie().setNumber(6);
 
-        PlayerMove playerMove = new PlayerMove(nickname,"UseTool",ToolNames.EGLOMISE_BRUSH,new int[]{0,0,0,2});
+
+        ArrayList<Integer> intParameters = new ArrayList<>();
+        intParameters.add(0);
+        intParameters.add(0);
+        intParameters.add(0);
+        intParameters.add(2);
+        PlayerMove playerMove = new PlayerMove(nickname, USE_TOOL, 2, intParameters);
         Assertions.assertTrue(replaceDieTool.toolEffect(turn,playerMove));
         ReplaceDieTool replaceDieTool1= new ReplaceDieTool(true, false, false,false,ToolNames.COPPER_FOIL_BURNISHER);
 
-        PlayerMove playerMove1 = new PlayerMove(nickname,"UseTool",ToolNames.COPPER_FOIL_BURNISHER,new int[]{1,0,1,2});
+
+        intParameters = new ArrayList<>();
+        intParameters.add(1);
+        intParameters.add(0);
+        intParameters.add(1);
+        intParameters.add(2);
+        PlayerMove playerMove1 = new PlayerMove(nickname,USE_TOOL, 0, intParameters);
         Assertions.assertTrue(replaceDieTool1.toolEffect(turn,playerMove1));
-        PlayerMove playerMove2 = new PlayerMove(nickname,"UseTool",ToolNames.LATHEKIN,new int[]{1,2,1,3,0,2,0,1});
+        intParameters = new ArrayList<>();
+        intParameters.add(1);
+        intParameters.add(2);
+        intParameters.add(1);
+        intParameters.add(3);
+        intParameters.add(0);
+        intParameters.add(2);
+        intParameters.add(0);
+        intParameters.add(1);
+        PlayerMove playerMove2 = new PlayerMove(nickname,USE_TOOL,8, intParameters);
         ReplaceDieTool replaceDieTool2= new ReplaceDieTool(true, true, false,false,ToolNames.LATHEKIN);
         Assertions.assertTrue(replaceDieTool2.toolEffect(turn,playerMove2));
 
@@ -58,7 +86,16 @@ class ReplaceDieToolTest {
 
 
         ReplaceDieTool replaceDieTool3= new ReplaceDieTool(true, true, true,false,ToolNames.TAP_WHEEL);
-        PlayerMove playerMove3 = new PlayerMove(nickname,"UseTool",ToolNames.TAP_WHEEL,new int[]{0,1,0,0,2,0,1,2});
+        intParameters = new ArrayList<>();
+        intParameters.add(0);
+        intParameters.add(1);
+        intParameters.add(0);
+        intParameters.add(0);
+        intParameters.add(2);
+        intParameters.add(0);
+        intParameters.add(1);
+        intParameters.add(2);
+        PlayerMove playerMove3 = new PlayerMove(nickname,USE_TOOL, 11, intParameters);
         Assertions.assertTrue(replaceDieTool3.toolEffect(turn,playerMove3));
 
         for (int i = 0; i <4 ; i++) {

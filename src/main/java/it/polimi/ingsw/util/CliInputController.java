@@ -9,7 +9,7 @@ public class CliInputController implements CliController {
         return s.contains(" ");
     }
 
-    public boolean connecionController(int i) {
+    public boolean connectionController(int i) {
         if (i == 1 || i == 2) return false;
         else return true;
     }

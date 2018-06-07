@@ -10,9 +10,7 @@ import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 class ChangeDieToolTest {
 
@@ -22,6 +20,14 @@ class ChangeDieToolTest {
         map.put("sergio", "Aurora_Sagradis");
         map.put("christian", "Chromatic_Splendor");
         GameBoard gameBoard = new GameBoard(map);
+        ArrayList<Tool> tools = new ArrayList<>();
+        ToolNames[] toolList = ToolNames.values();
+        ToolFactory abstractToolFactory = new ToolFactory();
+        for (ToolNames aToolList : toolList) {
+            Tool toolFactory = abstractToolFactory.getTool(aToolList);
+            tools.add(toolFactory);
+        }
+        gameBoard.setTools(tools);
 
         ArrayList<Die> testDraftPool= new ArrayList<>();
         Die die1 =new Die(Color.VIOLET);
@@ -54,11 +60,14 @@ class ChangeDieToolTest {
         String nickname = gameBoard.getPlayers().get(0).getNickname();
         System.out.println(gameBoard.getDraftPool());
         ChangeDieTool changeDieTool=new ChangeDieTool(false,ToolNames.LENS_CUTTER);
-        PlayerMove playerMove = new PlayerMove(nickname, "UseTool",ToolNames.LENS_CUTTER,0,new int[]{1,0});
+        ArrayList<Integer> intParameters = new ArrayList<>();
+        intParameters.add(1);
+        intParameters.add(0);
+        PlayerMove playerMove = new PlayerMove(nickname, "UseTool", 9,0, intParameters);
         Assertions.assertTrue(changeDieTool.toolEffect(turn,playerMove));
         System.out.println(gameBoard.getDraftPool());
         ChangeDieTool changeDieTool1=new ChangeDieTool(true,ToolNames.FLUX_REMOVER);
-        PlayerMove playerMove1 = new PlayerMove(nickname, "UseTool",ToolNames.FLUX_REMOVER,2);
+        PlayerMove playerMove1 = new PlayerMove(nickname, "UseTool",4,2);
         Assertions.assertTrue(changeDieTool1.toolEffect(turn,playerMove1));
         System.out.println(gameBoard.getDraftPool());
         //System.out.println(gameBoard.getRoundTrack());

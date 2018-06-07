@@ -9,6 +9,7 @@ import it.polimi.ingsw.server.model.exception.NotEnoughFavourTokensLeft;
 import it.polimi.ingsw.server.model.exception.NotValidParametersException;
 import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 
+import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -96,7 +97,7 @@ public class Turn {
     }
 
     public synchronized void newMove(PlayerMove playerMove) {
-        this.typeMove = playerMove.getTypeMove();
+        this.typeMove = playerMove.getMoveType();
         this.playerMove = playerMove;
         this.waitMove = false;
         notifyAll();
@@ -193,8 +194,11 @@ public class Turn {
     }
 
     private void useTool() {
-        if (playerMove.getToolName().isPresent()) {
-            Tool tool = gameBoard.getTools().stream().filter(t -> (t.getToolName().equals(playerMove.getToolName().get()))).findAny().orElseThrow(IllegalMonitorStateException::new);
+
+        Optional<Integer> toolIndex = playerMove.getExtractedToolIndex();
+        if (toolIndex.isPresent()) {
+            Integer toolIndexValue = toolIndex.get();
+            Tool tool = gameBoard.getTools().get(toolIndexValue);
 
             try {
 
@@ -217,7 +221,7 @@ public class Turn {
                     this.player.getServerInterface().send("Incorrect move! Please try again.");
 
             } catch (NotEnoughFavourTokensLeft | InterruptedException e) {
-                //risposta per mosse errate
+                throw new IllegalArgumentException();
 
             }
         } else
