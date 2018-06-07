@@ -9,8 +9,9 @@ public class CliInputController implements CliController {
         return s.contains(" ");
     }
 
-    public boolean connectionController(int i) {
-        if (i == 1 || i == 2) return false;
+    public boolean connecionController(String s) {
+        if (!s.matches("[0-9]+")) return true;
+        else if (Integer.parseInt(s) == 1 || Integer.parseInt(s) == 2) return false;
         else return true;
     }
 
@@ -27,9 +28,16 @@ public class CliInputController implements CliController {
         return false;
     }
 
-    public boolean portController(int s) {
-        if (s <= 1024 || s >= 65535) return true;
+    public boolean portController(String s) {
+        if (!s.matches("[0-9]+")) return true;
+        else if (Integer.parseInt(s) <= 1024 || Integer.parseInt(s) >= 65535) return true;
         else return false;
+    }
+
+    public boolean schemeController(String s){
+        if (!s.matches("[1-4]")) return true;
+        else if (Integer.parseInt(s) > 0 || Integer.parseInt(s) <= 4) return false;
+        else return true;
     }
 
 }

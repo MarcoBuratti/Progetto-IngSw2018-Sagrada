@@ -35,10 +35,15 @@ public class CliGraphicsClient implements GraphicsInterface {
         for (int i = 0; i < 4; i++) {
             JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/resources/dashboard_client/" + choice[i] + ".json"));
             System.out.println(i + 1 + ") " + "Nome: " + jsonObject.get("Name"));
+            System.out.println("Token: " + jsonObject.get("token"));
             System.out.println(jsonObject.get("String"));
             System.out.println("\n");
         }
 
+    }
+
+    public void printChoice( int i){
+        System.out.println("Please insert a number between 1 and 4. ");
     }
 
     public void printGeneric(String s) {

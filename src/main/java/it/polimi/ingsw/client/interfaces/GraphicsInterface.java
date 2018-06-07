@@ -22,6 +22,8 @@ public interface GraphicsInterface {
 
     void printChoice(String s) throws IOException, ParseException;
 
+    void printChoice(int i);
+
     void printIP();
 
     void printPort();
