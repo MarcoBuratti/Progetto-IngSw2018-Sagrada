@@ -1,4 +1,6 @@
 {
   "Name": "Martelletto",
-  "String": "Tira nuovamente tutti i dadi della Riserva. Questa carta può essera usata solo durante il tuo secondo turno, prima di scegliere il secondo dado"
+  "Number": "6",
+  "String": "Tira nuovamente tutti i dadi della Riserva.\nQuesta carta può essera usata solo durante il tuo secondo turno, prima di scegliere il secondo dado",
+  "Param": "0"
 }

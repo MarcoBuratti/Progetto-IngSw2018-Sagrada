@@ -195,6 +195,15 @@ class DashboardTest {
         }
     }
 
+    @Test
+    void ciao(){
+        String s = "VvsovBsonsBvoCdVV";
+        System.out.println(s);
+        String c =s.replace("V", "\u001B[31mV\033[0mm");
+        System.out.println(c);
+        String b = c.replace("B","\u001B[34mCIAO\033[0m");
+        System.out.println(b);
+    }
 }
 
 

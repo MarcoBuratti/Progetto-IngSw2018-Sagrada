@@ -33,5 +33,13 @@ public interface ClientInterface {
      */
     void handleMove(String fromClient);
 
-    void setTool(String s);
+     void setTool(String s);
+
+     boolean firstInput(String s);
+
+     boolean secondInputDie(String s);
+
+     boolean thirdInputDie(String s);
+
+     boolean secondInputTool(String s);
 }

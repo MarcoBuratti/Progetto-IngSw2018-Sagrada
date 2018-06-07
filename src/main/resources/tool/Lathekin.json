@@ -1,4 +1,6 @@
 {
   "Name": "Lathekin",
-  "String": "Muovi esattamente due dadi, rispettando tutte le restrizioni di piazzamento"
+  "Number": "9",
+  "String": "Muovi esattamente due dadi, rispettando tutte le restrizioni di piazzamento",
+  "Param": "8"
 }

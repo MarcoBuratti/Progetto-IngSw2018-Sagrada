@@ -2,6 +2,7 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.interfaces.CliController;
 import it.polimi.ingsw.client.interfaces.ClientInterface;
+import it.polimi.ingsw.client.interfaces.CliOutPut;
 import it.polimi.ingsw.client.interfaces.GraphicsInterface;
 import it.polimi.ingsw.client.rmi.RmiConnectionClient;
 import it.polimi.ingsw.client.socket.SocketConnectionClient;
@@ -9,27 +10,30 @@ import it.polimi.ingsw.util.CliGraphicsClient;
 import it.polimi.ingsw.util.CliInputController;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Observable;
 import java.util.Observer;
 
-public class View implements Observer {
+public class View implements Observer, GraphicsInterface {
     private BufferedReader bufferedReader;
     private ClientInterface connectionClient;
     private Boolean hasChosenScheme;
     private String nickname;
     private String schemes;
-    private GraphicsInterface graphicsInterface;
+    private CliOutPut cliOutPut;
     private String address;
     private String port;
-    private int portInt;
     private String choice;
-    private int choiceInt;
     private String fromClient;
     private String move;
     private String tmpMove;
-    private boolean connectionType; //true for socket, false for rmi
+    private String index;
+    private String RowColumn;
+    private boolean moveCtrl;
+    private boolean connectionType;
     private boolean inputCtrl;
+    private boolean toolCtrl = true;
     private CliController cliController;
 
 
@@ -39,35 +43,17 @@ public class View implements Observer {
 
     public void start() {
         try {
-            graphicsInterface = new CliGraphicsClient();
+            cliOutPut = new CliGraphicsClient();
             cliController = new CliInputController();
-            graphicsInterface.start();
-            inputCtrl = true;
-            do {
-                graphicsInterface.insert();
-                nickname = bufferedReader.readLine();
-                inputCtrl = cliController.nameController(nickname);
-            } while (inputCtrl);
-            inputCtrl = true;
-            do {
-                graphicsInterface.printIP();
-                address = bufferedReader.readLine();
-                inputCtrl = cliController.ipController(address);
-            } while (inputCtrl);
-            inputCtrl = true;
-            do {
-                graphicsInterface.printPort();
-                port = bufferedReader.readLine();
-                inputCtrl = cliController.portController(port);
-            } while (inputCtrl);
-            portInt = Integer.parseInt(port);
-            inputCtrl = true;
-            do {
-                graphicsInterface.printConnection();
-                choice = bufferedReader.readLine();
-                inputCtrl = cliController.connectionController(choice);
-            } while (inputCtrl);
-            choiceInt = Integer.parseInt(choice);
+            cliOutPut.start();
+
+            nickname = setNickname();
+            address = setIP();
+            port = setPort();
+            int portInt = Integer.parseInt(port);
+            choice = setChoice();
+            int choiceInt = Integer.parseInt(choice);
+
             hasChosenScheme = true;
 
             if (choiceInt == 1) {
@@ -86,24 +72,34 @@ public class View implements Observer {
                 }
             }
             if (!hasChosenScheme) {
-                inputCtrl = true;
-                int i = 0;
-                do {
-                    if(i >= 1) graphicsInterface.printChoice(i);
-                    fromClient = bufferedReader.readLine();
-                    inputCtrl = cliController.schemeController(fromClient);
-                    i++;
-                }while (inputCtrl);
+                fromClient = setScheme();
                 connectionClient.handleScheme(schemes, fromClient);
                 hasChosenScheme = true;
             }
 
             while (connectionClient.getIsOn()) {
-                /*inputCtrl = true;
+                inputCtrl = true;
                 do{
-                    tmpMove = bufferedReader.readLine();
-                }while (inputCtrl);*/
-                move = bufferedReader.readLine();
+                    tmpMove = setFirstInput();
+                    if(Integer.parseInt(tmpMove) == 3 || Integer.parseInt(tmpMove) == 4){
+                        move = tmpMove;
+                        moveCtrl = false;
+                        inputCtrl = false;
+                    }
+                    if(Integer.parseInt(tmpMove) == 1) {
+                        index = setIndexDash();
+                        tmpMove = tmpMove + " " + index;
+
+                        RowColumn = setRowColumn();
+                        tmpMove = tmpMove + " " + RowColumn;
+                        inputCtrl = false;
+                    }
+                    if(Integer.parseInt(tmpMove) == 2){
+                        //TODO implementare parte per tool
+                    }
+                }while (inputCtrl);
+
+                move = tmpMove;
                 connectionClient.handleMove(move);
             }
 
@@ -113,13 +109,94 @@ public class View implements Observer {
         }
     }
 
+    public synchronized String setNickname() throws IOException {
+        inputCtrl = true;
+        do {
+            cliOutPut.insert();
+            nickname = bufferedReader.readLine();
+            inputCtrl = cliController.nameController(nickname);
+        } while (inputCtrl);
+        return nickname;
+    }
+
+    public synchronized String setIP() throws IOException {
+        do {
+            cliOutPut.printIP();
+            address = bufferedReader.readLine();
+            inputCtrl = cliController.ipController(address);
+        } while (inputCtrl);
+        return address;
+    }
+
+    public synchronized String setPort() throws IOException {
+        inputCtrl = true;
+        do {
+            cliOutPut.printPort();
+            port = bufferedReader.readLine();
+            inputCtrl = cliController.portController(port);
+        } while (inputCtrl);
+        return port;
+    }
+
+    public synchronized String setChoice() throws IOException {
+        inputCtrl = true;
+        do {
+            cliOutPut.printConnection();
+            choice = bufferedReader.readLine();
+            inputCtrl = cliController.connectionController(choice);
+        } while (inputCtrl);
+        return choice;
+    }
+
+    public synchronized String setScheme() throws IOException {
+        inputCtrl = true;
+        int i = 0;
+        do {
+            if(i >= 1) cliOutPut.printChoice(i);
+            fromClient = bufferedReader.readLine();
+            inputCtrl = cliController.schemeController(fromClient);
+            i++;
+        }while (inputCtrl);
+        return fromClient;
+    }
+
     public String getNickname() {
         return this.nickname;
     }
 
-    private synchronized void setHasChosenScheme(boolean bool) {
+    public synchronized void setHasChosenScheme(boolean bool) {
         this.hasChosenScheme = bool;
         notifyAll();
+    }
+
+    public synchronized String setFirstInput() throws IOException {
+        moveCtrl = true;
+        while (moveCtrl){
+            cliOutPut.printRulesFirst();
+            tmpMove = bufferedReader.readLine();
+            moveCtrl = this.connectionClient.firstInput(tmpMove);
+        }
+        return tmpMove;
+    }
+
+    public synchronized String setIndexDash() throws IOException{
+        moveCtrl = true;
+        while (moveCtrl) {
+            cliOutPut.printRulesDash();
+            index = bufferedReader.readLine();
+            moveCtrl = this.connectionClient.secondInputDie(index);
+        }
+        return index;
+    }
+
+    public synchronized String setRowColumn() throws IOException{
+        moveCtrl = true;
+        while (moveCtrl){
+            cliOutPut.printRulesMatrix();
+            RowColumn = bufferedReader.readLine();
+            moveCtrl = this.connectionClient.secondInputDie(RowColumn);
+        }
+        return RowColumn;
     }
 
     @Override
@@ -133,21 +210,25 @@ public class View implements Observer {
                 if (fromServer.startsWith("You have logged in again as")) {
                     setHasChosenScheme(true);
                 }
-                graphicsInterface.printGeneric(fromServer);
+                cliOutPut.printGeneric(fromServer);
             } else if (fromServer.startsWith("schemes. ")) {
-                graphicsInterface.printChoice(fromServer);
+                cliOutPut.printChoice(fromServer);
                 schemes = fromServer;
                 setHasChosenScheme(false);
-            } else if (fromServer.startsWith("Your private achievement is:"))
-                graphicsInterface.printPrivate(fromServer);
-            else if (fromServer.startsWith("Tools:")) {
-                this.connectionClient.setTool(fromServer);
-                graphicsInterface.printTool(fromServer);
+            } else if (fromServer.startsWith("Your private achievement is:")) {
+                cliOutPut.printPrivate(fromServer);
             }
-            else if (fromServer.startsWith("UpdateFromServer"))
-                graphicsInterface.printRules();
+            else if (fromServer.startsWith("Tools:")) {
+                if(toolCtrl){
+                    this.connectionClient.setTool(fromServer);
+                    toolCtrl = false;
+                }
+                cliOutPut.printTool(fromServer);
+            }
+            else if(fromServer.startsWith("UpdateFromServer") )
+                cliOutPut.printRulesFirst();
             else {
-                graphicsInterface.printGeneric(fromServer);
+                cliOutPut.printGeneric(fromServer);
             }
 
         } catch (Exception e) {

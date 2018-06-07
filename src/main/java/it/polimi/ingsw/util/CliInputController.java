@@ -20,7 +20,7 @@ public class CliInputController implements CliController {
         String[] ctrl = s.split("\\.");
         if (ctrl.length != 4) return true;
         int j;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             if (!ctrl[i].matches("[0-9]+")) return true;
             j = Integer.parseInt(ctrl[i]);
             if (j < 0 || j > 255) return true;

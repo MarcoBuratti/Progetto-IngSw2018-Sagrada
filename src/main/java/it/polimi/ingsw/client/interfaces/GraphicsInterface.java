@@ -1,33 +1,21 @@
 package it.polimi.ingsw.client.interfaces;
 
-import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Observable;
 
 public interface GraphicsInterface {
 
-    void printGraphics();
-
     void start();
-
-    void insert();
-
-    void printConnection();
-
-    void printGeneric(String s);
-
-    void printPrivate(String s);
-
-    void printTool(String s) throws FileNotFoundException, IOException, ParseException;
-
-    void printRules();
-
-    void printChoice(String s) throws IOException, ParseException;
-
-    void printChoice(int i);
-
-    void printIP();
-
-    void printPort();
+    String getNickname();
+    void setHasChosenScheme(boolean bool);
+    void update(Observable o, Object arg);
+    String setNickname() throws IOException;
+    String setIP() throws IOException;
+    String setPort() throws IOException;
+    String setChoice() throws IOException;
+    String setScheme() throws IOException;
+    String setFirstInput() throws IOException;
+    String setIndexDash() throws IOException;
+    String setRowColumn() throws IOException;
 }

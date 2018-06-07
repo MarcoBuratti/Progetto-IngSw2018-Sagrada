@@ -42,7 +42,6 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
 
     }
 
-
     /**
      *
      */
@@ -211,11 +210,32 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
     /**
      *
      */
-
     @Override
     public void setTool(String s) {
         s = s.substring(s.indexOf(":") + 2);
         tool = s.split(",");
+    }
+
+    @Override
+    public boolean firstInput(String s) {
+        if (!s.matches("[1-4]")) return true;
+        else if (Integer.parseInt(s) > 0 || Integer.parseInt(s) <= 4) return false;
+        else return true;
+    }
+
+    @Override
+    public boolean secondInputDie(String s) {
+        return false;
+    }
+
+    @Override
+    public boolean thirdInputDie(String s) {
+        return false;
+    }
+
+    @Override
+    public boolean secondInputTool(String s) {
+        return false;
     }
 
     @Override

@@ -1,4 +1,6 @@
 {
   "Name": "Taglierina Manuale",
-  "String": "Muovi fino a due dadi dello stesso colore di un solo dado sul Tracciato dei Round. Devi rispettare tutte le restrizioni di piazzamento"
+  "Number": "12",
+  "String": "Muovi fino a due dadi dello stesso colore di un solo dado sul Tracciato dei Round. Devi rispettare tutte le restrizioni di piazzamento",
+  "Param": ["4", "8"]
 }

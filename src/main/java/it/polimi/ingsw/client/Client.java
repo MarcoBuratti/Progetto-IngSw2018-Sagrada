@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.interfaces.CliController;
-import it.polimi.ingsw.client.interfaces.GraphicsInterface;
+import it.polimi.ingsw.client.interfaces.CliOutPut;
 import it.polimi.ingsw.util.CliGraphicsClient;
 import it.polimi.ingsw.util.CliInputController;
 
@@ -18,10 +18,10 @@ public class Client {
         InputStreamReader input = new InputStreamReader(System.in);
         BufferedReader bufferedReader = new BufferedReader(input);
         CliController cliController = new CliInputController();
-        GraphicsInterface graphicsInterface = new CliGraphicsClient();
+        CliOutPut cliOutPut = new CliGraphicsClient();
 
         do {
-            graphicsInterface.printGraphics();
+            cliOutPut.printGraphics();
             choice = bufferedReader.readLine();
             inputCtrl = cliController.connectionController(choice);
         } while (inputCtrl);

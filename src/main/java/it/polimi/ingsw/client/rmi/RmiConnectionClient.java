@@ -1,11 +1,13 @@
 package it.polimi.ingsw.client.rmi;
 
 import it.polimi.ingsw.client.View;
+import it.polimi.ingsw.client.interfaces.ClientInputController;
 import it.polimi.ingsw.client.interfaces.ClientInterface;
 import it.polimi.ingsw.client.interfaces.RmiClientInterface;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.interfaces.RmiControllerInterface;
 import it.polimi.ingsw.server.interfaces.RmiServerInterface;
+import it.polimi.ingsw.util.ClientController;
 import it.polimi.ingsw.util.Message;
 import org.json.simple.JSONObject;
 
@@ -14,6 +16,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Observable;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 public class RmiConnectionClient extends Observable implements ClientInterface, RmiClientInterface {
 
@@ -22,6 +25,7 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
     private boolean isOn = true;
     private String playerNickname;
     private String [] tool;
+    private ClientInputController clientInputController;
 
     /**
      * Creates a RmiConnectionClient object, adding the corresponding view to its observers and establishing a connection between it and the server.
@@ -34,6 +38,7 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
         try {
             server = (RmiControllerInterface) Naming.lookup("//" + address + "/Server");
             channel = server.addClient((RmiClientInterface) UnicastRemoteObject.exportObject(this, port));
+            clientInputController = new ClientController();
         } catch (Exception e) {
             System.out.println("Connection error: " + e.toString());
         }
@@ -91,7 +96,6 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
     private synchronized void close() {
         this.isOn = false;
     }
-
 
     /**
      * Allows the user to close the connection between this client and the server.
@@ -197,12 +201,26 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
         }
     }
 
-    @Override
+
     public void setTool(String s) {
-        s = s.substring(s.indexOf(":") + 2);
-        tool = s.split(",");
+        clientInputController.setTool(s);
     }
 
+    public boolean firstInput(String s) {
+        return clientInputController.firstInput(s);
+    }
+
+    public boolean secondInputDie(String s) {
+        return clientInputController.secondInputDie(s);
+    }
+
+    public boolean thirdInputDie(String s) {
+        return clientInputController.thirdInputDie(s);
+    }
+
+    public boolean secondInputTool(String s) {
+      return clientInputController.secondInputTool(s);
+    }
 
     /**
      * Checks if the connection is on and notifies the observers (View) that a new message has arrived from the server.

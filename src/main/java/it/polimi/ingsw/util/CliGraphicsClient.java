@@ -1,6 +1,6 @@
 package it.polimi.ingsw.util;
 
-import it.polimi.ingsw.client.interfaces.GraphicsInterface;
+import it.polimi.ingsw.client.interfaces.CliOutPut;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -9,7 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 
-public class CliGraphicsClient implements GraphicsInterface {
+public class CliGraphicsClient implements CliOutPut {
 
     public void printGraphics(){
         System.out.println("Please insert 1 if you to play with CLI or 2 if you want to play with GUI");
@@ -70,12 +70,20 @@ public class CliGraphicsClient implements GraphicsInterface {
         }
     }
 
-    public void printRules() {
+    public void printRulesFirst() {
         System.out.println("\n");
-        System.out.println("Press 1 followed by the die index and\nthe row and column number to place a die");
-        System.out.println("Press 2 followed by the parameters\nshown on the cards to use the tools");
-        System.out.println("Press 3 if you want to go through");
-        System.out.println("Press 4 if you want to quit the game");
+        System.out.println("Premi 1 se vuoi piazzare un dado");
+        System.out.println("Premi 2 se vuoi usare una ToolCard");
+        System.out.println("Premi 3 se vuoi passare il turno");
+        System.out.println("Premi 4 se vuoi lasciare il gioco");
+    }
+
+    public void printRulesDash() {
+        System.out.println("Inserisci il numero del dado che vuoi prelevare dalla DraftPool - INSERISCI UN NUMERO DA 0 A 8");
+    }
+
+    public void printRulesMatrix(){
+        System.out.println("Inserisci l'indice della Riga e della Colonna in cui vuoi piazzare il dado");
     }
 
     public void printIP() {

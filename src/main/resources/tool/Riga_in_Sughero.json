@@ -1,4 +1,6 @@
 {
   "Name": "Riga in Sughero",
-  "String": "Dopo aver scelto un dado, piazzalo in una casella che non sia adiacente a un altro dado. Devi rispettare tutte le restrizioni di piazzamento"
+  "Number": "2",
+  "String": "Dopo aver scelto un dado, piazzalo in una casella che non sia adiacente a un altro dado. Devi rispettare tutte le restrizioni di piazzamento",
+  "Param": "3"
 }
