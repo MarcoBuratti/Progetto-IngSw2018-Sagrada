@@ -20,11 +20,6 @@ public class Player {
         this.skipSecondTurn = false;
     }
 
-    public void sendGameStarted() {
-        if (this.serverInterface != null)
-            serverInterface.send("The game has started!");
-    }
-
     public ServerInterface getServerInterface() {
         return this.serverInterface;
     }
@@ -60,12 +55,7 @@ public class Player {
      * @param dashboard          the player's dashboard, containing the chosen scheme and the initial number of favour tokens
      * @param privateAchievement the player's private achievement, associated with one of the available colours
      */
-    public Player(String nickname, Dashboard dashboard, PrivateAchievement privateAchievement) {
-        this.nickname = nickname;
-        this.dashboard = dashboard;
-        this.currentFavourToken = this.dashboard.getFavourToken();
-        this.privateAchievement = privateAchievement;
-    }
+
 
     /**
      * Returns the player's nickname attribute as a String object.
