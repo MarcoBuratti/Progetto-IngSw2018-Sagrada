@@ -197,6 +197,12 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
         }
     }
 
+    @Override
+    public void setTool(String s) {
+        s = s.substring(s.indexOf(":") + 2);
+        tool = s.split(",");
+    }
+
 
     /**
      * Checks if the connection is on and notifies the observers (View) that a new message has arrived from the server.
