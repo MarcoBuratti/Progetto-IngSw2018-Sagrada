@@ -2,10 +2,7 @@ package it.polimi.ingsw.server.controller.tool;
 
 import it.polimi.ingsw.server.controller.Turn;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
-import it.polimi.ingsw.server.model.Color;
-import it.polimi.ingsw.server.model.Dashboard;
-import it.polimi.ingsw.server.model.Die;
-import it.polimi.ingsw.server.model.GameBoard;
+import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.exception.NotValidParametersException;
 import it.polimi.ingsw.server.model.exception.NotValidRoundException;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
@@ -20,10 +17,14 @@ class ReplaceDieToolTest {
 
     @Test
     void toolEffect() throws NotValidValueException, OccupiedCellException, NotValidParametersException, NotValidRoundException {
-        Map<String, String> map = new HashMap<>();
-        map.put("sergio", "Aurora_Sagradis");
-        map.put("christian", "Chromatic_Splendor");
-        GameBoard gameBoard = new GameBoard(map);
+        ArrayList<Player> playersList = new ArrayList<>();
+        Player player = new Player ( "sergio" , null );
+        player.setDashboard("Aurora_Sagradis");
+        playersList.add( player );
+        player = new Player ( "christian" , null );
+        player.setDashboard("Chromatic_Splendor");
+        playersList.add( player );
+        GameBoard gameBoard = new GameBoard(playersList);
         ArrayList<Tool> tools = new ArrayList<>();
         ToolNames[] toolList = ToolNames.values();
         ToolFactory abstractToolFactory = new ToolFactory();

@@ -27,48 +27,8 @@ public class GameBoard extends Observable {
      * - The public achievements list containing the randomly extracted CardAchievement Objects.
      * The schemes argument must specify the players' user names and chosen window schemes.
      *
-     * @param schemes a map in which keys represent the players' user names and
      *                values represent the names of the chosen window schemes
      */
-    public GameBoard(Map<String, String> schemes) {
-
-        players = new ArrayList<>();
-        publicAchievements = new ArrayList<>();
-        tools = new ArrayList<>();
-
-        this.roundTrack = new RoundTrack();
-        this.diceBag = new DiceBag();
-
-        List<PublicAchievementNames> publicAchievementList = Arrays.asList(PublicAchievementNames.values());
-        Collections.shuffle(publicAchievementList);
-        AbstractCardFactory abstractFactory = new CardFactory();
-        for (int i = 0; i < NUMBER_OF_PUBLIC_ACHIEVEMENTS; i++) {
-            CardAchievement publicAchievementsFactory = abstractFactory.extractCardAchievement(publicAchievementList.get(i));
-            this.publicAchievements.add(publicAchievementsFactory);
-        }
-
-        List<ToolNames> toolList = Arrays.asList(ToolNames.values());
-        Collections.shuffle(toolList);
-        ToolFactory abstractToolFactory = new ToolFactory();
-        for (int i = 0; i < NUMBER_OF_TOOLS; i++) {
-            Tool toolFactory = abstractToolFactory.getTool(toolList.get(i));
-            this.tools.add(toolFactory);
-        }
-
-        List<Color> privateAchievementsList = Arrays.asList(Color.values());
-        Collections.shuffle(privateAchievementsList);
-        int i = 0;
-
-        try {
-            for (Map.Entry<String, String> elem : schemes.entrySet()) {
-                players.add(new Player(elem.getKey(), new Dashboard(elem.getValue()), new PrivateAchievement(privateAchievementsList.get(i))));
-                players.get(i).getDashboard().setOwner(players.get(i));
-                i++;
-            }
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
-    }
 
     public GameBoard(ArrayList<Player> players) {
 
