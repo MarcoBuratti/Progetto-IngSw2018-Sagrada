@@ -19,9 +19,13 @@ public class View implements Observer {
     private Boolean hasChosenScheme;
     private String nickname;
     private String schemes;
-    private String address;
-    private int port;
     private GraphicsInterface graphicsInterface;
+    private String address;
+    private String port;
+    private int portInt;
+    private String choice;
+    private int choiceInt;
+    private String fromClient;
     private boolean connectionType; //true for socket, false for rmi
     private boolean inputCtrl;
     private CliController cliController;
@@ -51,39 +55,43 @@ public class View implements Observer {
             inputCtrl = true;
             do {
                 graphicsInterface.printPort();
-                port = Integer.parseInt(bufferedReader.readLine());
+                port = bufferedReader.readLine();
                 inputCtrl = cliController.portController(port);
-
             } while (inputCtrl);
+            portInt = Integer.parseInt(port);
             inputCtrl = true;
-            int choice;
             do {
                 graphicsInterface.printConnection();
-                choice = Integer.parseInt(bufferedReader.readLine());
+                choice = bufferedReader.readLine();
                 inputCtrl = cliController.connecionController(choice);
             } while (inputCtrl);
-
+            choiceInt = Integer.parseInt(choice);
             hasChosenScheme = true;
 
-            if (choice == 1) {
+            if (choiceInt == 1) {
                 connectionType = true;
-                connectionClient = new SocketConnectionClient(this, address, port);
+                connectionClient = new SocketConnectionClient(this, address, portInt);
             } else {
                 connectionType = false;
-                connectionClient = new RmiConnectionClient(this, address, port);
+                connectionClient = new RmiConnectionClient(this, address, portInt);
             }
 
             connectionClient.handleName(nickname);
-
 
             if (connectionType) {
                 synchronized (this) {
                     wait();
                 }
             }
-
             if (!hasChosenScheme) {
-                String fromClient = bufferedReader.readLine();
+                inputCtrl = true;
+                int i = 0;
+                do {
+                    if(i >= 1) graphicsInterface.printChoice(i);
+                    fromClient = bufferedReader.readLine();
+                    inputCtrl = cliController.schemeController(fromClient);
+                    i++;
+                }while (inputCtrl);
                 connectionClient.handleScheme(schemes, fromClient);
                 hasChosenScheme = true;
             }

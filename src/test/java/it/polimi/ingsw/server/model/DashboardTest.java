@@ -190,6 +190,7 @@ class DashboardTest {
             String e =  schemesEnum.get(i).getName();
             JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/resources/dashboard_client/" + e + ".json"));
             System.out.println("Nome: " + jsonObject.get("Name"));
+            System.out.println("Token: " + jsonObject.get("token"));
             System.out.println(jsonObject.get("String"));
         }
     }
