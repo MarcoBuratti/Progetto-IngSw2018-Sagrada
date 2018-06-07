@@ -210,6 +210,7 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
      * @param str a String containing the message sent by server
      * @throws RemoteException
      */
+
     @Override
     public void update(String str) throws RemoteException {
         if (getIsOn()) {
