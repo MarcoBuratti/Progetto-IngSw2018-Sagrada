@@ -64,7 +64,9 @@ public class RemoteView extends Observable implements Observer {
         serverInterface.send("It's not your turn. Please wait.");
     }
 
-    private void process(PlayerMove playerMove) {
+    public void incorrectMove () { serverInterface.send("Your move is incorrect. Arguments not allowed.");}
+
+    private void process(PlayerMove playerMove){
         setChanged();
         notifyObservers(playerMove);
     }

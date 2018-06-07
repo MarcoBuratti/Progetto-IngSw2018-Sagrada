@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.controller.action;
 
-import it.polimi.ingsw.server.controller.tool.ToolNames;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -8,23 +7,27 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class PlayerMove implements Serializable {
+    private static final String PLACE_DIE = "PlaceDie";
+    private static final String USE_TOOL = "UseTool";
+    private static final String GO_THROUGH = "GoThrough";
     private String playerNickname;
-    private String typeMove;
-    private int[] intMatrixParameters;
+    private String moveType;
+    private ArrayList<Integer> intParameters;
     private Boolean twoReplace;
     private Boolean addOne;
     private Integer indexDie;
-    private ToolNames toolName;
+    private Integer extractedToolIndex;
 
 
-    public static PlayerMove PlayerMoveConstructor() {
+    public static PlayerMove playerMoveConstructor() {
         JSONParser parser = new JSONParser();
         try {
             JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/LastPlayerMove.json"));
-            return PlayerMoveReader(jsonObject);
+            return playerMoveReader(jsonObject);
         } catch (IOException | ParseException e) {
             System.err.println(e.toString());
         }
@@ -32,37 +35,74 @@ public class PlayerMove implements Serializable {
     }
 
 
-    public static PlayerMove PlayerMoveReader(JSONObject jsonObject) {
+    public static PlayerMove playerMoveReader(JSONObject jsonObject) {
 
         String playerNickname = (String) jsonObject.get("playerID");
         String moveType = (String) jsonObject.get("type_playerMove");
+        int dieIndex;
+        int row;
+        int column;
+        ArrayList<Integer> coordinates;
+        int otherKeysSize;
+
 
 
         switch (moveType) {
-            case "PlaceDie":
-                int die, row, column;
-                die = Integer.parseInt((String) jsonObject.get("Key1"));
+            case PLACE_DIE:
+                dieIndex = Integer.parseInt((String) jsonObject.get("Key1"));
                 row = Integer.parseInt((String) jsonObject.get("Key2"));
                 column = Integer.parseInt((String) jsonObject.get("Key3"));
-                int[] coordinates = new int[]{row, column};
-                return new PlayerMove(playerNickname, moveType, die, coordinates);
+                coordinates = new ArrayList<>();
+                coordinates.add(row);
+                coordinates.add(column);
+                return new PlayerMove(playerNickname, moveType, dieIndex, coordinates);
 
-            /*case "UseTool":
-                List<ToolNames> toolNames = Arrays.asList(ToolNames.values());
-                String toolName = (String) jsonObject.get("tool");
-                ToolNames tool = toolNames.stream().filter(t -> (t.getName().equals(toolName))).findAny().orElseThrow(IllegalMonitorStateException::new);
+            case USE_TOOL:
+                int toolIndex = Integer.parseInt((String) jsonObject.get("toolIndex"));
+                int extractedToolIndex = Integer.parseInt((String) jsonObject.get("extractedToolIndex"));
 
-                try {
-                    switch (toolName) {
-                        default:
-                            throw new IllegalAccessException();
+                switch (toolIndex) {
 
-                    }
-                } catch (Exception e) {
-                    System.out.println(e.toString());
+                    case 1:
+                        dieIndex = Integer.parseInt((String) jsonObject.get("Key1"));
+                        boolean addOne = Boolean.parseBoolean((String) jsonObject.get("Key2"));
+                        return new PlayerMove(playerNickname, moveType, extractedToolIndex, dieIndex, addOne);
+
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 12:
+                        otherKeysSize = jsonObject.size() - 4;
+                        coordinates = new ArrayList<>();
+                        for ( int i = 0 ; i < otherKeysSize ; i++ )
+                            coordinates.add( Integer.parseInt( (String) jsonObject.get( "Key" + (i+1) ) ) );
+                        return new PlayerMove(playerNickname, moveType, extractedToolIndex, coordinates);
+
+                    case 5:
+                    case 8:
+                    case 9:
+                        dieIndex = Integer.parseInt((String) jsonObject.get("Key1"));
+                        otherKeysSize = jsonObject.size() - 5;
+                        coordinates = new ArrayList<>();
+                        for ( int i = 0 ; i < otherKeysSize ; i++ )
+                            coordinates.add( Integer.parseInt( (String) jsonObject.get( "Key" + (i+2) ) ) );
+                        return new PlayerMove(playerNickname, moveType, extractedToolIndex, dieIndex, coordinates);
+
+                    case 6:
+                    case 10:
+                    case 11:
+                        dieIndex = Integer.parseInt((String) jsonObject.get("Key1"));
+                        return new PlayerMove(playerNickname, moveType, extractedToolIndex, dieIndex);
+
+                    case 7:
+                        return new PlayerMove(playerNickname, moveType, extractedToolIndex);
+
+                    default:
+                        throw new IllegalArgumentException();
+
                 }
-               */
-            case "GoThrough":
+
+            case GO_THROUGH:
                 return new PlayerMove(playerNickname, moveType);
 
             default:
@@ -70,86 +110,63 @@ public class PlayerMove implements Serializable {
         }
     }
 
-    public PlayerMove(String playerNickname, String typeMove) {
+    public PlayerMove(String playerNickname, String moveType) {
         this.playerNickname = playerNickname;
-        if (typeMove.equals("GoThrough"))
-            this.typeMove = typeMove;
+        if (moveType.equals(GO_THROUGH))
+            this.moveType = moveType;
         else
             throw new IllegalArgumentException();
     }
 
     //tool 7(OK)
-    public PlayerMove(String playerNickname, String typeMove, ToolNames toolName) {
+    public PlayerMove(String playerNickname, String moveType, int extractedToolIndex) {
         this.playerNickname = playerNickname;
-        if (typeMove.equals("UseTool") && (toolName.equals(ToolNames.GLAZING_HAMMER))) {
-            this.typeMove = typeMove;
-            this.toolName = toolName;
-        } else
-            throw new IllegalArgumentException();
+        this.moveType = moveType;
+        this.extractedToolIndex = extractedToolIndex;
     }
 
-    //usato anche da 11 per set dado(OK)
-    public PlayerMove(String playerNickname, String typeMove, int indexDie, int[] intParameters) {
+    //place die, usato anche da tool 11 OPPURE tool 2, 3, 4, 12
+    public PlayerMove(String playerNickname, String moveType, int firstParameter, ArrayList<Integer> intParameters) {
         this.playerNickname = playerNickname;
-        if (typeMove.equals("PlaceDie")) {
-            this.typeMove = typeMove;
-            this.intMatrixParameters = intParameters.clone();
-            this.indexDie = indexDie;
-        } else
+        this.moveType = moveType;
+        this.intParameters = intParameters;
+        if ( moveType.equals(PLACE_DIE) ) {
+            this.indexDie = firstParameter;
+        }
+        else if ( moveType.equals(USE_TOOL) ) {
+            this.extractedToolIndex = firstParameter;
+            this.twoReplace = intParameters.size() > 4;
+        }
+        else
             throw new IllegalArgumentException();
     }
 
     //tool 5 ,9(OK) e 8(OK ma dubbio su come segnarlo)
-    public PlayerMove(String playerNickname, String typeMove, ToolNames toolName, int indexDie, int[] intParameters) {
+    public PlayerMove(String playerNickname, String moveType, int extractedToolIndex, int indexDie, ArrayList<Integer> intParameters) {
         this.playerNickname = playerNickname;
-        if (typeMove.equals("UseTool") && ((toolName.equals(ToolNames.LENS_CUTTER) || toolName.equals(ToolNames.CORK_BAKED_STRAIGHTEDGE) ||
-                toolName.equals(ToolNames.RUNNING_PLIERS)))) {
-            this.typeMove = typeMove;
-            this.toolName = toolName;
-            this.intMatrixParameters = intParameters.clone();
-            this.indexDie = indexDie;
-        } else
-            throw new IllegalArgumentException();
+        this.moveType = moveType;
+        this.extractedToolIndex = extractedToolIndex;
+        this.intParameters = intParameters;
+        this.indexDie = indexDie;
     }
 
-    //tool 2 3 4 e 12
-    public PlayerMove(String playerNickname, String typeMove, ToolNames toolName, int[] intParameters) {
-        this.playerNickname = playerNickname;
-        if (typeMove.equals("UseTool") && (toolName.equals(ToolNames.EGLOMISE_BRUSH) || toolName.equals(ToolNames.COPPER_FOIL_BURNISHER) ||
-                toolName.equals(ToolNames.LATHEKIN) || toolName.equals(ToolNames.TAP_WHEEL))) {
-            this.typeMove = typeMove;
-            this.toolName = toolName;
-            this.intMatrixParameters = intParameters.clone();
-            if (intParameters.length > 4) {
-                this.twoReplace = true;
-            } else
-                this.twoReplace = false;
-        } else
-            throw new IllegalArgumentException();
-    }
+
 
     //tool 1(OK)
-    public PlayerMove(String playerNickname, String typeMove, ToolNames toolName, int indexDie, boolean addOne) {
+    public PlayerMove(String playerNickname, String moveType, int extractedToolIndex, int indexDie, boolean addOne) {
         this.playerNickname = playerNickname;
-        if (typeMove.equals("UseTool") && toolName.equals(ToolNames.GROZING_PLIERS)) {
-            this.toolName = toolName;
-            this.typeMove = typeMove;
-            this.indexDie = indexDie;
-            this.addOne = addOne;
-        } else
-            throw new IllegalArgumentException();
+        this.extractedToolIndex = extractedToolIndex;
+        this.moveType = moveType;
+        this.indexDie = indexDie;
+        this.addOne = addOne;
     }
 
     //tool 6(OK), 10(OK) e 11(OK)
-    public PlayerMove(String playerNickname, String typeMove, ToolNames toolName, int indexDie) {
-
-        if ((typeMove.equals("UseTool")) && (toolName.equals(ToolNames.GRINDING_STONE) || toolName.equals(ToolNames.FLUX_BRUSH)
-                || toolName.equals(ToolNames.FLUX_REMOVER))) {
-            this.toolName = toolName;
-            this.typeMove = typeMove;
-            this.indexDie = indexDie;
-        } else
-            throw new IllegalArgumentException();
+    public PlayerMove(String playerNickname, String moveType, int extractedToolIndex, int indexDie) {
+        this.playerNickname = playerNickname;
+        this.extractedToolIndex = extractedToolIndex;
+        this.moveType = moveType;
+        this.indexDie = indexDie;
     }
 
     public String getPlayerNickname() {
@@ -157,8 +174,10 @@ public class PlayerMove implements Serializable {
     }
 
     public Integer getIntParameters(int index) {
-        if (intMatrixParameters.length > 0 && index < intMatrixParameters.length)
-            return intMatrixParameters[index];
+        if (intParameters.size() > 0 && index < intParameters.size()) {
+            Integer newInt = intParameters.get(index);
+            return newInt;
+        }
         else
             throw new IllegalArgumentException();
     }
@@ -176,22 +195,22 @@ public class PlayerMove implements Serializable {
         return Optional.ofNullable(addOne);
     }
 
-    public Optional<ToolNames> getToolName() {
-        return Optional.ofNullable(toolName);
+    public Optional<Integer> getExtractedToolIndex() {
+        return Optional.ofNullable(extractedToolIndex);
     }
 
 
-    public String getTypeMove() {
-        return typeMove;
+    public String getMoveType() {
+        return moveType;
     }
 
     public String toString() {
-        switch (typeMove) {
-            case "PlaceDie":
-                return "Die:" + this.indexDie + " " + "coordinates:" + this.intMatrixParameters[0] + this.intMatrixParameters[1];
-            case "GoThrough":
+        switch (moveType) {
+            case PLACE_DIE:
+                return "Die:" + this.indexDie + " " + "coordinates:" + this.intParameters.get(0) + this.intParameters.get(1);
+            case GO_THROUGH:
                 return "Go Through";
-            case "UseTool":
+            case USE_TOOL:
                 return "Use Tool";
             default:
                 return "";

@@ -25,6 +25,14 @@ class SetDieToolTest {
         map.put("sergio", "Aurora_Sagradis");
         map.put("christian", "Chromatic_Splendor");
         GameBoard gameBoard = new GameBoard(map);
+        ArrayList<Tool> tools = new ArrayList<>();
+        ToolNames[] toolList = ToolNames.values();
+        ToolFactory abstractToolFactory = new ToolFactory();
+        for (ToolNames aToolList : toolList) {
+            Tool toolFactory = abstractToolFactory.getTool(aToolList);
+            tools.add(toolFactory);
+        }
+        gameBoard.setTools(tools);
 
         ArrayList<Die> testDraftPool = new ArrayList<>();
         Die die1 = new Die(Color.VIOLET);
@@ -53,21 +61,17 @@ class SetDieToolTest {
         dashboard.setDieOnCell(1, 1, new Die(Color.RED));
         dashboard.getMatrixScheme()[1][1].getDie().setNumber(6);
 
-        PlayerMove playerMove = new PlayerMove(nickname,"UseTool", ToolNames.GROZING_PLIERS, 0, false);
+        PlayerMove playerMove = new PlayerMove(nickname,"UseTool", 7, 0, false);
         Assertions.assertFalse(setDieTool.toolEffect(turn, playerMove));
-        PlayerMove playerMove1 = new PlayerMove(nickname,"UseTool", ToolNames.GROZING_PLIERS, 0, true);
+        PlayerMove playerMove1 = new PlayerMove(nickname,"UseTool", 7, 0, true);
         Assertions.assertTrue(setDieTool.toolEffect(turn, playerMove1));
-        /*turn.newMove(new PlayerMove("PlaceDie",0, new int[]{0, 1}));
-        Assertions.assertTrue(setDieTool.toolEffect(turn,playerMove));
-        System.out.println(gameBoard.getDraftPool().get(0));
-        setDieTool.placementDie(turn);*/
         SetDieTool setDieTool1 = new SetDieTool(true, ToolNames.FLUX_BRUSH);
-        PlayerMove playerMove2 = new PlayerMove(nickname,"UseTool", ToolNames.FLUX_BRUSH, 0);
+        PlayerMove playerMove2 = new PlayerMove(nickname,"UseTool", 3, 0);
         Assertions.assertTrue(setDieTool1.toolEffect(turn, playerMove2));
         System.out.println(gameBoard.getDraftPool().get(0));
 
         SetDieTool setDieTool2 = new SetDieTool(true, ToolNames.GRINDING_STONE);
-        PlayerMove playerMove3 = new PlayerMove(nickname,"UseTool", ToolNames.GRINDING_STONE, 0);
+        PlayerMove playerMove3 = new PlayerMove(nickname,"UseTool", 6, 0);
         Assertions.assertTrue(setDieTool2.toolEffect(turn, playerMove3));
         System.out.println(gameBoard.getDraftPool().get(0));
     }

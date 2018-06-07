@@ -21,6 +21,14 @@ class RerollToolTest {
         map.put("sergio", "Aurora_Sagradis");
         map.put("christian", "Chromatic_Splendor");
         GameBoard gameBoard = new GameBoard(map);
+        ArrayList<Tool> tools = new ArrayList<>();
+        ToolNames[] toolList = ToolNames.values();
+        ToolFactory abstractToolFactory = new ToolFactory();
+        for (ToolNames aToolList : toolList) {
+            Tool toolFactory = abstractToolFactory.getTool(aToolList);
+            tools.add(toolFactory);
+        }
+        gameBoard.setTools(tools);
 
         ArrayList<Die> testDraftPool= new ArrayList<>();
         Die die1 =new Die(Color.VIOLET);
@@ -38,7 +46,7 @@ class RerollToolTest {
         RerollTool rerollTool =new RerollTool(false, ToolNames.GLAZING_HAMMER);
         Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
         String nickname = gameBoard.getPlayers().get(0).getNickname();
-        PlayerMove playerMove = new PlayerMove(nickname,"UseTool",ToolNames.GLAZING_HAMMER);
+        PlayerMove playerMove = new PlayerMove(nickname,"UseTool", 5);
         Assertions.assertFalse(rerollTool.toolEffect(turn,playerMove));
         Turn turn1 = new Turn(gameBoard.getPlayers().get(0), gameBoard, true);
         Assertions.assertTrue(rerollTool.toolEffect(turn1,playerMove));

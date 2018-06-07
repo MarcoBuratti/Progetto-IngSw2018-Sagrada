@@ -23,6 +23,12 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
     private String playerNickname;
     private String [] tool;
 
+    /**
+     *
+     * @param view
+     * @param s
+     * @param port
+     */
     public SocketConnectionClient(View view, String s, int port) {
         this.addObserver(view);
         try {
@@ -36,14 +42,25 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
 
     }
 
+
+    /**
+     *
+     */
     private synchronized void setOff() {
         isOn = false;
     }
 
+    /**
+     *
+     * @param message
+     */
     private void send(String message) {
         out.println(message);
     }
 
+    /**
+     *
+     */
     private synchronized void close() {
         try {
             socket.close();
@@ -55,6 +72,10 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
 
     }
 
+    /**
+     *
+     * @param fromClient
+     */
     private void placeDieHandler(String fromClient) {
         StringTokenizer strtok = new StringTokenizer(fromClient, " ");
         strtok.nextToken();
@@ -74,6 +95,9 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
         send(json_translation);
     }
 
+    /**
+     *
+     */
     private void goThroughHandler() {
         StringBuilder bld = new StringBuilder();
         bld.append("playerID ");
@@ -82,10 +106,17 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
         send(bld.toString());
     }
 
+    /**
+     *
+     */
     private void quitHandler() {
         send("/quit");
     }
 
+    /**
+     *
+     * @param fromClient
+     */
     private void useToolHandler(String fromClient) {
         StringTokenizer strtok = new StringTokenizer(fromClient);
         strtok.nextToken();
@@ -100,11 +131,38 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
         }
     }
 
+    /**
+     *
+     * @return
+     */
+    @Override
+    public synchronized boolean getIsOn() {
+        return isOn;
+    }
+
+    /**
+     *
+     * @param nickname the String the user wants to set as playerNickname attribute.
+     */
     @Override
     public void setPlayerNickname(String nickname) {
         this.playerNickname = nickname;
     }
 
+    /**
+     *
+     * @param name a String specifying the chosen nickname
+     */
+    @Override
+    public void handleName(String name) {
+        send(name);
+    }
+
+    /**
+     *
+     * @param fromServer a String containing the names of the available schemes
+     * @param fromClient a String containing the client input
+     */
     @Override
     public void handleScheme(String fromServer, String fromClient) {
         int choice = Integer.parseInt(fromClient);
@@ -124,11 +182,10 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
         send(chosenScheme);
     }
 
-    @Override
-    public synchronized boolean getIsOn() {
-        return isOn;
-    }
-
+    /**
+     *
+     * @param fromClient a String containing the client input
+     */
     @Override
     public void handleMove(String fromClient) {
         StringTokenizer strtok = new StringTokenizer(fromClient);
@@ -151,10 +208,9 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
         }
     }
 
-    @Override
-    public void handleName(String name) {
-        send(name);
-    }
+    /**
+     *
+     */
 
     @Override
     public void setTool(String s) {

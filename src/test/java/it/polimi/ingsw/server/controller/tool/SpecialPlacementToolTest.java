@@ -9,9 +9,7 @@ import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 class SpecialPlacementToolTest {
 
@@ -21,6 +19,14 @@ class SpecialPlacementToolTest {
         map.put("sergio", "Aurora_Sagradis");
         map.put("christian", "Chromatic_Splendor");
         GameBoard gameBoard = new GameBoard(map);
+        ArrayList<Tool> tools = new ArrayList<>();
+        ToolNames[] toolList = ToolNames.values();
+        ToolFactory abstractToolFactory = new ToolFactory();
+        for (ToolNames aToolList : toolList) {
+            Tool toolFactory = abstractToolFactory.getTool(aToolList);
+            tools.add(toolFactory);
+        }
+        gameBoard.setTools(tools);
 
         ArrayList<Die> testDraftPool= new ArrayList<>();
         Die die1 =new Die(Color.VIOLET);
@@ -39,9 +45,15 @@ class SpecialPlacementToolTest {
         Turn turn1 = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
         String nickname = gameBoard.getPlayers().get(0).getNickname();
         SpecialPlacementTool specialPlacementTool= new SpecialPlacementTool(true,true,false, ToolNames.CORK_BAKED_STRAIGHTEDGE);
-        PlayerMove playerMove = new PlayerMove(nickname,"UseTool",ToolNames.CORK_BAKED_STRAIGHTEDGE,0,new int[]{2,3});
+        ArrayList<Integer> intParameters = new ArrayList<>();
+        intParameters.add(2);
+        intParameters.add(3);
+        PlayerMove playerMove = new PlayerMove(nickname,"UseTool",1,0,intParameters);
         Assertions.assertTrue(specialPlacementTool.toolEffect(turn,playerMove));
-        PlayerMove playerMove1 = new PlayerMove(nickname,"UseTool",ToolNames.CORK_BAKED_STRAIGHTEDGE,0,new int[]{1,2});
+        intParameters = new ArrayList<>();
+        intParameters.add(1);
+        intParameters.add(2);
+        PlayerMove playerMove1 = new PlayerMove(nickname,"UseTool",1,0,intParameters);
         Assertions.assertTrue(specialPlacementTool.toolEffect(turn1,playerMove1));
 
     }
