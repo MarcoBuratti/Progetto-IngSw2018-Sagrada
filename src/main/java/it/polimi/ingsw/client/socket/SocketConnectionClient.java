@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.socket;
 
 import it.polimi.ingsw.client.View;
+import it.polimi.ingsw.client.interfaces.ClientInputController;
 import it.polimi.ingsw.client.interfaces.ClientInterface;
 
 import java.io.BufferedReader;
@@ -21,7 +22,7 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
     private boolean isOn = true;
     private ExecutorService executor = Executors.newCachedThreadPool();
     private String playerNickname;
-    private String [] tool;
+    private ClientInputController clientInputController;
 
     /**
      *
@@ -224,32 +225,24 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
     /**
      *
      */
-    @Override
     public void setTool(String s) {
-        s = s.substring(s.indexOf(":") + 2);
-        tool = s.split(",");
+        clientInputController.setTool(s);
     }
 
-    @Override
     public boolean firstInput(String s) {
-        if (!s.matches("[1-4]")) return true;
-        else if (Integer.parseInt(s) > 0 || Integer.parseInt(s) <= 4) return false;
-        else return true;
+        return clientInputController.firstInput(s);
     }
 
-    @Override
     public boolean secondInputDie(String s) {
-        return false;
+        return clientInputController.secondInputDie(s);
     }
 
-    @Override
     public boolean thirdInputDie(String s) {
-        return false;
+        return clientInputController.thirdInputDie(s);
     }
 
-    @Override
     public boolean secondInputTool(String s) {
-        return false;
+        return clientInputController.secondInputTool(s);
     }
 
     @Override
