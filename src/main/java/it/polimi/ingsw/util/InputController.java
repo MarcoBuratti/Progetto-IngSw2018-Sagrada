@@ -1,18 +1,15 @@
 package it.polimi.ingsw.util;
 
 
-import it.polimi.ingsw.client.interfaces.CliController;
 
-public class CliInputController implements CliController {
+public class InputController {
 
     public boolean nameController(String s) {
         return s.contains(" ");
     }
 
     public boolean connectionController(String s) {
-        if (!s.matches("[0-9]+")) return true;
-        else if (Integer.parseInt(s) == 1 || Integer.parseInt(s) == 2) return false;
-        else return true;
+        return  (!s.matches("[1-2]"));
     }
 
     public boolean ipController(String s) {
@@ -35,9 +32,7 @@ public class CliInputController implements CliController {
     }
 
     public boolean schemeController(String s){
-        if (!s.matches("[1-4]")) return true;
-        else if (Integer.parseInt(s) > 0 || Integer.parseInt(s) <= 4) return false;
-        else return true;
+        return  (!s.matches("[1-4]"));
     }
 
 }

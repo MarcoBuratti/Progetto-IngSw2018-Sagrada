@@ -24,7 +24,6 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
     RmiServerInterface channel;
     private boolean isOn = true;
     private String playerNickname;
-    private String [] tool;
     private ClientInputController clientInputController;
 
     /**

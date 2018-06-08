@@ -216,7 +216,7 @@ public class Server extends UnicastRemoteObject {
         }
     }
 
-    private synchronized void registerOldPlayer (ServerInterface newServerInterface) {
+    private void registerOldPlayer (ServerInterface newServerInterface) {
         Player oldPlayer;
         for (Player p : players) {
             if (p.getNickname().equals(newServerInterface.getPlayer().getNickname())) {
@@ -232,7 +232,7 @@ public class Server extends UnicastRemoteObject {
         }
     }
 
-    private synchronized void searchRemoteView (ServerInterface newServerInterface, Player oldPlayer) {
+    private void searchRemoteView (ServerInterface newServerInterface, Player oldPlayer) {
         for (RemoteView r : remoteViews) {
             if (r.getPlayer().getNickname().equals(newServerInterface.getPlayer().getNickname())) {
                 r.changeConnection(newServerInterface);
@@ -243,7 +243,7 @@ public class Server extends UnicastRemoteObject {
         }
     }
 
-    private synchronized void registerNewPlayer (ServerInterface newServerInterface) {
+    private void registerNewPlayer (ServerInterface newServerInterface) {
         serverInterfaces.add(newServerInterface);
         remoteViews.add(new RemoteView(newServerInterface));
         players.add(newServerInterface.getPlayer());

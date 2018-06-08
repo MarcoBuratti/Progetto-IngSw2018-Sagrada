@@ -5,7 +5,7 @@ import org.json.simple.parser.ParseException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public interface CliOutPut {
+public interface CliOutput {
 
     void printGraphics();
     void start();

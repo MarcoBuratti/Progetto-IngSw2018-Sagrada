@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.socket;
 import it.polimi.ingsw.client.View;
 import it.polimi.ingsw.client.interfaces.ClientInputController;
 import it.polimi.ingsw.client.interfaces.ClientInterface;
+import it.polimi.ingsw.util.ClientController;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,6 +35,7 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
         this.addObserver(view);
         try {
             socket = new Socket(s, port);
+            clientInputController = new ClientController();
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintStream(socket.getOutputStream());
             executor.submit(this);

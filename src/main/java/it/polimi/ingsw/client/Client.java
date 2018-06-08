@@ -1,9 +1,7 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.interfaces.CliController;
-import it.polimi.ingsw.client.interfaces.CliOutPut;
-import it.polimi.ingsw.util.CliGraphicsClient;
-import it.polimi.ingsw.util.CliInputController;
+import it.polimi.ingsw.util.GraphicsClient;
+import it.polimi.ingsw.util.InputController;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,11 +15,11 @@ public class Client {
     public static void main(String[] args) throws IOException {
         InputStreamReader input = new InputStreamReader(System.in);
         BufferedReader bufferedReader = new BufferedReader(input);
-        CliController cliController = new CliInputController();
-        CliOutPut cliOutPut = new CliGraphicsClient();
+        InputController cliController = new InputController();
+        GraphicsClient cliOutPut = new GraphicsClient();
 
         do {
-            cliOutPut.printGraphics();
+            cliOutPut.printStart();
             choice = bufferedReader.readLine();
             inputCtrl = cliController.connectionController(choice);
         } while (inputCtrl);

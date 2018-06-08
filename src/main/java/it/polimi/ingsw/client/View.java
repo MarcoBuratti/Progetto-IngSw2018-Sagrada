@@ -1,13 +1,11 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.interfaces.CliController;
 import it.polimi.ingsw.client.interfaces.ClientInterface;
-import it.polimi.ingsw.client.interfaces.CliOutPut;
 import it.polimi.ingsw.client.interfaces.GraphicsInterface;
 import it.polimi.ingsw.client.rmi.RmiConnectionClient;
 import it.polimi.ingsw.client.socket.SocketConnectionClient;
-import it.polimi.ingsw.util.CliGraphicsClient;
-import it.polimi.ingsw.util.CliInputController;
+import it.polimi.ingsw.util.GraphicsClient;
+import it.polimi.ingsw.util.InputController;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,7 +19,7 @@ public class View implements Observer, GraphicsInterface {
     private Boolean hasChosenScheme;
     private String nickname;
     private String schemes;
-    private CliOutPut cliOutPut;
+    private GraphicsClient graphicsClient;
     private String address;
     private String port;
     private String choice;
@@ -34,24 +32,23 @@ public class View implements Observer, GraphicsInterface {
     private boolean connectionType;
     private boolean inputCtrl;
     private boolean toolCtrl = true;
-    private CliController cliController;
+    private InputController cliController;
 
 
     public View(InputStreamReader input) {
         bufferedReader = new BufferedReader(input);
+        graphicsClient = new GraphicsClient();
+        cliController = new InputController();
     }
 
     public void start() {
         try {
-            cliOutPut = new CliGraphicsClient();
-            cliController = new CliInputController();
-            cliOutPut.start();
 
-            nickname = setNickname();
-            address = setIP();
-            port = setPort();
+            setNickname();
+            setIP();
+            setPort();
             int portInt = Integer.parseInt(port);
-            choice = setChoice();
+            setChoice();
             int choiceInt = Integer.parseInt(choice);
 
             hasChosenScheme = true;
@@ -72,7 +69,7 @@ public class View implements Observer, GraphicsInterface {
                 }
             }
             if (!hasChosenScheme) {
-                fromClient = setScheme();
+                setScheme();
                 connectionClient.handleScheme(schemes, fromClient);
                 hasChosenScheme = true;
             }
@@ -80,84 +77,104 @@ public class View implements Observer, GraphicsInterface {
             while (connectionClient.getIsOn()) {
                 inputCtrl = true;
                 do{
-                    tmpMove = setFirstInput();
-                    if(Integer.parseInt(tmpMove) == 3 || Integer.parseInt(tmpMove) == 4){
+                    setFirstInput();
+                    if( tmpMove.equals("3")  || tmpMove.equals("4") ){
                         move = tmpMove;
                         moveCtrl = false;
                         inputCtrl = false;
                     }
-                    if(Integer.parseInt(tmpMove) == 1) {
-                        index = setIndexDash();
+                    if( tmpMove.equals("1") ) {
+                        setIndexDash();
                         tmpMove = tmpMove + " " + index;
 
-                        RowColumn = setRowColumn();
+                        setRowColumn();
                         tmpMove = tmpMove + " " + RowColumn;
                         inputCtrl = false;
                     }
-                    if(Integer.parseInt(tmpMove) == 2){
+                    if( tmpMove.equals("2") ){
                         //TODO implementare parte per tool
                     }
                 }while (inputCtrl);
-
                 move = tmpMove;
                 connectionClient.handleMove(move);
             }
 
-            System.out.println("Game ended.");
+            System.out.println( graphicsClient.printEnd() );
         } catch (Exception e) {
             System.err.println(e.toString());
         }
     }
 
-    public synchronized String setNickname() throws IOException {
-        inputCtrl = true;
+    private void setNickname() throws IOException {
+        inputCtrl = false;
         do {
-            cliOutPut.insert();
+            System.out.println( graphicsClient.askNick() );
             nickname = bufferedReader.readLine();
             inputCtrl = cliController.nameController(nickname);
+            if(inputCtrl) System.out.println( graphicsClient.wrongNick() );
         } while (inputCtrl);
-        return nickname;
     }
 
-    public synchronized String setIP() throws IOException {
+    private void setIP() throws IOException {
         do {
-            cliOutPut.printIP();
+            System.out.println( graphicsClient.printIP() );
             address = bufferedReader.readLine();
             inputCtrl = cliController.ipController(address);
         } while (inputCtrl);
-        return address;
     }
 
-    public synchronized String setPort() throws IOException {
+    private void setPort() throws IOException {
         inputCtrl = true;
         do {
-            cliOutPut.printPort();
+            System.out.println( graphicsClient.printPort() );
             port = bufferedReader.readLine();
             inputCtrl = cliController.portController(port);
         } while (inputCtrl);
-        return port;
     }
 
-    public synchronized String setChoice() throws IOException {
+    private  void setChoice() throws IOException {
         inputCtrl = true;
         do {
-            cliOutPut.printConnection();
+            System.out.println( graphicsClient.printConnection() );
             choice = bufferedReader.readLine();
             inputCtrl = cliController.connectionController(choice);
         } while (inputCtrl);
-        return choice;
     }
 
-    public synchronized String setScheme() throws IOException {
+    private void setScheme() throws IOException {
         inputCtrl = true;
-        int i = 0;
         do {
-            if(i >= 1) cliOutPut.printChoice(i);
             fromClient = bufferedReader.readLine();
             inputCtrl = cliController.schemeController(fromClient);
-            i++;
+            if(inputCtrl) System.out.println( graphicsClient.printRequest() );
         }while (inputCtrl);
-        return fromClient;
+    }
+
+    private void setFirstInput() throws IOException {
+        moveCtrl = true;
+        do {
+            tmpMove = bufferedReader.readLine();
+            moveCtrl = this.connectionClient.firstInput(tmpMove);
+            if(inputCtrl) System.out.println( graphicsClient.printRulesFirst() );
+        }while (moveCtrl);
+    }
+
+    private void setIndexDash() throws IOException{
+        moveCtrl = true;
+        while (moveCtrl) {
+            System.out.println( graphicsClient.printRulesDash() );
+            index = bufferedReader.readLine();
+            moveCtrl = this.connectionClient.secondInputDie(index);
+        }
+    }
+
+    private void setRowColumn() throws IOException{
+        moveCtrl = true;
+        while (moveCtrl){
+            System.out.println( graphicsClient.printRulesMatrix() );
+            RowColumn = bufferedReader.readLine();
+            moveCtrl = this.connectionClient.secondInputDie(RowColumn);
+        }
     }
 
     public String getNickname() {
@@ -169,37 +186,6 @@ public class View implements Observer, GraphicsInterface {
         notifyAll();
     }
 
-    public synchronized String setFirstInput() throws IOException {
-        moveCtrl = true;
-        while (moveCtrl){
-            cliOutPut.printRulesFirst();
-            tmpMove = bufferedReader.readLine();
-            moveCtrl = this.connectionClient.firstInput(tmpMove);
-        }
-        return tmpMove;
-    }
-
-    public synchronized String setIndexDash() throws IOException{
-        moveCtrl = true;
-        while (moveCtrl) {
-            cliOutPut.printRulesDash();
-            index = bufferedReader.readLine();
-            moveCtrl = this.connectionClient.secondInputDie(index);
-        }
-        return index;
-    }
-
-    public synchronized String setRowColumn() throws IOException{
-        moveCtrl = true;
-        while (moveCtrl){
-            cliOutPut.printRulesMatrix();
-            RowColumn = bufferedReader.readLine();
-            moveCtrl = this.connectionClient.secondInputDie(RowColumn);
-        }
-        return RowColumn;
-    }
-
-    @Override
     public synchronized void update(Observable o, Object arg) {
         try {
             String fromServer = (String) arg;
@@ -210,27 +196,25 @@ public class View implements Observer, GraphicsInterface {
                 if (fromServer.startsWith("You have logged in again as")) {
                     setHasChosenScheme(true);
                 }
-                cliOutPut.printGeneric(fromServer);
+                System.out.println(graphicsClient.printGeneric(fromServer));
             } else if (fromServer.startsWith("schemes. ")) {
-                cliOutPut.printChoice(fromServer);
+                graphicsClient.printChoice(fromServer);
                 schemes = fromServer;
                 setHasChosenScheme(false);
             } else if (fromServer.startsWith("Your private achievement is:")) {
-                cliOutPut.printPrivate(fromServer);
-            }
-            else if (fromServer.startsWith("Tools:")) {
-                if(toolCtrl){
+                System.out.println(graphicsClient.printPrivate(fromServer));
+            } else if (fromServer.startsWith("Tools:")) {
+                if (toolCtrl) {
                     this.connectionClient.setTool(fromServer);
                     toolCtrl = false;
                 }
-                cliOutPut.printTool(fromServer);
+                graphicsClient.printTool(fromServer);
+            } else if (fromServer.startsWith("UpdateFromServer")) {
+                System.out.println( graphicsClient.printRulesFirst());
             }
-            else if(fromServer.startsWith("UpdateFromServer") )
-                cliOutPut.printRulesFirst();
             else {
-                cliOutPut.printGeneric(fromServer);
+                System.out.println(graphicsClient.printGeneric(fromServer));
             }
-
         } catch (Exception e) {
             System.err.println(e.toString());
         }
