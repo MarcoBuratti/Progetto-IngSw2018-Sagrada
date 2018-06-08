@@ -38,7 +38,7 @@ public class Server extends UnicastRemoteObject {
     private ArrayList<Color> privateAchievements;
     private final int lobbyTime = 5 * 1000;
     private ArrayList<RemoteView> remoteViews;
-    boolean gameStarted;
+    private boolean gameStarted;
     private Timer timer;
     private CliGraphicsServer cliGraphicsServer = new CliGraphicsServer();
 
@@ -203,46 +203,61 @@ public class Server extends UnicastRemoteObject {
     public synchronized void registerConnection(ServerInterface newServerInterface) {
 
         if (alreadyLoggedIn(newServerInterface)) {
-            Player oldPlayer;
-            for (Player p : players) {
-                if (p.getNickname().equals(newServerInterface.getPlayer().getNickname())) {
-                    oldPlayer = p;
-                    if (p.getServerInterface() == null) {
-                        serverInterfaces.add(newServerInterface);
-                        for (RemoteView r : remoteViews) {
-                            if (r.getPlayer().getNickname().equals(newServerInterface.getPlayer().getNickname())) {
-                                r.changeConnection(newServerInterface);
-                                cliGraphicsServer.printLoggedAgain(oldPlayer.getNickname());
-                                newServerInterface.send("You have logged in again as: " + newServerInterface.getPlayer().getNickname());
-                                r.showGameboard(modelView);
-                            }
-                        }
-                    } else {
-                        newServerInterface.send("This nickname has been already used! Please try again.");
-                        newServerInterface.send("Terminate.");
-                    }
-                }
-            }
-        } else if (!playersConnected && nicknames.size() < 4) {
-            serverInterfaces.add(newServerInterface);
-            remoteViews.add(new RemoteView(newServerInterface));
-            players.add(newServerInterface.getPlayer());
-            nicknames.add(newServerInterface.getPlayer().getNickname());
-            newServerInterface.send("You have logged in as: " + newServerInterface.getPlayer().getNickname());
-            try {
-                cliGraphicsServer.printLoggedIn(newServerInterface.getPlayer().getNickname());
-            } catch (Exception e) {
-                cliGraphicsServer.printErr();
-            }
-            if (remoteViews.size() == 2) {
-                this.gameStartTimer();
-            } else if (((remoteViews.size() == 4))) {
-                this.startGame();
-            }
+         registerOldPlayer(newServerInterface);
+        }
 
-        } else {
+        else if (!playersConnected && nicknames.size() < 4) {
+            registerNewPlayer(newServerInterface);
+        }
+
+        else {
             newServerInterface.send("Game has already started! Please try again later.");
             newServerInterface.send("Terminate.");
+        }
+    }
+
+    private synchronized void registerOldPlayer (ServerInterface newServerInterface) {
+        Player oldPlayer;
+        for (Player p : players) {
+            if (p.getNickname().equals(newServerInterface.getPlayer().getNickname())) {
+                oldPlayer = p;
+                if (p.getServerInterface() == null) {
+                    serverInterfaces.add(newServerInterface);
+                    searchRemoteView( newServerInterface, oldPlayer );
+                } else {
+                    newServerInterface.send("This nickname has been already used! Please try again.");
+                    newServerInterface.send("Terminate.");
+                }
+            }
+        }
+    }
+
+    private synchronized void searchRemoteView (ServerInterface newServerInterface, Player oldPlayer) {
+        for (RemoteView r : remoteViews) {
+            if (r.getPlayer().getNickname().equals(newServerInterface.getPlayer().getNickname())) {
+                r.changeConnection(newServerInterface);
+                cliGraphicsServer.printLoggedAgain(oldPlayer.getNickname());
+                newServerInterface.send("You have logged in again as: " + newServerInterface.getPlayer().getNickname());
+                r.showGameboard(modelView);
+            }
+        }
+    }
+
+    private synchronized void registerNewPlayer (ServerInterface newServerInterface) {
+        serverInterfaces.add(newServerInterface);
+        remoteViews.add(new RemoteView(newServerInterface));
+        players.add(newServerInterface.getPlayer());
+        nicknames.add(newServerInterface.getPlayer().getNickname());
+        newServerInterface.send("You have logged in as: " + newServerInterface.getPlayer().getNickname());
+        try {
+            cliGraphicsServer.printLoggedIn(newServerInterface.getPlayer().getNickname());
+        } catch (Exception e) {
+            cliGraphicsServer.printErr();
+        }
+        if (remoteViews.size() == 2) {
+            this.gameStartTimer();
+        } else if (((remoteViews.size() == 4))) {
+            this.startGame();
         }
     }
 
@@ -285,6 +300,15 @@ public class Server extends UnicastRemoteObject {
         remoteViews.clear();
         gameStarted = false;
         System.out.println("Waiting for the next game to start...");
+    }
+
+    private synchronized void readyForNewGame () {
+        schemes = new ArrayList<>(Arrays.asList(SchemeCardsEnum.values()));
+        Collections.shuffle(schemes);
+        privateAchievements = new ArrayList<>(Arrays.asList(Color.values()));
+        Collections.shuffle(privateAchievements);
+        gameStarted = false;
+        System.out.println("Ready to start a new game!");
     }
 
 }
