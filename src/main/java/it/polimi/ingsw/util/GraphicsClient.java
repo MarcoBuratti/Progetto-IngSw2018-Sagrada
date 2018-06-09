@@ -82,6 +82,8 @@ public class GraphicsClient {
         return ("Inserisci l'indice della Riga e della Colonna in cui vuoi piazzare il dado");
     }
 
+    public String printToolIndex(){ return ("Scegli uno dei tre Tool, inserisci 1, 2 o 3"); }
+
     public String printIP() {
         return ("Per favore inserisci l'indirizzo IP del server");
     }

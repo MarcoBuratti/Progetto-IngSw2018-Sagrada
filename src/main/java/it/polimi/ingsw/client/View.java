@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import it.polimi.ingsw.client.interfaces.ClientInterface;
 import it.polimi.ingsw.client.interfaces.GraphicsInterface;
 import it.polimi.ingsw.client.rmi.RmiConnectionClient;
@@ -28,10 +29,12 @@ public class View implements Observer, GraphicsInterface {
     private String tmpMove;
     private String index;
     private String RowColumn;
+    private String toolIndex;
     private boolean moveCtrl;
     private boolean connectionType;
     private boolean inputCtrl;
     private boolean toolCtrl = true;
+    private boolean gameStarted = false;
     private InputController cliController;
 
 
@@ -42,7 +45,7 @@ public class View implements Observer, GraphicsInterface {
     }
 
     public void start() {
-        try {
+
 
             setNickname();
             setIP();
@@ -63,117 +66,170 @@ public class View implements Observer, GraphicsInterface {
 
             connectionClient.handleName(nickname);
 
-            if (connectionType) {
-                synchronized (this) {
-                    wait();
+            if(connectionType){
+                synchronized (this){
+                    try {
+                        wait();
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
                 }
             }
+
             if (!hasChosenScheme) {
                 setScheme();
                 connectionClient.handleScheme(schemes, fromClient);
                 hasChosenScheme = true;
             }
 
-            while (connectionClient.getIsOn()) {
+        while (connectionClient.getIsOn()) {
                 inputCtrl = true;
+                StringBuilder bld = new StringBuilder();
                 do{
                     setFirstInput();
+                    bld.append(tmpMove);
                     if( tmpMove.equals("3")  || tmpMove.equals("4") ){
-                        move = tmpMove;
                         moveCtrl = false;
                         inputCtrl = false;
                     }
                     if( tmpMove.equals("1") ) {
+                        System.out.println( graphicsClient.printRulesDash() );
                         setIndexDash();
-                        tmpMove = tmpMove + " " + index;
-
+                        bld.append(" " + index);
+                        System.out.println( graphicsClient.printRulesMatrix() );
                         setRowColumn();
-                        tmpMove = tmpMove + " " + RowColumn;
+                        bld.append(" " + RowColumn);
                         inputCtrl = false;
                     }
                     if( tmpMove.equals("2") ){
-                        //TODO implementare parte per tool
+                        bld.append(tmpMove);
+                        System.out.println( graphicsClient.printToolIndex() );
+                        setSecondTool();
+                        bld.append(" " + toolIndex);
                     }
                 }while (inputCtrl);
-                move = tmpMove;
+                move = bld.toString();
+            System.out.println(move);
                 connectionClient.handleMove(move);
             }
 
             System.out.println( graphicsClient.printEnd() );
-        } catch (Exception e) {
+    }
+
+    private void setNickname(){
+    try {
+        inputCtrl = false;
+        do {
+            System.out.println(graphicsClient.askNick());
+            nickname = bufferedReader.readLine();
+            inputCtrl = cliController.nameController(nickname);
+            if (inputCtrl) System.out.println(graphicsClient.wrongNick());
+        } while (inputCtrl);
+    }catch (IOException e) {
+        System.err.println(e.toString());
+    }
+    }
+
+    private void setIP() {
+        try {
+            do {
+                System.out.println(graphicsClient.printIP());
+                address = bufferedReader.readLine();
+                inputCtrl = cliController.ipController(address);
+            } while (inputCtrl);
+        }catch (IOException e) {
             System.err.println(e.toString());
         }
     }
 
-    private void setNickname() throws IOException {
-        inputCtrl = false;
-        do {
-            System.out.println( graphicsClient.askNick() );
-            nickname = bufferedReader.readLine();
-            inputCtrl = cliController.nameController(nickname);
-            if(inputCtrl) System.out.println( graphicsClient.wrongNick() );
-        } while (inputCtrl);
-    }
-
-    private void setIP() throws IOException {
-        do {
-            System.out.println( graphicsClient.printIP() );
-            address = bufferedReader.readLine();
-            inputCtrl = cliController.ipController(address);
-        } while (inputCtrl);
-    }
-
-    private void setPort() throws IOException {
-        inputCtrl = true;
-        do {
-            System.out.println( graphicsClient.printPort() );
-            port = bufferedReader.readLine();
-            inputCtrl = cliController.portController(port);
-        } while (inputCtrl);
-    }
-
-    private  void setChoice() throws IOException {
-        inputCtrl = true;
-        do {
-            System.out.println( graphicsClient.printConnection() );
-            choice = bufferedReader.readLine();
-            inputCtrl = cliController.connectionController(choice);
-        } while (inputCtrl);
-    }
-
-    private void setScheme() throws IOException {
-        inputCtrl = true;
-        do {
-            fromClient = bufferedReader.readLine();
-            inputCtrl = cliController.schemeController(fromClient);
-            if(inputCtrl) System.out.println( graphicsClient.printRequest() );
-        }while (inputCtrl);
-    }
-
-    private void setFirstInput() throws IOException {
-        moveCtrl = true;
-        do {
-            tmpMove = bufferedReader.readLine();
-            moveCtrl = this.connectionClient.firstInput(tmpMove);
-            if(inputCtrl) System.out.println( graphicsClient.printRulesFirst() );
-        }while (moveCtrl);
-    }
-
-    private void setIndexDash() throws IOException{
-        moveCtrl = true;
-        while (moveCtrl) {
-            System.out.println( graphicsClient.printRulesDash() );
-            index = bufferedReader.readLine();
-            moveCtrl = this.connectionClient.secondInputDie(index);
+    private void setPort() {
+        try {
+            inputCtrl = true;
+            do {
+                System.out.println(graphicsClient.printPort());
+                port = bufferedReader.readLine();
+                inputCtrl = cliController.portController(port);
+            } while (inputCtrl);
+        }catch (IOException e) {
+            System.out.println(e.toString());
         }
     }
 
-    private void setRowColumn() throws IOException{
-        moveCtrl = true;
-        while (moveCtrl){
-            System.out.println( graphicsClient.printRulesMatrix() );
-            RowColumn = bufferedReader.readLine();
-            moveCtrl = this.connectionClient.secondInputDie(RowColumn);
+    private  void setChoice() {
+        try {
+            inputCtrl = true;
+            do {
+                System.out.println(graphicsClient.printConnection());
+                choice = bufferedReader.readLine();
+                inputCtrl = cliController.connectionController(choice);
+            } while (inputCtrl);
+        }catch (IOException e) {
+            System.out.println(e.toString());
+        }
+    }
+
+    private void setScheme() {
+        try {
+            inputCtrl = true;
+            do {
+                fromClient = bufferedReader.readLine();
+                inputCtrl = cliController.schemeController(fromClient);
+                if (inputCtrl) System.out.println(graphicsClient.printRequest());
+            } while (inputCtrl);
+        }catch (IOException e) {
+            System.out.println(e.toString());
+        }
+    }
+
+    private void setFirstInput() {
+        try {
+            moveCtrl = true;
+            do {
+                tmpMove = bufferedReader.readLine();
+                moveCtrl = this.connectionClient.firstInput(tmpMove);
+                if (moveCtrl) System.out.println(graphicsClient.printRulesFirst());
+            } while (moveCtrl);
+        }catch (IOException e) {
+            System.out.println(e.toString());
+        }
+    }
+
+    private void setIndexDash() {
+        try {
+            moveCtrl = true;
+            do {
+                index = bufferedReader.readLine();
+                moveCtrl = this.connectionClient.secondInputDie(index);
+                if (moveCtrl) System.out.println(graphicsClient.printRulesDash());
+            } while (moveCtrl);
+        }catch (IOException e) {
+            System.out.println(e.toString());
+        }
+    }
+
+    private void setRowColumn() {
+        try {
+            moveCtrl = true;
+            do {
+                RowColumn = bufferedReader.readLine();
+                moveCtrl = this.connectionClient.thirdInputDie(RowColumn);
+                if (moveCtrl) System.out.println(graphicsClient.printRulesMatrix());
+            } while (moveCtrl);
+        }catch (IOException e) {
+            System.out.println(e.toString());
+        }
+    }
+
+    private void setSecondTool(){
+        try {
+            moveCtrl = true;
+            do {
+                toolIndex = bufferedReader.readLine();
+                moveCtrl = this.connectionClient.secondInputTool(toolIndex);
+                if (moveCtrl) System.out.println(graphicsClient.printToolIndex());
+            } while (moveCtrl);
+        }catch (IOException e) {
+            System.out.println(e.toString());
         }
     }
 
@@ -212,6 +268,8 @@ public class View implements Observer, GraphicsInterface {
             } else if (fromServer.startsWith("UpdateFromServer")) {
                 System.out.println( graphicsClient.printRulesFirst());
             }
+            else if(fromServer.startsWith("The game has started!"))
+                gameStarted = true;
             else {
                 System.out.println(graphicsClient.printGeneric(fromServer));
             }

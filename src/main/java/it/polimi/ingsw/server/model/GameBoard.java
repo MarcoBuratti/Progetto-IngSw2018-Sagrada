@@ -171,8 +171,7 @@ public class GameBoard extends Observable {
     public String toString() {
         StringBuilder bld = new StringBuilder();
 
-        for (Player p : players)
-            bld.append(p.getDashboard().toString());
+           // bld.append(getDashboard().toString());
 
         if (currentPlayer != null)
             bld.append("\nNow it's " + currentPlayer.getNickname() + "'s turn.");

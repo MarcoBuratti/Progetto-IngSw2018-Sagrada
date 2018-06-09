@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.interfaces.ServerInterface;
 import it.polimi.ingsw.server.model.Player;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -12,6 +13,7 @@ public class RemoteView extends Observable implements Observer {
     private Player player;
     private ServerInterface serverInterface;
     private MessageReceiver messageReceiver;
+    private ArrayList<Player> players;
 
     public RemoteView(ServerInterface serverInterface) {
         this.serverInterface = serverInterface;
@@ -48,11 +50,13 @@ public class RemoteView extends Observable implements Observer {
 
     public void showGameboard(ModelView modelView) {
         if (serverInterface != null) {
+            players = modelView.model.getPlayers();
             serverInterface.send(modelView.model.sendTool());
             serverInterface.send(modelView.model.sendAchievement());
             serverInterface.send(modelView.model.sendRoundTrack());
             serverInterface.send(modelView.model.sendDraft());
-            serverInterface.send(modelView.model.toString());
+            for (Player p : players)
+                serverInterface.send(p.getDashboard().toString());
         }
     }
 
