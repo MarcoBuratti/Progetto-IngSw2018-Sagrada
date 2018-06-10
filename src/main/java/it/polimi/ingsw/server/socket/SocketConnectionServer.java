@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.socket;
 
+import it.polimi.ingsw.server.Game;
 import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.interfaces.ServerInterface;
@@ -17,12 +18,12 @@ import java.util.StringTokenizer;
 public class SocketConnectionServer extends Observable implements Runnable, ServerInterface {
 
     private Server server;
+    private Game game;
     private Socket socket;
     private PrintStream out;
     private BufferedReader in;
     private Player player;
-    private boolean firstLog;
-    private boolean gameStarted;
+    private boolean gameStarted = false;
     private boolean isOn;
 
     public SocketConnectionServer(Socket socket, Server server) throws IOException {
@@ -30,12 +31,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         this.server = server;
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintStream(socket.getOutputStream());
-        firstLog = true;
         isOn = true;
-    }
-
-    private synchronized boolean getIsOn() {
-        return isOn;
     }
 
     public synchronized void setOff() {
@@ -81,24 +77,36 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
     public void run() {
         try {
             this.player = new Player(in.readLine(), this);
-            gameStarted = server.isGameStarted();
-            firstLog = !server.alreadyLoggedIn(this);
-            if (firstLog && !gameStarted) {
-                String schemes = server.selectSchemes();
-                String defaultScheme = defaultScheme(schemes);
-                Color privateAchievementColor = server.selectPrivateAchievement();
-                this.player.setPrivateAchievement(new PrivateAchievement(privateAchievementColor));
+            boolean firstLog = !server.alreadyLoggedIn(this);
+
+            if ( firstLog ) {
                 server.registerConnection(this);
+                synchronized (this) {
+                    while (!gameStarted) {
+                        try {
+                            wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                String schemes = game.selectSchemes();
+                String defaultScheme = defaultScheme(schemes);
+                Color privateAchievementColor = game.selectPrivateAchievement();
+                this.player.setPrivateAchievement(new PrivateAchievement(privateAchievementColor));
                 this.send("Your private achievement is: " + privateAchievementColor);
                 String chosenScheme = askForChosenScheme(schemes);
-                gameStarted = server.isGameStarted();
-                if (!gameStarted) {
+                boolean schemeChosen = game.isSchemeChosen();
+                if (!schemeChosen) {
                     this.player.setDashboard(chosenScheme);
                     this.send("You have chosen the following scheme: " + chosenScheme + "\n" + this.player.getDashboard().toString() + "\nPlease wait, the game will start soon.");
                 } else
                     this.send("Too late! Your scheme is: " + defaultScheme + "\n" + this.player.getDashboard().toString() + "\nThe game has already started!");
-            } else
+            }
+
+            else
                 server.registerConnection(this);
+
             isOn = true;
 
             while (isOn) {
@@ -121,6 +129,11 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
     @Override
     public Player getPlayer() {
         return player;
+    }
+
+    @Override
+    public synchronized void setGame(Game game) {
+        this.game = game;
     }
 
     @Override
@@ -148,4 +161,9 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         server.deregisterConnection(this);
     }
 
+    @Override
+    public synchronized void update(Observable o, Object arg) {
+        gameStarted = true;
+        notifyAll();
+    }
 }

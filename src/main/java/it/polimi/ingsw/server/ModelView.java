@@ -7,15 +7,19 @@ import java.util.Observer;
 
 public class ModelView extends Observable implements Observer {
 
-    public GameBoard model;
+    private GameBoard model;
 
     public void setModel(GameBoard model) {
         this.model = model;
     }
 
-    public ModelView(GameBoard gameBoard) {
+    ModelView(GameBoard gameBoard) {
         this.model = gameBoard;
         this.model.addObserver(this);
+    }
+
+    public GameBoard getModel() {
+        return model;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.server.Game;
 import it.polimi.ingsw.server.RemoteView;
 import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
@@ -23,13 +24,13 @@ public class Controller extends Observable implements Observer {
     private ArrayList<Pair<Player, Integer>> finalScore;
     private boolean onePlayerLeft = false;
 
-    public Controller(Server server) {
-        gameBoard = new GameBoard(server.getPlayers());
+    public Controller(Game game) {
+        gameBoard = new GameBoard(game.getPlayers());
         players = gameBoard.getPlayers();
     }
 
-    public void setRemoteViews(Server server) {
-        ArrayList<RemoteView> remoteViews = new ArrayList<>(server.getRemoteViews());
+    public void setRemoteViews(Game game) {
+        ArrayList<RemoteView> remoteViews = new ArrayList<>(game.getRemoteViews());
         for (RemoteView r : remoteViews)
             r.addObserver(this);
     }
@@ -132,6 +133,24 @@ public class Controller extends Observable implements Observer {
         }
     }
 
+    private void toolMoveHandler (PlayerMove playerMove, Observable o) {
+        int toolCost;
+        Optional<Integer> toolIndex = playerMove.getExtractedToolIndex();
+        if (toolIndex.isPresent()) {
+            Integer toolIndexValue = toolIndex.get();
+            if (gameBoard.getTools().get(toolIndexValue).isAlreadyUsed())
+                toolCost = 2;
+            else toolCost = 1;
+
+            if (currentRound.getCurrentPlayer().getCurrentFavourToken() >= toolCost) {
+                moveHandler(playerMove, o);
+            }
+        } else {
+            RemoteView remoteView = (RemoteView) o;
+            remoteView.incorrectMove();
+        }
+    }
+
     @Override
     public void update(Observable o, Object arg) {
 
@@ -146,21 +165,7 @@ public class Controller extends Observable implements Observer {
                     break;
 
                 case USE_TOOL:
-                    int toolCost;
-                    Optional<Integer> toolIndex = playerMove.getExtractedToolIndex();
-                    if (toolIndex.isPresent()) {
-                        Integer toolIndexValue = toolIndex.get();
-                        if (gameBoard.getTools().get(toolIndexValue).isAlreadyUsed())
-                            toolCost = 2;
-                        else toolCost = 1;
-
-                        if (currentRound.getCurrentPlayer().getCurrentFavourToken() >= toolCost) {
-                            moveHandler(playerMove, o);
-                        }
-                    } else {
-                        RemoteView remoteView = (RemoteView) o;
-                        remoteView.incorrectMove();
-                    }
+                    toolMoveHandler(playerMove, o);
                     break;
 
                 case GO_THROUGH:

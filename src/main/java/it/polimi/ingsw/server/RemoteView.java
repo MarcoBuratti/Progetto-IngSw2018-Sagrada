@@ -11,11 +11,13 @@ import java.util.Observer;
 public class RemoteView extends Observable implements Observer {
 
     private Player player;
+    private Game game;
     private ServerInterface serverInterface;
     private MessageReceiver messageReceiver;
-    private ArrayList<Player> players;
+    private boolean gameStarted;
 
     public RemoteView(ServerInterface serverInterface) {
+        gameStarted = false;
         this.serverInterface = serverInterface;
         player = serverInterface.getPlayer();
         messageReceiver = new MessageReceiver();
@@ -25,6 +27,7 @@ public class RemoteView extends Observable implements Observer {
 
     synchronized void changeConnection(ServerInterface serverInterface) {
         this.serverInterface = serverInterface;
+        this.serverInterface.setGame(game);
         this.serverInterface.setPlayer(player);
         this.player.setServerInterface(this.serverInterface);
         messageReceiver = new MessageReceiver();
@@ -32,8 +35,17 @@ public class RemoteView extends Observable implements Observer {
         serverConnection.addObserver(this.messageReceiver);
     }
 
-    synchronized void setModelView(ModelView modelView) {
+    synchronized void setModelView ( ModelView modelView ) {
         modelView.addObserver(this);
+    }
+
+    Game getGame () { return this.game; }
+
+    synchronized void setGame (Game game) {
+        this.game = game;
+        this.setGameStarted();
+        if ( this.serverInterface != null )
+            this.serverInterface.setGame(game);
     }
 
     synchronized void removeConnection() {
@@ -44,17 +56,17 @@ public class RemoteView extends Observable implements Observer {
         return player;
     }
 
-    public ServerInterface getServerInterface() {
+    ServerInterface getServerInterface() {
         return serverInterface;
     }
 
-    public void showGameboard(ModelView modelView) {
+    void showGameBoard(ModelView modelView) {
         if (serverInterface != null) {
-            players = modelView.model.getPlayers();
-            serverInterface.send(modelView.model.sendTool());
-            serverInterface.send(modelView.model.sendAchievement());
-            serverInterface.send(modelView.model.sendRoundTrack());
-            serverInterface.send(modelView.model.sendDraft());
+            ArrayList<Player> players = modelView.getModel().getPlayers();
+            serverInterface.send(modelView.getModel().sendTool());
+            serverInterface.send(modelView.getModel().sendAchievement());
+            serverInterface.send(modelView.getModel().sendRoundTrack());
+            serverInterface.send(modelView.getModel().sendDraft());
             for (Player p : players)
                 serverInterface.send(p.getDashboard().toString());
         }
@@ -75,6 +87,14 @@ public class RemoteView extends Observable implements Observer {
         notifyObservers(playerMove);
     }
 
+    synchronized boolean isGameStarted () {
+        return this.gameStarted;
+    }
+
+    private synchronized void setGameStarted () {
+        this.gameStarted = true;
+    }
+
     private class MessageReceiver implements Observer {
         @Override
         public void update(Observable o, Object arg) {
@@ -86,6 +106,6 @@ public class RemoteView extends Observable implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        showGameboard((ModelView) o);
+        showGameBoard((ModelView) o);
     }
 }
