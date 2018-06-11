@@ -15,7 +15,7 @@ import javafx.util.Pair;
 import java.util.*;
 
 public class Controller extends Observable implements Observer {
-    private static final int NUMBER_OF_ROUNDS = 1;
+    private static final int NUMBER_OF_ROUNDS = 10;
     private static final String PLACE_DIE = "PlaceDie";
     private static final String USE_TOOL = "UseTool";
     private static final String GO_THROUGH = "GoThrough";
@@ -34,6 +34,25 @@ public class Controller extends Observable implements Observer {
         ArrayList<RemoteView> remoteViews = new ArrayList<>(game.getRemoteViews());
         for (RemoteView r : remoteViews)
             r.addObserver(this);
+    }
+
+    private void endGame (ArrayList< Pair <Player, Integer> > finalScores, Player winner) {
+        for (Pair p : finalScores) {
+            Player player = (Player) p.getKey();
+            ServerInterface playerConnection = player.getServerInterface();
+            if (playerConnection != null) {
+                if (player.getNickname().equals(winner.getNickname()))
+                    playerConnection.send("You win!");
+                else
+                    playerConnection.send("You lose!");
+
+                for (Pair pair : finalScores) {
+                    Player otherPlayer = (Player) pair.getKey();
+                    playerConnection.send("Player: " + otherPlayer.getNickname() + " , Score: " + pair.getValue());
+                }
+            }
+        }
+        setGameEnded(true);
     }
 
     public String startGame() {
@@ -55,23 +74,7 @@ public class Controller extends Observable implements Observer {
         ArrayList<Pair<Player, Integer>> finalScores = this.calculateFinalScores();
         Player winner = finalScores.get(0).getKey();
         if (!onePlayerLeft) {
-            //TODO Pensa a modificarlo con for con indice
-            for (Pair p : finalScores) {
-                Player player = (Player) p.getKey();
-                ServerInterface playerConnection = player.getServerInterface();
-                if (playerConnection != null) {
-                    if (player.getNickname().equals(winner.getNickname()))
-                        playerConnection.send("You win!");
-                    else
-                        playerConnection.send("You lose!");
-
-                    for (Pair pair : finalScores) {
-                        Player otherPlayer = (Player) pair.getKey();
-                        playerConnection.send("Player: " + otherPlayer.getNickname() + " , Score: " + pair.getValue());
-                    }
-                }
-            }
-            setGameEnded(true);
+            endGame(finalScores, winner);
         }
         return winner.getNickname();
     }

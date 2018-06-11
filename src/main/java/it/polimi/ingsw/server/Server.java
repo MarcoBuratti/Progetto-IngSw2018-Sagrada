@@ -164,6 +164,20 @@ public class Server extends UnicastRemoteObject {
 
     }
 
+    private void disconnectPlayer ( ArrayList<RemoteView> tempRemoteViews, ServerInterface serverInterface ) {
+        for (RemoteView r : tempRemoteViews) {
+            if (r.getServerInterface() != null) {
+                if (r.getServerInterface().equals(serverInterface)) {
+                    if (r.isGameStarted()) {
+                        r.getGame().playerDisconnected(r);
+                    } else {
+                        currentLobby.playerDisconnected(r);
+                    }
+                }
+            }
+        }
+    }
+
     public synchronized void deregisterConnection ( ServerInterface serverInterface ) {
 
         if (this.serverInterfaces.contains(serverInterface)) {
@@ -172,18 +186,7 @@ public class Server extends UnicastRemoteObject {
             serverInterfaces.remove(serverInterface);
 
             ArrayList<RemoteView> tempRemoteViews = new ArrayList<>(remoteViews);
-
-            for (RemoteView r : tempRemoteViews) {
-                if (r.getServerInterface() != null) {
-                    if (r.getServerInterface().equals(serverInterface)) {
-                        if (r.isGameStarted()) {
-                            r.getGame().playerDisconnected(r);
-                        } else {
-                            currentLobby.playerDisconnected(r);
-                        }
-                    }
-                }
-            }
+            disconnectPlayer( tempRemoteViews, serverInterface );
         }
     }
 
