@@ -83,34 +83,36 @@ public class View implements Observer, GraphicsInterface {
             }
 
             while (connectionClient.getIsOn()) {
-                inputCtrl = true;
-                StringBuilder bld = new StringBuilder();
-                do{
-                    setFirstInput();
-                    bld.append(tmpMove);
-                    if( tmpMove.equals("3")  || tmpMove.equals("4") ){
-                        moveCtrl = false;
-                        inputCtrl = false;
-                    }
-                    if( tmpMove.equals("1") ) {
-                        System.out.println( graphicsClient.printRulesDash() );
-                        setIndexDash();
-                        bld.append(" " + index);
-                        System.out.println( graphicsClient.printRulesMatrix() );
-                        setRowColumn();
-                        bld.append(" " + RowColumn);
-                        inputCtrl = false;
-                    }
-                    if( tmpMove.equals("2") ){
+                if (hasChosenScheme) {
+                    inputCtrl = true;
+                    StringBuilder bld = new StringBuilder();
+                    do {
+                        setFirstInput();
                         bld.append(tmpMove);
-                        System.out.println( graphicsClient.printToolIndex() );
-                        setSecondTool();
-                        bld.append(" " + toolIndex);
-                    }
-                }while (inputCtrl);
-                move = bld.toString();
-            System.out.println(move);
-                connectionClient.handleMove(move);
+                        if (tmpMove.equals("3") || tmpMove.equals("4")) {
+                            moveCtrl = false;
+                            inputCtrl = false;
+                        }
+                        if (tmpMove.equals("1")) {
+                            System.out.println(graphicsClient.printRulesDash());
+                            setIndexDash();
+                            bld.append(" " + index);
+                            System.out.println(graphicsClient.printRulesMatrix());
+                            setRowColumn();
+                            bld.append(" " + RowColumn);
+                            inputCtrl = false;
+                        }
+                        if (tmpMove.equals("2")) {
+                            bld.append(tmpMove);
+                            System.out.println(graphicsClient.printToolIndex());
+                            setSecondTool();
+                            bld.append(" " + toolIndex);
+                        }
+                    } while (inputCtrl);
+                    move = bld.toString();
+                    System.out.println(move);
+                    connectionClient.handleMove(move);
+                }
             }
 
             System.out.println( graphicsClient.printEnd() );

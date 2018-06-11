@@ -34,7 +34,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         isOn = true;
     }
 
-    public synchronized void setOff() {
+    private synchronized void setOff() {
         send("You've been disconnected successfully.");
         this.isOn = false;
     }
@@ -56,7 +56,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         }
     }
 
-    private synchronized String askForChosenScheme(String schemes) throws IOException {
+    private String askForChosenScheme(String schemes) throws IOException {
         this.send("schemes. " + schemes);
         return in.readLine();
     }
