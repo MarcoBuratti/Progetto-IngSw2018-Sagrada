@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.RemoteView;
 import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.controller.tool.Tool;
+import it.polimi.ingsw.server.interfaces.ServerInterface;
 import it.polimi.ingsw.server.model.GameBoard;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.achievement.CardAchievement;
@@ -14,14 +15,14 @@ import javafx.util.Pair;
 import java.util.*;
 
 public class Controller extends Observable implements Observer {
-    private static final int NUMBER_OF_ROUNDS = 10;
+    private static final int NUMBER_OF_ROUNDS = 1;
     private static final String PLACE_DIE = "PlaceDie";
     private static final String USE_TOOL = "UseTool";
     private static final String GO_THROUGH = "GoThrough";
     private Round currentRound;
     private GameBoard gameBoard;
     private ArrayList<Player> players;
-    private ArrayList<Pair<Player, Integer>> finalScore;
+    private boolean gameEnded;
     private boolean onePlayerLeft = false;
 
     public Controller(Game game) {
@@ -35,7 +36,8 @@ public class Controller extends Observable implements Observer {
             r.addObserver(this);
     }
 
-    public void startGame() {
+    public String startGame() {
+
         for (int i = 0; i < NUMBER_OF_ROUNDS && !onePlayerLeft ; i++) {
             currentRound = new Round(players, gameBoard);
             this.addObserver(currentRound);
@@ -49,35 +51,58 @@ public class Controller extends Observable implements Observer {
                  currentRound.endRound();
             Collections.rotate(players, players.size()-1);
         }
+
+        ArrayList<Pair<Player, Integer>> finalScores = this.calculateFinalScores();
+        Player winner = finalScores.get(0).getKey();
+        if (!onePlayerLeft) {
+            //TODO Pensa a modificarlo con for con indice
+            for (Pair p : finalScores) {
+                Player player = (Player) p.getKey();
+                ServerInterface playerConnection = player.getServerInterface();
+                if (playerConnection != null) {
+                    if (player.getNickname().equals(winner.getNickname()))
+                        playerConnection.send("You win!");
+                    else
+                        playerConnection.send("You lose!");
+
+                    for (Pair pair : finalScores) {
+                        Player otherPlayer = (Player) pair.getKey();
+                        playerConnection.send("Player: " + otherPlayer.getNickname() + " , Score: " + pair.getValue());
+                    }
+                }
+            }
+            setGameEnded(true);
+        }
+        return winner.getNickname();
     }
 
     public GameBoard getGameBoard() {
         return gameBoard;
     }
 
-    private void calculateFinalScores() {
+    private ArrayList<Pair<Player, Integer>> calculateFinalScores() {
 
-        finalScore = new ArrayList<>();
-        Collections.rotate(players, players.size()-1);
+        ArrayList<Pair<Player, Integer>> finalScores = new ArrayList<>();
+        Collections.rotate(players, 1);
 
         for (Player p : this.players) {
+
             Pair<Player, Integer> pair = new Pair<>(p, calculateFinalScorePlayer(p));
             boolean added = false;
-            for (int i = 0; i < finalScore.size() && !added; i++) {
-                if (compare(finalScore.get(i), pair)) {
-                    finalScore.add(i, pair);
+
+            for (int i = 0; i < finalScores.size() && !added; i++) {
+                if (compare(finalScores.get(i), pair)) {
+                    finalScores.add(i, pair);
                     added = true;
-                }
-                if (!added) {
-                    finalScore.add(pair);
                 }
             }
 
-
-
+            if (!added) {
+                finalScores.add(pair);
+            }
         }
 
-
+        return finalScores;
     }
 
     private boolean compare(Pair<Player,Integer> pair1,Pair<Player,Integer> pair2){
@@ -179,5 +204,13 @@ public class Controller extends Observable implements Observer {
             RemoteView remoteView = (RemoteView) o;
             remoteView.notYourTurn();
         }
+    }
+
+    public synchronized boolean isGameEnded() {
+        return gameEnded;
+    }
+
+    private synchronized void setGameEnded(boolean gameEnded) {
+        this.gameEnded = gameEnded;
     }
 }

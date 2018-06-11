@@ -19,6 +19,7 @@ public class Game extends Observable implements Runnable {
     private ArrayList<SchemeCardsEnum> schemes;
     private ArrayList<Color> privateAchievements;
     private boolean schemeChosen = false;
+    private boolean gameEnded = false;
     private CliGraphicsServer cliGraphicsServer;
 
     public Game ( Lobby lobby, Server server ) {
@@ -55,7 +56,7 @@ public class Game extends Observable implements Runnable {
         remoteView.getPlayer().removeServerInterface();
 
 
-        if ( this.serverInterfaces.size() == 1 )
+        if ( this.serverInterfaces.size() == 1 && !isGameEnded() )
             gameFailed();
     }
 
@@ -193,11 +194,28 @@ public class Game extends Observable implements Runnable {
 
         if (serverInterfaces.size() > 1) {
             cliGraphicsServer.printStart();
-            this.controller.startGame();
+            String winner = this.controller.startGame();
+            if ( controller.isGameEnded() ) {
+                setGameEnded(true);
+                tempServerInterfaces = new ArrayList<>(serverInterfaces);
+                for (ServerInterface serverInterface : tempServerInterfaces) {
+                    serverInterface.close();
+                }
+                cliGraphicsServer.printWinner(winner);
+                this.endGame();
+            }
         }
 
         else {
             gameFailed();
         }
+    }
+
+    private synchronized boolean isGameEnded() {
+        return gameEnded;
+    }
+
+    private synchronized void setGameEnded(boolean gameEnded) {
+        this.gameEnded = gameEnded;
     }
 }

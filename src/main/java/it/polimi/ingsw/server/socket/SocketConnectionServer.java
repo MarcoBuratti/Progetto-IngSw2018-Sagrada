@@ -56,7 +56,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         }
     }
 
-    private String askForChosenScheme(String schemes) throws IOException {
+    private synchronized String askForChosenScheme(String schemes) throws IOException {
         this.send("schemes. " + schemes);
         return in.readLine();
     }

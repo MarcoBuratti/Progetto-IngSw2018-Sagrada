@@ -66,7 +66,7 @@ public class View implements Observer, GraphicsInterface {
 
             connectionClient.handleName(nickname);
 
-            if(connectionType && !hasChosenScheme){
+            if(connectionType){
                 synchronized (this){
                     try {
                         wait();
@@ -76,7 +76,7 @@ public class View implements Observer, GraphicsInterface {
                 }
             }
 
-            while (connectionClient.getIsOn() && !hasChosenScheme) {
+            if (!hasChosenScheme) {
                 setScheme();
                 connectionClient.handleScheme(schemes, fromClient);
                 hasChosenScheme = true;
@@ -173,7 +173,6 @@ public class View implements Observer, GraphicsInterface {
             inputCtrl = true;
             do {
                 fromClient = bufferedReader.readLine();
-                System.out.println("ok");
                 inputCtrl = cliController.schemeController(fromClient);
                 if (inputCtrl) System.out.println(graphicsClient.printRequest());
             } while (inputCtrl);
@@ -276,7 +275,6 @@ public class View implements Observer, GraphicsInterface {
             else {
                 System.out.println(graphicsClient.printGeneric(fromServer));
             }
-            System.out.println("Fine della update di View");
         } catch (Exception e) {
             System.err.println(e.toString());
         }
