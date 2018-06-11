@@ -17,7 +17,7 @@ import java.util.Observer;
 public class View implements Observer, GraphicsInterface {
     private BufferedReader bufferedReader;
     private ClientInterface connectionClient;
-    private Boolean hasChosenScheme;
+    private boolean hasChosenScheme;
     private String nickname;
     private String schemes;
     private GraphicsClient graphicsClient;
@@ -66,7 +66,7 @@ public class View implements Observer, GraphicsInterface {
 
             connectionClient.handleName(nickname);
 
-            if(connectionType){
+            if(connectionType && !hasChosenScheme){
                 synchronized (this){
                     try {
                         wait();
@@ -76,13 +76,13 @@ public class View implements Observer, GraphicsInterface {
                 }
             }
 
-            if (!hasChosenScheme) {
+            while (connectionClient.getIsOn() && !hasChosenScheme) {
                 setScheme();
                 connectionClient.handleScheme(schemes, fromClient);
                 hasChosenScheme = true;
             }
 
-        while (connectionClient.getIsOn()) {
+            while (connectionClient.getIsOn()) {
                 inputCtrl = true;
                 StringBuilder bld = new StringBuilder();
                 do{
@@ -173,6 +173,7 @@ public class View implements Observer, GraphicsInterface {
             inputCtrl = true;
             do {
                 fromClient = bufferedReader.readLine();
+                System.out.println("ok");
                 inputCtrl = cliController.schemeController(fromClient);
                 if (inputCtrl) System.out.println(graphicsClient.printRequest());
             } while (inputCtrl);
@@ -268,11 +269,14 @@ public class View implements Observer, GraphicsInterface {
             } else if (fromServer.startsWith("UpdateFromServer")) {
                 System.out.println( graphicsClient.printRulesFirst());
             }
-            else if(fromServer.startsWith("The game has started!"))
+            else if(fromServer.startsWith("The game has started!")) {
                 gameStarted = true;
+                System.out.println(graphicsClient.printGeneric(fromServer));
+            }
             else {
                 System.out.println(graphicsClient.printGeneric(fromServer));
             }
+            System.out.println("Fine della update di View");
         } catch (Exception e) {
             System.err.println(e.toString());
         }
