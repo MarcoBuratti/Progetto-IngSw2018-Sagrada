@@ -116,7 +116,7 @@ public class PlacementCheck {
 
 
         if (isEmpty(matrixScheme)) {
-            if (row == 0 || row == 4 || column == 0 || column == 5) {
+            if (row == 0 || row == 3 || column == 0 || column == 4) {
                 return true;
             } else return false;
 
