@@ -34,8 +34,8 @@ class TurnTest {
         }
         gameBoard.setTools(tools);
 
-        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, true);
-        String nickname = gameBoard.getPlayers().get(0).getNickname();
+        Turn turn = new Turn(gameBoard.getPlayers().get(1), gameBoard, true);
+        String nickname = gameBoard.getPlayers().get(1).getNickname();
         ArrayList<Die> testDraftPool= new ArrayList<>();
         Die die1 =new Die(Color.BLUE);
         die1.setNumber(1);
@@ -96,9 +96,9 @@ class TurnTest {
 
 
 
-        System.out.println(gameBoard.getPlayers().get(0).getDashboard().getMatrixScheme()[1][1].toString());
-        System.out.println(gameBoard.getPlayers().get(0).getDashboard().getMatrixScheme()[0][0].toString());
-        System.out.println(gameBoard.getPlayers().get(0).getDashboard().getMatrixScheme()[1][0].toString());
+        System.out.println(gameBoard.getPlayers().get(1).getDashboard().getMatrixScheme()[1][1].toString());
+        System.out.println(gameBoard.getPlayers().get(1).getDashboard().getMatrixScheme()[0][0].toString());
+        System.out.println(gameBoard.getPlayers().get(1).getDashboard().getMatrixScheme()[1][0].toString());
         System.out.println(gameBoard.getDraftPool());
 
     }
