@@ -1,5 +1,1 @@
-{
- "Name": "Fractal Drops",
- "token": "3",
- "String": " [  ] 4[  ]  [  ] \u001B[33mY\u001B[37m[  ] 6[  ]\n\u001B[31mR\u001B[37m[  ]  [  ] 2[  ]  [  ]  [  ]\n [  ]  [  ] \u001B[31mR\u001B[37m[  ] \u001B[35mV\u001B[37m[  ] 1[  ]\n\u001B[34mB\u001B[37m[  ] \u001B[33mY\u001B[37m[  ]  [  ]  [  ]  [  ]"
-}
+{"String":" [  ] 4[  ]  [  ] \u001B[33mY\u001B[0m[  ] 6[  ]\n\u001B[31mR\u001B[0m[  ]  [  ] 2[  ]  [  ]  [  ]\n [  ]  [  ] \u001B[31mR\u001B[0m[  ] \u001B[35mV\u001B[0m[  ] 1[  ]\n\u001B[34mB\u001B[0m[  ] \u001B[33mY\u001B[0m[  ]  [  ]  [  ]  [  ]","Name":"Fractal Drops","token":"3"}

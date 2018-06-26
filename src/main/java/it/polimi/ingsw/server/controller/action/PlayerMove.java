@@ -22,6 +22,7 @@ public class PlayerMove implements Serializable {
     private Integer indexDie;
     private Integer extractedToolIndex;
 
+    //TODO PlayerMove(playerNickname, moveType, dieIndex, coordinates)
 
     public static PlayerMove playerMoveConstructor() {
         JSONParser parser = new JSONParser();
@@ -33,7 +34,6 @@ public class PlayerMove implements Serializable {
         }
         throw new IllegalArgumentException();
     }
-
 
     public static PlayerMove playerMoveReader(JSONObject jsonObject) {
 
@@ -60,41 +60,52 @@ public class PlayerMove implements Serializable {
             case USE_TOOL:
                 int toolIndex = Integer.parseInt((String) jsonObject.get("toolIndex"));
                 int extractedToolIndex = Integer.parseInt((String) jsonObject.get("extractedToolIndex"));
-
+                System.out.println(playerNickname + " " + moveType + " " + toolIndex + " SWITCH");
+                System.out.println(extractedToolIndex + " avevo ragione io");
                 switch (toolIndex) {
 
-                    case 1:
+                    case 7:
+                        System.out.println( toolIndex + " CASE 7");
                         dieIndex = Integer.parseInt((String) jsonObject.get("Key1"));
-                        boolean addOne = Boolean.parseBoolean((String) jsonObject.get("Key2"));
-                        return new PlayerMove(playerNickname, moveType, extractedToolIndex, dieIndex, addOne);
+                        String bool = ((String) jsonObject.get("Key2"));
+                        if(bool.equals("0"))
+                            return new PlayerMove(playerNickname, moveType, extractedToolIndex, dieIndex, false);
+                        else
+                            return new PlayerMove(playerNickname, moveType, extractedToolIndex, dieIndex, true);
 
                     case 2:
-                    case 3:
-                    case 4:
-                    case 12:
+                    case 0:
+                    case 10:
+                    case 11:
                         otherKeysSize = jsonObject.size() - 4;
                         coordinates = new ArrayList<>();
-                        for ( int i = 0 ; i < otherKeysSize ; i++ )
-                            coordinates.add( Integer.parseInt( (String) jsonObject.get( "Key" + (i+1) ) ) );
+                        for ( int i = 0 ; i < otherKeysSize ; i++ ) {
+                            coordinates.add(Integer.parseInt((String) jsonObject.get("Key" + (i + 1))));
+                            System.out.println(coordinates + " " + toolIndex + " CASE 0,2,10,11");
+                        }
                         return new PlayerMove(playerNickname, moveType, extractedToolIndex, coordinates);
 
-                    case 5:
+                    case 1:
                     case 8:
                     case 9:
                         dieIndex = Integer.parseInt((String) jsonObject.get("Key1"));
                         otherKeysSize = jsonObject.size() - 5;
                         coordinates = new ArrayList<>();
-                        for ( int i = 0 ; i < otherKeysSize ; i++ )
-                            coordinates.add( Integer.parseInt( (String) jsonObject.get( "Key" + (i+2) ) ) );
+                        for ( int i = 0 ; i < otherKeysSize ; i++ ) {
+                            coordinates.add(Integer.parseInt((String) jsonObject.get("Key" + (i + 1))));
+                            System.out.println(coordinates + " " + toolIndex + " CASE 1,8,9");
+                        }
                         return new PlayerMove(playerNickname, moveType, extractedToolIndex, dieIndex, coordinates);
 
+                    case 3:
                     case 6:
-                    case 10:
-                    case 11:
+                    case 4:
                         dieIndex = Integer.parseInt((String) jsonObject.get("Key1"));
+                        System.out.println(   toolIndex +  " CASE 3,4,6");
                         return new PlayerMove(playerNickname, moveType, extractedToolIndex, dieIndex);
 
-                    case 7:
+                    case 5:
+                        System.out.println("CASE 5");
                         return new PlayerMove(playerNickname, moveType, extractedToolIndex);
 
                     default:
@@ -150,8 +161,6 @@ public class PlayerMove implements Serializable {
         this.indexDie = indexDie;
     }
 
-
-
     //tool 1(OK)
     public PlayerMove(String playerNickname, String moveType, int extractedToolIndex, int indexDie, boolean addOne) {
         this.playerNickname = playerNickname;
@@ -182,7 +191,6 @@ public class PlayerMove implements Serializable {
             throw new IllegalArgumentException();
     }
 
-
     public Optional<Boolean> getTwoReplace() {
         return Optional.ofNullable(twoReplace);
     }
@@ -198,7 +206,6 @@ public class PlayerMove implements Serializable {
     public Optional<Integer> getExtractedToolIndex() {
         return Optional.ofNullable(extractedToolIndex);
     }
-
 
     public String getMoveType() {
         return moveType;

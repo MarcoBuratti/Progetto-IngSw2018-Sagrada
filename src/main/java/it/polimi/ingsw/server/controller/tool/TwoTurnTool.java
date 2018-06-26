@@ -25,10 +25,18 @@ public class TwoTurnTool implements Tool {
     }
 
     public boolean toolEffect(Turn turn, PlayerMove playerMove) {
+        System.out.println(turn.isPlacementDone()+" " +turn.isSecondTurn());
         if (!turn.isSecondTurn() && turn.isPlacementDone()) {
             turn.setPlacementDone(false);
-            turn.getPlayer().setSkipSecondTurn(true);
-            return true;
+            turn.tryPlacementMove(playerMove);
+            if(turn.isPlacementDone()) {
+                turn.getPlayer().setSkipSecondTurn(true);
+                return true;
+            }
+            else {
+                turn.setPlacementDone(true);
+                return false;
+            }
         }
         return false;
     }

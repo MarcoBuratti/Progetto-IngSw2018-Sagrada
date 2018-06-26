@@ -35,7 +35,7 @@ public class Turn {
         this.secondTurn = secondTurn;
         this.player = player;
         this.gameBoard = gameBoard;
-        this.timeTurn = 30 * 1000;
+        this.timeTurn = 60 * 1000;
     }
 
     public synchronized void setTurnIsOver() {
@@ -75,7 +75,6 @@ public class Turn {
         return usedTool;
     }
 
-
     public boolean isSecondTurn() {
         return secondTurn;
     }
@@ -103,7 +102,6 @@ public class Turn {
         notifyAll();
     }
 
-
     private synchronized void timeOut() {
         this.turnIsOver = true;
         if (this.player.getServerInterface() != null)
@@ -128,7 +126,7 @@ public class Turn {
         this.launchTimer();
 
         if (this.player.getServerInterface() != null) {
-            this.player.getServerInterface().send("UpdateFromServer");
+            //this.player.getServerInterface().send("UpdateFromServer");
         }
 
         while (!isTurnIsOver()) {
@@ -144,7 +142,7 @@ public class Turn {
             }
 
             if (!isWaitMove() && typeMove != null) {
-
+                System.out.println("if else");
                 if (typeMove.equals("PlaceDie") && !placementDone) {
 
                     this.tryPlacementMove(this.playerMove);
@@ -154,7 +152,7 @@ public class Turn {
 
 
                 } else if (typeMove.equals("UseTool") && !usedTool) {
-
+                    System.out.println("Dentro usa tool");
                     this.useTool();
 
                     if (placementDone && usedTool)
@@ -171,7 +169,6 @@ public class Turn {
             }
         }
     }
-
 
     public void tryPlacementMove(PlayerMove playerMove) {
 
@@ -201,7 +198,6 @@ public class Turn {
             Tool tool = gameBoard.getTools().get(toolIndexValue);
 
             try {
-
                 this.player.useToken(tool.isAlreadyUsed());
                 usedTool = tool.toolEffect(this, playerMove);
                 if (tool.needPlacement()) {
@@ -214,9 +210,13 @@ public class Turn {
 
                     }
                 }
+
+                System.out.println("UsedTool è uguale a: " + usedTool);
                 if (isUsedTool()) {
-                    if (this.player.getServerInterface() != null)
+                    if (this.player.getServerInterface() != null) {
+                        this.gameBoard.update();
                         this.player.getServerInterface().send("The selected tool has been used successfully");
+                    }
                 } else if (this.player.getServerInterface() != null)
                     this.player.getServerInterface().send("Incorrect move! Please try again.");
 

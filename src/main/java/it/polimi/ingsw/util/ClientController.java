@@ -1,27 +1,23 @@
 package it.polimi.ingsw.util;
 
-import it.polimi.ingsw.client.interfaces.ClientInputController;
+import java.util.List;
 
-public class ClientController implements ClientInputController {
-    public String [] tool;
+public class ClientController {
+    public ToolClient [] tool;
 
-    @Override
     public void setTool(String s) {
-        s = s.substring(s.indexOf(":") + 2);
-        tool = s.split(",");
+        ParserTool parserTool = new ParserTool(s);
+        tool = parserTool.getToolClients();
     }
 
-    @Override
     public boolean firstInput(String s) {
         return  (!s.matches("[1-4]"));
     }
 
-    @Override
     public boolean secondInputDie(String s) {
         return (!s.matches("[0-8]"));
     }
 
-    @Override
     public boolean thirdInputDie(String s) {
         if (!s.matches("[0-3]\\s[0-4]")) return true;
         String [] ctrl = s.split(" ");
@@ -29,9 +25,36 @@ public class ClientController implements ClientInputController {
         else return false;
     }
 
-    @Override
-    public boolean secondInputTool(String s) {
+    public boolean secondToolIndex(String s) {
         return (!s.matches("[1-3]"));
     }
 
+    public List<TypeMove> thirdToolInput(String s){
+        int i = Integer.parseInt(s) -1;
+        return tool[i].getMove();
+
+    }
+
+    public List<String> thirdToolMessage(String s){
+        int i = Integer.parseInt(s) - 1;
+        return tool[i].getMessage();
+    }
+
+    public boolean  plusMinCtrl(String s){
+        return  (!s.matches("[0-1]"));
+    }
+
+    public boolean dieNumCtrl(String s){ return  (!s.matches("[1-6]")); }
+
+    public String numberTool(String s){
+        int i = Integer.parseInt(s) -1;
+        return tool[i].getNumber();
+    }
+
+    public boolean roundTrackCtrl(String s) {
+        if (!s.matches("[0-9]\\s[0-8]")) return true;
+        String [] ctrl = s.split(" ");
+        if(ctrl.length != 2)    return true;
+        else return false;
+    }
 }

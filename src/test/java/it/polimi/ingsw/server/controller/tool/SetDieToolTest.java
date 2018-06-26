@@ -66,6 +66,7 @@ class SetDieToolTest {
         Assertions.assertFalse(setDieTool.toolEffect(turn, playerMove));
         PlayerMove playerMove1 = new PlayerMove(nickname,"UseTool", 7, 0, true);
         Assertions.assertTrue(setDieTool.toolEffect(turn, playerMove1));
+        System.out.println(gameBoard.getDraftPool().get(0));
         SetDieTool setDieTool1 = new SetDieTool(true, ToolNames.FLUX_BRUSH);
         PlayerMove playerMove2 = new PlayerMove(nickname,"UseTool", 3, 0);
         Assertions.assertTrue(setDieTool1.toolEffect(turn, playerMove2));

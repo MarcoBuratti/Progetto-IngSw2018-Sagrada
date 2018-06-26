@@ -1,29 +1,27 @@
-package it.polimi.ingsw.client.socket;
+package it.polimi.ingsw.client.connection.socket;
+
 
 import it.polimi.ingsw.client.View;
-import it.polimi.ingsw.client.interfaces.ClientInputController;
+import it.polimi.ingsw.client.connection.ConnectionClient;
 import it.polimi.ingsw.client.interfaces.ClientInterface;
-import it.polimi.ingsw.util.ClientController;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.Observable;
 import java.util.StringTokenizer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class SocketConnectionClient extends Observable implements Runnable, ClientInterface {
+public class SocketConnectionClientClient extends ConnectionClient implements Runnable, ClientInterface {
 
     private Socket socket;
     private BufferedReader in;
     private PrintStream out;
-    private boolean isOn = true;
     private ExecutorService executor = Executors.newCachedThreadPool();
     private String playerNickname;
-    private ClientInputController clientInputController;
+
 
     /**
      *
@@ -31,11 +29,11 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
      * @param s
      * @param port
      */
-    public SocketConnectionClient(View view, String s, int port) {
+    public SocketConnectionClientClient(View view, String s, int port) {
         this.addObserver(view);
         try {
             socket = new Socket(s, port);
-            clientInputController = new ClientController();
+            super.setView(view);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintStream(socket.getOutputStream());
             executor.submit(this);
@@ -43,13 +41,6 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
             e.printStackTrace();
         }
 
-    }
-
-    /**
-     *
-     */
-    private synchronized void setOff() {
-        isOn = false;
     }
 
     /**
@@ -69,7 +60,7 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
         } catch (IOException e) {
             e.printStackTrace();
         }
-        setOff();
+        super.setIsOn( false );
         executor.shutdown();
 
     }
@@ -95,24 +86,6 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
         }
 
         this.send( bld.toString() );
-    }
-
-    /**
-     *
-     */
-    private void goThroughHandler() {
-        StringBuilder bld = new StringBuilder();
-        bld.append("playerID ");
-        bld.append(this.playerNickname);
-        bld.append(" type_playerMove GoThrough");
-        this.send( bld.toString() );
-    }
-
-    /**
-     *
-     */
-    private void quitHandler() {
-        send("/quit");
     }
 
     /**
@@ -149,11 +122,20 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
 
     /**
      *
-     * @return
      */
-    @Override
-    public synchronized boolean getIsOn() {
-        return isOn;
+    private void goThroughHandler() {
+        StringBuilder bld = new StringBuilder();
+        bld.append("playerID ");
+        bld.append(this.playerNickname);
+        bld.append(" type_playerMove GoThrough");
+        this.send( bld.toString() );
+    }
+
+    /**
+     *
+     */
+    private void quitHandler() {
+        send("/quit");
     }
 
     /**
@@ -171,6 +153,7 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
      */
     @Override
     public void handleName(String name) {
+        setPlayerNickname(name);
         send(name);
     }
 
@@ -204,8 +187,11 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
      */
     @Override
     public void handleMove(String fromClient) {
-        StringTokenizer strtok = new StringTokenizer(fromClient);
-        int moveChoice = Integer.parseInt(strtok.nextToken());
+        System.out.println(fromClient + "con spazio");
+        fromClient = fromClient.substring(0, fromClient.length()-1);
+        System.out.println(fromClient + "senza spazio");
+        String  [] substringSchemes = fromClient.split(" ");
+        int moveChoice = Integer.parseInt(substringSchemes[0]);
         switch (moveChoice) {
             case 1:
                 placeDieHandler(fromClient);
@@ -222,29 +208,6 @@ public class SocketConnectionClient extends Observable implements Runnable, Clie
             default:
                 goThroughHandler();
         }
-    }
-
-    /**
-     *
-     */
-    public void setTool(String s) {
-        clientInputController.setTool(s);
-    }
-
-    public boolean firstInput(String s) {
-        return clientInputController.firstInput(s);
-    }
-
-    public boolean secondInputDie(String s) {
-        return clientInputController.secondInputDie(s);
-    }
-
-    public boolean thirdInputDie(String s) {
-        return clientInputController.thirdInputDie(s);
-    }
-
-    public boolean secondInputTool(String s) {
-        return clientInputController.secondInputTool(s);
     }
 
     @Override

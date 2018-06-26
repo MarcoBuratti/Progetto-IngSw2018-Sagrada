@@ -35,4 +35,8 @@ public class InputController {
         return  (!s.matches("[1-4]"));
     }
 
+    public boolean continueToPlayController(String s){
+        return  (!s.matches("[0-1]"));
+    }
+
 }

@@ -151,7 +151,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
     public void close() {
 
         setOff();
-        send("Connection expired.");
+        send("ConnectionClient expired.");
         send("Terminate.");
         try {
             socket.close();

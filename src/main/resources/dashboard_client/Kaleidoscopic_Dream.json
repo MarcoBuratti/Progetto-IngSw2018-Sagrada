@@ -1,5 +1,1 @@
-{
-  "Name": "Kaleidoscopic Dream",
-  "token": "4",
-  "String": "\u001B[33mY\u001B[37m[  ] \u001B[34mB\u001B[37m[  ]  [  ]  [  ] 1[  ]\n\u001B[32mG\u001B[37m[  ]  [  ] 5[  ]  [  ] 4[  ]\n3[  ]  [  ] \u001B[31mR\u001B[37m[  ]  [  ] \u001B[32mG\u001B[37m[  ]\n2[  ]  [  ]  [  ] \u001B[34mB\u001B[37m[  ] \u001B[33mY\u001B[37m[  ] "
-}
+{"String":"\u001B[33mY\u001B[0m[  ] \u001B[34mB\u001B[0m[  ]  [  ]  [  ] 1[  ]\n\u001B[32mG\u001B[0m[  ]  [  ] 5[  ]  [  ] 4[  ]\n3[  ]  [  ] \u001B[31mR\u001B[0m[  ]  [  ] \u001B[32mG\u001B[0m[  ]\n2[  ]  [  ]  [  ] \u001B[34mB\u001B[0m[  ] \u001B[33mY\u001B[0m[  ] ","Name":"Kaleidoscopic Dream","token":"4"}

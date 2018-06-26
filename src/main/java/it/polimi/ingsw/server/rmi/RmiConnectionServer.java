@@ -118,7 +118,7 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
 
     @Override
     public void close() {
-        send("Connection expired.");
+        send("ConnectionClient expired.");
         send("Terminate.");
         server.deregisterConnection(this);
         send("You've been disconnected successfully.");

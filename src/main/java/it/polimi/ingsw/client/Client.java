@@ -27,8 +27,8 @@ public class Client {
 
 
         if(choiceInt == 1) {
-            View view = new View(new InputStreamReader(System.in));
-            view.start();
+            CliView cliView = new CliView(new InputStreamReader(System.in));
+            cliView.start();
         }
 
     }

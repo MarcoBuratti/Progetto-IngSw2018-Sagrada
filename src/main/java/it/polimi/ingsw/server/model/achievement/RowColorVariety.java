@@ -41,7 +41,7 @@ public class RowColorVariety implements CardAchievement {
 
     @Override
     public String toString() {
-        return "Row Color Variety: Rows with no repeated colors.\n";
+        return "Row Color Variety: Rows with no repeated colors.!";
     }
 
 }

@@ -73,7 +73,7 @@ public class Server extends UnicastRemoteObject {
         } catch (MalformedURLException e) {
             System.err.println("The selected object cannot be read!");
         } catch (RemoteException e) {
-            System.err.println("Connection error: " + e.getMessage() + "!");
+            System.err.println("ConnectionClient error: " + e.getMessage() + "!");
         }
 
 
@@ -83,7 +83,7 @@ public class Server extends UnicastRemoteObject {
                 SocketConnectionServer connectionServer = new SocketConnectionServer(newSocket, this);
                 executor.submit(connectionServer);
             } catch (IOException e) {
-                System.out.println("Connection error!");
+                System.out.println("ConnectionClient error!");
             }
         }
     }

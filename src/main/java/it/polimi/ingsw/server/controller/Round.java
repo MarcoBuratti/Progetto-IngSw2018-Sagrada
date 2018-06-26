@@ -37,7 +37,7 @@ public class Round implements Observer {
         while (iterator.hasNext() && !onePlayerLeft) {
             currentPlayer = iterator.next();
             this.gameBoard.setCurrentPlayer(currentPlayer);
-            createTurn();
+            createTurn(false);
         }
 
         while (iterator.hasPrevious() && !onePlayerLeft) {
@@ -46,12 +46,12 @@ public class Round implements Observer {
                 currentPlayer.setSkipSecondTurn(false);
             else {
                 this.gameBoard.setCurrentPlayer(currentPlayer);
-                createTurn();
+                createTurn(true);
             }
         }
     }
 
-    private void createTurn() {
+    private void createTurn (boolean bool) {
         for (Player p : players)
             if ((!p.equals(currentPlayer)) && (p.getServerInterface() != null) && (currentPlayer.getServerInterface() != null))
                 p.getServerInterface().send("It's " + currentPlayer.getNickname() + "'s turn. Please wait.");
@@ -59,7 +59,7 @@ public class Round implements Observer {
         if (currentPlayer.getServerInterface() != null) {
             this.currentPlayer.getServerInterface().send("It's your turn! Please make your move.");
             if (!onePlayerLeft) {
-                this.currentTurn = new Turn(currentPlayer, gameBoard, false);
+                this.currentTurn = new Turn(currentPlayer, gameBoard, bool);
                 currentTurn.turnManager();
             }
         }

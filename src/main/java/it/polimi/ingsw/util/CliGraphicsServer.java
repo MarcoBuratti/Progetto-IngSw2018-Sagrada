@@ -11,7 +11,7 @@ public class CliGraphicsServer {
     }
 
     public void printErr() {
-        System.out.println("Client Connection Error!");
+        System.out.println("Client ConnectionClient Error!");
     }
 
     public void printLoggedIn(String s) {

@@ -1,6 +1,7 @@
 {
   "Name": "Pinza Sgrossatrice",
-  "Number": "8",
+  "Number": "7",
 "String": "Dopo aver scelto un dado, aumenta o diminuisce il valore del dado scelto di 1\nNon puoi cambiare un 6 in 1 o un 1 in 6",
-  "Param": "2"
+  "Param": 3,
+  "Move": ["CHOOSE_INDEX_DIE","CHOOSE_PLUS_MIN", "CHOOSE_SEND_MOVE"]
 }

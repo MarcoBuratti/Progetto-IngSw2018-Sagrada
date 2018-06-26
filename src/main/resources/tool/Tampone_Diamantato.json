@@ -1,6 +1,7 @@
 {
   "Name": "Tampone Diamantato",
-  "Number": "7",
+  "Number": "6",
   "String": "Dopo aver scelto un dado, giralo sulla faccia opposta. 6 diventa 1, 5 diventa 2, 4 diventa 3 ecc.",
-  "Param": "1"
+  "Param": 2,
+  "Move": ["CHOOSE_INDEX_DIE", "CHOOSE_SEND_MOVE"]
 }

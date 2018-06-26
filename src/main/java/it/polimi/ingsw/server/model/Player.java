@@ -131,11 +131,10 @@ public class Player {
      * how many favour tokens he/she currently has and his/her private achievement.
      */
     public String toString() {
-        String string = "Player:\n";
-        string += "Nickname: " + this.nickname + "\n";
-        string += this.dashboard.toString() + "\n";
-        string += "Current Favour Tokens: " + this.currentFavourToken + "\n";
-        string += "Private Achievement: " + this.privateAchievement;
-        return string;
+        StringBuilder bld = new StringBuilder();
+        bld.append("Player: " + this.getNickname() + "!");
+        bld.append("Current Token: " + this.getCurrentFavourToken() + "!");
+        bld.append(dashboard.toString());
+        return bld.toString();
     }
 }

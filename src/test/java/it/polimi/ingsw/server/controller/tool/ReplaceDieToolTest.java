@@ -55,7 +55,7 @@ class ReplaceDieToolTest {
         intParameters.add(2);
         PlayerMove playerMove = new PlayerMove(nickname, USE_TOOL, 2, intParameters);
         Assertions.assertTrue(replaceDieTool.toolEffect(turn,playerMove));
-        ReplaceDieTool replaceDieTool1= new ReplaceDieTool(true, false, false,false,ToolNames.COPPER_FOIL_BURNISHER);
+        /*ReplaceDieTool replaceDieTool1= new ReplaceDieTool(true, false, false,false,ToolNames.COPPER_FOIL_BURNISHER);
 
 
         intParameters = new ArrayList<>();
@@ -97,7 +97,7 @@ class ReplaceDieToolTest {
         intParameters.add(1);
         intParameters.add(2);
         PlayerMove playerMove3 = new PlayerMove(nickname,USE_TOOL, 11, intParameters);
-        Assertions.assertTrue(replaceDieTool3.toolEffect(turn,playerMove3));
+        Assertions.assertTrue(replaceDieTool3.toolEffect(turn,playerMove3));*/
 
         for (int i = 0; i <4 ; i++) {
             for (int j = 0; j <5; j++) {

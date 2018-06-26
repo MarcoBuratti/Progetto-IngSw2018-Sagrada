@@ -34,13 +34,13 @@ class TurnTest {
         }
         gameBoard.setTools(tools);
 
-        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, true);
+        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
         String nickname = gameBoard.getPlayers().get(0).getNickname();
         ArrayList<Die> testDraftPool= new ArrayList<>();
         Die die1 =new Die(Color.BLUE);
         die1.setNumber(1);
         Die die2 =new Die(Color.GREEN);
-        die2.setNumber(2);
+        die2.setNumber(4);
         Die die3 =new Die(Color.RED);
         die3.setNumber(3);
 
@@ -73,10 +73,10 @@ class TurnTest {
                 ArrayList<Integer> intParameters = new ArrayList<>();
                 intParameters.add(0);
                 intParameters.add(0);
-                turn.newMove(new PlayerMove(nickname,"PlaceDie",1, intParameters));
+                turn.newMove(new PlayerMove(nickname,"PlaceDie",2, intParameters));
             }
         }, 1000);
-        timer.schedule(new TimerTask() {
+       /* timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 ArrayList<Integer> intParameters = new ArrayList<>();
@@ -84,19 +84,33 @@ class TurnTest {
                 intParameters.add(1);
                 turn.newMove(new PlayerMove(nickname,"PlaceDie",2, intParameters));
             }
-        }, 1500);
+        }, 1500);*/
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                ArrayList<Integer> intParameters = new ArrayList<>();
+                intParameters.add(0);
+                intParameters.add(0);
+                intParameters.add(0);
+                intParameters.add(2);
+                turn.newMove(new PlayerMove(nickname,"UseTool", 2, intParameters));
+            }}, 1100);
+
        timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                turn.newMove(new PlayerMove(nickname,"UseTool", 6,1));
+                ArrayList<Integer> intParameters = new ArrayList<>();
+                intParameters.add(1);
+                intParameters.add(0);
+                turn.newMove(new PlayerMove(nickname,"UseTool", 10,1,intParameters));
             }
-        }, 900);
+        }, 1300);
 
         turn.turnManager();
 
 
 
-        System.out.println(gameBoard.getPlayers().get(0).getDashboard().getMatrixScheme()[1][1].toString());
+        System.out.println(gameBoard.getPlayers().get(0).getDashboard().getMatrixScheme()[0][2].toString());
         System.out.println(gameBoard.getPlayers().get(0).getDashboard().getMatrixScheme()[0][0].toString());
         System.out.println(gameBoard.getPlayers().get(0).getDashboard().getMatrixScheme()[1][0].toString());
         System.out.println(gameBoard.getDraftPool());

@@ -1,47 +1,40 @@
-package it.polimi.ingsw.client.rmi;
+package it.polimi.ingsw.client.connection.rmi;
 
 import it.polimi.ingsw.client.View;
-import it.polimi.ingsw.client.interfaces.ClientInputController;
-import it.polimi.ingsw.client.interfaces.ClientInterface;
+import it.polimi.ingsw.client.connection.ConnectionClient;
 import it.polimi.ingsw.client.interfaces.RmiClientInterface;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.interfaces.RmiControllerInterface;
 import it.polimi.ingsw.server.interfaces.RmiServerInterface;
-import it.polimi.ingsw.util.ClientController;
 import it.polimi.ingsw.util.Message;
 import org.json.simple.JSONObject;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Observable;
 import java.util.StringTokenizer;
-import java.util.regex.Pattern;
 
-public class RmiConnectionClient extends Observable implements ClientInterface, RmiClientInterface {
+public class RmiConnectionClientClient extends ConnectionClient implements RmiClientInterface {
 
     RmiControllerInterface server;
     RmiServerInterface channel;
-    private boolean isOn = true;
     private String playerNickname;
-    private ClientInputController clientInputController;
 
     /**
-     * Creates a RmiConnectionClient object, adding the corresponding view to its observers and establishing a connection between it and the server.
-     * @param view the View object which has to be added to the observers.
+     * Creates a RmiConnectionClientClient object, adding the corresponding cliView to its observers and establishing a connection between it and the server.
+     * @param view the CliView object which has to be added to the observers.
      * @param address the server address
      * @param port the port that has to be used by the remote object to receive incoming calls
      */
-    public RmiConnectionClient(View view, String address, int port) {
-        addObserver(view);
+    public RmiConnectionClientClient(View view, String address, int port) {
+        this.addObserver(view);
         try {
             server = (RmiControllerInterface) Naming.lookup("//" + address + "/Server");
             channel = server.addClient((RmiClientInterface) UnicastRemoteObject.exportObject(this, port));
-            clientInputController = new ClientController();
+            super.setView(view);
         } catch (Exception e) {
-            System.out.println("Connection error: " + e.toString());
+            System.out.println("ConnectionClient error: " + e.toString());
         }
-
     }
 
     /**
@@ -93,7 +86,7 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
      * Sets the boolean attribute isOn as false whenever the connection needs to be closed.
      */
     private synchronized void close() {
-        this.isOn = false;
+        super.setIsOn( false );
     }
 
     /**
@@ -106,15 +99,6 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
             e.printStackTrace();
         }
         this.close();
-    }
-
-    /**
-     * Returns the current state of the boolean attribute isOn.
-     * @return a boolean which specifies the connection state
-     */
-    @Override
-    public synchronized boolean getIsOn() {
-        return isOn;
     }
 
     /**
@@ -132,6 +116,7 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
      */
     @Override
     public void handleName(String name) {
+        setPlayerNickname(name);
         sendName(new Message(name));
     }
 
@@ -167,13 +152,16 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
      */
     @Override
     public void handleMove(String fromClient) {
-        StringTokenizer strtok = new StringTokenizer(fromClient);
+        System.out.println(fromClient + "con spazio");
+        fromClient = fromClient.substring(0, fromClient.length()-1);
+        System.out.println(fromClient + "senza spazio");
+        String [] strtok = fromClient.split(" ");
         String key;
         String value;
         final String TYPE_PLAYERMOVE = "type_playerMove";
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("playerID", this.playerNickname);
-        String moveType = strtok.nextToken();
+        String moveType = strtok[0];
         int choice = Integer.parseInt(moveType);
         switch (choice) {
             case 1:
@@ -186,58 +174,34 @@ public class RmiConnectionClient extends Observable implements ClientInterface, 
                 jsonObject.put(TYPE_PLAYERMOVE, "GoThrough");
                 break;
         }
-        if (choice > 0 && choice <= 3) {
-
-            int i = 1;
-
-            if (choice == 2) {
-                String toolIndex = strtok.nextToken();
-                jsonObject.put( "toolIndex", toolIndex );
-                toolIndex = strtok.nextToken();
-                jsonObject.put( "extractedToolIndex", toolIndex );
-            }
-
-            while (strtok.hasMoreTokens()) {
-                key = "Key" + i;
-                value = strtok.nextToken();
-                jsonObject.put(key, value);
-                i++;
-            }
-
-            sendMove(PlayerMove.playerMoveReader(jsonObject));
-
-        } else if (choice == 4) {
+        if (choice == 4) {
             quit();
         }
+        else {
+            if (choice == 1 || choice == 2) {
+
+                int i = 1;
+
+                if (choice == 2) {
+                    String toolIndex = strtok[i];
+                    jsonObject.put("toolIndex", toolIndex);
+                    i++;
+                    toolIndex = strtok[i];
+                    jsonObject.put("extractedToolIndex", toolIndex);
+                    i++;
+                }
+                int k = strtok.length - i;
+                for (int j = 0; j < k; j++) {
+                    key = "Key" + (j + 1);
+                    value = strtok[i];
+                    System.out.println(key + " " + value + " è fatta bene");
+                    jsonObject.put(key, value);
+                    i++;
+                }
+            }
+            sendMove(PlayerMove.playerMoveReader(jsonObject));
+        }
     }
-
-
-    public void setTool(String s) {
-        clientInputController.setTool(s);
-    }
-
-    public boolean firstInput(String s) {
-        return clientInputController.firstInput(s);
-    }
-
-    public boolean secondInputDie(String s) {
-        return clientInputController.secondInputDie(s);
-    }
-
-    public boolean thirdInputDie(String s) {
-        return clientInputController.thirdInputDie(s);
-    }
-
-    public boolean secondInputTool(String s) {
-      return clientInputController.secondInputTool(s);
-    }
-
-    /**
-     * Checks if the connection is on and notifies the observers (View) that a new message has arrived from the server.
-     * Closes the connection if the message is "Terminate.".
-     * @param str a String containing the message sent by server
-     * @throws RemoteException
-     */
 
     @Override
     public void update(String str) throws RemoteException {

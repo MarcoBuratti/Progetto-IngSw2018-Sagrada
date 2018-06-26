@@ -1,5 +1,1 @@
-{
-  "Name": "Aurorae Magnificus",
-  "token": "5",
-  "String":  "5[  ] \u001B[32mG\u001B[37m[  ] \u001B[34mB\u001B[37m[  ] \u001B[35mV\u001B[37m[  ] 2[  ]\n\u001B[35mV\u001B[37m[  ]  [  ]  [  ]  [  ] \u001B[33mY\u001B[37m[  ]\n\u001B[33mY\u001B[37m[  ]  [  ] 6[  ]  [  ] \u001B[35mV\u001B[37m[  ]\n1[  ]  [  ]  [  ] \u001B[32mG\u001B[37m[  ] 4[  ]"
-}
+{"String":"5[  ] \u001B[32mG\u001B[0m[  ] \u001B[34mB\u001B[0m[  ] \u001B[35mV\u001B[0m[  ] 2[  ]\n\u001B[35mV\u001B[0m[  ]  [  ]  [  ]  [  ] \u001B[33mY\u001B[0m[  ]\n\u001B[33mY\u001B[0m[  ]  [  ] 6[  ]  [  ] \u001B[35mV\u001B[0m[  ]\n1[  ]  [  ]  [  ] \u001B[32mG\u001B[0m[  ] 4[  ]","Name":"Aurorae Magnificus","token":"5"}

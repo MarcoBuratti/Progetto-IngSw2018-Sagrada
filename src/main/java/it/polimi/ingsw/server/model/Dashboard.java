@@ -145,11 +145,7 @@ public class Dashboard {
     @Override
     public String toString() {
         StringBuilder bld = new StringBuilder();
-        bld.append("\nDashboard: " + this.owner.getNickname() + "\n");
-        bld.append("Token: " + this.owner.getDashboard().getFavourToken() + "\n");
-        bld.append("     0     1     2     3     4\n");
         for (int i = 0; i < ROW; i++) {
-            bld.append(i + "  ");
             for (int j = 0; j < COLUMN; j++) {
                 if (this.matrixScheme[i][j].getUsedCell()) {
                     bld.append(this.matrixScheme[i][j].getRestriction().toString() + "[" + this.matrixScheme[i][j].getDie().toString() + "]");
@@ -159,7 +155,7 @@ public class Dashboard {
                     bld.append(" ");
                 }
             }
-            bld.append("\n");
+            bld.append("!");
         }
         return bld.toString();
     }

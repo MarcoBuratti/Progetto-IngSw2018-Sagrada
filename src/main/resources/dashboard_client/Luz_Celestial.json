@@ -1,5 +1,1 @@
-{
- "Name": "Luz Celestial",
- "token": "3",
- "String": " [  ]  [  ] \u001B[31mR\u001B[37m[  ] 5[  ]  [  ]\n\u001B[35mV\u001B[37m[  ] 4[  ]  [  ] \u001B[32mG\u001B[37m[  ] 3[  ]\n6[  ]  [  ]  [  ] \u001B[34mB\u001B[37m[  ]  [  ]\n [  ] \u001B[33mY\u001B[37m[  ] 2[  ]  [  ]  [  ] "
-}
+{"String":" [  ]  [  ] \u001B[31mR\u001B[0m[  ] 5[  ]  [  ]\n\u001B[35mV\u001B[0m[  ] 4[  ]  [  ] \u001B[32mG\u001B[0m[  ] 3[  ]\n6[  ]  [  ]  [  ] \u001B[34mB\u001B[0m[  ]  [  ]\n [  ] \u001B[33mY\u001B[0m[  ] 2[  ]  [  ]  [  ] ","Name":"Luz Celestial","token":"3"}

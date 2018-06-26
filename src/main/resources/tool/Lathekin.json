@@ -1,6 +1,7 @@
 {
   "Name": "Lathekin",
-  "Number": "9",
+  "Number": "8",
   "String": "Muovi esattamente due dadi, rispettando tutte le restrizioni di piazzamento",
-  "Param": "8"
+  "Param": 5,
+  "Move": ["CHOOSE_ROW_COLUMNS","CHOOSE_ROW_COLUMNS","CHOOSE_ROW_COLUMNS","CHOOSE_ROW_COLUMNS", "CHOOSE_SEND_MOVE"]
 }

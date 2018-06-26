@@ -1,5 +1,1 @@
-{
- "Name": "Sun Catcher",
- "token": "3",
- "String": " [  ] \u001B[34mB\u001B[37m[  ] 2[  ]  [  ] \u001B[33mY\u001B[37m[  ]\n [  ] 4[  ]  [  ] \u001B[31mR\u001B[37m[  ]  [  ]\n [  ]  [  ] 5[  ] \u001B[33mY\u001B[37m[  ]  [  ]\n\u001B[32mG\u001B[37m[  ] 3[  ]  [  ]  [  ] \u001B[35mV\u001B[37m[  ]"
-}
+{"String":" [  ] \u001B[34mB\u001B[0m[  ] 2[  ]  [  ] \u001B[33mY\u001B[0m[  ]\n [  ] 4[  ]  [  ] \u001B[31mR\u001B[0m[  ]  [  ]\n [  ]  [  ] 5[  ] \u001B[33mY\u001B[0m[  ]  [  ]\n\u001B[32mG\u001B[0m[  ] 3[  ]  [  ]  [  ] \u001B[35mV\u001B[0m[  ]","Name":"Sun Catcher","token":"3"}

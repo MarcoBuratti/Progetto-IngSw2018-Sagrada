@@ -15,7 +15,7 @@ import javafx.util.Pair;
 import java.util.*;
 
 public class Controller extends Observable implements Observer {
-    private static final int NUMBER_OF_ROUNDS = 10;
+    private static final int NUMBER_OF_ROUNDS = 5;
     private static final String PLACE_DIE = "PlaceDie";
     private static final String USE_TOOL = "UseTool";
     private static final String GO_THROUGH = "GoThrough";
@@ -153,28 +153,26 @@ public class Controller extends Observable implements Observer {
                 notifyObservers(playerMove);
             } else {
                 RemoteView remoteView = (RemoteView) o;
+                System.out.println("incorrect move dentro primo else di moveHandler");
                 remoteView.incorrectMove();
             }
         } else {
             RemoteView remoteView = (RemoteView) o;
+            System.out.println("incorrect move dentro secondo else di moveHandler");
             remoteView.incorrectMove();
         }
     }
 
     private void toolMoveHandler (PlayerMove playerMove, Observable o) {
-        int toolCost;
-        Optional<Integer> toolIndex = playerMove.getExtractedToolIndex();
-        if (toolIndex.isPresent()) {
-            Integer toolIndexValue = toolIndex.get();
-            if (gameBoard.getTools().get(toolIndexValue).isAlreadyUsed())
-                toolCost = 2;
-            else toolCost = 1;
 
-            if (currentRound.getCurrentPlayer().getCurrentFavourToken() >= toolCost) {
-                moveHandler(playerMove, o);
-            }
+        Optional<Integer> toolIndex = playerMove.getExtractedToolIndex();
+        System.out.println("ToolIndex is present: " + toolIndex.isPresent());
+        if (toolIndex.isPresent()) {
+            setChanged();
+            notifyObservers(playerMove);
         } else {
             RemoteView remoteView = (RemoteView) o;
+            System.out.println("incorrect move dentro else di toolMoveHandler");
             remoteView.incorrectMove();
         }
     }

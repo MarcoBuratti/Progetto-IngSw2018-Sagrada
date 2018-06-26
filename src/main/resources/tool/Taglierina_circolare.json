@@ -1,6 +1,7 @@
 {
   "Name": "Taglierina Circolare",
-  "Number": "10",
+  "Number": "9",
   "String": "Dopo aver scelto un dado, scambia quel dado con un dado sul Tracciato dei Round",
-  "Param": "3"
+  "Param": 3,
+  "Move": ["CHOOSE_INDEX_DIE","CHOOSE_ROUND_INDEX", "CHOOSE_SEND_MOVE"]
 }

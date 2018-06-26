@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.model.exception.NotValidParametersException;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 import it.polimi.ingsw.server.model.restriction.NoRestriction;
+import it.polimi.ingsw.util.GraphicsClient;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.MonthDay;
 import java.util.ArrayList;
@@ -177,31 +179,57 @@ class DashboardTest {
     @Test
     void jsonTester() throws NotValidValueException, OccupiedCellException, IOException, ParseException {
         List<SchemesEnum> schemesEnum = Arrays.asList(SchemesEnum.values());
-
+        GraphicsClient graphicsClient;
+        graphicsClient = new GraphicsClient();
         Dashboard dashboard = new Dashboard(schemesEnum.get(8).getName());
-
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 5; j++) {
-                System.out.println(dashboard.getMatrixScheme()[i][j].getRestriction().toString());
+        JSONParser parser = new JSONParser();
+        for (int i = 0; i < schemesEnum.size(); i++){
+            String sub = schemesEnum.get(i).getName();
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/resources/dashboard_client/"+ sub +".json"));
+            String change = (String) jsonObject.get("String");
+            change = change.replace("\u001B[37m", "\u001b[0m");
+            jsonObject.put("String", change);
+            try (FileWriter up = new FileWriter("src/main/resources/dashboard_client/"+ sub +".json")) {
+                up.write(jsonObject.toJSONString());
+                System.out.println(change);
+                System.out.println(sub + " eseguito " + i);
+            } catch (IOException e) {
+                System.out.println(e.toString() );
             }
         }
-        JSONParser parser = new JSONParser();
-        for(int i = 0; i< 24; i++) {
-            String e =  schemesEnum.get(i).getName();
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/resources/dashboard_client/" + e + ".json"));
-            System.out.println("Nome: " + jsonObject.get("Name"));
-            System.out.println("Token: " + jsonObject.get("token"));
-            System.out.println(jsonObject.get("String"));
+
+        try {
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/up.json"));
+            String achievement = (String) jsonObject.get("Public Achievements");
+            graphicsClient.printAchivements(achievement);
+            String tool = (String) jsonObject.get("Tools");
+            graphicsClient.printTool(tool);
+            String roundTrack = (String) jsonObject.get("Round track");
+            graphicsClient.printRoundTrack(roundTrack);
+            String draft = (String) jsonObject.get("Draft");
+            if(draft != null) graphicsClient.printDraft(draft);
+            String number = (String) jsonObject.get("numberPlayer");
+            int player = Integer.parseInt(number);
+            System.out.println(number);
+            for (int i = 0; i < player; i++) {
+                String request = "scheme" + i;
+                System.out.println(request);
+                String scheme = (String) jsonObject.get(request);
+                graphicsClient.printScheme(scheme);
+            }
+
+        } catch (IOException | ParseException e) {
+            System.err.println(e.toString());
         }
+
     }
+
+
 
     @Test
     void ciao(){
-        String s = "\u001B[31mV\033[0m";
-        System.out.println(s);
-        String c =s.replace("\u001B[31m", "");
-        String a =c.replace("\033[0m", "");
-        System.out.println(a);
+
+
     }
 }
 

@@ -49,12 +49,15 @@ public class SetDieTool implements Tool {
                         die.setNumber(oldValue + 1);
                     else
                         die.setNumber(oldValue - 1);
+                    turn.getGameBoard().update();
                     return true;
                 } else if (toolName.equals(ToolNames.GRINDING_STONE)) {
                     die.setNumber(7 - oldValue);
+                    turn.getGameBoard().update();
                     return true;
                 } else if (toolName.equals(ToolNames.FLUX_BRUSH)) {
                     die.extractAgain();
+                    turn.getGameBoard().update();
                     return true;
                 }
             } catch (NotValidValueException e) {

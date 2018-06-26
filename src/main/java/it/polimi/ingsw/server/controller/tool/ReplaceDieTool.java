@@ -79,8 +79,9 @@ public class ReplaceDieTool implements Tool {
 
         if (checkColor &&
                 restrictions.indexOf(matrixScheme[row][column].getRestriction()) > 6 &&
-                !matrixScheme[row][column].allowedMove(myDie))
+                !matrixScheme[row][column].allowedMove(myDie)) {
             return false;
+        }
 
 
         if (checkValue &&
@@ -95,6 +96,7 @@ public class ReplaceDieTool implements Tool {
 
         if ((!placementCheck.nearBy(row, column, matrixScheme)) || (!placementCheck.allowedNeighbours(row, column, myDie, matrixScheme)))
             return false;
+        turn.getGameBoard().update();
         return true;
     }
 
