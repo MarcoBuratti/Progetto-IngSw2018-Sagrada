@@ -32,8 +32,8 @@ public class Game extends Observable implements Runnable {
 
         for (RemoteView r: remoteViews) {
             r.setGame( this );
-            this.players.add(r.getPlayer());
-            ServerInterface serverInterface = r.getPlayer().getServerInterface();
+            this.players.add( r.getPlayer() );
+            ServerInterface serverInterface = r.getServerInterface();
             if ( serverInterface != null ) {
                 this.serverInterfaces.add( serverInterface );
                 this.addObserver( serverInterface );
@@ -53,7 +53,6 @@ public class Game extends Observable implements Runnable {
 
         this.serverInterfaces.remove( remoteView.getServerInterface() );
         remoteView.removeConnection();
-        remoteView.getPlayer().removeServerInterface();
 
 
         if ( this.serverInterfaces.size() == 1 && !isGameEnded() )
@@ -150,7 +149,8 @@ public class Game extends Observable implements Runnable {
             Player p = r.getPlayer();
             server.removeNickname( p.getNickname() );
             server.removePlayer( p );
-            server.removeServerInterface( p.getServerInterface() );
+            if ( r.getServerInterface() != null )
+                server.removeServerInterface( r.getServerInterface() );
         }
 
         serverInterfaces.clear();

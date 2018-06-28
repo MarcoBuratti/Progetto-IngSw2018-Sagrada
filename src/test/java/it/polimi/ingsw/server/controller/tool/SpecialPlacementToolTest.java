@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.tool;
 
+import it.polimi.ingsw.server.RemoteView;
 import it.polimi.ingsw.server.controller.Turn;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.model.Color;
@@ -7,6 +8,7 @@ import it.polimi.ingsw.server.model.Die;
 import it.polimi.ingsw.server.model.GameBoard;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
+import it.polimi.ingsw.server.socket.SocketConnectionServer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -17,10 +19,10 @@ class SpecialPlacementToolTest {
     @Test
     void toolEffect() throws NotValidValueException {
         ArrayList<Player> playersList = new ArrayList<>();
-        Player player = new Player ( "sergio" , null );
+        Player player = new Player ( "sergio");
         player.setDashboard("Aurora_Sagradis");
         playersList.add( player );
-        player = new Player ( "christian" , null );
+        player = new Player ( "christian");
         player.setDashboard("Chromatic_Splendor");
         playersList.add( player );
         GameBoard gameBoard = new GameBoard(playersList);
@@ -46,8 +48,8 @@ class SpecialPlacementToolTest {
         testDraftPool.add(die3);
 
         gameBoard.setDraftPool(testDraftPool);
-        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
-        Turn turn1 = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
+        Turn turn = new Turn(null, gameBoard.getPlayers().get(0), gameBoard, false);
+        Turn turn1 = new Turn(null, gameBoard.getPlayers().get(0), gameBoard, false);
         String nickname = gameBoard.getPlayers().get(0).getNickname();
         SpecialPlacementTool specialPlacementTool= new SpecialPlacementTool(true,true,false, ToolNames.CORK_BAKED_STRAIGHTEDGE);
         ArrayList<Integer> intParameters = new ArrayList<>();

@@ -11,18 +11,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 class RerollToolTest {
 
     @Test
     void toolEffect() throws NotValidValueException {
         ArrayList<Player> playersList = new ArrayList<>();
-        Player player = new Player ( "sergio" , null );
+        Player player = new Player ( "sergio");
         player.setDashboard("Aurora_Sagradis");
         playersList.add( player );
-        player = new Player ( "christian" , null );
+        player = new Player ( "christian");
         player.setDashboard("Chromatic_Splendor");
         playersList.add( player );
         GameBoard gameBoard = new GameBoard(playersList);
@@ -49,11 +47,11 @@ class RerollToolTest {
         System.out.println(gameBoard.getDraftPool());
 
         RerollTool rerollTool =new RerollTool(false, ToolNames.GLAZING_HAMMER);
-        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
+        Turn turn = new Turn(null, gameBoard.getPlayers().get(0), gameBoard, false);
         String nickname = gameBoard.getPlayers().get(0).getNickname();
         PlayerMove playerMove = new PlayerMove(nickname,"UseTool", 5);
         Assertions.assertFalse(rerollTool.toolEffect(turn,playerMove));
-        Turn turn1 = new Turn(gameBoard.getPlayers().get(0), gameBoard, true);
+        Turn turn1 = new Turn(null, gameBoard.getPlayers().get(0), gameBoard, true);
         Assertions.assertTrue(rerollTool.toolEffect(turn1,playerMove));
         System.out.println(gameBoard.getDraftPool());
 

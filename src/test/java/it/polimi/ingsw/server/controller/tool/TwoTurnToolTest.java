@@ -15,10 +15,10 @@ class TwoTurnToolTest {
     void toolEffect() throws NotValidValueException {
         ArrayList<Player> playersList = new ArrayList<>();
         Player player;
-        player = new Player ( "christian" , null );
+        player = new Player ( "christian");
         player.setDashboard("Chromatic_Splendor");
         playersList.add( player );
-        player = new Player ( "sergio" , null );
+        player = new Player ( "sergio");
         player.setDashboard("Aurora_Sagradis");
         playersList.add( player );
         GameBoard gameBoard = new GameBoard(playersList);
@@ -46,8 +46,8 @@ class TwoTurnToolTest {
         gameBoard.setDraftPool(testDraftPool);
         ArrayList<Integer> intParameters;
 
-        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
-        Turn turn1 = new Turn(gameBoard.getPlayers().get(0), gameBoard, true);
+        Turn turn = new Turn(null, gameBoard.getPlayers().get(0), gameBoard, false);
+        Turn turn1 = new Turn(null, gameBoard.getPlayers().get(0), gameBoard, true);
         String nickname = gameBoard.getPlayers().get(0).getNickname();
         intParameters = new ArrayList<>();
         intParameters.add(0);

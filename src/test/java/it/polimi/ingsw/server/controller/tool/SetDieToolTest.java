@@ -10,8 +10,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 class SetDieToolTest {
 
@@ -19,10 +17,10 @@ class SetDieToolTest {
     void toolEffect() throws OccupiedCellException, NotValidParametersException, NotValidValueException {
 
         ArrayList<Player> playersList = new ArrayList<>();
-        Player player = new Player ( "sergio" , null );
+        Player player = new Player ( "sergio");
         player.setDashboard("Aurora_Sagradis");
         playersList.add( player );
-        player = new Player ( "christian" , null );
+        player = new Player ( "christian");
         player.setDashboard("Chromatic_Splendor");
         playersList.add( player );
         GameBoard gameBoard = new GameBoard(playersList);
@@ -49,7 +47,7 @@ class SetDieToolTest {
 
         gameBoard.setDraftPool(testDraftPool);
 
-        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
+        Turn turn = new Turn(null, gameBoard.getPlayers().get(0), gameBoard, false);
         String nickname = gameBoard.getPlayers().get(0).getNickname();
         SetDieTool setDieTool = new SetDieTool(true, ToolNames.GROZING_PLIERS);
         Dashboard dashboard = gameBoard.getPlayers().get(0).getDashboard();

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.server.RemoteView;
 import it.polimi.ingsw.server.controller.action.PlacementMove;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.controller.tool.Tool;
@@ -19,34 +20,36 @@ public class Turn {
     private final boolean secondTurn;
     private int timeTurn;
     private String typeMove;
-    private boolean turnIsOver;
+    private boolean turnOver;
     private boolean waitMove;
     private boolean placementDone;
     private boolean usedTool;
     private Player player;
+    private RemoteView remoteView;
     private GameBoard gameBoard;
     private PlayerMove playerMove;
 
-    public Turn(Player player, GameBoard gameBoard, boolean secondTurn) {
+    public Turn(RemoteView remoteView, Player player, GameBoard gameBoard, boolean secondTurn) {
+
         this.usedTool = false;
         this.placementDone = false;
-        this.turnIsOver = false;
+        this.turnOver = false;
         this.waitMove = true;
         this.secondTurn = secondTurn;
         this.player = player;
+        this.remoteView = remoteView;
         this.gameBoard = gameBoard;
         this.timeTurn = 60 * 1000;
     }
 
     public synchronized void setTurnIsOver() {
-        this.turnIsOver = true;
-        if (this.player.getServerInterface() != null)
-            this.player.getServerInterface().send("Your turn has ended.");
+        this.turnOver = true;
+        this.sendToPlayer("Your turn has ended.");
         notifyAll();
     }
 
     public synchronized void onePlayerLeft() {
-        this.turnIsOver = true;
+        this.turnOver = true;
         notifyAll();
     }
 
@@ -59,8 +62,8 @@ public class Turn {
         return waitMove;
     }
 
-    private synchronized boolean isTurnIsOver() {
-        return turnIsOver;
+    private synchronized boolean isTurnOver() {
+        return turnOver;
     }
 
     public void setPlacementDone(boolean placementDone) {
@@ -95,6 +98,20 @@ public class Turn {
         return playerMove;
     }
 
+    private void sendToPlayer ( String message ) {
+        if ( this.remoteView != null )
+            if ( this.remoteView.isOn() )
+                this.remoteView.send( message );
+    }
+
+    private void sendToPlayerAndUpdate ( String message ) {
+        if ( this.remoteView != null )
+            if ( this.remoteView.isOn() ) {
+                this.gameBoard.update();
+                this.remoteView.send(message);
+            }
+    }
+
     public synchronized void newMove(PlayerMove playerMove) {
         this.typeMove = playerMove.getMoveType();
         this.playerMove = playerMove;
@@ -103,9 +120,8 @@ public class Turn {
     }
 
     private synchronized void timeOut() {
-        this.turnIsOver = true;
-        if (this.player.getServerInterface() != null)
-            this.player.getServerInterface().send("The time is over! Your turn has ended.");
+        this.turnOver = true;
+        this.sendToPlayer("The time is over! Your turn has ended.");
         notifyAll();
     }
 
@@ -114,7 +130,7 @@ public class Turn {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (!isTurnIsOver()) {
+                if (!isTurnOver()) {
                     timeOut();
                 }
             }
@@ -125,15 +141,11 @@ public class Turn {
 
         this.launchTimer();
 
-        if (this.player.getServerInterface() != null) {
-            //this.player.getServerInterface().send("UpdateFromServer");
-        }
-
-        while (!isTurnIsOver()) {
+        while (!isTurnOver()) {
 
             synchronized (this) {
 
-                while (!isTurnIsOver() && isWaitMove())
+                while (!isTurnOver() && isWaitMove())
                     try {
                         wait();
                     } catch (InterruptedException e) {
@@ -179,10 +191,8 @@ public class Turn {
                 this.placementDone = placementMove.placeDie();
                 if (isPlacementDone()) {
                     this.gameBoard.removeDieFromDraftPool(placementMove.getDie());
-                    if (this.player.getServerInterface() != null)
-                        this.player.getServerInterface().send("The die has been placed on the selected cell.");
-                } else if (this.player.getServerInterface() != null)
-                    this.player.getServerInterface().send("Incorrect move! Please try again.");
+                    this.sendToPlayer("The die has been placed on the selected cell.");
+                } else this.sendToPlayer("Incorrect move! Please try again.");
             } catch (OccupiedCellException | NotValidParametersException e) {
                 e.printStackTrace();
             }
@@ -203,7 +213,7 @@ public class Turn {
                 if (tool.needPlacement()) {
                     setWaitMove(true);
                     synchronized (this) {
-                        while (!isTurnIsOver() && isWaitMove()) {
+                        while (!isTurnOver() && isWaitMove()) {
                             wait();
                             tool.placementDie(this);
                         }
@@ -213,12 +223,8 @@ public class Turn {
 
                 System.out.println("UsedTool è uguale a: " + usedTool);
                 if (isUsedTool()) {
-                    if (this.player.getServerInterface() != null) {
-                        this.gameBoard.update();
-                        this.player.getServerInterface().send("The selected tool has been used successfully");
-                    }
-                } else if (this.player.getServerInterface() != null)
-                    this.player.getServerInterface().send("Incorrect move! Please try again.");
+                    this.sendToPlayerAndUpdate("The selected tool has been used successfully");
+                } else this.sendToPlayer("Incorrect move! Please try again.");
 
             } catch (NotEnoughFavourTokensLeft | InterruptedException e) {
                 throw new IllegalArgumentException();

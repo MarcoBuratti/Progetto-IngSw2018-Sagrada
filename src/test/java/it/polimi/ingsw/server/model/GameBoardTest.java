@@ -4,8 +4,6 @@ import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,13 +12,13 @@ class GameBoardTest {
     public void gameBoardTest() throws NotValidValueException {
         ArrayList<Player> playersList = new ArrayList<>();
         Player player;
-        player = new Player ( "christian" , null );
+        player = new Player ( "christian");
         player.setDashboard("Chromatic_Splendor");
         playersList.add( player );
-        player = new Player ( "marco" , null );
+        player = new Player ( "marco");
         player.setDashboard("Fulgor_del_Cielo");
         playersList.add( player );
-        player = new Player ( "sergio" , null );
+        player = new Player ( "sergio");
         player.setDashboard("Aurora_Sagradis");
         playersList.add( player );
         GameBoard gameBoard = new GameBoard(playersList);

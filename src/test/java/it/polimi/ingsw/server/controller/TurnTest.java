@@ -18,10 +18,10 @@ class TurnTest {
     @Test
     void turnManager() throws NotValidValueException {
         ArrayList<Player> playersList = new ArrayList<>();
-        Player player = new Player ( "sergio" , null );
+        Player player = new Player ( "sergio");
         player.setDashboard("Aurora_Sagradis");
         playersList.add( player );
-        player = new Player ( "christian" , null );
+        player = new Player ( "christian");
         player.setDashboard("Chromatic_Splendor");
         playersList.add( player );
         GameBoard gameBoard = new GameBoard(playersList);
@@ -34,7 +34,7 @@ class TurnTest {
         }
         gameBoard.setTools(tools);
 
-        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
+        Turn turn = new Turn (null, gameBoard.getPlayers().get(0), gameBoard, false);
         String nickname = gameBoard.getPlayers().get(0).getNickname();
         ArrayList<Die> testDraftPool= new ArrayList<>();
         Die die1 =new Die(Color.BLUE);

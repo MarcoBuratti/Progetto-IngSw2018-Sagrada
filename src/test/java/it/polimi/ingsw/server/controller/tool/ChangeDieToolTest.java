@@ -18,10 +18,10 @@ class ChangeDieToolTest {
     @Test
     void toolEffect() throws NotValidValueException, NotValidRoundException {
         ArrayList<Player> playersList = new ArrayList<>();
-        Player player = new Player ( "sergio" , null );
+        Player player = new Player ( "sergio");
         player.setDashboard("Aurora_Sagradis");
         playersList.add( player );
-        player = new Player ( "christian" , null );
+        player = new Player ( "christian");
         player.setDashboard("Chromatic_Splendor");
         playersList.add( player );
         GameBoard gameBoard = new GameBoard(playersList);
@@ -61,7 +61,7 @@ class ChangeDieToolTest {
         diceList2.add(d3);
         gameBoard.getRoundTrack().setNextRound(diceList2);
 
-        Turn turn = new Turn(gameBoard.getPlayers().get(0), gameBoard, false);
+        Turn turn = new Turn(null, gameBoard.getPlayers().get(0), gameBoard, false);
         String nickname = gameBoard.getPlayers().get(0).getNickname();
         System.out.println(gameBoard.getDraftPool());
         ChangeDieTool changeDieTool=new ChangeDieTool(false,ToolNames.LENS_CUTTER);

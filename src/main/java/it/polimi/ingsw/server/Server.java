@@ -109,39 +109,30 @@ public class Server extends UnicastRemoteObject {
 
     private void registerOldPlayer ( ServerInterface newServerInterface ) {
 
-        for ( Player p : players ) {
+        for ( RemoteView r: remoteViews ) {
 
-            if ( p.getNickname().equals( newServerInterface.getPlayer().getNickname() ) ) {
+            if ( r.getPlayer().getNickname().equals( newServerInterface.getPlayer().getNickname() ) ) {
 
-                if ( p.getServerInterface() == null ) {
+                if ( r.getServerInterface() == null ) {
                     serverInterfaces.add( newServerInterface );
-                    searchRemoteView( newServerInterface, p );
+                    r.changeConnection(newServerInterface);
+                    cliGraphicsServer.printLoggedAgain(r.getPlayer().getNickname());
+                    newServerInterface.send("You have logged in again as: " + newServerInterface.getPlayer().getNickname());
+                    if ( r.isGameStarted() )
+                        r.getGame().playerReconnected( r );
+                    else
+                        currentLobby.playerReconnected( r );
                 }
 
                 else {
                     newServerInterface.send("This nickname has been already used! Please try again.");
                     newServerInterface.send("Terminate.");
                 }
+
             }
         }
     }
 
-    private void searchRemoteView ( ServerInterface newServerInterface, Player oldPlayer ) {
-
-        for (RemoteView r : remoteViews) {
-
-            if ( r.getPlayer().getNickname().equals(newServerInterface.getPlayer().getNickname()) ) {
-
-                r.changeConnection(newServerInterface);
-                cliGraphicsServer.printLoggedAgain(oldPlayer.getNickname());
-                newServerInterface.send("You have logged in again as: " + newServerInterface.getPlayer().getNickname());
-                if ( r.isGameStarted() )
-                    r.getGame().playerReconnected( r );
-                else
-                    currentLobby.playerReconnected( r );
-            }
-        }
-    }
 
     private void registerNewPlayer ( ServerInterface newServerInterface ) {
 

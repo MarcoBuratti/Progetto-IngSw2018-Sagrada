@@ -14,22 +14,9 @@ public class Player {
     private ServerInterface serverInterface;
 
 
-    public Player(String nickname, ServerInterface serverInterface) {
+    public Player(String nickname) {
         this.nickname = nickname;
-        this.serverInterface = serverInterface;
         this.skipSecondTurn = false;
-    }
-
-    public ServerInterface getServerInterface() {
-        return this.serverInterface;
-    }
-
-    public void setServerInterface(ServerInterface serverInterface) {
-        this.serverInterface = serverInterface;
-    }
-
-    public void removeServerInterface() {
-        this.serverInterface = null;
     }
 
     public void setDashboard(String scheme) throws NotValidValueException {

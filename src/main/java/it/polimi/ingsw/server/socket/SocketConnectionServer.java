@@ -76,7 +76,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
     @Override
     public void run() {
         try {
-            this.player = new Player(in.readLine(), this);
+            this.player = new Player(in.readLine());
             boolean firstLog = !server.alreadyLoggedIn(this);
 
             if ( firstLog ) {

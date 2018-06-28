@@ -35,7 +35,7 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
     @Override
     public void setPlayerAndAskScheme(Message message) throws RemoteException {
 
-        this.player = new Player( message.getMessage(), this );
+        this.player = new Player( message.getMessage());
         boolean firstLog = !server.alreadyLoggedIn(this);
 
         try {

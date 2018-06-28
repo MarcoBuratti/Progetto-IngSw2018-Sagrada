@@ -15,7 +15,7 @@ class PlayerTest {
 
         String nickname = "tester";
         PrivateAchievement privateAchievement = new PrivateAchievement(Color.GREEN);
-        Player player = new Player(nickname, null);
+        Player player = new Player(nickname);
         player.setDashboard("Scheme_Test");
         player.setPrivateAchievement(privateAchievement);
         assertEquals(nickname, player.getNickname());

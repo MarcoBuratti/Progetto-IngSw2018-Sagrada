@@ -25,11 +25,14 @@ public class RemoteView extends Observable implements Observer {
         serverConnection.addObserver(this.messageReceiver);
     }
 
+    public boolean isOn() {
+        return ( this.serverInterface != null );
+    }
+
     synchronized void changeConnection(ServerInterface serverInterface) {
         this.serverInterface = serverInterface;
         this.serverInterface.setGame(game);
         this.serverInterface.setPlayer(player);
-        this.player.setServerInterface(this.serverInterface);
         messageReceiver = new MessageReceiver();
         Observable serverConnection = (Observable) this.serverInterface;
         serverConnection.addObserver(this.messageReceiver);

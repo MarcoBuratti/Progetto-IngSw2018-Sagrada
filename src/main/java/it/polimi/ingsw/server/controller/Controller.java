@@ -2,9 +2,7 @@ package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.server.Game;
 import it.polimi.ingsw.server.RemoteView;
-import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
-import it.polimi.ingsw.server.controller.tool.Tool;
 import it.polimi.ingsw.server.interfaces.ServerInterface;
 import it.polimi.ingsw.server.model.GameBoard;
 import it.polimi.ingsw.server.model.Player;
@@ -22,6 +20,7 @@ public class Controller extends Observable implements Observer {
     private Round currentRound;
     private GameBoard gameBoard;
     private ArrayList<Player> players;
+    private ArrayList<RemoteView> remoteViews;
     private boolean gameEnded;
     private boolean onePlayerLeft = false;
 
@@ -31,24 +30,25 @@ public class Controller extends Observable implements Observer {
     }
 
     public void setRemoteViews(Game game) {
-        ArrayList<RemoteView> remoteViews = new ArrayList<>(game.getRemoteViews());
+        remoteViews = game.getRemoteViews();
         for (RemoteView r : remoteViews)
             r.addObserver(this);
     }
 
-    private void endGame (ArrayList< Pair <Player, Integer> > finalScores, Player winner) {
+    private void endGame (ArrayList< Pair < RemoteView, Integer > > finalScores, Player winner) {
         for (Pair p : finalScores) {
-            Player player = (Player) p.getKey();
-            ServerInterface playerConnection = player.getServerInterface();
-            if (playerConnection != null) {
+            RemoteView remoteView = (RemoteView) p.getKey();
+            Player player = remoteView.getPlayer();
+
+            if ( remoteView.isOn() ) {
                 if (player.getNickname().equals(winner.getNickname()))
-                    playerConnection.send("You win!");
+                    remoteView.send("You win!");
                 else
-                    playerConnection.send("You lose!");
+                    remoteView.send("You lose!");
 
                 for (Pair pair : finalScores) {
                     Player otherPlayer = (Player) pair.getKey();
-                    playerConnection.send("Player: " + otherPlayer.getNickname() + " , Score: " + pair.getValue());
+                    remoteView.send("Player: " + otherPlayer.getNickname() + " , Score: " + pair.getValue());
                 }
             }
         }
@@ -58,7 +58,7 @@ public class Controller extends Observable implements Observer {
     public String startGame() {
 
         for (int i = 0; i < NUMBER_OF_ROUNDS && !onePlayerLeft ; i++) {
-            currentRound = new Round(players, gameBoard);
+            currentRound = new Round( remoteViews, players, gameBoard);
             this.addObserver(currentRound);
             try {
                 currentRound.initializeDraftPool();
@@ -71,8 +71,8 @@ public class Controller extends Observable implements Observer {
             Collections.rotate(players, players.size()-1);
         }
 
-        ArrayList<Pair<Player, Integer>> finalScores = this.calculateFinalScores();
-        Player winner = finalScores.get(0).getKey();
+        ArrayList< Pair < RemoteView, Integer > > finalScores = this.calculateFinalScores();
+        Player winner = finalScores.get(0).getKey().getPlayer();
         if (!onePlayerLeft) {
             endGame(finalScores, winner);
         }
@@ -83,14 +83,15 @@ public class Controller extends Observable implements Observer {
         return gameBoard;
     }
 
-    private ArrayList<Pair<Player, Integer>> calculateFinalScores() {
+    private ArrayList< Pair< RemoteView, Integer > > calculateFinalScores() {
 
-        ArrayList<Pair<Player, Integer>> finalScores = new ArrayList<>();
+        ArrayList< Pair< RemoteView , Integer > > finalScores = new ArrayList<>();
         Collections.rotate(players, 1);
 
         for (Player p : this.players) {
 
-            Pair<Player, Integer> pair = new Pair<>(p, calculateFinalScorePlayer(p));
+            RemoteView remoteView = searchRemoteView( p );
+            Pair< RemoteView, Integer > pair = new Pair<>( remoteView , calculateFinalScorePlayer(p));
             boolean added = false;
 
             for (int i = 0; i < finalScores.size() && !added; i++) {
@@ -108,10 +109,17 @@ public class Controller extends Observable implements Observer {
         return finalScores;
     }
 
-    private boolean compare(Pair<Player,Integer> pair1,Pair<Player,Integer> pair2){
+    private RemoteView searchRemoteView ( Player player ) {
+        for ( RemoteView remoteView: remoteViews )
+            if ( remoteView.getPlayer().getNickname().equals( player.getNickname() ) )
+                return remoteView;
+        throw new IllegalArgumentException();
+    }
 
-        Player p1 = pair1.getKey();
-        Player p2 = pair2.getKey();
+    private boolean compare( Pair< RemoteView, Integer > pair1, Pair< RemoteView, Integer > pair2){
+
+        Player p1 = pair1.getKey().getPlayer();
+        Player p2 = pair2.getKey().getPlayer();
         if (pair1.getValue() < pair2.getValue())
             return true;
         else if (pair1.getValue().equals(pair2.getValue()) &&

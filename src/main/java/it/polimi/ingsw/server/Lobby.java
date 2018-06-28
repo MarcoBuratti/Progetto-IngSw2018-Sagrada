@@ -31,7 +31,6 @@ class Lobby {
 
         this.serverInterfaces.remove( remoteView.getServerInterface() );
         remoteView.removeConnection();
-        remoteView.getPlayer().removeServerInterface();
 
     }
 

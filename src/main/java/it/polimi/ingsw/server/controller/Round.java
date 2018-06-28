@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.server.RemoteView;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.model.Die;
 import it.polimi.ingsw.server.model.GameBoard;
@@ -17,12 +18,14 @@ public class Round implements Observer {
     private Turn currentTurn;
     private GameBoard gameBoard;
     private ArrayList<Player> players;
+    private ArrayList<RemoteView> remoteViews;
     private boolean onePlayerLeft = false;
 
-    public Round(ArrayList<Player> players, GameBoard gameBoard) {
+    public Round(ArrayList<RemoteView> remoteViews, ArrayList<Player> players, GameBoard gameBoard) {
         this.gameBoard = gameBoard;
         DRAFT_POOL_CAPACITY = (players.size() * 2) + 1;
         this.players = players;
+        this.remoteViews = remoteViews;
     }
 
     public void initializeDraftPool() throws NotEnoughDiceLeftException {
@@ -52,17 +55,26 @@ public class Round implements Observer {
     }
 
     private void createTurn (boolean bool) {
-        for (Player p : players)
-            if ((!p.equals(currentPlayer)) && (p.getServerInterface() != null) && (currentPlayer.getServerInterface() != null))
-                p.getServerInterface().send("It's " + currentPlayer.getNickname() + "'s turn. Please wait.");
+        RemoteView currentPlayerRemoteView = this.searchRemoteView( currentPlayer );
 
-        if (currentPlayer.getServerInterface() != null) {
-            this.currentPlayer.getServerInterface().send("It's your turn! Please make your move.");
-            if (!onePlayerLeft) {
-                this.currentTurn = new Turn(currentPlayer, gameBoard, bool);
+        for (RemoteView r: remoteViews)
+            if ((!r.getPlayer().equals(currentPlayer)) && ( r.isOn() ) && ( currentPlayerRemoteView.isOn() ))
+                r.send("It's " + currentPlayer.getNickname() + "'s turn. Please wait.");
+
+        if ( currentPlayerRemoteView.isOn() ) {
+            currentPlayerRemoteView.send("It's your turn! Please make your move.");
+            if ( !onePlayerLeft ) {
+                this.currentTurn = new Turn(searchRemoteView(currentPlayer), currentPlayer, gameBoard, bool);
                 currentTurn.turnManager();
             }
         }
+    }
+
+    protected RemoteView searchRemoteView ( Player player ) {
+        for ( RemoteView remoteView: remoteViews )
+            if ( remoteView.getPlayer().getNickname().equals( player.getNickname() ) )
+                return remoteView;
+        throw new IllegalArgumentException();
     }
 
     public void endRound() {
