@@ -1,8 +1,6 @@
 package it.polimi.ingsw.server.model;
 
-import it.polimi.ingsw.server.interfaces.ServerInterface;
 import it.polimi.ingsw.server.model.achievement.PrivateAchievement;
-import it.polimi.ingsw.server.model.exception.NotEnoughFavourTokensLeft;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
 
 public class Player {
@@ -11,7 +9,6 @@ public class Player {
     private Dashboard dashboard;
     private PrivateAchievement privateAchievement;
     private boolean skipSecondTurn;
-    private ServerInterface serverInterface;
 
 
     public Player(String nickname) {
@@ -90,18 +87,22 @@ public class Player {
      * any of the players.
      *
      * @param usedTool specifies whether the tool has been used at least once
-     * @throws NotEnoughFavourTokensLeft if the player does not have enough tokens left
      */
-    public void useToken(Boolean usedTool) throws NotEnoughFavourTokensLeft {
-        if (this.currentFavourToken > 0) {
+    public boolean hasEnoughToken ( boolean usedTool ) {
+        if ( this.currentFavourToken > 0 ) {
             if (!usedTool)
-                this.currentFavourToken--;
+                return true;
             else {
-                if (this.currentFavourToken > 1)
-                    this.currentFavourToken -= 2;
-                else throw new NotEnoughFavourTokensLeft();
+                return this.currentFavourToken > 1;
             }
-        } else throw new NotEnoughFavourTokensLeft();
+        } else return false;
+    }
+
+    public void useToken ( boolean usedTool ) {
+        if (usedTool)
+            this.currentFavourToken = this.currentFavourToken - 2;
+        else
+            this.currentFavourToken--;
     }
 
     public boolean skipSecondTurn() {

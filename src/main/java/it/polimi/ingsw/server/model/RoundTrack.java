@@ -30,7 +30,7 @@ public class RoundTrack {
      * @return an ArrayList containing the dice placed on the selected cell
      * @throws NotValidRoundException whether the user tries to access a not existing round track's cell
      */
-    public List getDiceList(int round) throws NotValidRoundException {
+    public List getDiceList ( int round ) throws NotValidRoundException {
         if (round > 0 && round <= NUMBER_OF_ROUNDS)
             return diceList[round - 1];
         else throw new NotValidRoundException();

@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.model.Die;
 
 public class ColorRestriction implements Restriction {
     private Color color;
+    private RestrictionType type;
 
     /**
      * Creates a ColorRestriction Object representing a cell's color restriction.
@@ -13,6 +14,7 @@ public class ColorRestriction implements Restriction {
      */
     public ColorRestriction(Color color) {
         this.color = color;
+        this.type = RestrictionType.COLOR;
     }
 
     /**
@@ -25,11 +27,16 @@ public class ColorRestriction implements Restriction {
     }
 
     @Override
+    public RestrictionType getType() {
+        return type;
+    }
+
+    @Override
     /**
      * Returns a Boolean object which specifies if the die can be set on the cell having that
      * restriction (the die must have the same color as the restriction).
      */
-    public Boolean restrictionCheck(Die die) {
+    public boolean restrictionCheck(Die die) {
         return (die.getColor().equals(this.color));
     }
 

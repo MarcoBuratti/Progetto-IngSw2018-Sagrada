@@ -6,7 +6,6 @@ import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.controller.tool.Tool;
 import it.polimi.ingsw.server.model.GameBoard;
 import it.polimi.ingsw.server.model.Player;
-import it.polimi.ingsw.server.model.exception.NotEnoughFavourTokensLeft;
 import it.polimi.ingsw.server.model.exception.NotValidParametersException;
 import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 
@@ -208,25 +207,30 @@ public class Turn {
             Tool tool = gameBoard.getTools().get(toolIndexValue);
 
             try {
-                this.player.useToken(tool.isAlreadyUsed());
-                usedTool = tool.toolEffect(this, playerMove);
-                if (tool.needPlacement()) {
-                    setWaitMove(true);
-                    synchronized (this) {
-                        while (!isTurnOver() && isWaitMove()) {
-                            wait();
-                            tool.placementDie(this);
+                boolean toolAlreadyUsed = tool.isAlreadyUsed();
+                if ( this.player.hasEnoughToken( toolAlreadyUsed ) ) {
+                    usedTool = tool.toolEffect(this, playerMove);
+                    if (tool.needPlacement()) {
+                        setWaitMove(true);
+                        synchronized (this) {
+                            while (!isTurnOver() && isWaitMove()) {
+                                wait();
+                                tool.placementDie(this);
+                            }
+
                         }
-
                     }
+
+                    System.out.println("UsedTool è uguale a: " + usedTool);
+                    if ( isUsedTool() ) {
+                        this.player.useToken( toolAlreadyUsed );
+                        this.sendToPlayerAndUpdate("The selected tool has been used successfully");
+                    }
+                    else this.sendToPlayer("Incorrect move! Please try again.");
                 }
+                else this.sendToPlayer("You don't have enough favour tokens left to use this tool!");
 
-                System.out.println("UsedTool è uguale a: " + usedTool);
-                if (isUsedTool()) {
-                    this.sendToPlayerAndUpdate("The selected tool has been used successfully");
-                } else this.sendToPlayer("Incorrect move! Please try again.");
-
-            } catch (NotEnoughFavourTokensLeft | InterruptedException e) {
+            } catch (InterruptedException e) {
                 throw new IllegalArgumentException();
 
             }

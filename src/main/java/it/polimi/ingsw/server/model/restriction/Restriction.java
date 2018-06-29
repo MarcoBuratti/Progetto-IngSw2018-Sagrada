@@ -11,6 +11,6 @@ public interface Restriction {
      * @param die the die the user wants to set on the cell having this restriction
      * @return true if the die complies with the restriction, false otherwise
      */
-    Boolean restrictionCheck(Die die);
-
+    boolean restrictionCheck(Die die);
+    RestrictionType getType();
 }

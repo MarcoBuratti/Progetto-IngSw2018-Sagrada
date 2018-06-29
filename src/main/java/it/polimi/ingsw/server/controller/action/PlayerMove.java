@@ -35,7 +35,7 @@ public class PlayerMove implements Serializable {
         throw new IllegalArgumentException();
     }
 
-    public static PlayerMove playerMoveReader(JSONObject jsonObject) {
+    public static PlayerMove playerMoveReader ( JSONObject jsonObject ) {
 
         String playerNickname = (String) jsonObject.get("playerID");
         String moveType = (String) jsonObject.get("type_playerMove");
@@ -61,20 +61,19 @@ public class PlayerMove implements Serializable {
                 int toolIndex = Integer.parseInt((String) jsonObject.get("toolIndex"));
                 int extractedToolIndex = Integer.parseInt((String) jsonObject.get("extractedToolIndex"));
                 System.out.println(playerNickname + " " + moveType + " " + toolIndex + " SWITCH");
-                System.out.println(extractedToolIndex + " avevo ragione io");
                 switch (toolIndex) {
 
                     case 7:
                         System.out.println( toolIndex + " CASE 7");
                         dieIndex = Integer.parseInt((String) jsonObject.get("Key1"));
-                        String bool = ((String) jsonObject.get("Key2"));
-                        if(bool.equals("0"))
-                            return new PlayerMove(playerNickname, moveType, extractedToolIndex, dieIndex, false);
-                        else
-                            return new PlayerMove(playerNickname, moveType, extractedToolIndex, dieIndex, true);
+                        String boolKey = ((String) jsonObject.get("Key2"));
+                        boolean bool;
+                        bool = ( boolKey.equals("1") );
+                        return new PlayerMove(playerNickname, moveType, extractedToolIndex, dieIndex, bool);
 
-                    case 2:
                     case 0:
+                    case 2:
+                    case 8:
                     case 10:
                     case 11:
                         otherKeysSize = jsonObject.size() - 4;
@@ -86,14 +85,15 @@ public class PlayerMove implements Serializable {
                         return new PlayerMove(playerNickname, moveType, extractedToolIndex, coordinates);
 
                     case 1:
-                    case 8:
+                        //case 8:
                     case 9:
                         dieIndex = Integer.parseInt((String) jsonObject.get("Key1"));
                         otherKeysSize = jsonObject.size() - 5;
                         coordinates = new ArrayList<>();
+                        System.out.println("DieIndex " + dieIndex);
                         for ( int i = 0 ; i < otherKeysSize ; i++ ) {
-                            coordinates.add(Integer.parseInt((String) jsonObject.get("Key" + (i + 1))));
-                            System.out.println(coordinates + " " + toolIndex + " CASE 1,8,9");
+                            coordinates.add(Integer.parseInt((String) jsonObject.get("Key" + (i + 2))));
+                            System.out.println(coordinates + " " + toolIndex + " CASE 1,9");
                         }
                         return new PlayerMove(playerNickname, moveType, extractedToolIndex, dieIndex, coordinates);
 
@@ -109,9 +109,10 @@ public class PlayerMove implements Serializable {
                         return new PlayerMove(playerNickname, moveType, extractedToolIndex);
 
                     default:
-                        throw new IllegalArgumentException();
-
+                        break;
                 }
+                throw new IllegalArgumentException();
+
 
             case GO_THROUGH:
                 return new PlayerMove(playerNickname, moveType);

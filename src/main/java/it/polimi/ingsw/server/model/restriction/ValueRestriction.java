@@ -7,6 +7,7 @@ import it.polimi.ingsw.server.model.exception.NotValidValueException;
 public class ValueRestriction implements Restriction {
     private static final int NUMBER_OF_SIDES = 6;
     private int number;
+    private RestrictionType type;
 
     /**
      * Creates a ValueRestriction Object representing a cell's value restriction.
@@ -17,8 +18,10 @@ public class ValueRestriction implements Restriction {
      */
     public ValueRestriction(int value) throws NotValidValueException {
         try {
-            if (value > 0 && value <= NUMBER_OF_SIDES)
+            if (value > 0 && value <= NUMBER_OF_SIDES) {
                 this.number = value;
+                this.type = RestrictionType.VALUE;
+            }
             else
                 throw new NotValidValueException();
         } catch (Exception e) {
@@ -40,8 +43,13 @@ public class ValueRestriction implements Restriction {
      * Returns a Boolean object which specifies if the die can be set on the cell having that
      * restriction (the die must have the same value as the restriction).
      */
-    public Boolean restrictionCheck(Die die) {
+    public boolean restrictionCheck(Die die) {
         return (die.getNumber() == this.number);
+    }
+
+    @Override
+    public RestrictionType getType() {
+        return type;
     }
 
     @Override

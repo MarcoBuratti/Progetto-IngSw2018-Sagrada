@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.controller.Turn;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Die;
+import it.polimi.ingsw.server.model.exception.EndedGameException;
 import it.polimi.ingsw.server.model.exception.NotValidRoundException;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
 
@@ -37,25 +38,31 @@ public class ChangeDieTool implements Tool {
     }
 
     public boolean toolEffect(Turn turn, PlayerMove playerMove) {
-        if (playerMove.getIndexDie().isPresent()) {
-            if (toolName.equals(ToolNames.LENS_CUTTER)) {
-                try {
-                    secondDie = (Die) turn.getGameBoard().getRoundTrack().getDiceList(playerMove.getIntParameters(0)).get(playerMove.getIntParameters(1));
-                    dieDraftPool = turn.getGameBoard().changeDie(secondDie, playerMove.getIndexDie().get());
-                    turn.getGameBoard().getRoundTrack().changeDie(dieDraftPool, playerMove.getIntParameters(0), playerMove.getIntParameters(1));
+        if ( playerMove.getIndexDie().isPresent() ) {
+            if ( playerMove.getIndexDie().get() < turn.getGameBoard().getDraftPool().size() ) {
+                if (toolName.equals(ToolNames.LENS_CUTTER)) {
+                    try {
+                        if ( playerMove.getIntParameters(0) < turn.getGameBoard().getRoundTrack().getCurrentRound()
+                                && playerMove.getIntParameters(1) < turn.getGameBoard().getRoundTrack().getDiceList(playerMove.getIntParameters(0)).size() ) {
+                            secondDie = (Die) turn.getGameBoard().getRoundTrack().getDiceList(playerMove.getIntParameters(0)).get(playerMove.getIntParameters(1));
+                            dieDraftPool = turn.getGameBoard().changeDie(secondDie, playerMove.getIndexDie().get());
+                            turn.getGameBoard().getRoundTrack().changeDie(dieDraftPool, playerMove.getIntParameters(0), playerMove.getIntParameters(1));
+                            return true;
+                        }
+                    } catch (NotValidRoundException e) {
+                        return false;
+                    } catch (EndedGameException e) {
+                        e.printStackTrace();
+                    }
+                } else if (toolName.equals(ToolNames.FLUX_REMOVER)) {
+                    dieDraftPool = turn.getGameBoard().getDraftPool().get(playerMove.getIndexDie().get());
+                    secondDie = turn.getGameBoard().getDiceBag().changeDie(dieDraftPool);
+                    turn.getGameBoard().changeDie(secondDie, playerMove.getIndexDie().get());
+                    index = playerMove.getIndexDie().get();
+
                     return true;
-                } catch (NotValidRoundException e) {
-                    e.printStackTrace();
                 }
-            } else if (toolName.equals(ToolNames.FLUX_REMOVER)) {
-                dieDraftPool = turn.getGameBoard().getDraftPool().get(playerMove.getIndexDie().get());
-                secondDie = turn.getGameBoard().getDiceBag().changeDie(dieDraftPool);
-                turn.getGameBoard().changeDie(secondDie, playerMove.getIndexDie().get());
-                index = playerMove.getIndexDie().get();
-
-                return true;
             }
-
             return false;
         } else
             throw new IllegalArgumentException();
