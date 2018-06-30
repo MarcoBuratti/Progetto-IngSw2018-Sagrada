@@ -19,6 +19,7 @@ public class Round implements Observer {
     private GameBoard gameBoard;
     private ArrayList<Player> players;
     private ArrayList<RemoteView> remoteViews;
+    private RemoteView currentPlayerRemoteView;
     private boolean onePlayerLeft = false;
 
     public Round(ArrayList<RemoteView> remoteViews, ArrayList<Player> players, GameBoard gameBoard) {
@@ -29,8 +30,7 @@ public class Round implements Observer {
     }
 
     public void initializeDraftPool() throws NotEnoughDiceLeftException {
-        ArrayList<Die> draftPool = new ArrayList<>();
-        draftPool.addAll(gameBoard.getDiceBag().extractSet(DRAFT_POOL_CAPACITY));
+        ArrayList<Die> draftPool = new ArrayList<>(gameBoard.getDiceBag().extractSet(DRAFT_POOL_CAPACITY));
         this.gameBoard.setDraftPool(draftPool);
     }
 
@@ -41,6 +41,7 @@ public class Round implements Observer {
             currentPlayer = iterator.next();
             this.gameBoard.setCurrentPlayer(currentPlayer);
             createTurn(false);
+            endTurn();
         }
 
         while (iterator.hasPrevious() && !onePlayerLeft) {
@@ -50,15 +51,16 @@ public class Round implements Observer {
             else {
                 this.gameBoard.setCurrentPlayer(currentPlayer);
                 createTurn(true);
+                endTurn();
             }
         }
     }
 
     private void createTurn (boolean bool) {
-        RemoteView currentPlayerRemoteView = this.searchRemoteView( currentPlayer );
+        currentPlayerRemoteView = this.searchRemoteView( currentPlayer );
 
         for (RemoteView r: remoteViews)
-            if ((!r.getPlayer().equals(currentPlayer)) && ( r.isOn() ) && ( currentPlayerRemoteView.isOn() ))
+            if ( ( !r.getPlayer().equals( currentPlayer ) ) && ( r.isOn() ) && ( currentPlayerRemoteView.isOn() ))
                 r.send("It's " + currentPlayer.getNickname() + "'s turn. Please wait.");
 
         if ( currentPlayerRemoteView.isOn() ) {
@@ -68,6 +70,16 @@ public class Round implements Observer {
                 currentTurn.turnManager();
             }
         }
+    }
+
+    private void endTurn () {
+        for (RemoteView r: remoteViews)
+            if ( ( !r.getPlayer().equals( currentPlayer ) ) && ( r.isOn() ) && ( currentPlayerRemoteView.isOn() ))
+                r.send(currentPlayer.getNickname() + "'s turn has ended.");
+
+        if ( currentPlayerRemoteView.isOn() )
+            currentPlayerRemoteView.send("Your turn has ended.");
+
     }
 
     protected RemoteView searchRemoteView ( Player player ) {

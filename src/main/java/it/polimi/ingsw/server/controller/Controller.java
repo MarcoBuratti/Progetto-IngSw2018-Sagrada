@@ -35,26 +35,6 @@ public class Controller extends Observable implements Observer {
             r.addObserver(this);
     }
 
-    private void endGame (ArrayList< Pair < RemoteView, Integer > > finalScores, Player winner) {
-        for (Pair p : finalScores) {
-            RemoteView remoteView = (RemoteView) p.getKey();
-            Player player = remoteView.getPlayer();
-
-            if ( remoteView.isOn() ) {
-                if (player.getNickname().equals(winner.getNickname()))
-                    remoteView.send("You win!");
-                else
-                    remoteView.send("You lose!");
-
-                for (Pair pair : finalScores) {
-                    Player otherPlayer = (Player) pair.getKey();
-                    remoteView.send("Player: " + otherPlayer.getNickname() + " , Score: " + pair.getValue());
-                }
-            }
-        }
-        setGameEnded(true);
-    }
-
     public String startGame() {
 
         for (int i = 0; i < NUMBER_OF_ROUNDS && !onePlayerLeft ; i++) {
@@ -81,6 +61,27 @@ public class Controller extends Observable implements Observer {
 
     public GameBoard getGameBoard() {
         return gameBoard;
+    }
+
+
+    private void endGame (ArrayList< Pair < RemoteView, Integer > > finalScores, Player winner) {
+        for (Pair p : finalScores) {
+            RemoteView remoteView = (RemoteView) p.getKey();
+            Player player = remoteView.getPlayer();
+
+            if ( remoteView.isOn() ) {
+                if (player.getNickname().equals(winner.getNickname()))
+                    remoteView.send("You win!");
+                else
+                    remoteView.send("You lose!");
+
+                for (Pair pair : finalScores) {
+                    Player otherPlayer = (Player) pair.getKey();
+                    remoteView.send("Player: " + otherPlayer.getNickname() + " , Score: " + pair.getValue());
+                }
+            }
+        }
+        setGameEnded(true);
     }
 
     private ArrayList< Pair< RemoteView, Integer > > calculateFinalScores() {
