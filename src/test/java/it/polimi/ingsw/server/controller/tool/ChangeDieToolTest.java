@@ -71,10 +71,18 @@ class ChangeDieToolTest {
         PlayerMove playerMove = new PlayerMove(nickname, "UseTool", 9,0, intParameters);
         Assertions.assertTrue(changeDieTool.toolEffect(turn,playerMove));
         System.out.println(gameBoard.getDraftPool());
-        ChangeDieTool changeDieTool1=new ChangeDieTool(true,ToolNames.FLUX_REMOVER);
-        PlayerMove playerMove1 = new PlayerMove(nickname, "UseTool",4,2);
-        Assertions.assertTrue(changeDieTool1.toolEffect(turn,playerMove1));
-        System.out.println(gameBoard.getDraftPool());
-        //System.out.println(gameBoard.getRoundTrack());
+
+        Turn turn1 = new Turn(null, gameBoard.getPlayers().get(1), gameBoard, false);
+        String nickname1 = gameBoard.getPlayers().get(1).getNickname();
+
+        DecoratedChangeDieTool decoratedChangeDieTool = new DecoratedChangeDieTool( new ChangeDieTool( true, ToolNames.FLUX_REMOVER ) );
+        PlayerMove playerMove1 = new PlayerMove( nickname1, "UseTool", 4, 2);
+        System.out.println( "DraftPool prima di FLUX_REMOVER\n" + gameBoard.getDraftPool() );
+        Assertions.assertTrue( decoratedChangeDieTool.toolEffect( turn1, playerMove1 ) );
+        System.out.println( "DraftPool dopo FLUX_REMOVER\n" + gameBoard.getDraftPool() );
+        intParameters.add(0, 0);
+        System.out.println( gameBoard.getPlayers().get(1).getDashboard() );
+        Assertions.assertTrue(decoratedChangeDieTool.placeDie( turn1, new PlayerMove( nickname1, "PlaceDie", 2, intParameters )));
+        System.out.println( gameBoard.getPlayers().get(1).getDashboard() );
     }
 }

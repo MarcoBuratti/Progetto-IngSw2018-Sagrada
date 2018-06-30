@@ -14,19 +14,19 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.StringTokenizer;
 
-public class RmiConnectionClientClient extends ConnectionClient implements RmiClientInterface {
+public class RmiConnectionClient extends ConnectionClient implements RmiClientInterface {
 
     RmiControllerInterface server;
     RmiServerInterface channel;
     private String playerNickname;
 
     /**
-     * Creates a RmiConnectionClientClient object, adding the corresponding cliView to its observers and establishing a connection between it and the server.
+     * Creates a RmiConnectionClient object, adding the corresponding cliView to its observers and establishing a connection between it and the server.
      * @param view the CliView object which has to be added to the observers.
      * @param address the server address
      * @param port the port that has to be used by the remote object to receive incoming calls
      */
-    public RmiConnectionClientClient(View view, String address, int port) {
+    public RmiConnectionClient(View view, String address, int port) {
         this.addObserver(view);
         try {
             server = (RmiControllerInterface) Naming.lookup("//" + address + "/Server");
@@ -129,7 +129,7 @@ public class RmiConnectionClientClient extends ConnectionClient implements RmiCl
     @Override
     public void handleScheme(String fromServer, String fromClient) {
         int choice = Integer.parseInt(fromClient);
-        String substringSchemes = fromServer.substring(fromServer.indexOf(".") + 2);
+        String substringSchemes = fromServer.substring(fromServer.indexOf('.') + 2);
         StringTokenizer strtok = new StringTokenizer(substringSchemes, ",");
         String[] schemes = new String[4];
         int i = 0;

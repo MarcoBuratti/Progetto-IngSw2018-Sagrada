@@ -3,11 +3,13 @@ package it.polimi.ingsw.server.controller.tool;
 import it.polimi.ingsw.server.controller.Turn;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.model.Color;
+import it.polimi.ingsw.server.model.Die;
 
-public class DecoratedSetDieTool extends PlaceToolDecorator {
+public class DecoratedChangeDieTool extends PlaceToolDecorator {
+
     private Tool myTool;
 
-    public DecoratedSetDieTool ( Tool tool ) {
+    public DecoratedChangeDieTool ( Tool tool ) {
         myTool = tool;
     }
 
@@ -24,20 +26,20 @@ public class DecoratedSetDieTool extends PlaceToolDecorator {
     @Override
     public boolean toolEffect(Turn turn, PlayerMove playerMove) {
 
-        if ( playerMove.getIndexDie().isPresent() ) {
+        if (playerMove.getIndexDie().isPresent()) {
 
-            if (playerMove.getIndexDie().get() >= turn.getGameBoard().getDraftPool().size()) {
+            if ( playerMove.getIndexDie().get() >= turn.getGameBoard().getDraftPool().size() )
                 return false;
-            }
 
-            if ( myTool.getToolName().equals( ToolNames.FLUX_BRUSH ) ) {
-                turn.getGameBoard().getDraftPool().get( playerMove.getIndexDie().get() ).extractAgain();
+            if ( myTool.getToolName().equals(ToolNames.FLUX_REMOVER )) {
+                Die dieFromDraftPool = turn.getGameBoard().getDraftPool().get( playerMove.getIndexDie().get() );
+                Die newDie = turn.getGameBoard().getDiceBag().changeDie( dieFromDraftPool );
+                turn.getGameBoard().changeDie( newDie, playerMove.getIndexDie().get() );
                 turn.getGameBoard().update();
                 return true;
             }
 
             else return false;
-
         }
 
         else return false;

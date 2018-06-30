@@ -74,7 +74,7 @@ class SetDieToolTest {
         ArrayList<Integer> intParameters = new ArrayList<>();
         intParameters.add(0);
         intParameters.add(0);
-        Assertions.assertTrue(decoratedSetDieTool.placeDie(turn1, new PlayerMove( nickname, "PlaceDie", 0, intParameters )));
+        Assertions.assertTrue(decoratedSetDieTool.placeDie(turn1, new PlayerMove( nickname1, "PlaceDie", 0, intParameters )));
 
         SetDieTool setDieTool2 = new SetDieTool(true, ToolNames.GRINDING_STONE);
         PlayerMove playerMove3 = new PlayerMove(nickname,"UseTool", 6, 0);

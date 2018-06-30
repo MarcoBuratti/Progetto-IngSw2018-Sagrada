@@ -3,10 +3,7 @@ package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.server.RemoteView;
 import it.polimi.ingsw.server.controller.action.PlacementMove;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
-import it.polimi.ingsw.server.controller.tool.DecoratedSetDieTool;
-import it.polimi.ingsw.server.controller.tool.PlaceToolDecorator;
-import it.polimi.ingsw.server.controller.tool.Tool;
-import it.polimi.ingsw.server.controller.tool.ToolNames;
+import it.polimi.ingsw.server.controller.tool.*;
 import it.polimi.ingsw.server.model.GameBoard;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.exception.NotValidParametersException;
@@ -214,9 +211,12 @@ public class Turn {
 
                     if ( tool.needPlacement() && !isPlacementDone() ) {
                         PlaceToolDecorator decoratedTool;
-                 //       if ( tool.getToolName().equals(ToolNames.FLUX_BRUSH))
+
+                        if ( tool.getToolName().equals(ToolNames.FLUX_BRUSH))
                             decoratedTool = new DecoratedSetDieTool( tool );
-                        //else decoratedTool = new DecoratedChangeDieTool( tool );
+                        else if ( tool.getToolName().equals(ToolNames.FLUX_REMOVER) )
+                            decoratedTool = new DecoratedChangeDieTool( tool );
+                        else throw new IllegalArgumentException();
 
                         usedTool = decoratedTool.toolEffect(this, playerMove);
                         if ( usedTool ) {

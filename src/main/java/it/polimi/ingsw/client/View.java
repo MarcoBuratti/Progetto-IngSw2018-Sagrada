@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.connection.rmi.RmiConnectionClientClient;
-import it.polimi.ingsw.client.connection.socket.SocketConnectionClientClient;
+import it.polimi.ingsw.client.connection.rmi.RmiConnectionClient;
+import it.polimi.ingsw.client.connection.socket.SocketConnectionClient;
 import it.polimi.ingsw.client.interfaces.ClientInterface;
 import org.json.simple.JSONObject;
 
@@ -47,7 +47,7 @@ public abstract class View implements Observer {
     public void createConnection(){
 
         if (choice.equals("SOCKET") || choice.equals("1")) {
-            connectionClient = new SocketConnectionClientClient(this, address, Integer.parseInt(port));
+            connectionClient = new SocketConnectionClient(this, address, Integer.parseInt(port));
             this.connectionClient.handleName(nickname);
             /*synchronized (this){
                 try {
@@ -57,7 +57,7 @@ public abstract class View implements Observer {
                 }
             }*/
         } else{
-            connectionClient = new RmiConnectionClientClient(this, address, Integer.parseInt(port));
+            connectionClient = new RmiConnectionClient(this, address, Integer.parseInt(port));
             this.connectionClient.handleName(nickname);
         }
 

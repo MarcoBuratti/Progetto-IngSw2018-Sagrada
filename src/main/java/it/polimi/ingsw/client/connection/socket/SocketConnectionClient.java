@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class SocketConnectionClientClient extends ConnectionClient implements Runnable, ClientInterface {
+public class SocketConnectionClient extends ConnectionClient implements Runnable, ClientInterface {
 
     private Socket socket;
     private BufferedReader in;
@@ -29,7 +29,7 @@ public class SocketConnectionClientClient extends ConnectionClient implements Ru
      * @param s
      * @param port
      */
-    public SocketConnectionClientClient(View view, String s, int port) {
+    public SocketConnectionClient(View view, String s, int port) {
         this.addObserver(view);
         try {
             socket = new Socket(s, port);
@@ -165,7 +165,7 @@ public class SocketConnectionClientClient extends ConnectionClient implements Ru
     @Override
     public void handleScheme(String fromServer, String fromClient) {
         int choice = Integer.parseInt(fromClient);
-        String substringSchemes = fromServer.substring(fromServer.indexOf(".") + 2);
+        String substringSchemes = fromServer.substring(fromServer.indexOf('.') + 2);
         StringTokenizer strtok = new StringTokenizer(substringSchemes, ",");
         String[] schemes = new String[4];
         int i = 0;
