@@ -13,8 +13,6 @@ public class SetDieTool implements Tool {
     private ToolNames toolName;
     private boolean needPlacement;
 
-    private Die die;
-
     public SetDieTool(boolean needPlacement, ToolNames toolName) {
         this.toolName = toolName;
         this.needPlacement = needPlacement;
@@ -38,12 +36,11 @@ public class SetDieTool implements Tool {
 
         if ( playerMove.getIndexDie().isPresent() ) {
 
-            if ( ( toolName.equals( ToolNames.FLUX_BRUSH ) && turn.isPlacementDone() )
-                    || ( playerMove.getIndexDie().get() >= turn.getGameBoard().getDraftPool().size() ) ) {
+            if ( playerMove.getIndexDie().get() >= turn.getGameBoard().getDraftPool().size() ) {
                 return false;
             }
 
-            die = turn.getGameBoard().getDraftPool().get( playerMove.getIndexDie().get() );
+            Die die = turn.getGameBoard().getDraftPool().get( playerMove.getIndexDie().get() );
 
 
             int oldValue = die.getNumber();
@@ -55,15 +52,14 @@ public class SetDieTool implements Tool {
                         die.setNumber( oldValue - 1 );
                     turn.getGameBoard().update();
                     return true;
-                } else if (toolName.equals(ToolNames.GRINDING_STONE)) {
+                }
+
+                else if (toolName.equals(ToolNames.GRINDING_STONE)) {
                     die.setNumber(7 - oldValue);
                     turn.getGameBoard().update();
                     return true;
-                } else if (toolName.equals(ToolNames.FLUX_BRUSH)) {
-                    die.extractAgain();
-                    turn.getGameBoard().update();
-                    return true;
                 }
+
             } catch (NotValidValueException e) {
                 System.out.println(e.toString());
             }
@@ -72,7 +68,7 @@ public class SetDieTool implements Tool {
             throw new IllegalArgumentException();
     }
 
-    public boolean canPlace(Turn turn) {
+ /*   public boolean canPlace(Turn turn) {
         boolean canPlace = false;
         PlacementCheck placementCheck = new PlacementCheck();
         for (int i = 0; i < 4 && !canPlace; i++) {
@@ -82,6 +78,7 @@ public class SetDieTool implements Tool {
         }
         return canPlace;
     }
+    */
 
     @Override
     public Color getColor() {
@@ -90,17 +87,6 @@ public class SetDieTool implements Tool {
 
     public boolean needPlacement() {
         return needPlacement;
-    }
-
-    public void placementDie(Turn turn) {
-        if (turn.getPlayerMove().getIndexDie().isPresent()) {
-            if (turn.getTypeMove().equals("PlaceDie") && !turn.isPlacementDone() &&
-                    die.equals(turn.getGameBoard().getDraftPool().get(turn.getPlayerMove().getIndexDie().get()))) {
-                turn.tryPlacementMove(turn.getPlayerMove());
-            } else
-                turn.setWaitMove(true);
-        } else
-            throw new IllegalArgumentException();
     }
 
     public ToolNames getToolName() {

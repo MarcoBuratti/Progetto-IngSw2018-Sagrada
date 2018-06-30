@@ -16,8 +16,6 @@ public interface Tool {
 
     boolean needPlacement();
 
-    void placementDie(Turn turn);
-
     ToolNames getToolName();
 
 }

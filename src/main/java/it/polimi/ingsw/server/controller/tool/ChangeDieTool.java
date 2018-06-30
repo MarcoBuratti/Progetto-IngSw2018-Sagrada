@@ -77,9 +77,9 @@ public class ChangeDieTool implements Tool {
         return this.needPlacement;
     }
 
-    public void placementDie(Turn turn) {
+    public void placeDie(Turn turn) {
         if (turn.getPlayerMove().getIndexDie().isPresent()) {
-            if (turn.getTypeMove().equals("PlaceDie") && !turn.isPlacementDone() && (index == turn.getPlayerMove().getIndexDie().get())) {
+            if (turn.getMoveType().equals("PlaceDie") && !turn.isPlacementDone() && (index == turn.getPlayerMove().getIndexDie().get())) {
                 if (toolName.equals(ToolNames.FLUX_REMOVER)) {
                     try {
                         turn.getGameBoard().getDraftPool().get(index).setNumber(turn.getPlayerMove().getIntParameters(2));
