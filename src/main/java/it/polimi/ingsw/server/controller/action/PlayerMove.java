@@ -74,26 +74,25 @@ public class PlayerMove implements Serializable {
                     case 0:
                     case 2:
                     case 8:
-                    case 10:
                     case 11:
                         otherKeysSize = jsonObject.size() - 4;
                         coordinates = new ArrayList<>();
                         for ( int i = 0 ; i < otherKeysSize ; i++ ) {
                             coordinates.add(Integer.parseInt((String) jsonObject.get("Key" + (i + 1))));
-                            System.out.println(coordinates + " " + toolIndex + " CASE 0,2,10,11");
+                            System.out.println(coordinates + " " + toolIndex + " CASE 0,2,8,11");
                         }
                         return new PlayerMove(playerNickname, moveType, extractedToolIndex, coordinates);
 
                     case 1:
-                        //case 8:
                     case 9:
+                    case 10:
                         dieIndex = Integer.parseInt((String) jsonObject.get("Key1"));
                         otherKeysSize = jsonObject.size() - 5;
                         coordinates = new ArrayList<>();
                         System.out.println("DieIndex " + dieIndex);
                         for ( int i = 0 ; i < otherKeysSize ; i++ ) {
                             coordinates.add(Integer.parseInt((String) jsonObject.get("Key" + (i + 2))));
-                            System.out.println(coordinates + " " + toolIndex + " CASE 1,9");
+                            System.out.println(coordinates + " " + toolIndex + " CASE 1,9,10");
                         }
                         return new PlayerMove(playerNickname, moveType, extractedToolIndex, dieIndex, coordinates);
 

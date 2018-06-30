@@ -161,12 +161,10 @@ public class Controller extends Observable implements Observer {
                 notifyObservers(playerMove);
             } else {
                 RemoteView remoteView = (RemoteView) o;
-                System.out.println("incorrect move dentro primo else di moveHandler");
                 remoteView.incorrectMove();
             }
         } else {
             RemoteView remoteView = (RemoteView) o;
-            System.out.println("incorrect move dentro secondo else di moveHandler");
             remoteView.incorrectMove();
         }
     }

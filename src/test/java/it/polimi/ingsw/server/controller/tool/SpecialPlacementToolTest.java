@@ -56,12 +56,22 @@ class SpecialPlacementToolTest {
         intParameters.add(2);
         intParameters.add(3);
         PlayerMove playerMove = new PlayerMove(nickname,"UseTool",1,0,intParameters);
-        Assertions.assertTrue(specialPlacementTool.toolEffect(turn,playerMove));
+        Assertions.assertFalse(specialPlacementTool.toolEffect(turn,playerMove));
         intParameters = new ArrayList<>();
+        intParameters.add(0);
         intParameters.add(1);
-        intParameters.add(2);
         PlayerMove playerMove1 = new PlayerMove(nickname,"UseTool",1,0,intParameters);
         Assertions.assertTrue(specialPlacementTool.toolEffect(turn1,playerMove1));
-
+        System.out.println( gameBoard.getPlayers().get(0).getDashboard().toString() );
+        intParameters.add(0, 3);
+        intParameters.add(1, 0);
+        playerMove1 = new PlayerMove(nickname,"UseTool",1,0,intParameters);
+        Assertions.assertTrue(specialPlacementTool.toolEffect(turn1,playerMove1));
+        System.out.println( gameBoard.getPlayers().get(0).getDashboard().toString() );
+        intParameters.add(0, 0);
+        intParameters.add(1, 0);
+        playerMove1 = new PlayerMove(nickname,"UseTool",1,0,intParameters);
+        Assertions.assertFalse(specialPlacementTool.toolEffect(turn1,playerMove1));
+        System.out.println( gameBoard.getPlayers().get(0).getDashboard().toString() );
     }
 }

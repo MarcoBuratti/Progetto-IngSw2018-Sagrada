@@ -24,17 +24,25 @@ public class TwoTurnTool implements Tool {
         this.isAlreadyUsed = alreadyUsed;
     }
 
-    public boolean toolEffect(Turn turn, PlayerMove playerMove) {
-        System.out.println(turn.isPlacementDone()+" " +turn.isSecondTurn());
-        if (!turn.isSecondTurn() && turn.isPlacementDone()) {
-            turn.setPlacementDone(false);
-            turn.tryPlacementMove(playerMove);
-            if(turn.isPlacementDone()) {
-                turn.getPlayer().setSkipSecondTurn(true);
+    public boolean toolEffect ( Turn turn, PlayerMove playerMove ) {
+
+        if ( !turn.isSecondTurn() && turn.isPlacementDone() && playerMove.getIndexDie().isPresent() ) {
+
+            if ( playerMove.getIndexDie().get() >= turn.getGameBoard().getDraftPool().size() )
+                return false;
+
+            turn.setPlacementDone( false );
+            turn.tryPlacementMove( playerMove );
+
+            if( turn.isPlacementDone() ) {
+
+                turn.getPlayer().setSkipSecondTurn( true );
                 return true;
+
             }
+
             else {
-                turn.setPlacementDone(true);
+                turn.setPlacementDone( true );
                 return false;
             }
         }
