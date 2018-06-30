@@ -36,19 +36,23 @@ public class SetDieTool implements Tool {
 
     public boolean toolEffect(Turn turn, PlayerMove playerMove) {
 
-        if (playerMove.getIndexDie().isPresent()) {
+        if ( playerMove.getIndexDie().isPresent() ) {
 
-            if (toolName.equals(ToolNames.FLUX_BRUSH) && turn.isPlacementDone()) {
+            if ( ( toolName.equals( ToolNames.FLUX_BRUSH ) && turn.isPlacementDone() )
+                    || ( playerMove.getIndexDie().get() >= turn.getGameBoard().getDraftPool().size() ) ) {
                 return false;
             }
-            die = turn.getGameBoard().getDraftPool().get(playerMove.getIndexDie().get());
+
+            die = turn.getGameBoard().getDraftPool().get( playerMove.getIndexDie().get() );
+
+
             int oldValue = die.getNumber();
             try {
-                if (toolName.equals(ToolNames.GROZING_PLIERS) && playerMove.getAddOne().isPresent()) {
+                if ( toolName.equals( ToolNames.GROZING_PLIERS ) && playerMove.getAddOne().isPresent() ) {
                     if (playerMove.getAddOne().get())
-                        die.setNumber(oldValue + 1);
+                        die.setNumber( oldValue + 1 );
                     else
-                        die.setNumber(oldValue - 1);
+                        die.setNumber( oldValue - 1 );
                     turn.getGameBoard().update();
                     return true;
                 } else if (toolName.equals(ToolNames.GRINDING_STONE)) {

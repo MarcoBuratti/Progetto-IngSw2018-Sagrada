@@ -55,11 +55,11 @@ public class GameBoard extends Observable {
             Tool toolFactory = abstractToolFactory.getTool(toolList.get(i));
             this.tools.add(toolFactory);
         }*/
-        Tool toolFactory = abstractToolFactory.getTool(toolList.get(0));
+        Tool toolFactory = abstractToolFactory.getTool(toolList.get(10));
         this.tools.add(toolFactory);
-        toolFactory = abstractToolFactory.getTool(toolList.get(2));
+        toolFactory = abstractToolFactory.getTool(toolList.get(1));
         this.tools.add(toolFactory);
-        toolFactory = abstractToolFactory.getTool(toolList.get(7));
+        toolFactory = abstractToolFactory.getTool(toolList.get(6));
         this.tools.add(toolFactory);
 
         List<Color> privateAchievementsList = Arrays.asList(Color.values());
