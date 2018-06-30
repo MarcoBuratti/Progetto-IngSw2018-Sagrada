@@ -3,7 +3,10 @@ package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.server.RemoteView;
 import it.polimi.ingsw.server.controller.action.PlacementMove;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
+import it.polimi.ingsw.server.controller.tool.DecoratedSetDieTool;
+import it.polimi.ingsw.server.controller.tool.PlaceToolDecorator;
 import it.polimi.ingsw.server.controller.tool.Tool;
+import it.polimi.ingsw.server.controller.tool.ToolNames;
 import it.polimi.ingsw.server.model.GameBoard;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.exception.NotValidParametersException;
@@ -18,7 +21,7 @@ public class Turn {
 
     private final boolean secondTurn;
     private int timeTurn;
-    private String typeMove;
+    private String moveType;
     private boolean turnOver;
     private boolean waitMove;
     private boolean placementDone;
@@ -43,7 +46,6 @@ public class Turn {
 
     public synchronized void setTurnIsOver() {
         this.turnOver = true;
-        this.sendToPlayer("Your turn has ended.");
         notifyAll();
     }
 
@@ -89,21 +91,21 @@ public class Turn {
         return gameBoard;
     }
 
-    public String getTypeMove() {
-        return this.typeMove;
+    public String getMoveType() {
+        return this.moveType;
     }
 
     public PlayerMove getPlayerMove() {
         return playerMove;
     }
 
-    private void sendToPlayer ( String message ) {
+    public void sendToPlayer ( String message ) {
         if ( this.remoteView != null )
             if ( this.remoteView.isOn() )
                 this.remoteView.send( message );
     }
 
-    private void sendToPlayerAndUpdate ( String message ) {
+    public void sendToPlayerAndUpdate ( String message ) {
         if ( this.remoteView != null )
             if ( this.remoteView.isOn() ) {
                 this.gameBoard.update();
@@ -112,7 +114,7 @@ public class Turn {
     }
 
     public synchronized void newMove(PlayerMove playerMove) {
-        this.typeMove = playerMove.getMoveType();
+        this.moveType = playerMove.getMoveType();
         this.playerMove = playerMove;
         this.waitMove = false;
         notifyAll();
@@ -152,9 +154,9 @@ public class Turn {
                     }
             }
 
-            if (!isWaitMove() && typeMove != null) {
+            if (!isWaitMove() && moveType != null) {
                 System.out.println("if else");
-                if (typeMove.equals("PlaceDie") && !placementDone) {
+                if (moveType.equals("PlaceDie") && !placementDone) {
 
                     this.tryPlacementMove(this.playerMove);
 
@@ -162,7 +164,7 @@ public class Turn {
                         setTurnIsOver();
 
 
-                } else if (typeMove.equals("UseTool") && !usedTool) {
+                } else if (moveType.equals("UseTool") && !usedTool) {
                     System.out.println("Dentro usa tool");
                     this.useTool();
 
@@ -170,7 +172,7 @@ public class Turn {
                         setTurnIsOver();
 
 
-                } else if (typeMove.equals("GoThrough")) {
+                } else if (moveType.equals("GoThrough")) {
 
                     setTurnIsOver();
 
@@ -209,17 +211,30 @@ public class Turn {
             try {
                 boolean toolAlreadyUsed = tool.isAlreadyUsed();
                 if ( this.player.hasEnoughToken( toolAlreadyUsed ) ) {
-                    usedTool = tool.toolEffect(this, playerMove);
-                    if (tool.needPlacement()) {
-                        setWaitMove(true);
-                        synchronized (this) {
-                            while (!isTurnOver() && isWaitMove()) {
-                                wait();
-                                tool.placementDie(this);
-                            }
 
+                    if ( tool.needPlacement() && !isPlacementDone() ) {
+                        PlaceToolDecorator decoratedTool;
+                 //       if ( tool.getToolName().equals(ToolNames.FLUX_BRUSH))
+                            decoratedTool = new DecoratedSetDieTool( tool );
+                        //else decoratedTool = new DecoratedChangeDieTool( tool );
+
+                        usedTool = decoratedTool.toolEffect(this, playerMove);
+                        if ( usedTool ) {
+                            sendToPlayer("Please complete your move:");
+                            setWaitMove(true);
+                            boolean correctMove = false;
+                            synchronized (this) {
+                                while (!correctMove) {
+                                    while (!isTurnOver() && isWaitMove()) {
+                                        wait();
+                                    }
+                                    correctMove = decoratedTool.placeDie(this, playerMove);
+                                }
+                            }
                         }
                     }
+
+                    else if ( !tool.needPlacement() ) usedTool = tool.toolEffect(this, playerMove);
 
                     System.out.println("UsedTool è uguale a: " + usedTool);
                     if ( isUsedTool() ) {
