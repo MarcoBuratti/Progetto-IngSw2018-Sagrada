@@ -104,13 +104,12 @@ public class Dashboard {
     }
 
 
-    public Die removeDieFromCell(int row, int column) throws NotValidParametersException, OccupiedCellException {
-        if ((row >= 0 && row < ROW) && (column >= 0 && column < COLUMN)) {
-            try {
-                return this.matrixScheme[row][column].removeDie();
-            } catch (Exception e) {
-                throw new OccupiedCellException();
-            }
+    public Die removeDieFromCell(int row, int column) throws NotValidParametersException {
+        if ((row >= 0 && row < ROW) && (column >= 0 && column < COLUMN) ) {
+            Die die = this.matrixScheme[row][column].removeDie();
+            if ( die != null )
+                return die;
+            else throw new NotValidParametersException();
         } else {
             throw new NotValidParametersException();
         }
