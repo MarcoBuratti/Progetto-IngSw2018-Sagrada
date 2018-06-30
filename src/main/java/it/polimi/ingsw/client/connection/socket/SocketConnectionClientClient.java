@@ -219,6 +219,8 @@ public class SocketConnectionClientClient extends ConnectionClient implements Ru
                 notifyObservers(message);
                 if (message.equals("Terminate."))
                     close();
+                else if (message.equals("Please complete your move:"))
+                    setWaitOn(false);
             }
         } catch (IOException e) {
             System.err.println(e.toString());

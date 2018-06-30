@@ -210,6 +210,8 @@ public class RmiConnectionClientClient extends ConnectionClient implements RmiCl
             notifyObservers(str);
             if (str.equals("Terminate."))
                 close();
+            else if (str.equals("Please complete your move:"))
+                setWaitOn(false);
         }
     }
 }

@@ -3,5 +3,5 @@
   "Number": "4",
   "String": "Dopo aver scelto un dado, riponilo nel Sacchetto, poi pescane uno dal Sacchetto.\nScegli il valore del nuovo dado e piazzalo, rispettando tutte le restrizioni di piazzamento",
   "Param": 5,
-  "Move": ["CHOOSE_INDEX_DIE", "CHOOSE_SEND_MOVE", "CHOOSE_DIE_NUM", "CHOOSE_ROW_COLUMNS", "CHOOSE_SEND_MOVE"]
+  "Move": ["CHOOSE_INDEX_DIE", "CHOOSE_SEND_MOVE", "WAIT_MOVE", "CHOOSE_DIE_NUM", "CHOOSE_ROW_COLUMNS", "CHOOSE_SEND_MOVE"]
 }

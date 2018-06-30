@@ -3,5 +3,5 @@
   "Number": "3",
   "String": "Dopo aver scelto un dado, tira nuovamente quel dado. Se non puoi piazzarlo, riponilo nella Riserva",
   "Param": 4,
-  "Move": ["CHOOSE_INDEX_DIE","CHOOSE_SEND_MOVE","CHOOSE_ROW_COLUMNS", "CHOOSE_SEND_MOVE"]
+  "Move": ["CHOOSE_INDEX_DIE","CHOOSE_SEND_MOVE", "WAIT_MOVE","CHOOSE_ROW_COLUMNS", "CHOOSE_SEND_MOVE"]
 }

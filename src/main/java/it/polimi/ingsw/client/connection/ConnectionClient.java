@@ -28,6 +28,7 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
     private boolean continueToPlay = false;
     private boolean isOn = true;
     private boolean inputCtrl = true;
+    private boolean waitOn;
 
 
     public void setView(View view) {
@@ -54,13 +55,20 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
                         String numberOfTool = numberTool(toolIndex);
                         concatMove(numberOfTool);
                         ArrayList<TypeMove> toolEffects = (ArrayList<TypeMove>) thirdToolInput(toolIndex);
-                        ArrayList<String> message = (ArrayList<String> ) thirdToolMessage(toolIndex);
                         Integer toolNumber = Integer.parseInt(toolIndex);
                         toolNumber--;
-                        int i = 0;
                         concatMove(toolNumber.toString());
                         for (TypeMove toolEffect : toolEffects) {
                             toolEffect.moveToDo(this);
+                            synchronized ( this ) {
+                                while (isWaitOn()) {
+                                    try {
+                                        wait();
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
                         }
                         inputCtrl = false;
                     }
@@ -70,7 +78,7 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
                     }
                 }
             } while (inputCtrl);
-            System.out.println("Move handel: " + move.toString());
+            System.out.println("Move handle: " + move.toString());
         }
     }
 
@@ -91,6 +99,17 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
         concatMove(tmpMove);
         System.out.println("dentro ask");
 
+    }
+
+    public synchronized void setWaitOn( boolean bool ) {
+        this.waitOn = bool;
+        if ( !bool ) {
+            notifyAll();
+        }
+    }
+
+    public synchronized boolean isWaitOn () {
+        return this.waitOn;
     }
 
     public void setIndexDash() {
