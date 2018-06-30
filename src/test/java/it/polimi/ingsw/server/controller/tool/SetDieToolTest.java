@@ -64,9 +64,17 @@ class SetDieToolTest {
         Assertions.assertFalse(setDieTool.toolEffect(turn, playerMove));
         PlayerMove playerMove1 = new PlayerMove(nickname,"UseTool", 7, 0, true);
         Assertions.assertTrue(setDieTool.toolEffect(turn, playerMove1));
+
+        Turn turn1 = new Turn(null, gameBoard.getPlayers().get(1), gameBoard, false);
+        String nickname1 = gameBoard.getPlayers().get(1).getNickname();
+
         DecoratedSetDieTool decoratedSetDieTool = new DecoratedSetDieTool( new SetDieTool(true, ToolNames.FLUX_BRUSH) );
-        PlayerMove playerMove2 = new PlayerMove(nickname,"UseTool", 3, 0);
-        Assertions.assertTrue(decoratedSetDieTool.toolEffect(turn, playerMove2));
+        PlayerMove playerMove2 = new PlayerMove(nickname1,"UseTool", 3, 0);
+        Assertions.assertTrue(decoratedSetDieTool.toolEffect(turn1, playerMove2));
+        ArrayList<Integer> intParameters = new ArrayList<>();
+        intParameters.add(0);
+        intParameters.add(0);
+        Assertions.assertTrue(decoratedSetDieTool.placeDie(turn1, new PlayerMove( nickname, "PlaceDie", 0, intParameters )));
 
         SetDieTool setDieTool2 = new SetDieTool(true, ToolNames.GRINDING_STONE);
         PlayerMove playerMove3 = new PlayerMove(nickname,"UseTool", 6, 0);
