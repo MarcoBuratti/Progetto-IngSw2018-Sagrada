@@ -78,9 +78,13 @@ class ChangeDieToolTest {
         DecoratedChangeDieTool decoratedChangeDieTool = new DecoratedChangeDieTool( new ChangeDieTool( true, ToolNames.FLUX_REMOVER ) );
         PlayerMove playerMove1 = new PlayerMove( nickname1, "UseTool", 4, 2);
         System.out.println( "DraftPool prima di FLUX_REMOVER\n" + gameBoard.getDraftPool() );
+        System.out.println( gameBoard.getDiceBag().toString() );
         Assertions.assertTrue( decoratedChangeDieTool.toolEffect( turn1, playerMove1 ) );
         System.out.println( "DraftPool dopo FLUX_REMOVER\n" + gameBoard.getDraftPool() );
-        intParameters.add(0, 0);
+        System.out.println( gameBoard.getDiceBag().toString() );
+        intParameters.add(0, 5);
+        intParameters.add(1, 0);
+        intParameters.add(2, 0);
         System.out.println( gameBoard.getPlayers().get(1).getDashboard() );
         Assertions.assertTrue(decoratedChangeDieTool.placeDie( turn1, new PlayerMove( nickname1, "PlaceDie", 2, intParameters )));
         System.out.println( gameBoard.getPlayers().get(1).getDashboard() );

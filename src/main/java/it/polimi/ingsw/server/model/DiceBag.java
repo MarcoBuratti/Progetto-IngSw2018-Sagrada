@@ -10,7 +10,7 @@ public class DiceBag {
     private static final int NUMBER_OF_DICE = 90;
     private static final Color[] colorsIndex = Color.values();
 
-    private ArrayList<Die> diceSet = new ArrayList<Die>();
+    private ArrayList<Die> diceSet = new ArrayList<>();
 
     /**
      * Creates a DiceBag object representing a bag containing some dice.

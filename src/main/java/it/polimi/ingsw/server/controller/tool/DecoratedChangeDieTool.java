@@ -5,10 +5,12 @@ import it.polimi.ingsw.server.controller.action.PlacementMove;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Die;
+import it.polimi.ingsw.server.model.PlacementCheck;
 import it.polimi.ingsw.server.model.exception.NotValidParametersException;
+import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import it.polimi.ingsw.server.model.exception.OccupiedCellException;
 
-public class DecoratedChangeDieTool implements PlaceToolDecorator {
+public class DecoratedChangeDieTool extends PlaceToolDecorator {
 
     private Tool myTool;
 
@@ -39,6 +41,8 @@ public class DecoratedChangeDieTool implements PlaceToolDecorator {
                 Die newDie = turn.getGameBoard().getDiceBag().changeDie( dieFromDraftPool );
                 turn.getGameBoard().changeDie( newDie, playerMove.getIndexDie().get() );
                 turn.getGameBoard().update();
+                if ( !canPlaceDie( turn, newDie))
+                    unableToPlaceDie( turn );
                 return true;
             }
 
@@ -68,22 +72,45 @@ public class DecoratedChangeDieTool implements PlaceToolDecorator {
     public boolean placeDie(Turn turn, PlayerMove playerMove) {
         if (playerMove.getIndexDie().isPresent()) {
             try {
-                PlacementMove placementMove = new PlacementMove(turn.getPlayer(), playerMove.getIntParameters(0),
-                        playerMove.getIntParameters(1), turn.getGameBoard().getDraftPool().get(playerMove.getIndexDie().get()));
-                turn.setPlacementDone ( placementMove.placeDie() );
-                if ( turn.isPlacementDone() ) {
-                    turn.getGameBoard().removeDieFromDraftPool(placementMove.getDie());
-                    turn.sendToPlayer("The die has been placed on the selected cell.");
-                    return true;
-                } else {
-                    turn.sendToPlayer("Incorrect move! Please try again.");
-                    return false;
-                }
-            } catch (OccupiedCellException | NotValidParametersException e) {
+                Die myDie = turn.getGameBoard().getDraftPool().get(playerMove.getIndexDie().get());
+
+                turn.getGameBoard().getDraftPool().get(playerMove.getIndexDie().get()).setNumber(playerMove.getIntParameters(0));
+                PlacementMove placementMove = new PlacementMove(turn.getPlayer(), playerMove.getIntParameters(1),
+                        playerMove.getIntParameters(2), myDie);
+                turn.setPlacementDone(placementMove.placeDie());
+                return placeDieCheck(turn, placementMove);
+
+            } catch (OccupiedCellException | NotValidParametersException | NotValidValueException e) {
                 return false;
             }
         } else
             return false;
 
     }
+
+    @Override
+    protected boolean canPlaceDie(Turn turn, Die die) {
+        Die myDie = new Die ( die.getColor() );
+        boolean canPlace = false;
+        PlacementCheck placementCheck = new PlacementCheck();
+        int myDieValue = 0;
+        while ( myDieValue < 6 && !canPlace ) {
+            myDieValue++;
+            try {
+                myDie.setNumber( myDieValue );
+            } catch ( NotValidValueException e ) {
+                e.printStackTrace();
+            }
+            for (int i = 0; i < 4 && !canPlace; i++) {
+                for (int j = 0; j < 5 && !canPlace; j++) {
+                    canPlace = placementCheck.genericCheck(i, j, die, turn.getPlayer().getDashboard().getMatrixScheme());
+                }
+            }
+        }
+
+        return canPlace;
+
+    }
+
+
 }

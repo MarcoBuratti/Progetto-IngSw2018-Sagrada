@@ -68,17 +68,6 @@ public class SetDieTool implements Tool {
             throw new IllegalArgumentException();
     }
 
- /*   public boolean canPlace(Turn turn) {
-        boolean canPlace = false;
-        PlacementCheck placementCheck = new PlacementCheck();
-        for (int i = 0; i < 4 && !canPlace; i++) {
-            for (int j = 0; j < 5 && !canPlace; j++) {
-                canPlace = placementCheck.genericCheck(i, j, die, turn.getPlayer().getDashboard().getMatrixScheme());
-            }
-        }
-        return canPlace;
-    }
-    */
 
     @Override
     public Color getColor() {
