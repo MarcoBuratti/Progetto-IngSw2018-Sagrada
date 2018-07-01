@@ -1,16 +1,22 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.client.CliView;
+import it.polimi.ingsw.client.GUIView;
+import it.polimi.ingsw.client.View;
 import it.polimi.ingsw.util.GraphicsClient;
 import it.polimi.ingsw.util.InputController;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.stage.Stage;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class Client {
-    private static boolean inputCtrl;
+public class Client extends Application{
     private static String choice;
-    private static int choiceInt;
+    private static View view;
 
     public static void main(String[] args) throws IOException {
         InputStreamReader input = new InputStreamReader(System.in);
@@ -21,15 +27,19 @@ public class Client {
         do {
             cliOutPut.printStart();
             choice = bufferedReader.readLine();
-            inputCtrl = cliController.connectionController(choice);
-        } while (inputCtrl);
-        choiceInt  = Integer.parseInt(choice);
+        } while (cliController.connectionController(choice));
 
 
-        if(choiceInt == 1) {
-            CliView cliView = new CliView(new InputStreamReader(System.in));
-            cliView.start();
-        }
+        if (choice.equals("1")) {
+            view = new CliView(new InputStreamReader(System.in));
+            view.start();
+        } else Application.launch();
+    }
 
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        view = new GUIView();
+        Platform.runLater(() -> view.start(primaryStage));
     }
 }

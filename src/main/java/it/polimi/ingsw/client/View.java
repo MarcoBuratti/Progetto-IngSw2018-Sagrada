@@ -3,6 +3,7 @@ package it.polimi.ingsw.client;
 import it.polimi.ingsw.client.connection.rmi.RmiConnectionClient;
 import it.polimi.ingsw.client.connection.socket.SocketConnectionClient;
 import it.polimi.ingsw.client.interfaces.ClientInterface;
+import javafx.stage.Stage;
 import org.json.simple.JSONObject;
 
 import java.io.FileWriter;
@@ -23,6 +24,8 @@ public abstract class View implements Observer {
     private boolean hasChosenScheme = false;
     private String schemes;
 
+    protected Stage primaryStage;
+
 
     public abstract void start();
 
@@ -31,14 +34,6 @@ public abstract class View implements Observer {
     public abstract void showOutput(String s);
 
     public abstract String getInput();
-
-    public abstract void setNickname();
-
-    public abstract void setIP();
-
-    public abstract void setPort();
-
-    public abstract void setChoice();
 
     public abstract void setScheme();
 
@@ -151,5 +146,10 @@ public abstract class View implements Observer {
     public boolean getHasChosenScheme() { return this.hasChosenScheme; }
 
     public String getSchemes(){ return schemes;}
+
+    public void start(Stage primaryStage){
+        this.primaryStage=primaryStage;
+        start();
+    }
 
 }

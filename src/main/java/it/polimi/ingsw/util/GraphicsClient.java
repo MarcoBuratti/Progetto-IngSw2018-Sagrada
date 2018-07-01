@@ -58,11 +58,11 @@ public class GraphicsClient {
     public String printToolIndex(){ return ("Scegli uno dei tre Tool, inserisci 1, 2 o 3"); }
 
     public String printIP() {
-        return ("Per favore inserisci l'indirizzo IP del server");
+        return ("Indirizzo IP:");
     }
 
     public String printPort() {
-        return ("Per favore inserisci la tua localPort, scegli un numero da 1024 a 65535");
+        return ("Porta:");
     }
 
     public String printToolParam(){ return ( "Inserisci i parametri del Tool");}
