@@ -29,6 +29,7 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
     private boolean isOn = true;
     private boolean inputCtrl = true;
     private boolean waitOn;
+    private boolean toolBreakFlag = false;
 
 
     public void setView(View view) {
@@ -58,8 +59,8 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
                         Integer toolNumber = Integer.parseInt(toolIndex);
                         toolNumber--;
                         concatMove(toolNumber.toString());
-                        for (TypeMove toolEffect : toolEffects) {
-                            toolEffect.moveToDo(this);
+                        for(int i = 0; i < toolEffects.size() && !isToolBreakFlag(); i++) {
+                            toolEffects.get(i).moveToDo(this);
                             synchronized ( this ) {
                                 while (isWaitOn()) {
                                     try {
@@ -70,6 +71,7 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
                                 }
                             }
                         }
+                        toolBreakFlag = false;
                         inputCtrl = false;
                     }
                     if (tmpMove.equals("3") || tmpMove.equals("4")) {
@@ -99,6 +101,13 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
         concatMove(tmpMove);
         System.out.println("dentro ask");
 
+    }
+
+    public void newPlaceMove(){
+        move = new StringBuilder();
+        concatMove("1");
+        concatMove(index);
+        setWaitOn(true);
     }
 
     public synchronized void setWaitOn( boolean bool ) {
@@ -160,6 +169,7 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
             DieNum = view.getInput();
             moveCtrl = setDieNum(DieNum);
         } while (moveCtrl);
+
         concatMove(DieNum);
     }
     //USATO PER TOOL
@@ -222,9 +232,9 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
         return clientInputController.thirdToolInput(s);
     }
 
-    public List<String> thirdToolMessage(String s){
+    /*public List<String> thirdToolMessage(String s){
         return clientInputController.thirdToolMessage(s);
-    }
+    }*/
 
     public String numberTool(String s){ return clientInputController.numberTool(s); }
 
@@ -238,4 +248,21 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
         return  clientInputController.roundTrackCtrl(s);
     }
 
+    public synchronized void setToolBreakFlag(boolean bool){
+        this.toolBreakFlag = bool;
+    }
+
+    public synchronized boolean isToolBreakFlag() {
+        return toolBreakFlag;
+    }
+
+    public void checkMessage(String str){
+
+        if (str.equals("Please complete your move:"))
+            setWaitOn(false);
+        else if(str.equals("You cannot place this die anyway!")){
+            setToolBreakFlag(true);
+            setWaitOn(false);
+        }
+    }
 }

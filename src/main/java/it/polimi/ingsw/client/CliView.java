@@ -110,6 +110,15 @@ public class CliView extends View  {
     }
 
     public void setScheme() {
+        synchronized ( this ) {
+            while (super.getChosenScheme()) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         if (!super.getHasChosenScheme()) {
             try {
                 inputCtrl = true;

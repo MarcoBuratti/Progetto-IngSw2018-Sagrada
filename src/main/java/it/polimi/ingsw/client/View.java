@@ -19,8 +19,8 @@ public abstract class View implements Observer {
     private String port;
     private String choice;
 
-
-    private Boolean hasChosenScheme = false;
+    private boolean chosenScheme = true;
+    private boolean hasChosenScheme = false;
     private String schemes;
 
 
@@ -95,12 +95,17 @@ public abstract class View implements Observer {
             }
             else if(!fromServer.startsWith("*")){
                 if (fromServer.startsWith("You have logged in")) {
+                    if (fromServer.startsWith("You have logged in again as")) {
+                        setHasChosenScheme(true);
+                        setChosenScheme(false);
+                    }
+                    else {
+                        setHasChosenScheme(false);
+                        setChosenScheme(false);
+                    }
                     int nicknameStartIndex = fromServer.lastIndexOf(' ') + 1;
                     String nickname = fromServer.substring(nicknameStartIndex);
                     this.setNickname(nickname);
-                    if (fromServer.startsWith("You have logged in again as")) {
-                        setHasChosenScheme(true);
-                    }
                 } else if (fromServer.startsWith("schemes. ")) {
                     schemes = fromServer;
                     setHasChosenScheme(false);
@@ -134,7 +139,16 @@ public abstract class View implements Observer {
         notifyAll();
     }
 
-    public Boolean getHasChosenScheme() { return hasChosenScheme; }
+    public synchronized void setChosenScheme(boolean bool){
+        this.chosenScheme = bool;
+        notifyAll();
+    }
+
+    public boolean getChosenScheme() {
+        return this.chosenScheme;
+    }
+
+    public boolean getHasChosenScheme() { return this.hasChosenScheme; }
 
     public String getSchemes(){ return schemes;}
 

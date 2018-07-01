@@ -40,7 +40,7 @@ public enum TypeMove {
     },
 
     WAIT_MOVE{
-        public void moveToDo(ConnectionClient connectionClient) { connectionClient.setWaitOn(true); }
+        public void moveToDo(ConnectionClient connectionClient) { connectionClient.newPlaceMove(); }
     };
 
     public abstract void moveToDo(ConnectionClient connectionClient);

@@ -219,8 +219,8 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
                 notifyObservers(message);
                 if (message.equals("Terminate."))
                     close();
-                else if (message.equals("Please complete your move:"))
-                    setWaitOn(false);
+                else
+                    checkMessage(message);
             }
         } catch (IOException e) {
             System.err.println(e.toString());
