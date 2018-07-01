@@ -54,9 +54,9 @@ public class GameBoard extends Observable {
             Tool toolFactory = abstractToolFactory.getTool(toolList.get(i));
             this.tools.add(toolFactory);
         }*/
-        Tool toolFactory = abstractToolFactory.getTool(toolList.get(3));
+        Tool toolFactory = abstractToolFactory.getTool(toolList.get(2));
         this.tools.add(toolFactory);
-        toolFactory = abstractToolFactory.getTool(toolList.get(4));
+        toolFactory = abstractToolFactory.getTool(toolList.get(8));
         this.tools.add(toolFactory);
         toolFactory = abstractToolFactory.getTool(toolList.get(11));
         this.tools.add(toolFactory);
@@ -142,8 +142,6 @@ public class GameBoard extends Observable {
     public void emptyDraftPool() {
         if (this.draftPool != null)
             this.draftPool.clear();
-        setChanged();
-        notifyObservers(this);
     }
 
     /**
@@ -204,6 +202,7 @@ public class GameBoard extends Observable {
         bld.append("Tools-");
         for (Tool t : tools) {
             bld.append(t.getToolName());
+            bld.append(",").append(t.isAlreadyUsed());
             bld.append(",");
         }
         bld.append("-");

@@ -19,6 +19,7 @@ public class CliView extends View  {
     private boolean toolCtrl = true;
     private boolean wantToPlay = true;
     private InputController cliController;
+    private JSONParser parser;
 
 
 
@@ -26,6 +27,7 @@ public class CliView extends View  {
         bufferedReader = new BufferedReader(input);
         graphicsClient = new GraphicsClient();
         cliController = new InputController();
+        parser = new JSONParser();
     }
 
     public void start() {
@@ -161,11 +163,11 @@ public class CliView extends View  {
             else if (fromServer.startsWith("Your private achievement is:"))
                 System.out.println(graphicsClient.printPrivate(fromServer));
             else if (fromServer.startsWith("Update")) {
-                JSONParser parser = new JSONParser();
+
                 try {
                     JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/up.json"));
                     String achievement = (String) jsonObject.get("Public Achievements");
-                    graphicsClient.printAchivements(achievement);
+                    graphicsClient.printAchievements(achievement);
                     String tool = (String) jsonObject.get("Tools");
                     if (toolCtrl) {
                         super.getConnectionClient().setTool(tool);
@@ -187,7 +189,8 @@ public class CliView extends View  {
                     }
                     System.out.println(graphicsClient.printRulesFirst());
                 } catch (IOException | ParseException e) {
-                    System.err.println(e.toString());
+                    System.out.println(fromServer);
+                    showInput(fromServer);
                 }
             }
             else {

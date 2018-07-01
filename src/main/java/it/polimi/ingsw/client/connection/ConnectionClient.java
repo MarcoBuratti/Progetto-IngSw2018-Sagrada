@@ -183,6 +183,22 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
         concatMove(roundTrackIndex);
     }
 
+    public void goOn(){
+        moveCtrl = true;
+        String goOnString;
+        do {
+            view.showOutput( graphicsClient.printGoOn() );
+            goOnString = view.getInput();
+            moveCtrl = plusMin(goOnString);
+        } while (moveCtrl);
+
+        if (goOnString.equals("0")) {
+            setToolBreakFlag(true);
+            TypeMove.CHOOSE_SEND_MOVE.moveToDo(this);
+        }
+
+    }
+
     public void sendMove(){
         handleMove(move.toString());
     }

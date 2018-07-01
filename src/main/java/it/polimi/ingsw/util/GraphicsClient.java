@@ -7,6 +7,11 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class GraphicsClient {
+    private JSONParser parser;
+
+    public GraphicsClient (){
+        parser = new JSONParser();
+    }
 
     public void printStart() {
         System.out.println("        \033[31;1mBenvenuto su Sagrada\033[0m");
@@ -65,7 +70,7 @@ public class GraphicsClient {
         return ("Porta:");
     }
 
-    public String printToolParam(){ return ( "Inserisci i parametri del Tool");}
+  //  public String printToolParam(){ return ( "Inserisci i parametri del Tool");}
 
     public String printPlusMin(){ return  ("Metti 0 per diminuire 1 per aumentare"); }
 
@@ -77,7 +82,6 @@ public class GraphicsClient {
         String substringSchemes = s.substring(s.indexOf(".") + 2);
         System.out.println(printRequest() + "\n");
         String[] choice = substringSchemes.split(",");
-        JSONParser parser = new JSONParser();
         for (int i = 0; i < 4; i++) {
             JSONObject jsonObject = null;
             try {
@@ -97,9 +101,9 @@ public class GraphicsClient {
     public void printTool(String s) {
 
         String[] tool = s.split(",");
-        JSONParser parser = new JSONParser();
         System.out.println("\u001B[34mTool:\033[0m");
-        for (int i = 0; i < 3; i++) {
+        int k = 1;
+        for (int i = 0; i < tool.length; i = i + 2, k++) {
             JSONObject jsonObject = null;
             try {
                 jsonObject = (JSONObject) parser.parse(new FileReader("src/main/resources/tool/" + tool[i] + ".json"));
@@ -108,7 +112,12 @@ public class GraphicsClient {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            System.out.println("\u001b[1m" + (i + 1) + ") " + "Nome: " + jsonObject.get("Name"));
+            if(tool[i+1].equals("true")){
+                System.out.println("\u001b[1mIl Tool è stato usato\u001b[0m");
+            }else
+                System.out.println("\u001b[1mIl Tool non è stato usato\u001b[0m");
+
+            System.out.println("\u001b[1m" + (k + 1) + ") " + "Nome: " + jsonObject.get("Name"));
             System.out.println( jsonObject.get("String") + "\u001b[0m");
         }
     }
@@ -121,7 +130,7 @@ public class GraphicsClient {
         System.out.println(bld.toString());
     }
 
-    public void printAchivements(String s){
+    public void printAchievements(String s){
         s = s.replace("!", "\n");
         System.out.println("\n\u001B[34mPublic Achievements:\u001b[0m");
         System.out.println("\u001b[1m" + s + "\u001b[0m");
@@ -141,5 +150,9 @@ public class GraphicsClient {
         System.out.println("\n\u001B[34mRoundTrack: 0  1  2  3  4  5  6  7  8\033[0m");
         s = s.replace("!", "\n");
         System.out.println(s);
+    }
+
+    public String printGoOn() {
+        return "Inserisci 1 per muovere un altro dado, 0 per inviare la tua mossa.";
     }
 }

@@ -39,6 +39,10 @@ public enum TypeMove {
         public void moveToDo(ConnectionClient connectionClient) { connectionClient.sendMove(); }
     },
 
+    CHOOSE_GO_ON {
+        public void moveToDo(ConnectionClient connectionClient) { connectionClient.goOn(); }
+    },
+
     WAIT_MOVE{
         public void moveToDo(ConnectionClient connectionClient) { connectionClient.newPlaceMove(); }
     };

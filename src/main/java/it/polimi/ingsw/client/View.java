@@ -119,7 +119,6 @@ public abstract class View implements Observer {
                 }
                 try (FileWriter up = new FileWriter("src/main/files/up.json")) {
                     up.write(jsonObject.toJSONString());
-                    System.out.println("eseguito\n");
                 } catch (IOException e) {
                     System.out.println(e.toString() );
                 }

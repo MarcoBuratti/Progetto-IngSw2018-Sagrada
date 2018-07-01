@@ -18,8 +18,10 @@ public class ParserTool {
     public ParserTool(String s){
         toolClients = new ToolClient[3];
         String[] tool = s.split(",");
+
         JSONParser parser = new JSONParser();
-        for (int i = 0; i < 3; i++) {
+        int k = 0;
+        for (int i = 0; i < tool.length; i = i + 2, k++) {
             JSONObject jsonObject = null;
             try {
                 jsonObject = (JSONObject) parser.parse(new FileReader("src/main/resources/tool/" + tool[i] + ".json"));
@@ -37,7 +39,7 @@ public class ParserTool {
                 //message.add( (String) mes.get(i));
             }
 
-            toolClients[i] = new ToolClient(message, number, toolMove);
+            toolClients[k] = new ToolClient(message, number, toolMove);
         }
 
     }

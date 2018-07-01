@@ -173,6 +173,8 @@ public class Turn {
 
                 }
 
+                else remoteView.incorrectMove();
+
                 this.waitMove = true;
             }
         }

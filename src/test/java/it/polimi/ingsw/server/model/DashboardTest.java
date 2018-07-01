@@ -12,15 +12,11 @@ import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.MonthDay;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ListIterator;
 
 class DashboardTest {
 
@@ -201,7 +197,7 @@ class DashboardTest {
         try {
             JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/up.json"));
             String achievement = (String) jsonObject.get("Public Achievements");
-            graphicsClient.printAchivements(achievement);
+            graphicsClient.printAchievements(achievement);
             String tool = (String) jsonObject.get("Tools");
             graphicsClient.printTool(tool);
             String roundTrack = (String) jsonObject.get("Round track");

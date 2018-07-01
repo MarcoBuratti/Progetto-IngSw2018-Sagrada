@@ -6,8 +6,8 @@ public enum ToolNames {
     COPPER_FOIL_BURNISHER("Alesatore_per_lamina_di_rame", Color.RED),   //0 OK DEFINITIVO
     CORK_BAKED_STRAIGHTEDGE("Riga_in_Sughero", Color.YELLOW),           //1 OK DEFINITIVO
     EGLOMISE_BRUSH("Pennello_per_Eglomise", Color.BLUE),                //2 OK DEFINITIVO
-    FLUX_BRUSH("Pennello_per_Pasta_Salda", Color.VIOLET),               //3
-    FLUX_REMOVER("Diluente_per_Pasta_Salda", Color.VIOLET),             //4
+    FLUX_BRUSH("Pennello_per_Pasta_Salda", Color.VIOLET),               //3 OK
+    FLUX_REMOVER("Diluente_per_Pasta_Salda", Color.VIOLET),             //4 OK
     GLAZING_HAMMER("Martelletto", Color.BLUE),                          //5 OK DEFINITIVO
     GRINDING_STONE("Tampone_Diamantato", Color.GREEN),                  //6 OK DEFINITIVO
     GROZING_PLIERS("Pinza_Sgrossatrice", Color.VIOLET),                 //7 OK DEFINITIVO
