@@ -38,7 +38,7 @@ public class Turn {
         this.player = player;
         this.remoteView = remoteView;
         this.gameBoard = gameBoard;
-        this.timeTurn = 60 * 1000;
+        this.timeTurn = 90 * 1000;
     }
 
     public synchronized void setTurnIsOver() {
@@ -227,6 +227,8 @@ public class Turn {
                                         wait();
                                     }
                                     correctMove = decoratedTool.placeDie(this, playerMove);
+                                    if (!correctMove)
+                                        setWaitMove(true);
                                 }
                             }
                         }

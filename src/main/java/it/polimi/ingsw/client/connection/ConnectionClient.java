@@ -59,6 +59,7 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
                         Integer toolNumber = Integer.parseInt(toolIndex);
                         toolNumber--;
                         concatMove(toolNumber.toString());
+                        toolBreakFlag = false;
                         for(int i = 0; i < toolEffects.size() && !isToolBreakFlag(); i++) {
                             toolEffects.get(i).moveToDo(this);
                             synchronized ( this ) {
@@ -71,7 +72,6 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
                                 }
                             }
                         }
-                        toolBreakFlag = false;
                         inputCtrl = false;
                     }
                     if (tmpMove.equals("3") || tmpMove.equals("4")) {
@@ -260,9 +260,10 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
 
         if (str.equals("Please complete your move:"))
             setWaitOn(false);
-        else if(str.equals("You cannot place this die anyway!")){
+        else if (str.equals("You cannot place this die anyway!") || str.equals("It's not your turn. Please wait.")){
             setToolBreakFlag(true);
             setWaitOn(false);
         }
+
     }
 }

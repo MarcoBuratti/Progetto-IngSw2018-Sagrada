@@ -40,8 +40,6 @@ public class PlayerMove implements Serializable {
         String playerNickname = (String) jsonObject.get("playerID");
         String moveType = (String) jsonObject.get("type_playerMove");
         int dieIndex;
-        int row;
-        int column;
         ArrayList<Integer> coordinates;
         int otherKeysSize;
 
@@ -50,11 +48,10 @@ public class PlayerMove implements Serializable {
         switch (moveType) {
             case PLACE_DIE:
                 dieIndex = Integer.parseInt((String) jsonObject.get("Key1"));
-                row = Integer.parseInt((String) jsonObject.get("Key2"));
-                column = Integer.parseInt((String) jsonObject.get("Key3"));
+                otherKeysSize = jsonObject.size() - 3;
                 coordinates = new ArrayList<>();
-                coordinates.add(row);
-                coordinates.add(column);
+                for ( int i = 0; i < otherKeysSize; i++ )
+                    coordinates.add(Integer.parseInt((String) jsonObject.get("Key" + (i + 2))));
                 return new PlayerMove(playerNickname, moveType, dieIndex, coordinates);
 
             case USE_TOOL:
@@ -214,7 +211,7 @@ public class PlayerMove implements Serializable {
     public String toString() {
         switch (moveType) {
             case PLACE_DIE:
-                return "Die:" + this.indexDie + " " + "coordinates:" + this.intParameters.get(0) + this.intParameters.get(1);
+                return "Die:" + this.indexDie + " " + "coordinates:" + this.intParameters;
             case GO_THROUGH:
                 return "Go Through";
             case USE_TOOL:

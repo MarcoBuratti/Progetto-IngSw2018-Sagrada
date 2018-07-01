@@ -46,7 +46,7 @@ class Lobby {
 
     private void gameStartTimer() {
         timer = new Timer();
-        int lobbyTime = 20 * 1000;
+        int lobbyTime = 10 * 1000;
         timer.schedule(new TimerTask() {
             @Override
             public void run() {

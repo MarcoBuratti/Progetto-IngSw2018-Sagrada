@@ -194,6 +194,7 @@ public class Controller extends Observable implements Observer {
 
             switch (playerMove.getMoveType()) {
                 case PLACE_DIE:
+                    System.out.println("Prima di Move Handler in Controller");
                     moveHandler(playerMove, o);
                     break;
 
