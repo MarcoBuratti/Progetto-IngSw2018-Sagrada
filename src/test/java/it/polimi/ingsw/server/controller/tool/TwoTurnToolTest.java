@@ -56,17 +56,17 @@ class TwoTurnToolTest {
         intParameters = new ArrayList<>();
         intParameters.add(0);
         intParameters.add(1);
-        PlayerMove playerMove1= new PlayerMove(nickname,"PlaceDie",0,intParameters);
-        PlayerMove playerMove2= new PlayerMove(nickname,"UseTool", 10,0,intParameters);
-        TwoTurnTool twoTurnTool=new TwoTurnTool(false,ToolNames.RUNNING_PLIERS);
+        PlayerMove playerMove1 = new PlayerMove(nickname,"PlaceDie",0,intParameters);
+        PlayerMove playerMove2 = new PlayerMove(nickname,"UseTool", 10,0,intParameters);
+        TwoTurnTool twoTurnTool = new TwoTurnTool(false,ToolNames.RUNNING_PLIERS);
         turn.tryPlacementMove(playerMove);
         Assertions.assertTrue(turn.isPlacementDone());
         Assertions.assertTrue(twoTurnTool.toolEffect(turn,playerMove2));
         Assertions.assertFalse(twoTurnTool.toolEffect(turn1,playerMove2));
-        Assertions.assertFalse(turn.isPlacementDone());
+        Assertions.assertFalse(turn1.isPlacementDone());
         turn.tryPlacementMove(playerMove1);
 
-        Dashboard dashboard =gameBoard.getPlayers().get(0).getDashboard();
+        Dashboard dashboard = gameBoard.getPlayers().get(0).getDashboard();
         for (int i = 0; i <4 ; i++) {
             for (int j = 0; j <5; j++) {
                 System.out.println(dashboard.getMatrixScheme()[i][j]);
