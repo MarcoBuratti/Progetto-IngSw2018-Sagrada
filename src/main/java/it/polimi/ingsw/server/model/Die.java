@@ -63,15 +63,17 @@ public class Die {
         this.number = random.nextInt(NUMBER_OF_SIDES) + 1;
     }
 
-
-    @Override
     /**
-     * Returns a string which represents the die, specifying its colour and the number on its side facing upwards.
+     * {@inheritDoc}
      */
+    @Override
     public String toString() {
         return this.color + "" + this.number + "\033[0m";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object myObject) {
         if (this.getClass() == myObject.getClass()) {

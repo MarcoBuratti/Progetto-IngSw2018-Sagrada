@@ -89,11 +89,10 @@ public class DiceBag {
         return mySet;
     }
 
-
-    @Override
     /**
-     * Returns a string specifying the number of dice included in the bag.
+     * {@inheritDoc}
      */
+    @Override
     public String toString() {
         return "This bag contains " + this.diceSet.size() + " dice \n";
     }

@@ -1,7 +1,9 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.server.model.GameBoard;
+import it.polimi.ingsw.server.model.Player;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -18,10 +20,6 @@ public class ModelView extends Observable implements Observer {
         this.model.addObserver(this);
     }
 
-    public GameBoard getModel() {
-        return model;
-    }
-
     @Override
     public void update(Observable o, Object arg) {
         this.model = (GameBoard) o;
@@ -31,7 +29,23 @@ public class ModelView extends Observable implements Observer {
 
     @Override
     public String toString() {
-        return model.toString();
+        StringBuilder bld = new StringBuilder();
+        bld.append("*").append(model.sendTool());
+        bld.append(model.sendAchievement());
+        bld.append(model.sendRoundTrack());
+        bld.append(model.sendDraft());
+        ArrayList<Player> players = model.getPlayers();
+        int i = 0;
+        for (Player p : players) {
+            bld.append("scheme").append(i);
+            bld.append("-");
+            bld.append(p.toString());
+            bld.append("-");
+            i++;
+        }
+        bld.append("numberPlayer" + "-");
+        bld.append(i);
+        return bld.toString();
     }
 
 

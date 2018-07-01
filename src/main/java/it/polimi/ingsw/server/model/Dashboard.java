@@ -141,6 +141,9 @@ public class Dashboard {
         return ret;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         StringBuilder bld = new StringBuilder();

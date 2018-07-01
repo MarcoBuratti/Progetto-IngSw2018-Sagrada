@@ -152,7 +152,6 @@ public class Turn {
             }
 
             if (!isWaitMove() && moveType != null) {
-                System.out.println("if else");
                 if (moveType.equals("PlaceDie") && !placementDone) {
 
                     this.tryPlacementMove(this.playerMove);
@@ -162,7 +161,6 @@ public class Turn {
 
 
                 } else if (moveType.equals("UseTool") && !usedTool) {
-                    System.out.println("Dentro usa tool");
                     this.useTool();
 
                     if (placementDone && usedTool)

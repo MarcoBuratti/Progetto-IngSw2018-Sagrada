@@ -64,29 +64,13 @@ public class RemoteView extends Observable implements Observer {
     }
 
     void showGameBoard(ModelView modelView) {
-        if (serverInterface != null) {
-            StringBuilder bld = new StringBuilder();
-            bld.append("*" + modelView.getModel().sendTool());
-            bld.append(modelView.getModel().sendAchievement());
-            bld.append(modelView.getModel().sendRoundTrack());
-            bld.append(modelView.getModel().sendDraft());
-            ArrayList<Player> players = modelView.getModel().getPlayers();
-            int i = 0;
-            for (Player p : players) {
-                bld.append("scheme" + i);
-                bld.append("-");
-                bld.append(p.toString());
-                bld.append("-");
-                i++;
-            }
-            bld.append("numberPlayer" + "-");
-            bld.append(i);
-            serverInterface.send(bld.toString());
-        }
+        send(player.getPrivateAchievement().toString());
+        send( modelView.toString() );
     }
 
     public void send(String string) {
-        serverInterface.send(string);
+        if (isOn())
+            serverInterface.send(string);
     }
 
     public void notYourTurn() {

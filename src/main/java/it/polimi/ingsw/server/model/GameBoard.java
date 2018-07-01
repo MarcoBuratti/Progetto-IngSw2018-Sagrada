@@ -25,10 +25,9 @@ public class GameBoard extends Observable {
      * - The dice bag containing all the dice needed for a new game (DiceBag Object);
      * - The round track containing no dice, as the first round has not been played yet (RoundTrack Object);
      * - The players list containing the references to the Player Objects;
-     * - The public achievements list containing the randomly extracted CardAchievement Objects.
+     * - The public achievements list containing the randomly extracted CardAchievement Objects;
+     * - The tool cards list containing the randomly extracted Tool Objects.
      * The schemes argument must specify the players' user names and chosen window schemes.
-     *
-     *                values represent the names of the chosen window schemes
      */
 
     public GameBoard(ArrayList<Player> players) {
@@ -116,15 +115,13 @@ public class GameBoard extends Observable {
     }
 
     /**
-     * Returns an ArrayList containing Die objects. The ArrayList represent the draft pool used
+     * Returns an ArrayList containing Die objects. The ArrayList is a copy of the draft pool used
      * for the current round (updated at the start of every round during the game).
      *
-     * @return the draft pool used for the current round
+     * @return a copy of the draft pool used for the current round
      */
     public ArrayList<Die> getDraftPool() {
-        ArrayList draftpoolCopy = new ArrayList<>();
-        draftpoolCopy.addAll(this.draftPool);
-        return draftpoolCopy;
+        return new ArrayList<>(this.draftPool);
     }
 
     /**
@@ -165,23 +162,43 @@ public class GameBoard extends Observable {
         notifyObservers(this);
     }
 
+    /**
+     * Allows the user to change a selected die with one contained in the draftPool.
+     *
+     * @param die the die the user wants to put in the draftPool
+     * @param dieIndex the index of the die the user wants to get from the draftPool
+     * @return the die removed from the draftPool
+     */
     public Die changeDie(Die die, int dieIndex) {
         Die myDie = this.draftPool.remove(dieIndex);
         this.draftPool.add(dieIndex, die);
         return myDie;
     }
 
+    /**
+     * Allows the user to set the player whose playing the current turn.
+     * @param currentPlayer a Player Object referring to the current player
+     */
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
 
+    /**
+     * Returns a string telling who is the current player.
+     * @return a String Object which specifies who is the current player
+     */
+    @Override
     public String toString() {
         StringBuilder bld = new StringBuilder();
         if (currentPlayer != null)
-            bld.append("\nNow it's " + currentPlayer.getNickname() + "'s turn.");
+            bld.append("\nNow it's ").append(currentPlayer.getNickname()).append("'s turn.");
         return bld.toString();
     }
 
+    /**
+     * Returns a representation of the extracted tools.
+     * @return a String Object which specifies the extracted tools
+     */
     public String sendTool() {
         StringBuilder bld = new StringBuilder();
         bld.append("Tools-");
@@ -193,6 +210,10 @@ public class GameBoard extends Observable {
         return bld.toString();
     }
 
+    /**
+     * Returns a representation of the extracted public achievements.
+     * @return a String Object which specifies the extracted public achievements
+     */
     public String sendAchievement() {
         StringBuilder bld = new StringBuilder();
         bld.append("Public Achievements-");
@@ -203,13 +224,19 @@ public class GameBoard extends Observable {
         return bld.toString();
     }
 
+    /**
+     * Returns a representation of the roundTrack.
+     * @return a String Object which represents the roundTrack
+     */
     public String sendRoundTrack() {
-        StringBuilder bld = new StringBuilder();
-        bld.append(roundTrack.toString());
-        bld.append("-");
-        return bld.toString();
+        return roundTrack.toString() +
+                "-";
     }
 
+    /**
+     * Returns a representation of the draftPool.
+     * @return a String Object which represents the draftPool
+     */
     public String sendDraft() {
         StringBuilder bld = new StringBuilder();
         StringBuilder bl = new StringBuilder();
@@ -218,21 +245,29 @@ public class GameBoard extends Observable {
             bld.append(" ");
         }
         if(bld.length() > 0) {
-            bl.append("Draft-" + bld);
+            bl.append("Draft-").append(bld);
             bl.append("-");
         }
         return bl.toString();
     }
 
+    /**
+     * Returns a list of the extracted tools.
+     * @return an ArrayList Object containing the extracted Tool Objects
+     */
     public ArrayList<Tool> getTools() {
         return this.tools;
     }
 
+    //TODO FAKE GAMEBOARD
     public void setTools(ArrayList<Tool> tools) {
         this.tools = tools;
 
     }
 
+    /**
+     * This method notifies its Observers that something has been changed.
+     */
     public void update () {
         setChanged();
         notifyObservers(this);
