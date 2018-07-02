@@ -14,7 +14,7 @@ public enum ToolNames {
     LATHEKIN("Lathekin", Color.YELLOW),                                 //8 OK DEFINITIVO
     LENS_CUTTER("Taglierina_Circolare", Color.GREEN),                   //9 OK DEFINITIVO
     RUNNING_PLIERS("Tenaglia_a_Rotelle", Color.RED),                    //10 OK DEFINITIVO
-    TAP_WHEEL("Taglierina_Manuale", Color.BLUE);                        //11
+    TAP_WHEEL("Taglierina_Manuale", Color.BLUE);                        //11 OK DEFINITIVO
 
     private final Color color;
     private final String name;

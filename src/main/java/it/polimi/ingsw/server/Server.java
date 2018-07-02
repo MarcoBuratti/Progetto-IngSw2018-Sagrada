@@ -146,7 +146,6 @@ public class Server extends UnicastRemoteObject {
         try {
             cliGraphicsServer.printLoggedIn(newServerInterface.getPlayer().getNickname());
         } catch (Exception e) {
-            System.out.println("sono in register new player");
             cliGraphicsServer.printErr();
         }
 

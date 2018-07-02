@@ -196,7 +196,6 @@ public abstract class View implements Observer {
                 showInput("Update");
             }else
                 showInput(fromServer);
-
     }
 
     public synchronized void setHasChosenScheme(boolean bool) {

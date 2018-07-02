@@ -110,7 +110,7 @@ public class GraphicsClient {
             }else
                 System.out.println("\u001b[1mIl Tool non è stato usato\u001b[0m");
 
-            System.out.println("\u001b[1m" + (k + 1) + ") " + "Nome: " + jsonObject.get("Name"));
+            System.out.println("\u001b[1m" + (k) + ") " + "Nome: " + jsonObject.get("Name"));
             System.out.println( jsonObject.get("String") + "\u001b[0m");
         }
     }
