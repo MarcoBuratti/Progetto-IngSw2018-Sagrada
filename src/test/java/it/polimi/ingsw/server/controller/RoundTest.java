@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.server.RemoteView;
 import it.polimi.ingsw.server.model.GameBoard;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.exception.NotEnoughDiceLeftException;
@@ -26,7 +27,9 @@ class RoundTest {
         playersList.add( player );
         GameBoard gameBoard = new GameBoard(playersList);
 
-        Round round = new Round(null, gameBoard.getPlayers(), gameBoard);
+        ArrayList<RemoteView> remoteViews = new ArrayList<>();
+
+        Round round = new Round(remoteViews, gameBoard.getPlayers(), gameBoard);
         int size = gameBoard.getDiceBag().getDiceSet().size();
         round.initializeDraftPool();
         gameBoard.setDraftPool(gameBoard.getDraftPool());
@@ -36,7 +39,7 @@ class RoundTest {
         round.endRound();
         Assertions.assertEquals(0,gameBoard.getDraftPool().size());
 
-        Round round2 = new Round(null, gameBoard.getPlayers(),gameBoard);
+        Round round2 = new Round(remoteViews, gameBoard.getPlayers(),gameBoard);
         round2.initializeDraftPool();
         gameBoard.setDraftPool(gameBoard.getDraftPool());
         Assertions.assertEquals(7,gameBoard.getDraftPool().size());

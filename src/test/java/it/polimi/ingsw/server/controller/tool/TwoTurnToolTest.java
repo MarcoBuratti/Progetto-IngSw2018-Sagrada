@@ -21,7 +21,7 @@ class TwoTurnToolTest {
         player = new Player ( "sergio");
         player.setDashboard("Aurora_Sagradis");
         playersList.add( player );
-        GameBoard gameBoard = new GameBoard(playersList);
+        FakeGameBoard gameBoard = new FakeGameBoard(playersList);
         ArrayList<Tool> tools = new ArrayList<>();
         ToolNames[] toolList = ToolNames.values();
         ToolFactory abstractToolFactory = new ToolFactory();

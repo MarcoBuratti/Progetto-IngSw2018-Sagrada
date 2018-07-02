@@ -177,10 +177,9 @@ class DashboardTest {
         List<SchemesEnum> schemesEnum = Arrays.asList(SchemesEnum.values());
         GraphicsClient graphicsClient;
         graphicsClient = new GraphicsClient();
-        Dashboard dashboard = new Dashboard(schemesEnum.get(8).getName());
         JSONParser parser = new JSONParser();
         for (int i = 0; i < schemesEnum.size(); i++){
-            String sub = schemesEnum.get(i).getName();
+           /* String sub = schemesEnum.get(i).getName();
             JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/resources/dashboard_client/"+ sub +".json"));
             String change = (String) jsonObject.get("String");
             change = change.replace("\u001B[37m", "\u001b[0m");
@@ -191,7 +190,10 @@ class DashboardTest {
                 System.out.println(sub + " eseguito " + i);
             } catch (IOException e) {
                 System.out.println(e.toString() );
-            }
+            }*/
+            Dashboard dashboard = new Dashboard(schemesEnum.get(i).getName());
+            System.out.println(dashboard.getFavourToken() + " " + schemesEnum.get(i).getName());
+            System.out.println(dashboard);
         }
 
         try {

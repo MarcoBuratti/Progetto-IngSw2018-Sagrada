@@ -17,16 +17,12 @@ public class ValueRestriction implements Restriction {
      *                                that is not allowed (lesser than 1 or greater than the number of sides of the dice)
      */
     public ValueRestriction(int value) throws NotValidValueException {
-        try {
-            if (value > 0 && value <= NUMBER_OF_SIDES) {
-                this.number = value;
-                this.type = RestrictionType.VALUE;
-            }
-            else
-                throw new NotValidValueException();
-        } catch (Exception e) {
-            System.out.println(e);
+        if (value > 0 && value <= NUMBER_OF_SIDES) {
+            this.number = value;
+            this.type = RestrictionType.VALUE;
         }
+        else
+            throw new NotValidValueException();
     }
 
     /**
@@ -38,35 +34,42 @@ public class ValueRestriction implements Restriction {
         return number;
     }
 
-    @Override
     /**
-     * Returns a Boolean object which specifies if the die can be set on the cell having that
-     * restriction (the die must have the same value as the restriction).
+     * {@inheritDoc}
      */
+    @Override
     public boolean restrictionCheck(Die die) {
         return (die.getNumber() == this.number);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestrictionType getType() {
         return type;
     }
 
-    @Override
     /**
-     * Returns a string which specifies the restriction's kind and value.
+     * {@inheritDoc}
      */
+    @Override
     public String toString() {
         return "" + number;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean equals(Object myObject) {
-        if (myObject != null) {
-            if (this.getClass() == myObject.getClass()) {
-                ValueRestriction valueRestriction = (ValueRestriction) myObject;
+    public boolean restrictionEquals (Restriction restriction) {
+        if (restriction != null) {
+            if (this.getClass() == restriction.getClass()) {
+                ValueRestriction valueRestriction = (ValueRestriction) restriction;
                 return (this.number == valueRestriction.number);
             } else return false;
         } else return false;
     }
+
 }

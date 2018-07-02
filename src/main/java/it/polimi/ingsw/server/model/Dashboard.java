@@ -17,42 +17,12 @@ import java.io.IOException;
 public class Dashboard {
     private static final int ROW = 4;
     private static final int COLUMN = 5;
-    private Player owner;
     private long favourToken;
     private Cell[][] matrixScheme;
 
-    public Dashboard(String schemeName) throws NotValidValueException {
+    public Dashboard ( String schemeName ) {
         this.matrixScheme = new Cell[ROW][COLUMN];
-        JSONParser parser = new JSONParser();
-
-        try {
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/resources/dashboard/" + schemeName + ".json"));
-
-            this.favourToken = (Long) jsonObject.get("favourToken");
-
-            AbstractRestriction restrictionFactory = new RestrictionFactory();
-            JSONArray first = (JSONArray) jsonObject.get("Restriction");
-
-            for (int i = 0; i < ROW; i++)
-                for (int j = 0; j < COLUMN; j++) {
-                    this.matrixScheme[i][j] = new Cell(restrictionFactory.getRestriction(RestrictionEnum.valueOf((String) ((JSONArray) first.get(i)).get(j))));
-                }
-        } catch (IOException | ParseException e) {
-            System.out.println(e.toString());
-        }
-    }
-
-    /**
-     * returns the name of the board owner
-     *
-     * @return
-     */
-    public Player getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Player player) {
-        this.owner = player;
+        ReadParser.createMatrixFromScheme(this, schemeName);
     }
 
     /**
@@ -65,6 +35,15 @@ public class Dashboard {
     }
 
     /**
+     *
+     *
+     * @param favourToken
+     */
+    void setFavourToken (long favourToken) {
+        this.favourToken = favourToken;
+    }
+
+    /**
      * returns a copy of the matrix, before being passed is cloned
      * has non @param input
      *
@@ -72,16 +51,20 @@ public class Dashboard {
      */
     public Cell[][] getMatrixScheme() {
 
-        Cell[][] matrixScheme = new Cell[ROW][COLUMN];
+        Cell[][] matrixSchemeCopy = new Cell[ROW][COLUMN];
         try {
             for (int i = 0; i < ROW; i++)
                 for (int j = 0; j < COLUMN; j++)
-                    matrixScheme[i][j] = this.matrixScheme[i][j].copyConstructor();
+                    matrixSchemeCopy[i][j] = this.matrixScheme[i][j].copyConstructor();
         } catch (Exception e) {
             System.out.println(e.toString());
         }
 
-        return matrixScheme;
+        return matrixSchemeCopy;
+    }
+
+    void setMatrixScheme (Cell[][] matrixScheme) {
+        this.matrixScheme = matrixScheme;
     }
 
     /**
@@ -116,17 +99,12 @@ public class Dashboard {
     }
 
 
-    public boolean equalsScheme(Object myObject) {
-        if (myObject != null) {
-            if (myObject.getClass() == this.getClass()) {
-                Dashboard dashboard = (Dashboard) myObject;
-                for (int row = 0; row < ROW; row++)
-                    for (int col = 0; col < COLUMN; col++)
-                        if (!this.matrixScheme[row][col].equals(dashboard.matrixScheme[row][col]))
-                            return false;
-                return true;
-            } else return false;
-        } else return false;
+    boolean equalsScheme( Dashboard dashboard ) {
+        for (int row = 0; row < ROW; row++)
+            for (int col = 0; col < COLUMN; col++)
+                if (!this.matrixScheme[row][col].cellEquals(dashboard.matrixScheme[row][col]))
+                    return false;
+        return true;
     }
 
     public int emptyCells() {
@@ -150,10 +128,10 @@ public class Dashboard {
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COLUMN; j++) {
                 if (this.matrixScheme[i][j].getUsedCell()) {
-                    bld.append(this.matrixScheme[i][j].getRestriction().toString() + "[" + this.matrixScheme[i][j].getDie().toString() + "]");
+                    bld.append(this.matrixScheme[i][j].getRestriction().toString()).append("[").append(this.matrixScheme[i][j].getDie().toString()).append("]");
                     bld.append(" ");
                 } else {
-                    bld.append(this.matrixScheme[i][j].getRestriction().toString() + "\033[0m" + "[  ]");
+                    bld.append(this.matrixScheme[i][j].getRestriction().toString()).append("\033[0m").append("[  ]");
                     bld.append(" ");
                 }
             }

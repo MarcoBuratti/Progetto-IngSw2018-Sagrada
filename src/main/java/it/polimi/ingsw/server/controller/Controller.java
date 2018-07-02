@@ -26,7 +26,7 @@ public class Controller extends Observable implements Observer {
 
     public Controller(Game game) {
         gameBoard = new GameBoard(game.getPlayers());
-        players = gameBoard.getPlayers();
+        players = new ArrayList<>(gameBoard.getPlayers());
     }
 
     public void setRemoteViews(Game game) {

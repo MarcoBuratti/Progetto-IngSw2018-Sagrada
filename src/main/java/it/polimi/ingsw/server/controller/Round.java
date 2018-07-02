@@ -7,13 +7,10 @@ import it.polimi.ingsw.server.model.GameBoard;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.exception.NotEnoughDiceLeftException;
 
-import java.util.ArrayList;
-import java.util.ListIterator;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 public class Round implements Observer {
-    private int DRAFT_POOL_CAPACITY;
+    private int draftPoolCapacity;
     private Player currentPlayer;
     private Turn currentTurn;
     private GameBoard gameBoard;
@@ -22,19 +19,19 @@ public class Round implements Observer {
     private RemoteView currentPlayerRemoteView;
     private boolean onePlayerLeft = false;
 
-    public Round(ArrayList<RemoteView> remoteViews, ArrayList<Player> players, GameBoard gameBoard) {
+    public Round(List<RemoteView> remoteViews, List<Player> players, GameBoard gameBoard) {
         this.gameBoard = gameBoard;
-        DRAFT_POOL_CAPACITY = (players.size() * 2) + 1;
-        this.players = players;
-        this.remoteViews = remoteViews;
+        draftPoolCapacity = (players.size() * 2) + 1;
+        this.players = new ArrayList<>(players);
+        this.remoteViews = new ArrayList<>(remoteViews);
     }
 
-    public void initializeDraftPool() throws NotEnoughDiceLeftException {
-        ArrayList<Die> draftPool = new ArrayList<>(gameBoard.getDiceBag().extractSet(DRAFT_POOL_CAPACITY));
+    void initializeDraftPool() throws NotEnoughDiceLeftException {
+        ArrayList<Die> draftPool = new ArrayList<>(gameBoard.getDiceBag().extractSet(draftPoolCapacity));
         this.gameBoard.setDraftPool(draftPool);
     }
 
-    public void roundManager() {
+    void roundManager() {
         ListIterator<Player> iterator = players.listIterator();
 
         while (iterator.hasNext() && !onePlayerLeft) {
@@ -82,14 +79,14 @@ public class Round implements Observer {
 
     }
 
-    protected RemoteView searchRemoteView ( Player player ) {
+    private RemoteView searchRemoteView(Player player) {
         for ( RemoteView remoteView: remoteViews )
             if ( remoteView.getPlayer().getNickname().equals( player.getNickname() ) )
                 return remoteView;
         throw new IllegalArgumentException();
     }
 
-    public void endRound() {
+    void endRound() {
         try {
             gameBoard.getRoundTrack().setNextRound(gameBoard.getDraftPool());
             gameBoard.emptyDraftPool();
@@ -99,13 +96,13 @@ public class Round implements Observer {
 
     }
 
-    public synchronized void onePlayerLeftEnd() {
+    synchronized void onePlayerLeftEnd() {
         this.onePlayerLeft = true;
         if (this.currentTurn != null)
             this.currentTurn.onePlayerLeft();
     }
 
-    public synchronized Player getCurrentPlayer() {
+    synchronized Player getCurrentPlayer() {
         return currentPlayer;
     }
 

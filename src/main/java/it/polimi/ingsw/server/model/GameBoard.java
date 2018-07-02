@@ -4,7 +4,6 @@ import it.polimi.ingsw.server.controller.tool.Tool;
 import it.polimi.ingsw.server.controller.tool.ToolFactory;
 import it.polimi.ingsw.server.controller.tool.ToolNames;
 import it.polimi.ingsw.server.model.achievement.*;
-import it.polimi.ingsw.server.model.exception.NotValidValueException;
 
 import java.util.*;
 
@@ -30,9 +29,9 @@ public class GameBoard extends Observable {
      * The schemes argument must specify the players' user names and chosen window schemes.
      */
 
-    public GameBoard(ArrayList<Player> players) {
+    public GameBoard( List<Player> players) {
 
-        this.players = players;
+        this.players = new ArrayList<>(players);
         publicAchievements = new ArrayList<>();
         tools = new ArrayList<>();
 
@@ -100,7 +99,7 @@ public class GameBoard extends Observable {
      *
      * @return the players list
      */
-    public ArrayList<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 
@@ -110,7 +109,7 @@ public class GameBoard extends Observable {
      *
      * @return the public achievements list
      */
-    public ArrayList<CardAchievement> getPublicAchievements() {
+    public List<CardAchievement> getPublicAchievements() {
         return publicAchievements;
     }
 
@@ -120,7 +119,7 @@ public class GameBoard extends Observable {
      *
      * @return a copy of the draft pool used for the current round
      */
-    public ArrayList<Die> getDraftPool() {
+    public List<Die> getDraftPool() {
         return new ArrayList<>(this.draftPool);
     }
 
@@ -130,8 +129,8 @@ public class GameBoard extends Observable {
      *
      * @param draftPool the new draft pool created at the start of the round
      */
-    public void setDraftPool(ArrayList<Die> draftPool) {
-        this.draftPool = draftPool;
+    public void setDraftPool(List<Die> draftPool) {
+        this.draftPool = new ArrayList<>(draftPool);
         setChanged();
         notifyObservers(this);
     }
@@ -254,14 +253,8 @@ public class GameBoard extends Observable {
      * Returns a list of the extracted tools.
      * @return an ArrayList Object containing the extracted Tool Objects
      */
-    public ArrayList<Tool> getTools() {
+    public List<Tool> getTools() {
         return this.tools;
-    }
-
-    //TODO FAKE GAMEBOARD
-    public void setTools(ArrayList<Tool> tools) {
-        this.tools = tools;
-
     }
 
     /**

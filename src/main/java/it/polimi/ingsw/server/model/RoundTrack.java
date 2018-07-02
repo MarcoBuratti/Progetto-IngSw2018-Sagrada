@@ -8,7 +8,7 @@ import java.util.List;
 
 public class RoundTrack {
     private static final int NUMBER_OF_ROUNDS = 10;
-    private ArrayList[] diceList;
+    private ArrayList<ArrayList<Die>> diceList;
 
     /**
      * Creates a RoundTrack object which represents the round track on the game board.
@@ -17,9 +17,9 @@ public class RoundTrack {
      * Round track's cells are represented as ArrayLists of Die objects.
      */
     public RoundTrack() {
-        diceList = new ArrayList[NUMBER_OF_ROUNDS];
+        diceList = new ArrayList<>( NUMBER_OF_ROUNDS );
         for (int i = 0; i < NUMBER_OF_ROUNDS; i++)
-            diceList[i] = new ArrayList<Die>();
+            diceList.add(new ArrayList<>());
     }
 
     /**
@@ -32,7 +32,7 @@ public class RoundTrack {
      */
     public List getDiceList ( int round ) throws NotValidRoundException {
         if (round > 0 && round <= NUMBER_OF_ROUNDS)
-            return diceList[round - 1];
+            return diceList.get(round - 1);
         else throw new NotValidRoundException();
     }
 
@@ -44,9 +44,9 @@ public class RoundTrack {
      * @param round the cell the user wants to place the dice on
      * @throws NotValidRoundException whether the user specifies a not existing round track's cell
      */
-    public void setDiceList(ArrayList<Die> mySet, int round) throws NotValidRoundException {
+    public void setDiceList( List<Die> mySet, int round) throws NotValidRoundException {
         if (round > 0 && round <= NUMBER_OF_ROUNDS)
-            diceList[round - 1] = mySet;
+            diceList.set( round-1 , new ArrayList<>(mySet) );
         else throw new NotValidRoundException();
     }
 
@@ -61,7 +61,7 @@ public class RoundTrack {
     public int getCurrentRound() throws EndedGameException {
         int roundIndex = 0;
         while (roundIndex < NUMBER_OF_ROUNDS) {
-            if (this.diceList[roundIndex].isEmpty())
+            if (this.diceList.get(roundIndex).isEmpty())
                 return roundIndex + 1;
             roundIndex++;
         }
@@ -76,11 +76,11 @@ public class RoundTrack {
      * @param mySet the dice set the user wants to place on the cell
      * @throws NotValidRoundException if the user tries to access the round track after the game is ended (every round already played)
      */
-    public void setNextRound(ArrayList<Die> mySet) throws NotValidRoundException {
+    public void setNextRound( List<Die> mySet) throws NotValidRoundException {
         int currentRound = 0;
         try {
             currentRound = this.getCurrentRound();
-        } catch (Exception e) {
+        } catch (EndedGameException e) {
             System.out.println(e.toString());
         }
         if (currentRound > 0 && currentRound <= NUMBER_OF_ROUNDS)
@@ -97,34 +97,37 @@ public class RoundTrack {
      */
     public Boolean isColorOnRoundTrack(Color color) {
         for (int i = 0; i < NUMBER_OF_ROUNDS; i++)
-            for (Object object : diceList[i]) {
-                Die d = (Die) object;
+            for (Die d : diceList.get(i)) {
                 if (d.getColor().equals(color))
                     return true;
             }
         return false;
     }
 
-    public Die changeDie(Die die, int round, int dieIndex) {
-        Die myDie = (Die) this.diceList[round - 1].remove(dieIndex);
-        this.diceList[round - 1].add(dieIndex, die);
-        return myDie;
+    /**
+     * Allows the user to replace a die from the roundTrack with another one.
+     * @param die the die the user wants to put in the draftPool
+     * @param round the round cell the user wants to get the die from
+     * @param dieIndex the index of the die the user wants to get
+     */
+    public void changeDie(Die die, int round, int dieIndex) {
+        this.diceList.get(round - 1).set(dieIndex, die);
     }
 
-    @Override
     /**
-     * Returns a string representing the round track, specifying the dice placed on every round's cell.
+     * {@inheritDoc}
      */
+    @Override
     public String toString() {
         String myRoundTrack = "Round track-";
         StringBuilder bld = new StringBuilder();
         int i;
-        for (i = 0; i < NUMBER_OF_ROUNDS && !diceList[i].isEmpty(); i++) {
+        for (i = 0; i < NUMBER_OF_ROUNDS && !diceList.get(i).isEmpty(); i++) {
             bld.append("Round ");
             bld.append(i + 1);
             bld.append("   : ");
-            for (Object die : diceList[i]) {
-                bld.append(die.toString() + " ");
+            for (Die die : diceList.get(i)) {
+                bld.append(die.toString()).append(" ");
             }
             bld.append("!");
         }

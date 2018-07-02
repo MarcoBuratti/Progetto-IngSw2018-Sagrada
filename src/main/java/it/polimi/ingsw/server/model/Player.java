@@ -10,22 +10,6 @@ public class Player {
     private PrivateAchievement privateAchievement;
     private boolean skipSecondTurn;
 
-
-    public Player(String nickname) {
-        this.nickname = nickname;
-        this.skipSecondTurn = false;
-    }
-
-    public void setDashboard(String scheme) throws NotValidValueException {
-        this.dashboard = new Dashboard(scheme);
-        this.dashboard.setOwner(this);
-        this.currentFavourToken = this.dashboard.getFavourToken();
-    }
-
-    public void setPrivateAchievement(PrivateAchievement privateAchievement) {
-        this.privateAchievement = privateAchievement;
-    }
-
     /**
      * Creates a Player object, which represent a player, having his own nickname and having his dashboard
      * and private achievement randomly assigned by the Game board.
@@ -35,11 +19,31 @@ public class Player {
      * the number of favour token associated with the scheme chosen from the player at the
      * start of the game.
      *
-     * @param nickname           the player's nickname, chosen during the log in session
-     * @param dashboard          the player's dashboard, containing the chosen scheme and the initial number of favour tokens
-     * @param privateAchievement the player's private achievement, associated with one of the available colours
+     * @param nickname the player's nickname, chosen during the log in session
      */
+    public Player(String nickname) {
+        this.nickname = nickname;
+        this.skipSecondTurn = false;
+    }
 
+    /**
+     * Allows the user to create a new dashboard from the selected scheme and associates it to the player.
+     * @param scheme the name of the scheme chosen by the player
+     * @throws NotValidValueException if one of the restrictions, contained in the json file associated to the scheme,
+     * specifies a not allowed value
+     */
+    public void setDashboard(String scheme) throws NotValidValueException {
+        this.dashboard = new Dashboard(scheme);
+        this.currentFavourToken = this.dashboard.getFavourToken();
+    }
+
+    /**
+     * Allows the user to set the player's private achievement
+     * @param privateAchievement the private achievement the user wants to set as privateAchievement attribute of the Player Object
+     */
+    public void setPrivateAchievement(PrivateAchievement privateAchievement) {
+        this.privateAchievement = privateAchievement;
+    }
 
     /**
      * Returns the player's nickname attribute as a String object.
@@ -80,12 +84,8 @@ public class Player {
     }
 
     /**
-     * Allows the player to use his favour tokens in order to use a tool.
-     * The cost of each tool is 1 favour token if it has never been used by any player
-     * or 2 favour tokens if it has already been used.
-     * The argument usedTool must specify if the tool has already been used by
-     * any of the players.
-     *
+     * Returns a boolean which specifies whether the player has enough favour tokens to use
+     * the selected tool or not.
      * @param usedTool specifies whether the tool has been used at least once
      */
     public boolean hasEnoughToken ( boolean usedTool ) {
@@ -98,6 +98,14 @@ public class Player {
         } else return false;
     }
 
+    /**
+     * Allows the player to use his favour tokens in order to use a tool.
+     * The cost of each tool is 1 favour token if it has never been used by any player
+     * or 2 favour tokens if it has already been used.
+     * The argument usedTool must specify whether the tool has already been used by
+     * any of the players or not.
+     * @param usedTool a boolean specifying whether the tool the user wants to use has been already used or not
+     */
     public void useToken ( boolean usedTool ) {
         if (usedTool)
             this.currentFavourToken = this.currentFavourToken - 2;
@@ -105,24 +113,29 @@ public class Player {
             this.currentFavourToken--;
     }
 
+    /**
+     * Returns a boolean which specifies whether the player has to skip his second turn or not.
+     * @return the skipSecondTurn attribute
+     */
     public boolean skipSecondTurn() {
         return skipSecondTurn;
     }
 
+    /**
+     * Allows the user to set the skipSecondTurn attribute.
+     * @param skipSecondTurn the boolean the user wants to set as skipSecondTurn attribute
+     */
     public void setSkipSecondTurn(boolean skipSecondTurn) {
         this.skipSecondTurn = skipSecondTurn;
     }
 
-    @Override
     /**
-     * Returns a string which represent the Player object, specifying the player's user name, his dashboard,
-     * how many favour tokens he/she currently has and his/her private achievement.
+     * {@inheritDoc}
      */
+    @Override
     public String toString() {
-        StringBuilder bld = new StringBuilder();
-        bld.append("Player: " + this.getNickname() + "!");
-        bld.append("Current Token: " + this.getCurrentFavourToken() + "!");
-        bld.append(dashboard.toString());
-        return bld.toString();
+        return "Player: " + this.getNickname() + "!" +
+                "Current Token: " + this.getCurrentFavourToken() + "!" +
+                dashboard.toString();
     }
 }

@@ -36,6 +36,7 @@ class RoundTrackTest {
         assertEquals(3, roundTrack.getCurrentRound());
         Die d4 = new Die(Color.VIOLET);
         diceList3.add(d4);
+        roundTrack.setDiceList(diceList3, 3);
         assertEquals(4, roundTrack.getCurrentRound());
         for (int i = 0; i < NUMBER_OF_ROUNDS-3 ; i++)
             roundTrack.setNextRound(diceList2);

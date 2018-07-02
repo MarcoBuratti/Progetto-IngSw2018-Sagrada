@@ -12,7 +12,7 @@ public class ColorRestriction implements Restriction {
      *
      * @param color the color the die placed on the cell must have.
      */
-    public ColorRestriction(Color color) {
+    ColorRestriction(Color color) {
         this.color = color;
         this.type = RestrictionType.COLOR;
     }
@@ -26,35 +26,42 @@ public class ColorRestriction implements Restriction {
         return color;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestrictionType getType() {
         return type;
     }
 
-    @Override
     /**
-     * Returns a Boolean object which specifies if the die can be set on the cell having that
-     * restriction (the die must have the same color as the restriction).
+     * {@inheritDoc}
      */
-    public boolean restrictionCheck(Die die) {
-        return (die.getColor().equals(this.color));
-    }
-
     @Override
-    /**
-     * Returns a string which specifies the restriction's kind and color.
-     */
-    public String toString() {
-        return color.toString();
-    }
-
-    @Override
-    public boolean equals(Object myObject) {
-        if (myObject != null) {
-            if (this.getClass() == myObject.getClass()) {
-                ColorRestriction colorRestriction = (ColorRestriction) myObject;
+    public boolean restrictionEquals(Restriction myRestriction) {
+        if (myRestriction != null) {
+            if (this.getClass() == myRestriction.getClass()) {
+                ColorRestriction colorRestriction = (ColorRestriction) myRestriction;
                 return (this.color.equals(colorRestriction.color));
             } else return false;
         } else return false;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean restrictionCheck(Die die) {
+        return (die.getColor().equals(this.color));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return color.toString();
+    }
+
+
 }

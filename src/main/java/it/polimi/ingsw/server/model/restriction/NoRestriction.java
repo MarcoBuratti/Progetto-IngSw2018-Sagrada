@@ -9,32 +9,39 @@ public class NoRestriction implements Restriction {
         this.type = RestrictionType.NO;
     }
 
-    @Override
     /**
-     * Specifies whether it is possible to set a die on the cell having this restriction.
-     * Always returns true as the NoRestriction Object specifies there are no restrictions on the cell.
+     * {@inheritDoc}
      */
+    @Override
     public boolean restrictionCheck(Die die) {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestrictionType getType() {
         return type;
     }
 
-    @Override
     /**
-     * Returns a string telling there are no restriction on the cell.
+     * {@inheritDoc}
      */
+    @Override
+    public boolean restrictionEquals(Restriction myRestriction) {
+        if (myRestriction != null)
+            return (this.getClass() == myRestriction.getClass());
+        else return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String toString() {
         return " ";
     }
 
-    @Override
-    public boolean equals(Object myObject) {
-        if (myObject != null)
-            return (this.getClass() == myObject.getClass());
-        else return false;
-    }
+
 }

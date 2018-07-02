@@ -55,7 +55,7 @@ public abstract class View implements Observer {
             try {
                 JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/up.json"));
                 String achievement = (String) jsonObject.get("Public Achievements");
-                graphicsClient.printAchivements(achievement);
+                graphicsClient.printAchievements(achievement);
                 String tool = (String) jsonObject.get("Tools");
                 if (toolCtrl) {
                     getConnectionClient().setTool(tool);

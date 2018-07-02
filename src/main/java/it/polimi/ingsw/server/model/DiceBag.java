@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.model.exception.NotEnoughDiceLeftException;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class DiceBag {
     private static final int NUMBER_OF_COLOURS = Color.values().length;
@@ -31,7 +32,7 @@ public class DiceBag {
      *
      * @return the list of dice inside the bag
      */
-    public ArrayList<Die> getDiceSet() {
+    public List<Die> getDiceSet() {
         return diceSet;
     }
 
@@ -43,7 +44,7 @@ public class DiceBag {
      *
      * @return a die that was included in the dice bag and now is no more
      */
-    public Die extract() {
+    Die extract() {
         Die myDie = diceSet.get(0);
         diceSet.remove(0);
         return myDie;
@@ -76,8 +77,8 @@ public class DiceBag {
      * @return a dice set containing the required number of dice
      * @throws NotEnoughDiceLeftException if the user requests a quantity of dice that is no available
      */
-    public ArrayList<Die> extractSet(int quantity) throws NotEnoughDiceLeftException {
-        ArrayList<Die> mySet = new ArrayList<Die>();
+    public List<Die> extractSet(int quantity) throws NotEnoughDiceLeftException {
+        ArrayList<Die> mySet = new ArrayList<>();
         if (quantity <= this.diceSet.size()) {
             Die newDie;
             for (int i = 0; i < quantity; i++) {

@@ -34,9 +34,8 @@ public class ModelView extends Observable implements Observer {
         bld.append(model.sendAchievement());
         bld.append(model.sendRoundTrack());
         bld.append(model.sendDraft());
-        ArrayList<Player> players = model.getPlayers();
         int i = 0;
-        for (Player p : players) {
+        for (Player p : model.getPlayers()) {
             bld.append("scheme").append(i);
             bld.append("-");
             bld.append(p.toString());

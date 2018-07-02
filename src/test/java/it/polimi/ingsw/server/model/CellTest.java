@@ -27,11 +27,11 @@ class CellTest {
         assertEquals(d1, c1.getDie());
         assertTrue(c1.getUsedCell());
         Cell c2 = c1.copyConstructor();
-        assertTrue(c1.equals(c2));
+        assertTrue(c1.cellEquals(c2));
         d1 = c1.removeDie();
         assertEquals(null, c1.getDie());
         assertEquals(d1, c2.getDie());
-        assertFalse(c1.equals(c2));
+        assertFalse(c1.cellEquals(c2));
     }
 
 }

@@ -46,12 +46,11 @@ public class Turn {
         notifyAll();
     }
 
-    public synchronized void onePlayerLeft() {
-        this.turnOver = true;
-        notifyAll();
+    synchronized void onePlayerLeft() {
+        setTurnIsOver();
     }
 
-    public synchronized void setWaitMove(boolean waitMove) {
+    private synchronized void setWaitMove(boolean waitMove) {
         this.waitMove = waitMove;
         notifyAll();
     }
@@ -72,7 +71,7 @@ public class Turn {
         return placementDone;
     }
 
-    public boolean isUsedTool() {
+    private boolean isUsedTool() {
         return usedTool;
     }
 
@@ -102,7 +101,7 @@ public class Turn {
                 this.remoteView.send( message );
     }
 
-    public void sendToPlayerAndUpdate ( String message ) {
+    private void sendToPlayerAndUpdate(String message) {
         if ( this.remoteView != null )
             if ( this.remoteView.isOn() ) {
                 this.gameBoard.update();
@@ -110,7 +109,7 @@ public class Turn {
             }
     }
 
-    public synchronized void newMove(PlayerMove playerMove) {
+    synchronized void newMove(PlayerMove playerMove) {
         this.moveType = playerMove.getMoveType();
         this.playerMove = playerMove;
         this.waitMove = false;
@@ -119,7 +118,7 @@ public class Turn {
 
     private synchronized void timeOut() {
         this.turnOver = true;
-        this.sendToPlayer("The time is over! Your turn has ended.");
+        this.sendToPlayer("The time is over!");
         notifyAll();
     }
 
@@ -220,6 +219,8 @@ public class Turn {
 
                         usedTool = decoratedTool.toolEffect(this, playerMove);
                         if ( usedTool ) {
+                            if ( !toolAlreadyUsed )
+                                tool.setAlreadyUsed(true);
                             sendToPlayer("Please complete your move:");
                             setWaitMove(true);
                             boolean correctMove = false;
@@ -228,15 +229,25 @@ public class Turn {
                                     while (!isTurnOver() && isWaitMove()) {
                                         wait();
                                     }
-                                    correctMove = decoratedTool.placeDie(this, playerMove);
-                                    if (!correctMove)
-                                        setWaitMove(true);
+                                    if (!isTurnOver()) {
+                                        correctMove = decoratedTool.placeDie(this, playerMove);
+                                        if (!correctMove)
+                                            setWaitMove(true);
+                                    }
+                                    else {
+                                        correctMove = true;
+                                        sendToPlayer("You cannot place the die anymore!");
+                                    }
                                 }
                             }
                         }
                     }
 
-                    else if ( !tool.needPlacement() ) usedTool = tool.toolEffect(this, playerMove);
+                    else if ( !tool.needPlacement() ) {
+                        usedTool = tool.toolEffect(this, playerMove);
+                        if (!toolAlreadyUsed)
+                            tool.setAlreadyUsed(true);
+                    }
 
                     System.out.println("UsedTool è uguale a: " + usedTool);
                     if ( isUsedTool() ) {

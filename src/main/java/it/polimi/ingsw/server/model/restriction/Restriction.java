@@ -12,5 +12,17 @@ public interface Restriction {
      * @return true if the die complies with the restriction, false otherwise
      */
     boolean restrictionCheck(Die die);
+
+    /**
+     * Specifies the restriction's type.
+     * @return an instance of the RestrictionType Enum, specifying the restriction's type
+     */
     RestrictionType getType();
+
+    /**
+     * Compares two restrictions.
+     * @param myRestriction the Restriction Object the user wants to compare to the one this method is called from
+     * @return  boolean specifying whether the Restriction Object represents the same restriction as myRestriction argument
+     */
+    boolean restrictionEquals (Restriction myRestriction);
 }

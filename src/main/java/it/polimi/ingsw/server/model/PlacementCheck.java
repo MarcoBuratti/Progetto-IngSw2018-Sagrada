@@ -7,11 +7,9 @@ public class PlacementCheck {
     private static final int COLUMN = 5;
 
     /**
-     * the isEmpty class checks if a die has already been placed on the matrixScheme,
-     * if there are dice return true otherwise return false
-     *
-     * @param matrixScheme
-     * @return boolean
+     * Returns a boolean specifying whether the matrix is empty or not.
+     * @param matrixScheme the matrix of Cell Objects selected by the user
+     * @return a boolean
      */
     public boolean isEmpty(Cell[][] matrixScheme) {
         for (int i = 0; i < ROW; i++) {
@@ -23,7 +21,6 @@ public class PlacementCheck {
     }
 
     /**
-     * control if two dice has the same color and return true if is the same
      *
      * @param die1
      * @param die2
@@ -40,7 +37,7 @@ public class PlacementCheck {
      * @param die2
      * @return
      */
-    public boolean checkDiceNumber(Die die1, Die die2) {
+    boolean checkDiceNumber(Die die1, Die die2) {
         return (die1.getNumber() == die2.getNumber());
     }
 
@@ -57,6 +54,11 @@ public class PlacementCheck {
      */
     public boolean allowedNeighbours(int row, int column, Die myDie, Cell[][] matrixScheme) {
 
+        return allowedNeighboursRow(row, column, myDie, matrixScheme) && allowedNeighboursColumn(row, column, myDie, matrixScheme);
+
+    }
+
+    private boolean allowedNeighboursRow (int row, int column, Die myDie, Cell[][] matrixScheme) {
         if (row > 0 && matrixScheme[row - 1][column].getUsedCell()) {
             Die die = matrixScheme[row - 1][column].getDie();
             if (checkDiceColor(myDie, die) || checkDiceNumber(myDie, die))
@@ -64,9 +66,12 @@ public class PlacementCheck {
         }
         if (row < 3 && matrixScheme[row + 1][column].getUsedCell()) {
             Die die = matrixScheme[row + 1][column].getDie();
-            if (checkDiceColor(myDie, die) || checkDiceNumber(myDie, die))
-                return false;
+            return !checkDiceColor(myDie, die) && !checkDiceNumber(myDie, die);
         }
+        return true;
+    }
+
+    private boolean allowedNeighboursColumn (int row, int column, Die myDie, Cell[][] matrixScheme) {
         if (column > 0 && matrixScheme[row][column - 1].getUsedCell()) {
             Die die = matrixScheme[row][column - 1].getDie();
             if (checkDiceColor(myDie, die) || checkDiceNumber(myDie, die))
@@ -74,8 +79,7 @@ public class PlacementCheck {
         }
         if (column < 4 && matrixScheme[row][column + 1].getUsedCell()) {
             Die die = matrixScheme[row][column + 1].getDie();
-            if (checkDiceColor(myDie, die) || checkDiceNumber(myDie, die))
-                return false;
+            return !checkDiceColor(myDie, die) && !checkDiceNumber(myDie, die);
         }
         return true;
     }
@@ -97,10 +101,7 @@ public class PlacementCheck {
         if (!nearBy(row, column, matrixScheme))
             return false;
 
-        if (!allowedNeighbours(row, column, myDie, matrixScheme))
-            return false;
-
-        return true;
+        return allowedNeighbours(row, column, myDie, matrixScheme);
     }
 
     /**
@@ -131,23 +132,30 @@ public class PlacementCheck {
     }
 
     public boolean neighbourOccupiedCell ( int row, int column, Cell[][] matrixScheme ) {
+
+        boolean cond1;
+        boolean cond2;
+        boolean cond3;
+
         if (row > 0) {
-            if (matrixScheme[row - 1][column].getUsedCell()) return true;
-            if (column > 0)
-                if (matrixScheme[row - 1][column - 1].getUsedCell() || matrixScheme[row][column - 1].getUsedCell())
-                    return true;
-            if (column < 4)
-                if (matrixScheme[row - 1][column + 1].getUsedCell() || matrixScheme[row][column + 1].getUsedCell())
-                    return true;
+
+            cond1 = matrixScheme[row - 1][column].getUsedCell();
+            cond2 = column > 0 && ( matrixScheme[row - 1][column - 1].getUsedCell() || matrixScheme[row][column - 1].getUsedCell() );
+            cond3 = column < 4 && ( matrixScheme[row - 1][column + 1].getUsedCell() || matrixScheme[row][column + 1].getUsedCell() );
+
+            if ( cond1 || cond2 || cond3 )
+                return true;
         }
+
         if (row < 3) {
-            if (matrixScheme[row + 1][column].getUsedCell()) return true;
-            if (column > 0)
-                if (matrixScheme[row + 1][column - 1].getUsedCell() || matrixScheme[row][column - 1].getUsedCell())
-                    return true;
-            if (column < 4)
-                return matrixScheme[row + 1][column + 1].getUsedCell() || matrixScheme[row][column + 1].getUsedCell();
+
+            cond1 = matrixScheme[row + 1][column].getUsedCell();
+            cond2 = column > 0 && ( matrixScheme[row + 1][column - 1].getUsedCell() || matrixScheme[row][column - 1].getUsedCell() );
+            cond3 = column < 4 && ( matrixScheme[row + 1][column + 1].getUsedCell() || matrixScheme[row][column + 1].getUsedCell() );
+
+            return cond1 || cond2 || cond3;
         }
+
         return false;
     }
 

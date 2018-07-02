@@ -9,19 +9,35 @@ public enum SchemeCardsEnum {
     private String firstScheme;
     private String secondScheme;
 
+    /**
+     * Creates an instance of the enum, representing a card which contains two schemes.
+     * @param name1 the name of the first scheme
+     * @param name2 the name of the second scheme
+     */
     SchemeCardsEnum(String name1, String name2) {
         this.firstScheme = name1;
         this.secondScheme = name2;
     }
 
+    /**
+     * Returns the name of the first scheme.
+     * @return the firstScheme attribute
+     */
     public String getFirstScheme() {
         return this.firstScheme;
     }
 
+    /**
+     * Returns the name of the second scheme.
+     * @return the secondScheme attribute
+     */
     public String getSecondScheme() {
         return this.secondScheme;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return "First Scheme: " + this.firstScheme + " , Second Scheme: " + this.secondScheme;

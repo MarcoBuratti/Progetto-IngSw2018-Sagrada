@@ -72,7 +72,7 @@ public class Cell {
      *
      * @return the Die object removed from the Cell
      */
-    public Die removeDie() {
+    Die removeDie() {
         if (this.usedCell) {
             Die myDie = this.die;
             this.die = null;
@@ -98,7 +98,7 @@ public class Cell {
      *
      * @return a copy of the Cell object.
      */
-    public Cell copyConstructor() throws OccupiedCellException {
+    Cell copyConstructor() throws OccupiedCellException {
         Cell cell = new Cell(this.restriction);
         if (this.usedCell)
             cell.setDie(this.die);
@@ -106,20 +106,20 @@ public class Cell {
     }
 
     /**
-     * {@inheritDoc}
+     * Compares two Cell Objects.
+     *
+     * @param myCell the Cell Object the user wants to compare to the one this method is called from
+     * @return a boolean specifying whether the Cell Object has all the same attributes as myCell argument
      */
-    @Override
-    public boolean equals(Object myObject) {
-        if (myObject != null) {
-            if (this.getClass() == myObject.getClass()) {
-                Cell myCell = (Cell) myObject;
-                if ((this.restriction.equals(myCell.restriction)) && (this.usedCell == myCell.usedCell)) {
-                    if (this.usedCell) {
-                        return (this.die.equals(myCell.die));
-                    } else return true;
-                }
+    boolean cellEquals(Cell myCell) {
+
+        if ((this.restriction.restrictionEquals(myCell.restriction)) && (this.usedCell == myCell.usedCell)) {
+            if (this.usedCell) {
+                return (this.die.equals(myCell.die));
             }
+            else return true;
         }
+
         return false;
     }
 

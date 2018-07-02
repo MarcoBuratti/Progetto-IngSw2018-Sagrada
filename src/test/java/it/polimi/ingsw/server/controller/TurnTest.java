@@ -4,10 +4,7 @@ import it.polimi.ingsw.server.controller.action.PlayerMove;
 import it.polimi.ingsw.server.controller.tool.Tool;
 import it.polimi.ingsw.server.controller.tool.ToolFactory;
 import it.polimi.ingsw.server.controller.tool.ToolNames;
-import it.polimi.ingsw.server.model.Color;
-import it.polimi.ingsw.server.model.Die;
-import it.polimi.ingsw.server.model.GameBoard;
-import it.polimi.ingsw.server.model.Player;
+import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +21,7 @@ class TurnTest {
         player = new Player ( "christian");
         player.setDashboard("Chromatic_Splendor");
         playersList.add( player );
-        GameBoard gameBoard = new GameBoard(playersList);
+        FakeGameBoard gameBoard = new FakeGameBoard(playersList);
         ArrayList<Tool> tools = new ArrayList<>();
         ToolNames[] toolList = ToolNames.values();
         ToolFactory abstractToolFactory = new ToolFactory();

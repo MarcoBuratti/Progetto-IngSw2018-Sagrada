@@ -23,7 +23,7 @@ class SetDieToolTest {
         player = new Player ( "christian");
         player.setDashboard("Chromatic_Splendor");
         playersList.add( player );
-        GameBoard gameBoard = new GameBoard(playersList);
+        FakeGameBoard gameBoard = new FakeGameBoard(playersList);
         ArrayList<Tool> tools = new ArrayList<>();
         ToolNames[] toolList = ToolNames.values();
         ToolFactory abstractToolFactory = new ToolFactory();

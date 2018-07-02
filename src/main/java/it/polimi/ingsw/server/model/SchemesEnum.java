@@ -10,14 +10,25 @@ public enum SchemesEnum {
 
     private String name;
 
+    /**
+     * Creates an instance of the enum, representing one of the existing schemes.
+     * @param name the name of the scheme
+     */
     SchemesEnum(String name) {
         this.name = name;
     }
 
+    /**
+     * Returns the name of the scheme.
+     * @return the name attribute
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return this.getName();
