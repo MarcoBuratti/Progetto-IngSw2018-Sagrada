@@ -47,18 +47,12 @@ public class GameBoard extends Observable {
         }
 
         List<ToolNames> toolList = Arrays.asList(ToolNames.values());
-        //Collections.shuffle(toolList);
+        Collections.shuffle(toolList);
         ToolFactory abstractToolFactory = new ToolFactory();
-        /*for (int i = 0; i < NUMBER_OF_TOOLS; i++) {
+        for (int i = 0; i < NUMBER_OF_TOOLS; i++) {
             Tool toolFactory = abstractToolFactory.getTool(toolList.get(i));
             this.tools.add(toolFactory);
-        }*/
-        Tool toolFactory = abstractToolFactory.getTool(toolList.get(3));
-        this.tools.add(toolFactory);
-        toolFactory = abstractToolFactory.getTool(toolList.get(4));
-        this.tools.add(toolFactory);
-        toolFactory = abstractToolFactory.getTool(toolList.get(11));
-        this.tools.add(toolFactory);
+        }
 
         List<Color> privateAchievementsList = Arrays.asList(Color.values());
         Collections.shuffle(privateAchievementsList);
