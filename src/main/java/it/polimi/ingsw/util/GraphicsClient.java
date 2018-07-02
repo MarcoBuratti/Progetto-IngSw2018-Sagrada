@@ -83,17 +83,10 @@ public class GraphicsClient {
         System.out.println(printRequest() + "\n");
         String[] choice = substringSchemes.split(",");
         for (int i = 0; i < 4; i++) {
-            JSONObject jsonObject = null;
-            try {
-                jsonObject = (JSONObject) parser.parse(new FileReader("src/main/resources/dashboard_client/" + choice[i] + ".json"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            System.out.println(i + 1 + ") " + "Nome: " + jsonObject.get("Name"));
-            System.out.println("Token: " + jsonObject.get("token"));
-            System.out.println(jsonObject.get("String"));
+            ParserScheme parserScheme = new ParserScheme(choice[i]);
+            System.out.println(i + 1 + ") " + "Nome: " + parserScheme.getName());
+            System.out.println("Token: " + parserScheme.getToken());
+            System.out.println(parserScheme.getStringScheme());
         }
 
     }

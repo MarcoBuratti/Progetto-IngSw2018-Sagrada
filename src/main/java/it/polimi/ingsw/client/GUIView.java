@@ -2,6 +2,7 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.util.GraphicsClient;
 import it.polimi.ingsw.util.InputController;
+import it.polimi.ingsw.util.utilGUI.SelectSchemeGUI;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -11,11 +12,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 
 public class GUIView extends View {
 
-    private GraphicsClient graphicsClient;
+
     private InputController cliController;
     private GridPane grid;
     private Scene scene;
@@ -23,21 +23,24 @@ public class GUIView extends View {
     private double h = 800;
     private double v = 600;
 
+    private SelectSchemeGUI selectSchemeGUI;
+    private String privateAchievement;
+
 
     public GUIView() {
-        graphicsClient = new GraphicsClient();
+        setGraphicsClient( new GraphicsClient());
         cliController = new InputController();
     }
 
 
     @Override
     public void start() {
-        super.primaryStage.setTitle("Login Sagrada");
+        getPrimaryStage().setTitle("Login Sagrada");
         grid = new GridPane();
         grid.heightProperty().addListener((observable, oldValue, newValue) -> v= (double) newValue);
         grid.widthProperty().addListener((observable, oldValue, newValue) -> h= (double) newValue);
         scene = new Scene(grid,h,v);
-        super.primaryStage.setScene(scene);
+        getPrimaryStage().setScene(scene);
 
         ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/images/intro.jpg"),h*9/20,v/2,true,true));
 
@@ -45,7 +48,7 @@ public class GUIView extends View {
         grid.vgapProperty().bind(grid.heightProperty().divide(100));
         grid.hgapProperty().bind((grid.widthProperty().divide(50)));
 
-        Label label1 = new Label(graphicsClient.askNick());
+        Label label1 = new Label(getGraphicsClient().askNick());
         setSize(label1);
         label1.setAlignment(Pos.CENTER);
         GridPane.setConstraints(label1, 0, 2);
@@ -55,7 +58,7 @@ public class GUIView extends View {
         setSize(nickNameTextField);
         GridPane.setConstraints(nickNameTextField, 1, 2);
 
-        Label label2 = new Label(graphicsClient.printIP());
+        Label label2 = new Label(getGraphicsClient().printIP());
         setSize(label2);
         label2.setAlignment(Pos.CENTER);
         GridPane.setConstraints(label2, 2, 2);
@@ -65,7 +68,7 @@ public class GUIView extends View {
         setSize(ipAddressTextField);
         GridPane.setConstraints(ipAddressTextField, 3, 2);
 
-        Label label3 = new Label(graphicsClient.printPort());
+        Label label3 = new Label(getGraphicsClient().printPort());
         setSize(label3);
         label3.setAlignment(Pos.CENTER);
         GridPane.setConstraints(label3, 0, 3);
@@ -97,7 +100,7 @@ public class GUIView extends View {
         loginButton.setOnAction(event -> Platform.runLater(() -> {
             if (checkChoose(nickNameTextField, ipAddressTextField, portTextField)) {
                 setChoice(choiceBox.getValue().toString());
-                super.primaryStage.close();
+                Platform.runLater(()->getPrimaryStage().setScene(waitAnswer()));
                 createConnection();
 
 
@@ -119,7 +122,7 @@ public class GUIView extends View {
 
         grid.getChildren().addAll(label1, label2, label3, label4, nickNameTextField, ipAddressTextField, portTextField, loginButton, choiceBox,pane);
         grid.setStyle("-fx-background-color: darkkhaki");
-        primaryStage.show();
+        getPrimaryStage().show();
 
     }
 
@@ -145,7 +148,7 @@ public class GUIView extends View {
             if(nickNameTextField.getText().length()==0)
                 nickNameTextField.setPromptText("Inserire nickname!");
             else
-                nickNameTextField.setPromptText(graphicsClient.wrongNick());
+                nickNameTextField.setPromptText(getGraphicsClient().wrongNick());
             nickNameTextField.clear();
             allOk=false;
 
@@ -180,9 +183,33 @@ public class GUIView extends View {
 
     }
 
-    @Override
-    public void showInput(String s) {
+    private Scene waitAnswer(){
+        TextField textField = new TextField("Attendi risposta...");
+        textField.setAlignment(Pos.CENTER);
+        textField.setStyle("-fx-font-size: 30px;");
+        return  new Scene(textField,h,v);
 
+    }
+
+    @Override
+    public void loginSuccess(String s) {
+
+        Label label = new Label(s);
+        label.setAlignment(Pos.CENTER);
+        label.setStyle("-fx-font-size: 30px;");
+        Platform.runLater(()->getPrimaryStage().setScene(new Scene(label,h/2,v/2)));
+
+    }
+
+    @Override
+    public void showSchemes(String s) {
+        selectSchemeGUI = new SelectSchemeGUI(getPrimaryStage(),s,privateAchievement,getNickname());
+
+    }
+
+    @Override
+    public void showPrivateAchievement(String s) {
+        this.privateAchievement= s;
     }
 
     @Override

@@ -3,9 +3,13 @@ package it.polimi.ingsw.client;
 import it.polimi.ingsw.client.connection.rmi.RmiConnectionClient;
 import it.polimi.ingsw.client.connection.socket.SocketConnectionClient;
 import it.polimi.ingsw.client.interfaces.ClientInterface;
+import it.polimi.ingsw.util.GraphicsClient;
 import javafx.stage.Stage;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Observable;
@@ -15,6 +19,7 @@ import java.util.StringTokenizer;
 public abstract class View implements Observer {
 
     private ClientInterface connectionClient;
+    private GraphicsClient graphicsClient ;
     private String nickname;
     private String address;
     private String port;
@@ -22,14 +27,64 @@ public abstract class View implements Observer {
 
     private boolean chosenScheme = true;
     private boolean hasChosenScheme = false;
+    private boolean toolCtrl = true;
     private String schemes;
 
-    protected Stage primaryStage;
+    private Stage primaryStage;
 
 
     public abstract void start();
 
-    public abstract void showInput(String s);
+    public void showInput(String fromServer) {
+        if (fromServer.startsWith("You have logged in")) {
+            loginSuccess(fromServer);
+        }
+        else if (fromServer.startsWith("schemes. "))
+            showSchemes(fromServer);
+
+        else if (fromServer.startsWith("The game has started")) {
+            System.out.println(graphicsClient.printGeneric(fromServer));
+        }
+        else if (fromServer.startsWith("Terminate"))
+            System.out.println(graphicsClient.printContinue());
+        else if (fromServer.startsWith("Your private achievement is:"))
+            showPrivateAchievement(fromServer);
+
+        else if (fromServer.startsWith("Update")) {
+            JSONParser parser = new JSONParser();
+            try {
+                JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/up.json"));
+                String achievement = (String) jsonObject.get("Public Achievements");
+                graphicsClient.printAchivements(achievement);
+                String tool = (String) jsonObject.get("Tools");
+                if (toolCtrl) {
+                    getConnectionClient().setTool(tool);
+                    toolCtrl = false;
+                }
+                graphicsClient.printTool(tool);
+                String roundTrack = (String) jsonObject.get("Round track");
+                graphicsClient.printRoundTrack(roundTrack);
+                String draft = (String) jsonObject.get("Draft");
+                if(draft != null) graphicsClient.printDraft(draft);
+                String number = (String) jsonObject.get("numberPlayer");
+                int player = Integer.parseInt(number);
+                System.out.println(number);
+                for (int i = 0; i < player; i++) {
+                    String request = "scheme" + i;
+                    System.out.println(request);
+                    String scheme = (String) jsonObject.get(request);
+                    graphicsClient.printScheme(scheme);
+                }
+                System.out.println(graphicsClient.printRulesFirst());
+            } catch (IOException | ParseException e) {
+                System.err.println(e.toString());
+            }
+        }
+        else {
+            System.out.println(graphicsClient.printGeneric(fromServer));
+        }
+
+    }
 
     public abstract void showOutput(String s);
 
@@ -38,6 +93,18 @@ public abstract class View implements Observer {
     public abstract void setScheme();
 
     public abstract void continueToPlay(String s);
+
+
+
+    public abstract void loginSuccess(String s);
+
+    public abstract void showSchemes(String s);
+
+    public abstract void showPrivateAchievement(String s);
+
+
+
+
 
     public void createConnection(){
 
@@ -80,6 +147,10 @@ public abstract class View implements Observer {
 
     public void setChoice(String choice) {
         this.choice = choice;
+    }
+
+    public void setGraphicsClient(GraphicsClient graphicsClient) {
+        this.graphicsClient = graphicsClient;
     }
 
     public synchronized void update(Observable o, Object arg) {
@@ -145,6 +216,14 @@ public abstract class View implements Observer {
     public boolean getHasChosenScheme() { return this.hasChosenScheme; }
 
     public String getSchemes(){ return schemes;}
+
+    public GraphicsClient getGraphicsClient() {
+        return graphicsClient;
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
 
     public void start(Stage primaryStage){
         this.primaryStage=primaryStage;
