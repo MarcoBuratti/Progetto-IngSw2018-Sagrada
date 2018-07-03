@@ -22,6 +22,11 @@ public class Game extends Observable implements Runnable {
     private boolean gameEnded = false;
     private CliGraphicsServer cliGraphicsServer;
 
+    /**
+     * Creates a new Game Object having references to the server, the controller and all of the players and their connections.
+     * @param lobby the Lobby Object that created the new Game Object
+     * @param server the server
+     */
     public Game ( Lobby lobby, Server server ) {
         this.server = server;
         server.registerGame( this );
@@ -43,13 +48,16 @@ public class Game extends Observable implements Runnable {
         cliGraphicsServer = new CliGraphicsServer();
     }
 
-
+    /**
+     * Deletes references to the connection belonging to the player who's disconnected and communicates to the other players that he's disconnected.
+     * If the game has not ended and only one player is connected, calls the method gameFailed.
+     * @param remoteView the RemoteView Object belonging to the player who has disconnected
+     */
     synchronized void playerDisconnected ( RemoteView remoteView ) {
 
         for (RemoteView r : remoteViews)
-            if ( r != null && r != remoteView )
-                if ( r.getServerInterface() != null )
-                    r.send(remoteView.getPlayer().getNickname() + " has disconnected from the server.");
+            if ( r != null && r != remoteView && r.getServerInterface() != null)
+                r.send(remoteView.getPlayer().getNickname() + " has disconnected from the server.");
 
         this.serverInterfaces.remove( remoteView.getServerInterface() );
         remoteView.removeConnection();
@@ -59,6 +67,10 @@ public class Game extends Observable implements Runnable {
             gameFailed();
     }
 
+    /**
+     * Adds references to the connection belonging to the player who's reconnected and communicates to the other players that he's reconnected.
+     * @param remoteView the RemoteView Object belonging to the player who has reconnected
+     */
     synchronized void playerReconnected ( RemoteView remoteView ) {
 
         remoteView.showGameBoard( modelView );
@@ -71,14 +83,26 @@ public class Game extends Observable implements Runnable {
         this.addObserver( remoteView.getServerInterface() );
     }
 
-    public ArrayList<RemoteView> getRemoteViews() {
+    /**
+     * Returns the remoteViews attribute.
+     * @return a List of RemoteView Objects
+     */
+    public List<RemoteView> getRemoteViews() {
         return remoteViews;
     }
 
-    public ArrayList<Player> getPlayers() {
+    /**
+     * Returns the players attribute.
+     * @return a List of Player Objects
+     */
+    public List<Player> getPlayers() {
         return players;
     }
 
+    /**
+     * Communicates to the Controller, to the Server and to the connected player that the game has ended.
+     * It also closes the connected player's connection.
+     */
     private synchronized void gameFailed () {
 
         if (this.controller != null)
@@ -100,10 +124,14 @@ public class Game extends Observable implements Runnable {
 
     }
 
+    /**
+     * Launches a timer. When the time is over, the schemeChoiceTimeOut method is called.
+     */
     private void schemeChoiceTimer () {
         final int schemeChoiceTime = 10 * 1000;
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
+
             @Override
             public void run() {
                 if (!schemeChosen)
@@ -113,15 +141,26 @@ public class Game extends Observable implements Runnable {
         }, schemeChoiceTime);
     }
 
+    /**
+     * Sets schemeChosen as true and notifies all ( unlocking wait ).
+     */
     private synchronized void schemeChoiceTimeOut () {
         schemeChosen = true;
         notifyAll();
     }
 
+    /**
+     * Returns the schemeChosen attribute.
+     * @return a boolean
+     */
     public boolean isSchemeChosen() {
         return schemeChosen;
     }
 
+    /**
+     * Returns a String containing four scheme names, extracting theme randomly from the schemes attribute.
+     * @return a String
+     */
     public synchronized String selectSchemes() {
         StringBuilder bld = new StringBuilder();
         bld.append(this.schemes.get(0).getFirstScheme());
@@ -136,19 +175,25 @@ public class Game extends Observable implements Runnable {
         return bld.toString();
     }
 
+    /**
+     * Returns a Color Object representing the extracted private achievement for the player.
+     * @return a Color Object
+     */
     public synchronized Color selectPrivateAchievement() {
         Color privateAchievement = this.privateAchievements.get(0);
         this.privateAchievements.remove(0);
         return privateAchievement;
     }
 
+    /**
+     * Manages the end of the game ( making the server deregister all the players who have played the game ).
+     */
     private synchronized void endGame() {
 
         for ( RemoteView r: remoteViews ) {
             server.removeRemoteView( r );
             Player p = r.getPlayer();
             server.removeNickname( p.getNickname() );
-            server.removePlayer( p );
             if ( r.getServerInterface() != null )
                 server.removeServerInterface( r.getServerInterface() );
         }
@@ -160,6 +205,9 @@ public class Game extends Observable implements Runnable {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void run() {
         System.out.println("A new game is about to start!");
@@ -196,7 +244,7 @@ public class Game extends Observable implements Runnable {
             cliGraphicsServer.printStart();
             String winner = this.controller.startGame();
             if ( controller.isGameEnded() ) {
-                setGameEnded(true);
+                setGameEnded();
                 tempServerInterfaces = new ArrayList<>(serverInterfaces);
                 for (ServerInterface serverInterface : tempServerInterfaces) {
                     serverInterface.close();
@@ -211,11 +259,18 @@ public class Game extends Observable implements Runnable {
         }
     }
 
+    /**
+     * Returns the gameEnded attribute.
+     * @return a boolean specifying whether the game has ended or not.
+     */
     private synchronized boolean isGameEnded() {
         return gameEnded;
     }
 
-    private synchronized void setGameEnded(boolean gameEnded) {
-        this.gameEnded = gameEnded;
+    /**
+     * Allows the user to set the gameEnded attribute as true.
+     */
+    private synchronized void setGameEnded() {
+        this.gameEnded = true;
     }
 }

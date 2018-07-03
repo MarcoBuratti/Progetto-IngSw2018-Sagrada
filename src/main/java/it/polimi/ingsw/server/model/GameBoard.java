@@ -31,7 +31,7 @@ public class GameBoard extends Observable {
 
     public GameBoard( List<Player> players) {
 
-        this.players = new ArrayList<>(players);
+        this.players = (ArrayList<Player>) players;
         publicAchievements = new ArrayList<>();
         tools = new ArrayList<>();
 
@@ -124,7 +124,7 @@ public class GameBoard extends Observable {
      * @param draftPool the new draft pool created at the start of the round
      */
     public void setDraftPool(List<Die> draftPool) {
-        this.draftPool = new ArrayList<>(draftPool);
+        this.draftPool = (ArrayList<Die>) draftPool;
         setChanged();
         notifyObservers(this);
     }

@@ -3,7 +3,6 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.server.model.GameBoard;
 import it.polimi.ingsw.server.model.Player;
 
-import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -11,15 +10,18 @@ public class ModelView extends Observable implements Observer {
 
     private GameBoard model;
 
-    public void setModel(GameBoard model) {
-        this.model = model;
-    }
-
+    /**
+     * Creates a ModelView Object which allows the user to send updates of the model to the players.
+     * @param gameBoard the model
+     */
     ModelView(GameBoard gameBoard) {
         this.model = gameBoard;
         this.model.addObserver(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(Observable o, Object arg) {
         this.model = (GameBoard) o;
@@ -27,6 +29,9 @@ public class ModelView extends Observable implements Observer {
         notifyObservers();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         StringBuilder bld = new StringBuilder();

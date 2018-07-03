@@ -27,7 +27,7 @@ public class Round implements Observer {
     }
 
     void initializeDraftPool() throws NotEnoughDiceLeftException {
-        ArrayList<Die> draftPool = new ArrayList<>(gameBoard.getDiceBag().extractSet(draftPoolCapacity));
+        ArrayList<Die> draftPool = (ArrayList<Die>) gameBoard.getDiceBag().extractSet(draftPoolCapacity);
         this.gameBoard.setDraftPool(draftPool);
     }
 
