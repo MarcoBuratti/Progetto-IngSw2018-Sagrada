@@ -1,7 +1,10 @@
 package it.polimi.ingsw.server.model.achievement;
 
-public class CardFactory extends AbstractCardFactory {
+public class CardFactory implements AbstractCardFactory {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CardAchievement extractCardAchievement(PublicAchievementNames publicAchievementNames) {
 

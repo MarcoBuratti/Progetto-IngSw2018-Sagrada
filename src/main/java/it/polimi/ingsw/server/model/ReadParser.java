@@ -21,10 +21,20 @@ class ReadParser {
     private static long favourToken;
     private static final JSONParser parser = new JSONParser();
 
+    /**
+     * Private constructor that throws an IllegalStateException when called.
+     * This is a static class.
+     */
     private ReadParser () {
         throw new IllegalStateException();
     }
 
+    /**
+     * Static method that allows the user to set a Dashboard's scheme and favour tokens.
+     * This method uses the parser to read the scheme to write on the matrix from JSON files.
+     * @param dashboard the Dashboard of which scheme and favour tokens must be set
+     * @param schemeName the name of the selected scheme
+     */
     static synchronized void createMatrixFromScheme(Dashboard dashboard, String schemeName) {
         try {
             matrixScheme = new Cell[ROW][COLUMN];
@@ -50,6 +60,10 @@ class ReadParser {
         }
     }
 
+    /**
+     * Returns a copy of the matrixScheme attribute
+     * @return a matrix of Cell Objects
+     */
     private static Cell[][] getMatrixSchemeCopy () {
         Cell[][] matrixSchemeCopy = new Cell[ROW][COLUMN];
         try {
@@ -61,11 +75,6 @@ class ReadParser {
         }
 
         return matrixSchemeCopy;
-    }
-
-
-    static long getFavourToken() {
-        return favourToken;
     }
 
 

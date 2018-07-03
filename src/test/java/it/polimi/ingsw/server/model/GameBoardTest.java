@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameBoardTest {
     @Test
-    public void gameBoardTest() throws NotValidValueException {
+    void gameBoardTest() throws NotValidValueException {
         ArrayList<Player> playersList = new ArrayList<>();
         Player player;
         player = new Player ( "christian");
@@ -37,9 +37,9 @@ class GameBoardTest {
         assertEquals("sergio", gameBoard.getPlayers().get(2).getNickname());
         assertEquals("christian", gameBoard.getPlayers().get(0).getNickname());
         assertEquals("marco", gameBoard.getPlayers().get(1).getNickname());
-        assertTrue(new Dashboard("Aurora_Sagradis").equalsScheme(gameBoard.getPlayers().get(2).getDashboard()));
-        assertTrue(new Dashboard("Chromatic_Splendor").equalsScheme(gameBoard.getPlayers().get(0).getDashboard()));
-        assertTrue(new Dashboard("Fulgor_del_Cielo").equalsScheme(gameBoard.getPlayers().get(1).getDashboard()));
+        assertTrue(new FakeDashboard("Aurora_Sagradis").equalsScheme(gameBoard.getPlayers().get(2).getDashboard()));
+        assertTrue(new FakeDashboard("Chromatic_Splendor").equalsScheme(gameBoard.getPlayers().get(0).getDashboard()));
+        assertTrue(new FakeDashboard("Fulgor_del_Cielo").equalsScheme(gameBoard.getPlayers().get(1).getDashboard()));
         assertNotNull(gameBoard.getPlayers().get(0).getPrivateAchievement());
         assertEquals(4, gameBoard.getPlayers().get(0).getCurrentFavourToken());
         assertEquals(3, gameBoard.getPublicAchievements().size());

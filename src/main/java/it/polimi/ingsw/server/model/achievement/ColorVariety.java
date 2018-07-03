@@ -12,6 +12,12 @@ public class ColorVariety implements CardAchievement {
 
     private Map<Color, Integer> counter = new EnumMap<>(Color.class);
 
+    /**
+     * Returns an int representing the score effect associated with the Color Variety Achievement.
+     * The return value is the count of sets of one of each color anywhere multiplied by four.
+     * @param dashboard the dashboard of the player whose score is being calculated
+     * @return an int representing a score effect
+     */
     @Override
     public int scoreEffect(Dashboard dashboard) {
 
@@ -32,6 +38,9 @@ public class ColorVariety implements CardAchievement {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return "Color Variety: Sets of one of each color anywhere.!";

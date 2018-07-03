@@ -21,44 +21,51 @@ public class PlacementCheck {
     }
 
     /**
-     *
-     * @param die1
-     * @param die2
-     * @return
+     * Returns a boolean which specifies whether two dice have the same color or not.
+     * @param die1 the first Die Object
+     * @param die2 the second Die Object
+     * @return a boolean
      */
     public boolean checkDiceColor(Die die1, Die die2) {
         return (die1.getColor() == die2.getColor());
     }
 
     /**
-     * control if two dice has the same number, return false if is different
-     *
-     * @param die1
-     * @param die2
-     * @return
+     * Returns a boolean which specifies whether two dice have the same value or not.
+     * @param die1 the first Die Object
+     * @param die2 the second Die Object
+     * @return a boolean
      */
     boolean checkDiceNumber(Die die1, Die die2) {
         return (die1.getNumber() == die2.getNumber());
     }
 
     /**
-     * the method allowedNeighbours checks if the "neighbors" (above, below, right, left)
-     * have common characters, same color or same number
-     * it return false if one the condition is verified, true otherwise
-     *
-     * @param row
-     * @param column
-     * @param myDie
-     * @param matrixScheme
-     * @return
+     * Checks if any of the dice placed near the selected position ( diagonals are not considered ) have the same color
+     * or value as the selected die.
+     * @param row the row of the considered position
+     * @param column the column of the considered position
+     * @param myDie the die the user wants to place
+     * @param matrixScheme the matrix of Cell Objects
+     * @return a boolean specifying whether there is any die having the same color or value as myDie parameter placed
+     * near the selected position ( coordinates: row, column ) on matrixScheme or not. Diagonals are not considered.
      */
     public boolean allowedNeighbours(int row, int column, Die myDie, Cell[][] matrixScheme) {
 
-        return allowedNeighboursRow(row, column, myDie, matrixScheme) && allowedNeighboursColumn(row, column, myDie, matrixScheme);
+        return allowedNeighboursColumn(row, column, myDie, matrixScheme) && allowedNeighboursRow(row, column, myDie, matrixScheme);
 
     }
 
-    private boolean allowedNeighboursRow (int row, int column, Die myDie, Cell[][] matrixScheme) {
+    /**
+     * This private method checks if any of the dice placed on the same column as the column parameter have
+     * the same color or value as the selected die.
+     * @param row the row of the considered position
+     * @param column the column of the considered position
+     * @param myDie the die the user wants to place
+     * @param matrixScheme the matrix of Cell Objects
+     * @return a boolean
+     */
+    private boolean allowedNeighboursColumn(int row, int column, Die myDie, Cell[][] matrixScheme) {
         if (row > 0 && matrixScheme[row - 1][column].getUsedCell()) {
             Die die = matrixScheme[row - 1][column].getDie();
             if (checkDiceColor(myDie, die) || checkDiceNumber(myDie, die))
@@ -71,7 +78,16 @@ public class PlacementCheck {
         return true;
     }
 
-    private boolean allowedNeighboursColumn (int row, int column, Die myDie, Cell[][] matrixScheme) {
+    /**
+     * This private method checks if any of the dice placed on the same row as the column parameter have
+     * the same color or value as the selected die.
+     * @param row the row of the considered position
+     * @param column the column of the considered position
+     * @param myDie the die the user wants to place
+     * @param matrixScheme the matrix of Cell Objects
+     * @return a boolean
+     */
+    private boolean allowedNeighboursRow(int row, int column, Die myDie, Cell[][] matrixScheme) {
         if (column > 0 && matrixScheme[row][column - 1].getUsedCell()) {
             Die die = matrixScheme[row][column - 1].getDie();
             if (checkDiceColor(myDie, die) || checkDiceNumber(myDie, die))
@@ -84,53 +100,25 @@ public class PlacementCheck {
         return true;
     }
 
-    /**
-     * performs a generic check through the methods previously defined
-     * if there are no particular constraints
-     *
-     * @param row
-     * @param column
-     * @param myDie
-     * @param matrixScheme
-     * @return
-     */
-    public boolean genericCheck(int row, int column, Die myDie, Cell[][] matrixScheme) {
-
-        if (!matrixScheme[row][column].allowedMove(myDie))
-            return false;
-        if (!nearBy(row, column, matrixScheme))
-            return false;
-
-        return allowedNeighbours(row, column, myDie, matrixScheme);
-    }
 
     /**
-     * check if there are any neighbors to be able to place the die, it does not control any kind of restriction
-     * return true if the die can be place, false if can't
-     *
-     * @param row
-     * @param column
-     * @param matrixScheme
-     * @return
+     * Returns a boolean which specifies if the selected coordinates are acceptable for the player's first placement move.
+     * If the matrix is empty, you can place a die only along the borders.
+     * @param row the row of the position where the user wants to place his die
+     * @param column the column of the position where the user wants to place his die
+     * @return a boolean
      */
-    public boolean nearBy(int row, int column, Cell[][] matrixScheme) {
-
-
-        if (isEmpty(matrixScheme)) {
-
-            return firstMove( row, column );
-
-        } else {
-
-            return neighbourOccupiedCell(row, column, matrixScheme);
-
-        }
-    }
-
     public boolean firstMove ( int row, int column ) {
         return row == 0 || row == 3 || column == 0 || column == 4;
     }
 
+    /**
+     * Checks if any of the cells near the selected position ( diagonals considered ) is occupied.
+     * @param row the row of the considered position
+     * @param column the column of the considered position
+     * @param matrixScheme the matrix of Cell Objects
+     * @return a boolean
+     */
     public boolean neighbourOccupiedCell ( int row, int column, Cell[][] matrixScheme ) {
 
         boolean cond1;
@@ -157,6 +145,46 @@ public class PlacementCheck {
         }
 
         return false;
+    }
+
+    /**
+     * Checks if it's possible to place a generic die on the selected position of the matrix.
+     * As we're considering a generic die, we're not checking if the die is compatible with the restriction on the selected cell.
+     * @param row the row of the considered position
+     * @param column the column of the considered position
+     * @param matrixScheme the matrix of Cell Objects
+     * @return a boolean
+     */
+    public boolean nearBy(int row, int column, Cell[][] matrixScheme) {
+
+
+        if (isEmpty(matrixScheme)) {
+
+            return firstMove( row, column );
+
+        } else {
+
+            return neighbourOccupiedCell(row, column, matrixScheme);
+
+        }
+    }
+
+    /**
+     * Checks whether it's possible to place the selected die on the selected position of the matrix or not.
+     * @param row the row of the considered position
+     * @param column the column of the considered position
+     * @param matrixScheme the matrix of Cell Objects
+     * @param myDie the die the user wants to place on the selected position
+     * @return a boolean
+     */
+    public boolean genericCheck(int row, int column, Die myDie, Cell[][] matrixScheme) {
+
+        if (!matrixScheme[row][column].allowedMove(myDie))
+            return false;
+        if (!nearBy(row, column, matrixScheme))
+            return false;
+
+        return allowedNeighbours(row, column, myDie, matrixScheme);
     }
 
 }

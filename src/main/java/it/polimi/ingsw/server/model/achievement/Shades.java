@@ -8,11 +8,28 @@ public class Shades implements CardAchievement {
     private int number1;
     private int number2;
 
-    public Shades(int number1, int number2) {
+    /**
+     * Shades gather three Achievements together: Dark Shades, Medium Shades, Light Shades.
+     * The int attributes are used to create an instance of the class representing one of the three Achievements.
+     * @param number1 the first number the selected Achievement makes reference to
+     * @param number2 the second number the selected Achievement makes reference to
+     */
+    Shades(int number1, int number2) {
         this.number1 = number1;
         this.number2 = number2;
     }
 
+    /**
+     * Returns an int representing the score effect associated with one of the Shades Achievement.
+     * The return value is the number of sets of:
+     * - 1 & 2 for Light Shades Achievement
+     * - 3 & 4 for Medium Shades Achievement
+     * - 5 & 6 for Dark Shades Achievement
+     *          multiplied by two.
+     * @param dashboard the dashboard of the player whose score is being calculated
+     * @return an int representing a score effect
+     */
+    @Override
     public int scoreEffect(Dashboard dashboard) {
 
         Cell[][] matrixScheme = dashboard.getMatrixScheme();
@@ -34,6 +51,9 @@ public class Shades implements CardAchievement {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         String string;

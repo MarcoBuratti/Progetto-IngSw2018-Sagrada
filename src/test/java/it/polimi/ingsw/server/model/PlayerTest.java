@@ -18,7 +18,7 @@ class PlayerTest {
         assertEquals(nickname, player.getNickname());
         assertEquals(3, player.getCurrentFavourToken());
         assertEquals(privateAchievement.toString(), player.getPrivateAchievement().toString());
-        assertTrue(player.getDashboard().equalsScheme(new Dashboard("Scheme_Test")));
+        assertTrue(new FakeDashboard("Scheme_Test").equalsScheme( player.getDashboard() ));
         assertTrue(player.hasEnoughToken(false));
         assertTrue(player.hasEnoughToken(true));
         player.useToken(true);

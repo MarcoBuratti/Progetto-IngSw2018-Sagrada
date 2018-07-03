@@ -30,7 +30,7 @@ class DieTest {
         assertEquals(Color.GREEN, myDie1.getColor());
         Die myDie2 = new Die(Color.values()[2]);
         assertEquals(Color.valueOf("BLUE"), myDie2.getColor());
-        assertFalse(myDie1.getColor().equals(myDie2.getColor()));
+        assertNotEquals(myDie1.getColor(), myDie2.getColor());
         myDie2 = new Die(Color.GREEN);
         assertTrue(myDie1.getColor().equals(myDie2.getColor()));
     }
