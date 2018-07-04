@@ -1,18 +1,7 @@
 package it.polimi.ingsw.server.model;
 
 import it.polimi.ingsw.server.model.exception.NotValidParametersException;
-import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import it.polimi.ingsw.server.model.exception.OccupiedCellException;
-import it.polimi.ingsw.server.model.restriction.AbstractRestriction;
-import it.polimi.ingsw.server.model.restriction.RestrictionEnum;
-import it.polimi.ingsw.server.model.restriction.RestrictionFactory;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import java.io.FileReader;
-import java.io.IOException;
 
 public class Dashboard {
     private static final int ROW = 4;
@@ -26,7 +15,7 @@ public class Dashboard {
      * @param schemeName the name of the selected scheme
      */
     public Dashboard ( String schemeName ) {
-        ReadParser.createMatrixFromScheme(this, schemeName);
+        DashboardParser.createMatrixFromScheme(this, schemeName);
     }
 
     /**

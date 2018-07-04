@@ -8,6 +8,7 @@ import it.polimi.ingsw.server.model.GameBoard;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.exception.NotValidParametersException;
 import it.polimi.ingsw.server.model.exception.OccupiedCellException;
+import it.polimi.ingsw.util.TimeParser;
 
 import java.util.Optional;
 import java.util.Timer;
@@ -17,7 +18,7 @@ public class Turn {
 
 
     private final boolean secondTurn;
-    private int timeTurn;
+    private long time;
     private String moveType;
     private boolean turnOver;
     private boolean waitMove;
@@ -27,6 +28,7 @@ public class Turn {
     private RemoteView remoteView;
     private GameBoard gameBoard;
     private PlayerMove playerMove;
+    private static final String TURN_TIMER = "Turn_Timer";
 
     /**
      * Creates a new Turn, setting its attribute as the ones of the Round which called the constructor.
@@ -45,7 +47,14 @@ public class Turn {
         this.player = player;
         this.remoteView = remoteView;
         this.gameBoard = gameBoard;
-        this.timeTurn = 90 * 1000;
+        setTime();
+    }
+
+    /**
+     * Calls a static method of the class TimeParser in order to read the time from a json file.
+     */
+    private synchronized void setTime () {
+        this.time = TimeParser.readTime(TURN_TIMER);
     }
 
     /**
@@ -179,7 +188,7 @@ public class Turn {
                     timeOut();
                 }
             }
-        }, this.timeTurn);
+        }, this.time);
     }
 
     /**

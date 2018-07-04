@@ -13,7 +13,7 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.IOException;
 
-class ReadParser {
+class DashboardParser {
     private static final int ROW = 4;
     private static final int COLUMN = 5;
 
@@ -24,7 +24,7 @@ class ReadParser {
      * Private constructor that throws an IllegalStateException when called.
      * This is a static class.
      */
-    private ReadParser () {
+    private DashboardParser() {
         throw new IllegalStateException();
     }
 

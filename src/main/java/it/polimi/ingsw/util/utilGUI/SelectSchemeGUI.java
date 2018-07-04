@@ -1,6 +1,6 @@
 package it.polimi.ingsw.util.utilGUI;
 
-import it.polimi.ingsw.util.ParserScheme;
+import it.polimi.ingsw.util.SchemeParser;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -69,7 +69,7 @@ public class SelectSchemeGUI {
             b[k] = new Button();
             b[k].setPrefSize(H/3.5,H/3.5);
             b[k].setAlignment(Pos.CENTER);
-            ParserScheme parser = new ParserScheme(schemes[k]);
+            SchemeParser parser = new SchemeParser(schemes[k]);
 
             b[k].setGraphic(UtilGUI.drawScheme(parser.getName(),parser.getToken(),UtilGUI.drawLabelScheme(parser.getStringScheme(),H/20,false),H));
             String numberChoose = String.valueOf(k + 1);

@@ -79,7 +79,7 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
     @Override
     public void setPlayerAndAskScheme(Message message) throws RemoteException {
 
-        this.player = new Player( message.getMessage());
+        this.player = new Player( message.getContent());
         boolean firstLog = !server.alreadyLoggedIn(this);
 
         if ( firstLog ) {
@@ -104,8 +104,8 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         try {
             boolean schemeChosen = game.isSchemeChosen();
             if (!schemeChosen) {
-                this.player.setDashboard(message.getMessage());
-                this.send("You have chosen the following scheme: " + message.getMessage() + "\n" + this.player.getDashboard().toString() + "\nPlease wait, the game will start soon.");
+                this.player.setDashboard(message.getContent());
+                this.send("You have chosen the following scheme: " + message.getContent() + "\n" + this.player.getDashboard().toString() + "\nPlease wait, the game will start soon.");
             } else {
                 this.send("Too late! Your scheme is: " + defaultScheme + "\n" + this.player.getDashboard().toString() + "\nThe game has already started!");
             }

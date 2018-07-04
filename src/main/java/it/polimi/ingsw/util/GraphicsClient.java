@@ -83,10 +83,10 @@ public class GraphicsClient {
         System.out.println(printRequest() + "\n");
         String[] choice = substringSchemes.split(",");
         for (int i = 0; i < 4; i++) {
-            ParserScheme parserScheme = new ParserScheme(choice[i]);
-            System.out.println(i + 1 + ") " + "Nome: " + parserScheme.getName());
-            System.out.println("Token: " + parserScheme.getToken());
-            System.out.println(parserScheme.getStringScheme());
+            SchemeParser schemeParser = new SchemeParser(choice[i]);
+            System.out.println(i + 1 + ") " + "Nome: " + schemeParser.getName());
+            System.out.println("Token: " + schemeParser.getToken());
+            System.out.println(schemeParser.getStringScheme());
         }
 
     }

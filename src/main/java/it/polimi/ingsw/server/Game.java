@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.SchemeCardsEnum;
 import it.polimi.ingsw.util.CliGraphicsServer;
+import it.polimi.ingsw.util.TimeParser;
 
 import java.util.*;
 
@@ -21,6 +22,8 @@ public class Game extends Observable implements Runnable {
     private boolean schemeChosen = false;
     private boolean gameEnded = false;
     private CliGraphicsServer cliGraphicsServer;
+    private long schemeChoiceTime;
+    private static final String SCHEME_CHOICE_TIMER = "Scheme_Choice_Timer";
 
     /**
      * Creates a new Game Object having references to the server, the controller and all of the players and their connections.
@@ -45,7 +48,15 @@ public class Game extends Observable implements Runnable {
             }
         }
 
+        setTime();
         cliGraphicsServer = new CliGraphicsServer();
+    }
+
+    /**
+     * Calls a static method of the class TimeParser in order to read the time from a json file.
+     */
+    private synchronized void setTime () {
+        this.schemeChoiceTime = TimeParser.readTime(SCHEME_CHOICE_TIMER);
     }
 
     /**
@@ -128,7 +139,7 @@ public class Game extends Observable implements Runnable {
      * Launches a timer. When the time is over, the schemeChoiceTimeOut method is called.
      */
     private void schemeChoiceTimer () {
-        final int schemeChoiceTime = 10 * 1000;
+
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
 

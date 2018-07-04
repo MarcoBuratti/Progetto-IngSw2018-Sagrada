@@ -6,8 +6,8 @@ public class ClientController {
     public ToolClient [] tool;
 
     public void setTool(String s) {
-        ParserTool parserTool = new ParserTool(s);
-        tool = parserTool.getToolClients();
+        ToolParser toolParser = new ToolParser(s);
+        tool = toolParser.getToolClients();
     }
 
     public boolean firstInput(String s) {

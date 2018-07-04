@@ -6,7 +6,6 @@ import it.polimi.ingsw.util.ClientController;
 import it.polimi.ingsw.util.GraphicsClient;
 import it.polimi.ingsw.util.TypeMove;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -20,10 +19,6 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
     private View view;
     private String toolIndex;
     private String index;
-    private String RowColumn;
-    private String PlusMin;
-    private String DieNum;
-    private String roundTrackIndex;
     private boolean moveCtrl;
     private boolean continueToPlay = false;
     private boolean isOn = true;
@@ -134,13 +129,14 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
 
     public void setRowColumn() {
         moveCtrl = true;
+        String rowColumn;
         do {
             view.showOutput( graphicsClient.printRulesMatrix() );
-            RowColumn = view.getInput();
-            moveCtrl = thirdInputDie(RowColumn);
+            rowColumn = view.getInput();
+            moveCtrl = thirdInputDie(rowColumn);
         } while (moveCtrl);
         System.out.println("dentro row");
-        concatMove(RowColumn);
+        concatMove(rowColumn);
     }
 
     public void setToolIndex(){
@@ -154,27 +150,30 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
     //USATO PER TOOL
     public void setPlusMin(){
         moveCtrl = true;
+        String plusMin;
         do {
             view.showOutput( graphicsClient.printPlusMin() );
-            PlusMin = view.getInput();
-            moveCtrl = plusMin(PlusMin);
+            plusMin = view.getInput();
+            moveCtrl = plusMin(plusMin);
         } while (moveCtrl);
-        concatMove(PlusMin);
+        concatMove(plusMin);
     }
     //USATO PER TOOL
     public void setDieNum(){
         moveCtrl = true;
+        String dieNum;
         do {
             view.showOutput( graphicsClient.printDieNum() );
-            DieNum = view.getInput();
-            moveCtrl = setDieNum(DieNum);
+            dieNum = view.getInput();
+            moveCtrl = setDieNum(dieNum);
         } while (moveCtrl);
 
-        concatMove(DieNum);
+        concatMove(dieNum);
     }
     //USATO PER TOOL
     public void setRoundTrackIndex(){
         moveCtrl = true;
+        String roundTrackIndex;
         do {
             view.showOutput( graphicsClient.printRoundDie() );
             roundTrackIndex = view.getInput();
