@@ -271,23 +271,6 @@ public class PlayerMove implements Serializable {
         return moveType;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        switch (moveType) {
-            case PLACE_DIE:
-                return "Die:" + this.indexDie + " " + "coordinates:" + this.intParameters;
-            case GO_THROUGH:
-                return "Go Through";
-            case USE_TOOL:
-                return "Use Tool";
-            default:
-                return "";
-        }
-
-    }
 }
 
 

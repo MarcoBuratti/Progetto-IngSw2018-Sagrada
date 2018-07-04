@@ -26,6 +26,12 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
     private boolean gameStarted = false;
     private boolean isOn;
 
+    /**
+     * Creates a new server thread associated with the socket client connection.
+     * @param socket the socket used to communicate with the client
+     * @param server the server
+     * @throws IOException if it's impossible to get the input stream and/or the output stream from the socket
+     */
     public SocketConnectionServer(Socket socket, Server server) throws IOException {
         this.socket = socket;
         this.server = server;
@@ -34,19 +40,25 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         isOn = true;
     }
 
+    /**
+     * Sends to the client a message communicating that the player has been disconnected and sets the isOn attribute as false.
+     */
     private synchronized void setOff() {
         send("You've been disconnected successfully.");
         this.isOn = false;
     }
 
-
+    /**
+     * Writes on a json file the content of the String jsonContent.
+     * @param jsonContent a message received from client that needs to be written on a json file
+     */
     private synchronized void read(String jsonContent) {
         StringTokenizer strtok = new StringTokenizer(jsonContent);
-        String key, value;
+        String key;
         JSONObject jsonObject = new JSONObject();
         while (strtok.hasMoreTokens()) {
             key = strtok.nextToken();
-            value = strtok.nextToken();
+            String value = strtok.nextToken();
             jsonObject.put(key, value);
         }
         try (FileWriter lastPlayerMove = new FileWriter("src/main/files/LastPlayerMove.json")) {
@@ -56,12 +68,23 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         }
     }
 
+    /**
+     * Private method used to send the schemes to the player, waiting for his answer.
+     * @param schemes the extracted schemes
+     * @return the player's choice
+     * @throws IOException due to input stream problems
+     */
     private String askForChosenScheme(String schemes) throws IOException {
         this.send("schemes. " + schemes);
         return in.readLine();
     }
 
-
+    /**
+     * Sets a default scheme before sending to the player the extracted scheme in order to set a scheme
+     * in case the player makes his choice too late.
+     * @param schemes the String containing the schemes
+     * @return the name of the default scheme
+     */
     private String defaultScheme(String schemes) {
         StringTokenizer strtok = new StringTokenizer(schemes, ",");
         String defaultScheme = strtok.nextToken();
@@ -73,7 +96,9 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         return defaultScheme;
     }
 
-
+    /**
+     * Locks the thread waiting for the attribute gameStarted to be set as true.
+     */
     private synchronized void waitGameStart() {
         while (!gameStarted) {
             try {
@@ -84,7 +109,9 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         }
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void run() {
         try {
@@ -120,7 +147,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
                 } else {
                     read(message);
                     PlayerMove newMove = PlayerMove.playerMoveConstructor();
-                    send("Trying to make the following move: " + newMove.toString() + " ...");
+                    send("Trying to make the move ...");
                     setChanged();
                     notifyObservers(newMove);
                 }
@@ -130,27 +157,42 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public synchronized void setGame(Game game) {
         this.game = game;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setPlayer(Player player) {
         this.player = player;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void send(String message) {
         out.println(message);
         out.flush();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void close() {
 
@@ -165,6 +207,9 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         server.deregisterConnection(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public synchronized void update(Observable o, Object arg) {
         gameStarted = true;

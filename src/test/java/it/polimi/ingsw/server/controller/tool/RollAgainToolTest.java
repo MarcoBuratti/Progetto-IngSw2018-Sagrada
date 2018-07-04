@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-class RerollToolTest {
+class RollAgainToolTest {
 
     @Test
     void toolEffect() throws NotValidValueException {
@@ -43,13 +43,13 @@ class RerollToolTest {
         gameBoard.setDraftPool(testDraftPool);
         System.out.println(gameBoard.getDraftPool());
 
-        RerollTool rerollTool =new RerollTool(false, ToolNames.GLAZING_HAMMER);
+        RollAgainTool rollAgainTool =new RollAgainTool(false, ToolNames.GLAZING_HAMMER);
         Turn turn = new Turn(null, gameBoard.getPlayers().get(0), gameBoard, false);
         String nickname = gameBoard.getPlayers().get(0).getNickname();
         PlayerMove playerMove = new PlayerMove(nickname,"UseTool", 5);
-        Assertions.assertFalse(rerollTool.toolEffect(turn,playerMove));
+        Assertions.assertFalse(rollAgainTool.toolEffect(turn,playerMove));
         Turn turn1 = new Turn(null, gameBoard.getPlayers().get(0), gameBoard, true);
-        Assertions.assertTrue(rerollTool.toolEffect(turn1,playerMove));
+        Assertions.assertTrue(rollAgainTool.toolEffect(turn1,playerMove));
         System.out.println(gameBoard.getDraftPool());
 
     }

@@ -16,8 +16,7 @@ import java.util.StringTokenizer;
 
 public class RmiConnectionClient extends ConnectionClient implements RmiClientInterface {
 
-    RmiControllerInterface server;
-    RmiServerInterface channel;
+    private RmiServerInterface channel;
     private String playerNickname;
 
     /**
@@ -29,7 +28,7 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
     public RmiConnectionClient(View view, String address, int port) {
         this.addObserver(view);
         try {
-            server = (RmiControllerInterface) Naming.lookup("//" + address + "/Server");
+            RmiControllerInterface server = (RmiControllerInterface) Naming.lookup("//" + address + "/Server");
             channel = server.addClient((RmiClientInterface) UnicastRemoteObject.exportObject(this, port));
             super.setView(view);
         } catch (Exception e) {

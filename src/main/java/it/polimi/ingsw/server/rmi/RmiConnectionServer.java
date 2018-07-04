@@ -12,7 +12,6 @@ import it.polimi.ingsw.server.model.achievement.PrivateAchievement;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
 import it.polimi.ingsw.util.Message;
 
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Observable;
 import java.util.StringTokenizer;
@@ -26,12 +25,19 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
     private boolean gameStarted = false;
     private String defaultScheme;
 
-
-    public RmiConnectionServer(RmiClientInterface connectionClientRMI, Server server) {
+    /**
+     * Creates a new server thread associated with the rmi client connection.
+     * @param connectionClientRMI the reference to the client connection
+     * @param server the server
+     */
+    RmiConnectionServer(RmiClientInterface connectionClientRMI, Server server) {
         this.client = connectionClientRMI;
         this.server = server;
     }
 
+    /**
+     * Locks the thread waiting for the attribute gameStarted to be set as true.
+     */
     private synchronized void waitGameStart() {
         while (!gameStarted) {
             try {
@@ -42,30 +48,57 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         }
     }
 
+    /**
+     * Sends the schemes to the player.
+     * @param schemes a String containing the extracted schemes
+     */
+    private synchronized void askForChosenScheme(String schemes) {
+        this.send("schemes. " + schemes);
+    }
 
+    /**
+     * Sets a default scheme before sending to the player the extracted scheme in order to set a scheme
+     * in case the player makes his choice too late.
+     * @param schemes the String containing the schemes
+     * @return the name of the default scheme
+     */
+    private String defaultScheme(String schemes) {
+        StringTokenizer strtok = new StringTokenizer(schemes, ",");
+        String defaultScheme = strtok.nextToken();
+        try {
+            this.player.setDashboard(defaultScheme);
+        } catch (NotValidValueException e) {
+            e.printStackTrace();
+        }
+        return defaultScheme;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setPlayerAndAskScheme(Message message) throws RemoteException {
 
         this.player = new Player( message.getMessage());
         boolean firstLog = !server.alreadyLoggedIn(this);
 
-        try {
-            if ( firstLog ) {
-                server.registerConnection(this);
-                waitGameStart();
-                String schemes = game.selectSchemes();
-                this.defaultScheme = defaultScheme(schemes);
-                Color privateAchievementColor = game.selectPrivateAchievement();
-                this.player.setPrivateAchievement(new PrivateAchievement(privateAchievementColor));;
-                this.send("Your private achievement is: " + privateAchievementColor);
-                askForChosenScheme(schemes);
-            } else
-                server.registerConnection(this);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if ( firstLog ) {
+            server.registerConnection(this);
+            waitGameStart();
+            String schemes = game.selectSchemes();
+            this.defaultScheme = defaultScheme(schemes);
+            Color privateAchievementColor = game.selectPrivateAchievement();
+            this.player.setPrivateAchievement(new PrivateAchievement(privateAchievementColor));;
+            this.send("Your private achievement is: " + privateAchievementColor);
+            askForChosenScheme(schemes);
         }
+        else server.registerConnection(this);
+
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public synchronized void setDashboard(Message message) throws RemoteException {
         try {
@@ -81,34 +114,51 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void sendMove(PlayerMove playerMove) throws RemoteException {
-        send("Trying to make the following move: " + playerMove.toString() + " ...");
+        send("Trying to make the move ...");
         setChanged();
         notifyObservers(playerMove);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void quit() throws RemoteException {
         this.close();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setGame(Game game) {
         this.game = game;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public synchronized void setPlayer(Player player) {
         this.player = player;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public synchronized Player getPlayer() {
         return player;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public synchronized void send(String string) {
         try {
@@ -119,6 +169,9 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void close() {
         send("ConnectionClient expired.");
@@ -127,22 +180,9 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         send("You've been disconnected successfully.");
     }
 
-    public synchronized void askForChosenScheme(String schemes) throws IOException {
-        this.send("schemes. " + schemes);
-    }
-
-
-    private String defaultScheme(String schemes) {
-        StringTokenizer strtok = new StringTokenizer(schemes, ",");
-        String defaultScheme = strtok.nextToken();
-        try {
-            this.player.setDashboard(defaultScheme);
-        } catch (NotValidValueException e) {
-            e.printStackTrace();
-        }
-        return defaultScheme;
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public synchronized void update(Observable o, Object arg) {
         gameStarted = true;

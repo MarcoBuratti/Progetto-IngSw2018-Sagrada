@@ -2,10 +2,10 @@ package it.polimi.ingsw.server.controller.tool;
 
 import it.polimi.ingsw.server.controller.Turn;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
-import it.polimi.ingsw.server.model.Color;
 import it.polimi.ingsw.server.model.Die;
-import it.polimi.ingsw.server.model.PlacementCheck;
 import it.polimi.ingsw.server.model.exception.NotValidValueException;
+
+import java.util.Optional;
 
 public class SetDieTool implements Tool {
 
@@ -13,18 +13,29 @@ public class SetDieTool implements Tool {
     private ToolNames toolName;
     private boolean needPlacement;
 
-    public SetDieTool(boolean needPlacement, ToolNames toolName) {
+    /**
+     * Creates a ChangeDieTool, a class used to manage the following tools: GRINDING STONE, GROZING PLIERS, FLUX BRUSH (using decorator DecoratedSetDieTool).
+     * @param needPlacement a boolean which specifies whether the tool has already been used once or not
+     * @param toolName an instance of ToolNames enum representing the tool's name
+     */
+    SetDieTool(boolean needPlacement, ToolNames toolName) {
         this.toolName = toolName;
         this.needPlacement = needPlacement;
         this.isAlreadyUsed = false;
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isAlreadyUsed() {
         return this.isAlreadyUsed;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setAlreadyUsed(boolean alreadyUsed) {
         this.isAlreadyUsed = alreadyUsed;
@@ -32,21 +43,35 @@ public class SetDieTool implements Tool {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean toolEffect(Turn turn, PlayerMove playerMove) {
 
-        if ( playerMove.getIndexDie().isPresent() ) {
+        Optional<Integer> dieIndex = playerMove.getIndexDie();
 
-            if ( playerMove.getIndexDie().get() >= turn.getGameBoard().getDraftPool().size() ) {
+        if ( dieIndex.isPresent() ) {
+
+            Integer dieIndexValue = dieIndex.get();
+
+            if ( dieIndexValue >= turn.getGameBoard().getDraftPool().size() ) {
                 return false;
             }
 
-            Die die = turn.getGameBoard().getDraftPool().get( playerMove.getIndexDie().get() );
+            Die die = turn.getGameBoard().getDraftPool().get( dieIndexValue );
 
 
             int oldValue = die.getNumber();
             try {
-                if ( toolName.equals( ToolNames.GROZING_PLIERS ) && playerMove.getAddOne().isPresent() ) {
-                    if (playerMove.getAddOne().get())
+
+                Optional<Boolean> increaseNumber = playerMove.getAddOne();
+
+                if ( toolName.equals( ToolNames.GROZING_PLIERS ) && increaseNumber.isPresent() ) {
+
+                    boolean increaseNumberValue = increaseNumber.get();
+
+                    if (increaseNumberValue)
                         die.setNumber( oldValue + 1 );
                     else
                         die.setNumber( oldValue - 1 );
@@ -68,16 +93,18 @@ public class SetDieTool implements Tool {
             throw new IllegalArgumentException();
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Color getColor() {
-        return this.toolName.getColor();
-    }
-
     public boolean needPlacement() {
         return needPlacement;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ToolNames getToolName() {
         return this.toolName;
     }
