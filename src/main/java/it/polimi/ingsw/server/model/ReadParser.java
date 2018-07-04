@@ -18,7 +18,6 @@ class ReadParser {
     private static final int COLUMN = 5;
 
     private static Cell[][] matrixScheme;
-    private static long favourToken;
     private static final JSONParser parser = new JSONParser();
 
     /**
@@ -40,7 +39,7 @@ class ReadParser {
             matrixScheme = new Cell[ROW][COLUMN];
             JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/resources/dashboard/" + schemeName + ".json"));
 
-            favourToken = (Long) jsonObject.get("favourToken");
+            long favourToken = (Long) jsonObject.get("favourToken");
 
             AbstractRestriction restrictionFactory = new RestrictionFactory();
             JSONArray first = (JSONArray) jsonObject.get("Restriction");
@@ -52,7 +51,7 @@ class ReadParser {
             }
 
             dashboard.setMatrixScheme( getMatrixSchemeCopy() );
-            dashboard.setFavourToken( favourToken );
+            dashboard.setFavourToken(favourToken);
         } catch (IOException | ParseException e) {
             System.out.println(e.toString());
         } catch (NotValidValueException e) {

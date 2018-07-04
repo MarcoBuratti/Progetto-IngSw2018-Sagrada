@@ -15,7 +15,7 @@ public class ChangeDieTool implements Tool {
     private boolean needPlacement;
     private ToolNames toolName;
 
-    public ChangeDieTool(boolean needPlacement, ToolNames toolName) {
+    ChangeDieTool(boolean needPlacement, ToolNames toolName) {
         this.color = toolName.getColor();
         this.toolName = toolName;
         this.needPlacement = needPlacement;

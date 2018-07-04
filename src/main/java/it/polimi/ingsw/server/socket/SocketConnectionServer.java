@@ -73,6 +73,18 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
         return defaultScheme;
     }
 
+
+    private synchronized void waitGameStart() {
+        while (!gameStarted) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     @Override
     public void run() {
         try {
@@ -81,15 +93,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
 
             if ( firstLog ) {
                 server.registerConnection(this);
-                synchronized (this) {
-                    while (!gameStarted) {
-                        try {
-                            wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
+                waitGameStart();
                 String schemes = game.selectSchemes();
                 String defaultScheme = defaultScheme(schemes);
                 Color privateAchievementColor = game.selectPrivateAchievement();

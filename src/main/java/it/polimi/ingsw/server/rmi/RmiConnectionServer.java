@@ -32,6 +32,17 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         this.server = server;
     }
 
+    private synchronized void waitGameStart() {
+        while (!gameStarted) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     @Override
     public void setPlayerAndAskScheme(Message message) throws RemoteException {
 
@@ -41,15 +52,7 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
         try {
             if ( firstLog ) {
                 server.registerConnection(this);
-                synchronized (this) {
-                    while (!gameStarted) {
-                        try {
-                            wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
+                waitGameStart();
                 String schemes = game.selectSchemes();
                 this.defaultScheme = defaultScheme(schemes);
                 Color privateAchievementColor = game.selectPrivateAchievement();

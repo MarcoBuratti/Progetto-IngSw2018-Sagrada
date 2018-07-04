@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.controller.tool;
 
-public class ToolFactory extends AbstarctToolFactory {
+public class ToolFactory implements AbstractToolFactory {
     @Override
     public Tool getTool(ToolNames toolName) {
         switch (toolName) {

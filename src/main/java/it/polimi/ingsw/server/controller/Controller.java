@@ -3,7 +3,6 @@ package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.server.Game;
 import it.polimi.ingsw.server.RemoteView;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
-import it.polimi.ingsw.server.interfaces.ServerInterface;
 import it.polimi.ingsw.server.model.GameBoard;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.achievement.CardAchievement;
@@ -24,17 +23,29 @@ public class Controller extends Observable implements Observer {
     private boolean gameEnded;
     private boolean onePlayerLeft = false;
 
+    /**
+     * Creates a new Controller Object, also creating a new GameBoard Object and setting it as gameBoard attribute.
+     * @param game the Game Object that calls the constructor ( players is set using game's getPlayers method )
+     */
     public Controller(Game game) {
         gameBoard = new GameBoard(game.getPlayers());
         players = (ArrayList<Player>) gameBoard.getPlayers();
     }
 
+    /**
+     * Sets the remoteView attribute and adds the controller as Observer of all the RemoteView Objects contained in remoteViews.
+     * @param game the Game Object that has the references to the Remote View Objects
+     */
     public void setRemoteViews(Game game) {
         remoteViews = (ArrayList<RemoteView>) game.getRemoteViews();
         for (RemoteView r : remoteViews)
             r.addObserver(this);
     }
 
+    /**
+     * Starts the game and returns the winner's nickname.
+     * @return a String
+     */
     public String startGame() {
 
         for (int i = 0; i < NUMBER_OF_ROUNDS && !onePlayerLeft ; i++) {
@@ -59,11 +70,19 @@ public class Controller extends Observable implements Observer {
         return winner.getNickname();
     }
 
+    /**
+     * Returns the gameBoard attribute.
+     * @return a GameBoard Object representing the game board
+     */
     public GameBoard getGameBoard() {
         return gameBoard;
     }
 
-
+    /**
+     * Manages the end of the game, communicating to the players who is the winner and the score of each player.
+     * @param finalScores an ArrayList of Pairs containing the score of each player
+     * @param winner a Player Object representing the player who has won the game
+     */
     private void endGame (ArrayList< Pair < RemoteView, Integer > > finalScores, Player winner) {
         for (Pair p : finalScores) {
             RemoteView remoteView = (RemoteView) p.getKey();
@@ -81,9 +100,13 @@ public class Controller extends Observable implements Observer {
                 }
             }
         }
-        setGameEnded(true);
+        setGameEnded();
     }
 
+    /**
+     * Returns an ArrayList of Pair Objects. Every Pair contains a RemoteView and an Integer and associates a player to his final score.
+     * @return an ArrayList of Pair Objects
+     */
     private ArrayList< Pair< RemoteView, Integer > > calculateFinalScores() {
 
         ArrayList< Pair< RemoteView , Integer > > finalScores = new ArrayList<>();
@@ -110,6 +133,11 @@ public class Controller extends Observable implements Observer {
         return finalScores;
     }
 
+    /**
+     * Returns the RemoteView associated with the player specified as argument.
+     * @param player a Player Object representing a player
+     * @return a RemoteView Object associated with player
+     */
     private RemoteView searchRemoteView ( Player player ) {
         for ( RemoteView remoteView: remoteViews )
             if ( remoteView.getPlayer().getNickname().equals( player.getNickname() ) )
@@ -117,6 +145,12 @@ public class Controller extends Observable implements Observer {
         throw new IllegalArgumentException();
     }
 
+    /**
+     * Compares two players' scores and returns true if the player associated with the first Pair Object wins.
+     * @param pair1 the Pair Object associated with the first player
+     * @param pair2 the Pair Object associated with the second player
+     * @return a boolean
+     */
     private boolean compare( Pair< RemoteView, Integer > pair1, Pair< RemoteView, Integer > pair2){
 
         Player p1 = pair1.getKey().getPlayer();
@@ -135,6 +169,11 @@ public class Controller extends Observable implements Observer {
 
     }
 
+    /**
+     * Calculate the final score associated with the player specified as a Player Object arguemnt.
+     * @param player the Player Object associated with the considered player
+     * @return an int representing the score
+     */
     private int calculateFinalScorePlayer(Player player) {
         int score = 0;
         score += player.getPrivateAchievement().scoreEffect(player.getDashboard());
@@ -147,13 +186,21 @@ public class Controller extends Observable implements Observer {
         return score;
     }
 
+    /**
+     * Manages the end of the game when some of the players have disconnected and only one player is connected.
+     */
     public synchronized void onePlayerLeftEnd () {
         this.onePlayerLeft = true;
         if(this.currentRound != null)
             this.currentRound.onePlayerLeftEnd();
     }
 
-    private void moveHandler (PlayerMove playerMove, Observable o) {
+    /**
+     * Manages a PlayerMove Object associated with a placement move, checking if the dieIndex parameter is present and if its value is acceptable.
+     * @param playerMove a PlayerMove Object representing the move the player is trying to make
+     * @param o an Observable Object: the RemoteView associated with the player
+     */
+    private void placementMoveHandler(PlayerMove playerMove, Observable o) {
         Optional<Integer> dieIndex = playerMove.getIndexDie();
         if (dieIndex.isPresent()) {
             Integer dieIndexValue = dieIndex.get();
@@ -170,20 +217,28 @@ public class Controller extends Observable implements Observer {
         }
     }
 
+    /**
+     * Manages a PlayerMove Object associated with a tool move, checking if the toolIndex parameter is present.
+     * @param playerMove a PlayerMove Object representing the move the player is trying to make
+     * @param o an Observable Object: the RemoteView associated with the player
+     */
     private void toolMoveHandler (PlayerMove playerMove, Observable o) {
 
         Optional<Integer> toolIndex = playerMove.getExtractedToolIndex();
-        System.out.println("ToolIndex is present: " + toolIndex.isPresent());
         if (toolIndex.isPresent()) {
             setChanged();
             notifyObservers(playerMove);
         } else {
             RemoteView remoteView = (RemoteView) o;
-            System.out.println("incorrect move dentro else di toolMoveHandler");
             remoteView.incorrectMove();
         }
     }
 
+    /**
+     * Manages the PlayerMove received from the RemoteViews.
+     * @param o the RemoteView the PlayerMove was sent by
+     * @param arg the PlayerMove sent by the RemoteView
+     */
     @Override
     public void update(Observable o, Object arg) {
 
@@ -194,8 +249,7 @@ public class Controller extends Observable implements Observer {
 
             switch (playerMove.getMoveType()) {
                 case PLACE_DIE:
-                    System.out.println("Prima di Move Handler in Controller");
-                    moveHandler(playerMove, o);
+                    placementMoveHandler(playerMove, o);
                     break;
 
                 case USE_TOOL:
@@ -215,11 +269,18 @@ public class Controller extends Observable implements Observer {
         }
     }
 
+    /**
+     * Returns the gameEnded attribute.
+     * @return an int specifying whether the game has ended or not
+     */
     public synchronized boolean isGameEnded() {
         return gameEnded;
     }
 
-    private synchronized void setGameEnded(boolean gameEnded) {
-        this.gameEnded = gameEnded;
+    /**
+     * Allows the user to set the gameEnded attribute as true.
+     */
+    private synchronized void setGameEnded() {
+        this.gameEnded = true;
     }
 }

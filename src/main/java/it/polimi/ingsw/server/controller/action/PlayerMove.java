@@ -1,13 +1,10 @@
 package it.polimi.ingsw.server.controller.action;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class PlayerMove implements Serializable {
@@ -22,19 +19,26 @@ public class PlayerMove implements Serializable {
     private Integer indexDie;
     private Integer extractedToolIndex;
 
-    //TODO PlayerMove(playerNickname, moveType, dieIndex, coordinates)
-
+    /**
+     * A static method that allows the user to create a new PlayerMove using the right constructor.
+     * It reads the parameters it needs from a JSON file through the method playerMoveReader.
+     * @return a new PlayerMove Object created by reading a JSON file
+     */
     public static PlayerMove playerMoveConstructor() {
-        JSONParser parser = new JSONParser();
         try {
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/LastPlayerMove.json"));
+            JSONObject jsonObject = PlayerMoveParser.readMove();
             return playerMoveReader(jsonObject);
-        } catch (IOException | ParseException e) {
-            System.err.println(e.toString());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException();
         }
-        throw new IllegalArgumentException();
     }
 
+    /**
+     * It gets all the needed parameters from the jsonObject parameter and then selects the right constructor
+     * for a new PlayerMove and returns it.
+     * @param jsonObject the JSONObject containing the parameters needed to construct the move
+     * @return a new PlayerMove
+     */
     public static PlayerMove playerMoveReader ( JSONObject jsonObject ) {
 
         String playerNickname = (String) jsonObject.get("playerID");
@@ -57,11 +61,9 @@ public class PlayerMove implements Serializable {
             case USE_TOOL:
                 int toolIndex = Integer.parseInt((String) jsonObject.get("toolIndex"));
                 int extractedToolIndex = Integer.parseInt((String) jsonObject.get("extractedToolIndex"));
-                System.out.println(playerNickname + " " + moveType + " " + toolIndex + " SWITCH");
                 switch (toolIndex) {
 
                     case 7:
-                        System.out.println( toolIndex + " CASE 7");
                         dieIndex = Integer.parseInt((String) jsonObject.get("Key1"));
                         String boolKey = ((String) jsonObject.get("Key2"));
                         boolean bool;
@@ -76,7 +78,6 @@ public class PlayerMove implements Serializable {
                         coordinates = new ArrayList<>();
                         for ( int i = 0 ; i < otherKeysSize ; i++ ) {
                             coordinates.add(Integer.parseInt((String) jsonObject.get("Key" + (i + 1))));
-                            System.out.println(coordinates + " " + toolIndex + " CASE 0,2,8,11");
                         }
                         return new PlayerMove(playerNickname, moveType, extractedToolIndex, coordinates);
 
@@ -86,22 +87,18 @@ public class PlayerMove implements Serializable {
                         dieIndex = Integer.parseInt((String) jsonObject.get("Key1"));
                         otherKeysSize = jsonObject.size() - 5;
                         coordinates = new ArrayList<>();
-                        System.out.println("DieIndex " + dieIndex);
                         for ( int i = 0 ; i < otherKeysSize ; i++ ) {
                             coordinates.add(Integer.parseInt((String) jsonObject.get("Key" + (i + 2))));
-                            System.out.println(coordinates + " " + toolIndex + " CASE 1,9,10");
                         }
                         return new PlayerMove(playerNickname, moveType, extractedToolIndex, dieIndex, coordinates);
 
                     case 3:
-                    case 6:
                     case 4:
+                    case 6:
                         dieIndex = Integer.parseInt((String) jsonObject.get("Key1"));
-                        System.out.println(   toolIndex +  " CASE 3,4,6");
                         return new PlayerMove(playerNickname, moveType, extractedToolIndex, dieIndex);
 
                     case 5:
-                        System.out.println("CASE 5");
                         return new PlayerMove(playerNickname, moveType, extractedToolIndex);
 
                     default:
@@ -118,6 +115,11 @@ public class PlayerMove implements Serializable {
         }
     }
 
+    /**
+     * Constructor used to create a new go through move.
+     * @param playerNickname the player's nickname
+     * @param moveType the type of the new move
+     */
     public PlayerMove(String playerNickname, String moveType) {
         this.playerNickname = playerNickname;
         if (moveType.equals(GO_THROUGH))
@@ -126,39 +128,66 @@ public class PlayerMove implements Serializable {
             throw new IllegalArgumentException();
     }
 
-    //tool 7(OK)
+    /**
+     * Constructor used for the 6th tool.
+     * @param playerNickname the player's nickname
+     * @param moveType the type of the new move
+     * @param extractedToolIndex the index of the tool chosen by the player
+     */
     public PlayerMove(String playerNickname, String moveType, int extractedToolIndex) {
         this.playerNickname = playerNickname;
         this.moveType = moveType;
         this.extractedToolIndex = extractedToolIndex;
     }
 
-    //place die, usato anche da tool 11 OPPURE tool 2, 3, 4, 12
-    public PlayerMove(String playerNickname, String moveType, int firstParameter, ArrayList<Integer> intParameters) {
+    /**
+     * Constructor used for the place die move or for the following tools: 1st, 3rd, 9th, 12th.
+     * @param playerNickname the player's nickname
+     * @param moveType the type of the new move
+     * @param firstParameter an int representing the index of the selected die ( draft pool ) if it's a placement move or the index of the selected tool if it's a tool move
+     * @param intParameters a list of int parameters containing parameters used for the moves
+     */
+    public PlayerMove(String playerNickname, String moveType, int firstParameter, List<Integer> intParameters) {
         this.playerNickname = playerNickname;
         this.moveType = moveType;
-        this.intParameters = intParameters;
-        if ( moveType.equals(PLACE_DIE) ) {
-            this.indexDie = firstParameter;
+        this.intParameters = (ArrayList<Integer>) intParameters;
+        switch (moveType) {
+            case PLACE_DIE:
+                this.indexDie = firstParameter;
+                break;
+            case USE_TOOL:
+                this.extractedToolIndex = firstParameter;
+                this.twoReplace = intParameters.size() > 4;
+                break;
+            default:
+                throw new IllegalArgumentException();
         }
-        else if ( moveType.equals(USE_TOOL) ) {
-            this.extractedToolIndex = firstParameter;
-            this.twoReplace = intParameters.size() > 4;
-        }
-        else
-            throw new IllegalArgumentException();
     }
 
-    //tool 5 ,9(OK) e 8(OK ma dubbio su come segnarlo)
-    public PlayerMove(String playerNickname, String moveType, int extractedToolIndex, int indexDie, ArrayList<Integer> intParameters) {
+    /**
+     * Constructor used for the following tools: 2nd, 10th, 11th.
+     * @param playerNickname the player's nickname
+     * @param moveType the type of the new move
+     * @param extractedToolIndex the index of the tool chosen by the player
+     * @param indexDie an int representing the index of the selected die ( draft pool )
+     * @param intParameters a list of int parameters containing parameters used for the moves
+     */
+    public PlayerMove(String playerNickname, String moveType, int extractedToolIndex, int indexDie, List<Integer> intParameters) {
         this.playerNickname = playerNickname;
         this.moveType = moveType;
         this.extractedToolIndex = extractedToolIndex;
-        this.intParameters = intParameters;
+        this.intParameters = (ArrayList<Integer>) intParameters;
         this.indexDie = indexDie;
     }
 
-    //tool 1(OK)
+    /**
+     * Constructor used for the 8th tool.
+     * @param playerNickname the player's nickname
+     * @param moveType the type of the new move
+     * @param extractedToolIndex the index of the tool chosen by the player
+     * @param indexDie an int representing the index of the selected die ( draft pool )
+     * @param addOne a boolean that specifies if the user wants to increase or decrease the value of the die
+     */
     public PlayerMove(String playerNickname, String moveType, int extractedToolIndex, int indexDie, boolean addOne) {
         this.playerNickname = playerNickname;
         this.extractedToolIndex = extractedToolIndex;
@@ -167,7 +196,13 @@ public class PlayerMove implements Serializable {
         this.addOne = addOne;
     }
 
-    //tool 6(OK), 10(OK) e 11(OK)
+    /**
+     * Constructor used for the following tools: 4th, 5th, 7th.
+     * @param playerNickname the player's nickname
+     * @param moveType the type of the new move
+     * @param extractedToolIndex the index of the tool chosen by the player
+     * @param indexDie an int representing the index of the selected die ( draft pool )
+     */
     public PlayerMove(String playerNickname, String moveType, int extractedToolIndex, int indexDie) {
         this.playerNickname = playerNickname;
         this.extractedToolIndex = extractedToolIndex;
@@ -175,39 +210,71 @@ public class PlayerMove implements Serializable {
         this.indexDie = indexDie;
     }
 
+    /**
+     * Returns the playerNickname attribute.
+     * @return a String representing the player's nickname
+     */
     public String getPlayerNickname() {
         return this.playerNickname;
     }
 
+    /**
+     * Returns the value positioned at the "index" position of the intParameters attribute if it exists.
+     * @param index the index of the intParameters attribute the user wants to access
+     * @return an Integer
+     */
     public Integer getIntParameters(int index) {
-        if (intParameters.size() > 0 && index < intParameters.size()) {
-            Integer newInt = intParameters.get(index);
-            return newInt;
+        if ( !intParameters.isEmpty() && index < intParameters.size()) {
+            return intParameters.get(index);
         }
         else
             throw new IllegalArgumentException();
     }
 
+    /**
+     * Returns an Optional ( Boolean ) which specifies if the player wants to move one or two dice ( 11th tool ).
+     * @return an Optional, the twoReplace attribute
+     */
     public Optional<Boolean> getTwoReplace() {
         return Optional.ofNullable(twoReplace);
     }
 
+    /**
+     * Rerturns an Optional ( Integer ) which specifies the index of the chosen die in the draft pool.
+     * @return an Optional, the indexDie attribute
+     */
     public Optional<Integer> getIndexDie() {
         return Optional.ofNullable(indexDie);
     }
 
+    /**
+     * Returns an Optional ( Integer ) which specifies if the player wants to increase or decrease the value of the die ( 8th tool ).
+     * @return an Optional, the addOne attribute
+     */
     public Optional<Boolean> getAddOne() {
         return Optional.ofNullable(addOne);
     }
 
+    /**
+     * Returns an Optional ( Integer ) which specifies the index of the selected tool ( from the three ones extracted ).
+     * @return an Optional, the extractedToolIndex attribute
+     */
     public Optional<Integer> getExtractedToolIndex() {
         return Optional.ofNullable(extractedToolIndex);
     }
 
+    /**
+     * Returns the moveType attribute.
+     * @return a String representing the type of the move
+     */
     public String getMoveType() {
         return moveType;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String toString() {
         switch (moveType) {
             case PLACE_DIE:
