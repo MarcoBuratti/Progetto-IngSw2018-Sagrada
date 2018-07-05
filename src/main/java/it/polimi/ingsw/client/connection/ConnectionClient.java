@@ -87,7 +87,7 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
     public void askAction() {
         moveCtrl = true;
         do {
-            tmpMove = view.getInput();
+            tmpMove = view.getAction();
             if (getContinueToPlay()) {
                 setIsOn(false);
                 view.continueToPlay(tmpMove);
@@ -99,7 +99,6 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
             }
         } while (moveCtrl);
         concatMove(tmpMove);
-        System.out.println("dentro ask");
 
     }
 
@@ -124,11 +123,9 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
     public void setIndexDash() {
         moveCtrl = true;
         do {
-            view.showOutput( graphicsClient.printRulesDash() );
-            index = view.getInput();
+            index = view.getIndex();
             moveCtrl = secondInputDie(index);
         } while (moveCtrl);
-        System.out.println("dentro index");
         concatMove(index);
     }
 

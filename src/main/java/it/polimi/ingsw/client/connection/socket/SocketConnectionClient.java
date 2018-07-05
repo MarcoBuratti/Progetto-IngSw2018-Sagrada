@@ -187,9 +187,7 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
      */
     @Override
     public void handleMove(String fromClient) {
-        System.out.println(fromClient + "con spazio");
         fromClient = fromClient.substring(0, fromClient.length()-1);
-        System.out.println(fromClient + "senza spazio");
         String  [] substringSchemes = fromClient.split(" ");
         int moveChoice = Integer.parseInt(substringSchemes[0]);
         switch (moveChoice) {

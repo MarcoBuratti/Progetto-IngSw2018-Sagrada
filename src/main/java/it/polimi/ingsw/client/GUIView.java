@@ -2,7 +2,8 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.util.GraphicsClient;
 import it.polimi.ingsw.util.InputController;
-import it.polimi.ingsw.util.utilGUI.SelectSchemeGUI;
+import it.polimi.ingsw.util.utilgui.GameGUI;
+import it.polimi.ingsw.util.utilgui.SelectSchemeGUI;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -24,6 +25,7 @@ public class GUIView extends View {
     private double v = 600;
 
     private SelectSchemeGUI selectSchemeGUI;
+    private GameGUI gameGUI;
     private String privateAchievement;
 
 
@@ -102,6 +104,7 @@ public class GUIView extends View {
                 setChoice(choiceBox.getValue().toString());
                 Platform.runLater(()->getPrimaryStage().setScene(waitAnswer()));
                 createConnection();
+
 
 
 
@@ -203,7 +206,9 @@ public class GUIView extends View {
 
     @Override
     public void showSchemes(String s) {
-        selectSchemeGUI = new SelectSchemeGUI(getPrimaryStage(),s,privateAchievement,getNickname());
+        selectSchemeGUI = new SelectSchemeGUI();
+        selectSchemeGUI.setStage(getPrimaryStage(),s,privateAchievement,getNickname(),this);
+        System.out.println("ok stage");
 
     }
 
@@ -213,7 +218,63 @@ public class GUIView extends View {
     }
 
     @Override
+    public void startGame(String s) {
+        System.out.println("startgame");
+        gameGUI = new GameGUI();
+        System.out.println("dopocrea");
+        gameGUI.setMessageFromServer(s);
+
+    }
+
+    @Override
+    public void showPublicAchievements(String s) {
+        gameGUI.setAchievements(s,privateAchievement);
+
+    }
+
+    @Override
+    public void showTools(String s) {
+        gameGUI.setTools(s);
+    }
+
+    @Override
+    public void showRoundTrack(String s) {
+        gameGUI.setRoundTrack(s);
+    }
+
+    @Override
+    public void showDraftPool(String s) {
+        gameGUI.setRoundTrack(s);
+    }
+
+
+    @Override
+    public void showPlayers(String s) {
+        gameGUI.setPlayers(s,getNickname());
+    }
+
+    @Override
+    public void endUpdate() {
+        System.out.println("endupdate");
+        gameGUI.show(getPrimaryStage());
+    }
+
+    @Override
+    public String getAction() {
+        gameGUI.activeButtons();
+        return gameGUI.getMove();
+    }
+
+    @Override
+    public String getIndex() {
+        gameGUI.activeDraftPool();
+        return gameGUI.getMove();
+    }
+
+
+    @Override
     public void showOutput(String s) {
+
 
     }
 

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.util.utilGUI;
+package it.polimi.ingsw.util.utilgui;
 
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;

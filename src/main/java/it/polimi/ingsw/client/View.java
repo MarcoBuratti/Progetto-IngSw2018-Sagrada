@@ -36,6 +36,7 @@ public abstract class View implements Observer {
     public abstract void start();
 
     public void showInput(String fromServer) {
+        System.out.println("showinput");
         if (fromServer.startsWith("You have logged in")) {
             loginSuccess(fromServer);
         }
@@ -43,7 +44,10 @@ public abstract class View implements Observer {
             showSchemes(fromServer);
 
         else if (fromServer.startsWith("The game has started")) {
-            System.out.println(graphicsClient.printGeneric(fromServer));
+            System.out.println("instartgame");
+            startGame(fromServer);
+
+
         }
         else if (fromServer.startsWith("Terminate"))
             System.out.println(graphicsClient.printContinue());
@@ -54,28 +58,39 @@ public abstract class View implements Observer {
             JSONParser parser = new JSONParser();
             try {
                 JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/up.json"));
+
                 String achievement = (String) jsonObject.get("Public Achievements");
-                graphicsClient.printAchievements(achievement);
+                showPublicAchievements(achievement);
+
                 String tool = (String) jsonObject.get("Tools");
                 if (toolCtrl) {
                     getConnectionClient().setTool(tool);
                     toolCtrl = false;
                 }
-                graphicsClient.printTool(tool);
+                showTools(tool);
+
+
                 String roundTrack = (String) jsonObject.get("Round track");
-                graphicsClient.printRoundTrack(roundTrack);
+                showRoundTrack(roundTrack);
+
+
                 String draft = (String) jsonObject.get("Draft");
-                if(draft != null) graphicsClient.printDraft(draft);
+                if(draft != null)
+                    showDraftPool(draft);
+
+
                 String number = (String) jsonObject.get("numberPlayer");
                 int player = Integer.parseInt(number);
-                System.out.println(number);
+
                 for (int i = 0; i < player; i++) {
                     String request = "scheme" + i;
-                    System.out.println(request);
                     String scheme = (String) jsonObject.get(request);
-                    graphicsClient.printScheme(scheme);
+                    showPlayers(scheme);
+
                 }
-                System.out.println(graphicsClient.printRulesFirst());
+
+                endUpdate();
+
             } catch (IOException | ParseException e) {
                 System.err.println(e.toString());
             }
@@ -102,6 +117,23 @@ public abstract class View implements Observer {
 
     public abstract void showPrivateAchievement(String s);
 
+    public abstract void startGame(String s);
+
+    public abstract void showPublicAchievements(String s);
+
+    public abstract void showTools(String s);
+
+    public abstract void showRoundTrack(String s);
+
+    public abstract void showDraftPool(String s);
+
+    public abstract void showPlayers(String s);
+
+    public abstract void endUpdate();
+
+    public abstract String getAction();
+
+    public abstract String getIndex();
 
 
 
@@ -154,6 +186,7 @@ public abstract class View implements Observer {
     }
 
     public synchronized void update(Observable o, Object arg) {
+        System.out.println("update");
             String fromServer = (String) arg;
             if(fromServer.startsWith("Terminate")){
                 showOutput("Terminate");
@@ -193,6 +226,7 @@ public abstract class View implements Observer {
                 } catch (IOException e) {
                     System.out.println(e.toString() );
                 }
+                System.out.println("ciao");
                 showInput("Update");
             }else
                 showInput(fromServer);

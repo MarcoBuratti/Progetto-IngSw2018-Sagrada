@@ -162,6 +162,49 @@ public class CliView extends View  {
         System.out.println(getGraphicsClient().printPrivate(s));
     }
 
+    @Override
+    public void startGame(String s){System.out.println(getGraphicsClient().printGeneric(s));}
+
+    @Override
+    public void showPublicAchievements(String s){
+        getGraphicsClient().printAchievements(s);
+        }
+
+    @Override
+    public void showTools(String s) {
+        getGraphicsClient().printTool(s);
+    }
+
+    @Override
+    public void showRoundTrack(String s) {
+        getGraphicsClient().printRoundTrack(s);
+    }
+
+    @Override
+    public void showDraftPool(String s) {
+        getGraphicsClient().printDraft(s);
+    }
+
+    @Override
+    public void showPlayers(String s) {
+        getGraphicsClient().printScheme(s);
+    }
+
+    @Override
+    public void endUpdate() {
+        System.out.println(getGraphicsClient().printRulesFirst());
+    }
+
+    @Override
+    public String getAction() {
+        return getInput();
+    }
+
+    @Override
+    public String getIndex() {
+        showOutput( getGraphicsClient().printRulesDash() );
+        return getInput();
+    }
 
     public void showOutput(String s){
         System.out.println(s);
