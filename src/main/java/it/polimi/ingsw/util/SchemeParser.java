@@ -7,14 +7,14 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class ParserScheme {
+public class SchemeParser {
 
 
         private String stringScheme;
         private String name;
         private String token;
 
-        public ParserScheme(String name){
+        public SchemeParser(String name){
 
             JSONParser parser = new JSONParser();
 

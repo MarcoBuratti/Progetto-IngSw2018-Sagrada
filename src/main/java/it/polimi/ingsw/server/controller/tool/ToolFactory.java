@@ -17,7 +17,7 @@ public class ToolFactory implements AbstractToolFactory {
             case FLUX_BRUSH:
                 return new SetDieTool(true, ToolNames.FLUX_BRUSH);
             case GLAZING_HAMMER:
-                return new RerollTool(false, ToolNames.GLAZING_HAMMER);
+                return new RollAgainTool(false, ToolNames.GLAZING_HAMMER);
             case RUNNING_PLIERS:
                 return new TwoTurnTool(false, ToolNames.RUNNING_PLIERS);
             case CORK_BAKED_STRAIGHTEDGE:

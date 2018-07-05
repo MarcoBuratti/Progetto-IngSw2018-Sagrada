@@ -281,4 +281,12 @@ public class Server extends UnicastRemoteObject {
         else return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override //Please note this method is not used, but it's always recommended to override hashCode if equals is overridden
+    public int hashCode() {
+        return super.hashCode();
+    }
+
 }

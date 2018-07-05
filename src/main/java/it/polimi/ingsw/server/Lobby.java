@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.server.interfaces.ServerInterface;
+import it.polimi.ingsw.util.TimeParser;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -15,6 +16,8 @@ class Lobby {
     private ArrayList<ServerInterface> serverInterfaces;
     private Timer timer;
     private boolean gameStarted;
+    private static final String LOBBY_TIMER = "Lobby_Timer";
+    private long lobbyTime;
 
     /**
      * Creates a new Lobby Object and initializes all of its attributes, saving the reference to the Server too.
@@ -25,6 +28,14 @@ class Lobby {
         this.remoteViews = new ArrayList<>();
         this.serverInterfaces = new ArrayList<>();
         executor = Executors.newCachedThreadPool();
+        setTime();
+    }
+
+    /**
+     * Calls a static method of the class TimeParser in order to read the time from a json file.
+     */
+    private synchronized void setTime () {
+        this.lobbyTime = TimeParser.readTime(LOBBY_TIMER);
     }
 
     /**
@@ -61,7 +72,6 @@ class Lobby {
      */
     private void gameStartTimer() {
         timer = new Timer();
-        int lobbyTime = 10 * 1000;
         timer.schedule(new TimerTask() {
             @Override
             public void run() {

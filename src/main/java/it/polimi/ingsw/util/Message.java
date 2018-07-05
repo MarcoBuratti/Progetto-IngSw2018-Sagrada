@@ -4,14 +4,22 @@ import java.io.Serializable;
 
 public class Message implements Serializable {
 
-    private String message;
+    private String content;
 
-    public Message(String message) {
-        this.message = message;
+    /**
+     * Creates a Message Object, a serializable class having just a String as attribute.
+     * @param content a String containing the message the user wants to send
+     */
+    public Message(String content) {
+        this.content = content;
     }
 
-    public String getMessage() {
-        return this.message;
+    /**
+     * Returns the content attribute.
+     * @return a String containing information
+     */
+    public String getContent() {
+        return this.content;
     }
 
 }

@@ -16,20 +16,19 @@ import java.util.StringTokenizer;
 
 public class RmiConnectionClient extends ConnectionClient implements RmiClientInterface {
 
-    RmiControllerInterface server;
-    RmiServerInterface channel;
+    private RmiServerInterface channel;
     private String playerNickname;
 
     /**
-     * Creates a RmiConnectionClient object, adding the corresponding cliView to its observers and establishing a connection between it and the server.
-     * @param view the CliView object which has to be added to the observers.
+     * Creates a RmiConnectionClient object, adding the corresponding View to its observers and establishing a connection between it and the server.
+     * @param view the View object which has to be added to the observers
      * @param address the server address
      * @param port the port that has to be used by the remote object to receive incoming calls
      */
     public RmiConnectionClient(View view, String address, int port) {
         this.addObserver(view);
         try {
-            server = (RmiControllerInterface) Naming.lookup("//" + address + "/Server");
+            RmiControllerInterface server = (RmiControllerInterface) Naming.lookup("//" + address + "/Server");
             channel = server.addClient((RmiClientInterface) UnicastRemoteObject.exportObject(this, port));
             super.setView(view);
         } catch (Exception e) {
@@ -92,7 +91,7 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
     /**
      * Allows the user to close the connection between this client and the server.
      */
-    public void quit() {
+    private void quit() {
         try {
             this.channel.quit();
         } catch (RemoteException e) {
@@ -152,9 +151,7 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
      */
     @Override
     public void handleMove(String fromClient) {
-        System.out.println(fromClient + "con spazio");
         fromClient = fromClient.substring(0, fromClient.length()-1);
-        System.out.println(fromClient + "senza spazio");
         String [] strtok = fromClient.split(" ");
         String key;
         String value;
@@ -173,36 +170,39 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
             case 3:
                 jsonObject.put(TYPE_PLAYERMOVE, "GoThrough");
                 break;
+            default:
+                quit();
+                break;
         }
-        if (choice == 4) {
-            quit();
-        }
-        else {
-            if (choice == 1 || choice == 2) {
 
-                int i = 1;
+        if (choice == 1 || choice == 2) {
 
-                if (choice == 2) {
-                    String toolIndex = strtok[i];
-                    jsonObject.put("toolIndex", toolIndex);
-                    i++;
-                    toolIndex = strtok[i];
-                    jsonObject.put("extractedToolIndex", toolIndex);
-                    i++;
-                }
-                int k = strtok.length - i;
-                for (int j = 0; j < k; j++) {
-                    key = "Key" + (j + 1);
-                    value = strtok[i];
-                    System.out.println(key + " " + value + " è fatta bene");
-                    jsonObject.put(key, value);
-                    i++;
-                }
+            int i = 1;
+
+            if (choice == 2) {
+                String toolIndex = strtok[i];
+                jsonObject.put("toolIndex", toolIndex);
+                i++;
+                toolIndex = strtok[i];
+                jsonObject.put("extractedToolIndex", toolIndex);
+                i++;
             }
-            sendMove(PlayerMove.playerMoveReader(jsonObject));
+            int k = strtok.length - i;
+            for (int j = 0; j < k; j++) {
+                key = "Key" + (j + 1);
+                value = strtok[i];
+                jsonObject.put(key, value);
+                i++;
+            }
         }
+
+        sendMove(PlayerMove.playerMoveReader(jsonObject));
+
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(String str) throws RemoteException {
         if (getIsOn()) {

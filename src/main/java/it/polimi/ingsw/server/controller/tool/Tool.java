@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.controller.tool;
 
 import it.polimi.ingsw.server.controller.Turn;
 import it.polimi.ingsw.server.controller.action.PlayerMove;
-import it.polimi.ingsw.server.model.Color;
 
 public interface Tool {
 
@@ -19,17 +18,23 @@ public interface Tool {
     void setAlreadyUsed(boolean alreadyUsed);
 
     /**
-     *
-     * @param turn
-     * @param playerMove
-     * @return
+     * Returns a boolean which specifies whether the tool has been used successfully or not.
+     * @param turn a Turn Object representing the turn
+     * @param playerMove a PlayerMove Object representing the move
+     * @return a boolean
      */
     boolean toolEffect(Turn turn, PlayerMove playerMove);
 
-    Color getColor();
-
+    /**
+     * Returns a boolean specifying whether the tool needs a placement move or not.
+     * @return a boolean
+     */
     boolean needPlacement();
 
+    /**
+     * Returns the name of the selected tool.
+     * @returnan instance of the ToolNames Enum specifying the name of the selected tool
+     */
     ToolNames getToolName();
 
 }

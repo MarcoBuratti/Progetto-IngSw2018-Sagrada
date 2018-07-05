@@ -21,18 +21,19 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
     private PrintStream out;
     private ExecutorService executor = Executors.newCachedThreadPool();
     private String playerNickname;
+    private static final String PLAYER_ID = "playerID ";
 
 
     /**
-     *
-     * @param view
-     * @param s
-     * @param port
+     * Creates a SocketConnectionClient object, adding the corresponding View to its observers and establishing a connection between it and the server.
+     * @param view the View object which has to be added to the observers
+     * @param address the server address
+     * @param port the server port
      */
-    public SocketConnectionClient(View view, String s, int port) {
+    public SocketConnectionClient(View view, String address, int port) {
         this.addObserver(view);
         try {
-            socket = new Socket(s, port);
+            socket = new Socket(address, port);
             super.setView(view);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintStream(socket.getOutputStream());
@@ -44,15 +45,16 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
     }
 
     /**
-     *
-     * @param message
+     * Sends a message to the Server through the socket.
+     * @param message the message (String)
      */
     private void send(String message) {
         out.println(message);
     }
 
     /**
-     *
+     * Sets the boolean attribute isOn as false whenever the connection needs to be closed
+     * and closes the connection with the socket, shutting the executor down too.
      */
     private synchronized void close() {
         try {
@@ -66,14 +68,14 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
     }
 
     /**
-     *
-     * @param fromClient
+     * Creates a String containing the information the server needs to create a new placement move.
+     * @param fromClient the String sent by the client (through the view)
      */
     private void placeDieHandler(String fromClient) {
         StringTokenizer strtok = new StringTokenizer(fromClient, " ");
         strtok.nextToken();
         StringBuilder bld = new StringBuilder();
-        bld.append("playerID ");
+        bld.append(PLAYER_ID);
         bld.append(this.playerNickname);
         bld.append(" type_playerMove PlaceDie");
         int i = 1;
@@ -81,7 +83,7 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
         while (strtok.hasMoreTokens()) {
             String key = "Key" + i;
             String value = strtok.nextToken();
-            bld.append(" " + key + " " + value);
+            bld.append(" ").append(key).append(" ").append(value);
             i++;
         }
 
@@ -89,14 +91,14 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
     }
 
     /**
-     *
-     * @param fromClient
+     * Creates a String containing the information the server needs to create a new tool move.
+     * @param fromClient the String sent by the client (through the view)
      */
     private void useToolHandler(String fromClient) {
         StringTokenizer strtok = new StringTokenizer(fromClient);
         strtok.nextToken();
         StringBuilder bld = new StringBuilder();
-        bld.append("playerID ");
+        bld.append(PLAYER_ID);
         bld.append(this.playerNickname);
         bld.append(" type_playerMove UseTool");
         int i = 1;
@@ -121,26 +123,24 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
     }
 
     /**
-     *
+     * Creates a String containing the information the server needs to create new go through move.
      */
     private void goThroughHandler() {
-        StringBuilder bld = new StringBuilder();
-        bld.append("playerID ");
-        bld.append(this.playerNickname);
-        bld.append(" type_playerMove GoThrough");
-        this.send( bld.toString() );
+        String bld = PLAYER_ID +
+                this.playerNickname +
+                " type_playerMove GoThrough";
+        this.send(bld);
     }
 
     /**
-     *
+     * Sends to the Server the message that makes it close the connection.
      */
     private void quitHandler() {
         send("/quit");
     }
 
     /**
-     *
-     * @param nickname the String the user wants to set as playerNickname attribute.
+     * {@inheritDoc}
      */
     @Override
     public void setPlayerNickname(String nickname) {
@@ -148,8 +148,7 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
     }
 
     /**
-     *
-     * @param name a String specifying the chosen nickname
+     * {@inheritDoc}
      */
     @Override
     public void handleName(String name) {
@@ -158,9 +157,7 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
     }
 
     /**
-     *
-     * @param fromServer a String containing the names of the available schemes
-     * @param fromClient a String containing the client input
+     * {@inheritDoc}
      */
     @Override
     public void handleScheme(String fromServer, String fromClient) {
@@ -182,8 +179,7 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
     }
 
     /**
-     *
-     * @param fromClient a String containing the client input
+     * {@inheritDoc}
      */
     @Override
     public void handleMove(String fromClient) {
@@ -208,6 +204,10 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
         }
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void run() {
         try {
