@@ -16,6 +16,11 @@ public class TimeParser {
     private static long time = 90000;
     private static final JSONParser parser = new JSONParser();
 
+    /**
+     *
+     * @param timerType
+     * @return
+     */
     public static synchronized long readTime ( String timerType ) {
 
         try {

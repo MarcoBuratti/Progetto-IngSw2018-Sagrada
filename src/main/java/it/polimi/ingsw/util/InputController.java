@@ -4,6 +4,11 @@ package it.polimi.ingsw.util;
 
 public class InputController {
 
+    /**
+     *
+     * @param s
+     * @return
+     */
     public boolean nameController(String s) {
         return s.contains(" ");
     }

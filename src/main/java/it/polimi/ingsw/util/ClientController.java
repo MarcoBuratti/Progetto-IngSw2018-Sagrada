@@ -35,11 +35,6 @@ public class ClientController {
 
     }
 
-    public List<String> thirdToolMessage(String s){
-        int i = Integer.parseInt(s) - 1;
-        return tool[i].getMessage();
-    }
-
     public boolean  plusMinCtrl(String s){
         return  (!s.matches("[0-1]"));
     }

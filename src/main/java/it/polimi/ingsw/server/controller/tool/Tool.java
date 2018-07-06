@@ -33,7 +33,7 @@ public interface Tool {
 
     /**
      * Returns the name of the selected tool.
-     * @returnan instance of the ToolNames Enum specifying the name of the selected tool
+     * @return an instance of the ToolNames Enum specifying the name of the selected tool
      */
     ToolNames getToolName();
 

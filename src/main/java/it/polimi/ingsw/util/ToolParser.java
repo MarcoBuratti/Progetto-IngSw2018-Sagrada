@@ -31,16 +31,13 @@ class ToolParser {
                 String number = (String) jsonObject.get("Number");
                 long param = (Long) jsonObject.get("Param");
                 List<TypeMove> toolMove = new ArrayList<>();
-                List<String> message = new ArrayList<>();
                 JSONArray move = (JSONArray) jsonObject.get("Move");
-                //JSONArray mes = (JSONArray) jsonObject.get("Message");
 
                 for(int j = 0; j < param; j++) {
                     toolMove.add(TypeMove.valueOf((String) (move.get(j))));
-                    //message.add( (String) mes.get(i));
                 }
 
-                toolClients[k] = new ToolClient(message, number, toolMove);
+                toolClients[k] = new ToolClient(number, toolMove);
 
             }
 
