@@ -8,7 +8,7 @@ public interface RmiClientInterface extends Remote {
     /**
      * Allows server to communicate with client.
      * @param string a String containing the message that server wants to send to client
-     * @throws RemoteException
+     * @throws RemoteException if the connection with the server has expired
      */
     void update(String string) throws RemoteException;
 }

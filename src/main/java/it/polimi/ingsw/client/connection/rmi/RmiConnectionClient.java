@@ -24,7 +24,7 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
      * Creates a RmiConnectionClient object, adding the corresponding View to its observers and establishing a connection between it and the server.
      * @param view the View object which has to be added to the observers
      * @param address the server address
-     * @param port the port that has to be used by the remote object to receive incoming calls
+     * @param port the port of the server
      */
     public RmiConnectionClient(View view, String address, int port) {
         this.addObserver(view);
