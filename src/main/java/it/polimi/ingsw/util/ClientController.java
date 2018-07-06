@@ -65,7 +65,7 @@ public class ClientController {
     }
 
     /**
-     * Returns a boolean specifying whether the string value is 0 or 1.
+     * Returns a boolean specifying if the string value is 0 or 1.
      * @param s the input String
      * @return a boolean
      */
