@@ -18,8 +18,8 @@ import java.util.concurrent.Executors;
 
 public class Server extends UnicastRemoteObject {
 
-    private static final int SOCKET_PORT_NUMBER = 1996;
-    private static final int RMI_PORT_NUMBER = 1997;
+    private static int SOCKET_PORT_NUMBER;
+    private static int RMI_PORT_NUMBER;
     private ServerSocket serverSocket;
     private Registry registry;
     private ExecutorService executor;
@@ -48,6 +48,7 @@ public class Server extends UnicastRemoteObject {
      * @throws IOException if it's impossible to initialize the serverSocket attribute
      */
     private Server() throws IOException {
+        PortParser.setPorts(this);
         this.serverSocket = new ServerSocket(SOCKET_PORT_NUMBER);
         this.registry = LocateRegistry.createRegistry(RMI_PORT_NUMBER);
         executor = Executors.newCachedThreadPool();
@@ -61,6 +62,19 @@ public class Server extends UnicastRemoteObject {
         games = new HashMap<>();
     }
 
+    /**
+     * Allows the user to set the ports' numbers.
+     * @param socketPort the port used for Socket
+     * @param rmiPort the port used for RMI
+     */
+    synchronized void setPorts(int socketPort, int rmiPort) {
+        SOCKET_PORT_NUMBER = socketPort;
+        RMI_PORT_NUMBER = rmiPort;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public static void main(String[] args) {
 
         try {
@@ -72,7 +86,7 @@ public class Server extends UnicastRemoteObject {
     }
 
     /**
-     *
+     * Rebinds the Server to a new remote object for RMI and listens to new socket connections through accept method called by serverSocket.
      */
     private void start() {
         System.out.println("Server is on!");
