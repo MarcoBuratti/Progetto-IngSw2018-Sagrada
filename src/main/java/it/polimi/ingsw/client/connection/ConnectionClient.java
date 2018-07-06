@@ -26,11 +26,17 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
     private boolean waitOn;
     private boolean toolBreakFlag = false;
 
-
+    /**
+     * Sets the view attribute as the view argument.
+     * @param view the View Object
+     */
     public void setView(View view) {
         this.view = view;
     }
 
+    /**
+     * Manages the input during a game.
+     */
     public void game(){
 
         while (getIsOn()) {
@@ -75,11 +81,14 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
                     }
                 }
             } while (inputCtrl);
-            System.out.println("Move handle: " + move.toString());
+
         }
     }
 
-    public void askAction() {
+    /**
+     * Asks to the player the action he wants to make.
+     */
+    private void askAction() {
         moveCtrl = true;
         do {
             tmpMove = view.getAction();
@@ -93,10 +102,14 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
                 if (moveCtrl) view.showOutput(graphicsClient.printRulesFirst());
             }
         } while (moveCtrl);
+
         concatMove(tmpMove);
 
     }
 
+    /**
+     * Initialize a move as a new StringBuilder Object and appends to it the value needed to create a placement move.
+     */
     public void newPlaceMove(){
         move = new StringBuilder();
         concatMove("1");
@@ -104,26 +117,41 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
         setWaitOn(true);
     }
 
-    public synchronized void setWaitOn( boolean bool ) {
+    /**
+     * Sets the waitOn attribute as bool.
+     * @param bool the value the user wants to set
+     */
+    private synchronized void setWaitOn( boolean bool ) {
         this.waitOn = bool;
         if ( !bool ) {
             notifyAll();
         }
     }
 
-    public synchronized boolean isWaitOn () {
+    /**
+     * Returns the waitOn attribute.
+     * @return a boolean
+     */
+    private synchronized boolean isWaitOn () {
         return this.waitOn;
     }
 
+    /**
+     * Asks the user for the index of the chosen scheme until it's correct and then appends it to move.
+     */
     public void setIndexDash() {
         moveCtrl = true;
         do {
             index = view.getIndex();
             moveCtrl = secondInputDie(index);
         } while (moveCtrl);
+
         concatMove(index);
     }
 
+    /**
+     * Asks the user for the coordinates until they're correct and then appends them to move.
+     */
     public void setRowColumn() {
         moveCtrl = true;
         String rowColumn;
@@ -132,10 +160,13 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
             rowColumn = view.getInput();
             moveCtrl = thirdInputDie(rowColumn);
         } while (moveCtrl);
-        System.out.println("dentro row");
+
         concatMove(rowColumn);
     }
 
+    /**
+     * Asks the user the index of the chosen tool until it's correct and then appends it to move.
+     */
     public void setToolIndex(){
         moveCtrl = true;
         do {
@@ -144,7 +175,10 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
             moveCtrl = secondToolIndex(toolIndex);
         } while (moveCtrl);
     }
-    //USATO PER TOOL
+
+    /**
+     * Asks the user a value that must be 0 or 1 and appends it to move.
+     */
     public void setPlusMin(){
         moveCtrl = true;
         String plusMin;
@@ -155,7 +189,10 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
         } while (moveCtrl);
         concatMove(plusMin);
     }
-    //USATO PER TOOL
+
+    /**
+     * Asks the user for the index of the chosen die until it's acceptable and then appends it to move.
+     */
     public void setDieNum(){
         moveCtrl = true;
         String dieNum;
@@ -167,7 +204,10 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
 
         concatMove(dieNum);
     }
-    //USATO PER TOOL
+
+    /**
+     * Asks the user for the index of the chosen round until it's acceptable and then appends it to move.
+     */
     public void setRoundTrackIndex(){
         moveCtrl = true;
         String roundTrackIndex;
@@ -179,6 +219,10 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
         concatMove(roundTrackIndex);
     }
 
+    /**
+     * Asks the user if he wants to place a second die or not (tool) :
+     * Sends the move if the player wants to place one die, asks for the second die coordinates if he wants to place two dice.
+     */
     public void goOn(){
         moveCtrl = true;
         String goOnString;
@@ -189,91 +233,171 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
         } while (moveCtrl);
 
         if (goOnString.equals("0")) {
-            setToolBreakFlag(true);
+            setToolBreakFlag();
             TypeMove.CHOOSE_SEND_MOVE.moveToDo(this);
         }
 
     }
 
+    /**
+     * Calls handle move using move.toString() as parameter.
+     */
     public void sendMove(){
         handleMove(move.toString());
     }
 
+    /**
+     * Appends s and a space to move.
+     * @param s the string to append
+     */
     private void concatMove(String s){
-        move.append(s + " ");
+        move.append(s).append(" ");
         System.out.println("move: " + move.toString());
     }
 
+    /**
+     * Returns the isOn attribute.
+     * @return a boolean
+     */
     public synchronized boolean getIsOn() {
         return isOn;
     }
 
+    /**
+     * Sets the isOn attribute as bool.
+     * @param bool a boolean
+     */
     public synchronized void setIsOn(boolean bool){
         this.isOn = bool;
     }
 
-    public synchronized boolean getContinueToPlay(){
+    /**
+     * Returns the continueToPlay attribute.
+     * @return a boolean
+     */
+    private synchronized boolean getContinueToPlay(){
         return  continueToPlay;
     }
 
+    /**
+     * Sets the continueToPlay attribute as bool.
+     * @param bool a boolean
+     */
     public synchronized void setContinueToPlay(boolean bool){
         this.continueToPlay = bool;
     }
 
+    /**
+     * Allows the user to set the extracted tools in ToolClient.
+     * @param s the name of the tool
+     */
     public void setTool(String s) {
         clientInputController.setTool(s);
     }
 
-    public boolean firstInput(String s) {
+    /**
+     * Returns true if the input is 1, 2, 3 or 4.
+     * @param s the String to check
+     * @return a boolean
+     */
+    private boolean firstInput(String s) {
         return clientInputController.firstInput(s);
     }
 
-    public boolean secondInputDie(String s) {
+    /**
+     * Returns true if the input is included between 1 and 9 ( boundaries included ).
+     * @param s the String to check
+     * @return a boolean
+     */
+    private boolean secondInputDie(String s) {
         return clientInputController.secondInputDie(s);
     }
 
-    public boolean thirdInputDie(String s) {
+    /**
+     * Returns true if the input is a String containing two values separated by a space
+     * and values are acceptable as row-column indexes.
+     * @param s the String to check
+     * @return a boolean
+     */
+    private boolean thirdInputDie(String s) {
         return clientInputController.thirdInputDie(s);
     }
 
-    public boolean secondToolIndex(String s) {
+    /**
+     * Returns true if the value contained in the string is acceptable as tool index (1,2,3).
+     * @param s the String to check
+     * @return a boolean
+     */
+    private boolean secondToolIndex(String s) {
         return clientInputController.secondToolIndex(s);
     }
 
-    public List<TypeMove> thirdToolInput(String s){
+    /**
+     * Returns a List containing the TypeMove Enum classes.
+     * @param s the String to check
+     * @return a List of TypeMove Objects
+     */
+    private List<TypeMove> thirdToolInput(String s){
         return clientInputController.thirdToolInput(s);
     }
 
-    /*public List<String> thirdToolMessage(String s){
-        return clientInputController.thirdToolMessage(s);
-    }*/
+    /**
+     * Returns a String representing the tool index ( 0-11 ). This is necessary to read create a PlayerMove Object.
+     * @param s the String to check
+     * @return a String
+     */
+    private String numberTool(String s){ return clientInputController.numberTool(s); }
 
-    public String numberTool(String s){ return clientInputController.numberTool(s); }
-
-    public boolean plusMin(String s){
+    /**
+     * Returns true if the value contained in s is 0 or 1.
+     * @param s the String to check
+     * @return a boolean
+     */
+    private boolean plusMin(String s){
         return clientInputController.plusMinCtrl(s);
     }
 
-    public boolean setDieNum(String s){ return clientInputController.dieNumCtrl(s); }
+    /**
+     * Returns true if the value contained in s is included between 1 and 9 ( boundaries included ).
+     * @param s the String to check
+     * @return a boolean
+     */
+    private boolean setDieNum(String s){ return clientInputController.dieNumCtrl(s); }
 
-    public boolean roundTrackCtrl(String s) {
+    /**
+     * Returns true if the value contained in the String is included between 1 and 10 ( boundaries included ).
+     * @param s the String to check
+     * @return a boolean
+     */
+    private boolean roundTrackCtrl(String s) {
         return  clientInputController.roundTrackCtrl(s);
     }
 
-    public synchronized void setToolBreakFlag(boolean bool){
-        this.toolBreakFlag = bool;
+    /**
+     * Sets the toolBreakFlag attribute as true.
+     */
+    private synchronized void setToolBreakFlag(){
+        this.toolBreakFlag = true;
     }
 
-    public synchronized boolean isToolBreakFlag() {
+    /**
+     * Returns the toolBreakFlag attribute.
+     * @return a boolean
+     */
+    private synchronized boolean isToolBreakFlag() {
         return toolBreakFlag;
     }
 
-    public void checkMessage(String str){
+    /**
+     * Checks if the message received from the server is a message that should unlock some methods using setWaitOn.
+     * @param str the String received from the server
+     */
+    protected void checkMessage(String str){
 
         if (str.equals("Please complete your move:"))
             setWaitOn(false);
         else if (str.equals("You cannot place this die anyway!") || str.equals("It's not your turn. Please wait.")){
-            setToolBreakFlag(true);
+            setToolBreakFlag();
             setWaitOn(false);
         }
 

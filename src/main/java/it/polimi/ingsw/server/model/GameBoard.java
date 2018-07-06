@@ -211,6 +211,7 @@ public class GameBoard extends Observable {
         bld.append("Public Achievements-");
         for (CardAchievement p : publicAchievements) {
             bld.append(p.toString());
+            bld.append(",");
         }
         bld.append("-");
         return bld.toString();

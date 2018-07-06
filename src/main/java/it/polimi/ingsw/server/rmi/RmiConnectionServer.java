@@ -105,9 +105,9 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
             boolean schemeChosen = game.isSchemeChosen();
             if (!schemeChosen) {
                 this.player.setDashboard(message.getContent());
-                this.send("You have chosen the following scheme: " + message.getContent() + "\n" + this.player.getDashboard().toString() + "\nPlease wait, the game will start soon.");
+                this.send("You have chosen the following scheme: " + message.getContent() + "\nPlease wait, the game will start soon.");
             } else {
-                this.send("Too late! Your scheme is: " + defaultScheme + "\n" + this.player.getDashboard().toString() + "\nThe game has already started!");
+                this.send("Too late! Your scheme is: " + defaultScheme + "\nThe game has already started!");
             }
         } catch (NotValidValueException e) {
             System.err.println(e.toString());

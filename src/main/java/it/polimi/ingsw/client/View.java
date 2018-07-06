@@ -109,8 +109,6 @@ public abstract class View implements Observer {
 
     public abstract void continueToPlay(String s);
 
-
-
     public abstract void loginSuccess(String s);
 
     public abstract void showSchemes(String s);
@@ -134,8 +132,6 @@ public abstract class View implements Observer {
     public abstract String getAction();
 
     public abstract String getIndex();
-
-
 
 
     public void createConnection(){
