@@ -94,15 +94,11 @@ public abstract class View implements Observer {
 
     public abstract void continueToPlay(String s);
 
-
-
     public abstract void loginSuccess(String s);
 
     public abstract void showSchemes(String s);
 
     public abstract void showPrivateAchievement(String s);
-
-
 
 
 

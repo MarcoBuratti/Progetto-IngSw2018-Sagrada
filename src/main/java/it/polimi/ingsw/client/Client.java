@@ -1,8 +1,6 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.CliView;
-import it.polimi.ingsw.client.GUIView;
-import it.polimi.ingsw.client.View;
+
 import it.polimi.ingsw.util.GraphicsClient;
 import it.polimi.ingsw.util.InputController;
 import javafx.application.Application;

@@ -41,6 +41,6 @@ public class ShadeVariety implements CardAchievement {
      */
     @Override
     public String toString() {
-        return "Shades Variety: Sets of one of each value anywhere.!";
+        return "Shades_Variety";
     }
 }

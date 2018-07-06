@@ -45,6 +45,6 @@ public class ColumnColorVariety implements CardAchievement, AbstractColorVariety
      */
     @Override
     public String toString() {
-        return "Column Color Variety: Columns with no repeated colors.!";
+        return "Column_Color_Variety";
     }
 }
