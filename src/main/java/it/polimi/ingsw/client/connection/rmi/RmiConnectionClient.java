@@ -9,8 +9,9 @@ import it.polimi.ingsw.server.interfaces.RmiServerInterface;
 import it.polimi.ingsw.util.Message;
 import org.json.simple.JSONObject;
 
-import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.StringTokenizer;
 
@@ -28,8 +29,9 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
     public RmiConnectionClient(View view, String address, int port) {
         this.addObserver(view);
         try {
-            RmiControllerInterface server = (RmiControllerInterface) Naming.lookup("//" + address + "/Server");
-            channel = server.addClient((RmiClientInterface) UnicastRemoteObject.exportObject(this, port));
+            Registry registry = LocateRegistry.getRegistry(address, port);
+            RmiControllerInterface server = (RmiControllerInterface) registry.lookup("Server");
+            channel = server.addClient((RmiClientInterface) UnicastRemoteObject.exportObject(this, 0));
             super.setView(view);
         } catch (Exception e) {
             System.out.println("ConnectionClient error: " + e.toString());

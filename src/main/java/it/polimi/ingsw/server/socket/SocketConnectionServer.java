@@ -130,9 +130,9 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
                 boolean schemeChosen = game.isSchemeChosen();
                 if (!schemeChosen) {
                     this.player.setDashboard(chosenScheme);
-                    this.send("You have chosen the following scheme: " + chosenScheme + "\n" + this.player.getDashboard().toString() + "\nPlease wait, the game will start soon.");
+                    this.send("You have chosen the following scheme: " + chosenScheme + "\nPlease wait, the game will start soon.");
                 } else
-                    this.send("Too late! Your scheme is: " + defaultScheme + "\n" + this.player.getDashboard().toString() + "\nThe game has already started!");
+                    this.send("Too late! Your scheme is: " + defaultScheme + "\nThe game has already started!");
             }
 
             else
