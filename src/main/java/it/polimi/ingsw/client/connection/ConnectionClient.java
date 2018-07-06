@@ -22,7 +22,7 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
     private boolean moveCtrl;
     private boolean continueToPlay = false;
     private boolean isOn = true;
-    private boolean inputCtrl = true;
+    private boolean inputCtrl = false;
     private boolean waitOn;
     private boolean toolBreakFlag = false;
 
@@ -41,16 +41,16 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
 
         while (getIsOn()) {
 
-            inputCtrl = true;
-            move = new StringBuilder();
-            do {
+
+            while (inputCtrl) {
+                move = new StringBuilder();
                 askAction();
                 if(getIsOn()) {
                     if (tmpMove.equals("1")) {
                         TypeMove.CHOOSE_INDEX_DIE.moveToDo(this);
                         TypeMove.CHOOSE_ROW_COLUMNS.moveToDo(this);
                         TypeMove.CHOOSE_SEND_MOVE.moveToDo(this);
-                        inputCtrl = false;
+
                     }
                     if (tmpMove.equals("2")) {
                         TypeMove.CHOOSE_TOOL_INDEX.moveToDo(this);
@@ -73,15 +73,14 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
                                 }
                             }
                         }
-                        inputCtrl = false;
+
                     }
                     if (tmpMove.equals("3") || tmpMove.equals("4")) {
                         TypeMove.CHOOSE_SEND_MOVE.moveToDo(this);
-                        inputCtrl = false;
+
                     }
                 }
-            } while (inputCtrl);
-
+            }
         }
     }
 
@@ -156,11 +155,9 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
         moveCtrl = true;
         String rowColumn;
         do {
-            view.showOutput( graphicsClient.printRulesMatrix() );
-            rowColumn = view.getInput();
+            rowColumn = view.getRowColumn();
             moveCtrl = thirdInputDie(rowColumn);
         } while (moveCtrl);
-
         concatMove(rowColumn);
     }
 
@@ -170,8 +167,8 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
     public void setToolIndex(){
         moveCtrl = true;
         do {
-            view.showOutput( graphicsClient.printToolIndex() );
-            toolIndex = view.getInput();
+            toolIndex = view.getTool();
+            System.out.println("TOOL INDEX:"+toolIndex);
             moveCtrl = secondToolIndex(toolIndex);
         } while (moveCtrl);
     }
@@ -212,8 +209,7 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
         moveCtrl = true;
         String roundTrackIndex;
         do {
-            view.showOutput( graphicsClient.printRoundDie() );
-            roundTrackIndex = view.getInput();
+            roundTrackIndex = view.getRoundTrack();
             moveCtrl = roundTrackCtrl(roundTrackIndex);
         } while (moveCtrl);
         concatMove(roundTrackIndex);
@@ -243,6 +239,7 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
      * Calls handle move using move.toString() as parameter.
      */
     public void sendMove(){
+        System.out.println("SEND"+move.toString());
         handleMove(move.toString());
     }
 
@@ -252,7 +249,7 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
      */
     private void concatMove(String s){
         move.append(s).append(" ");
-        System.out.println("move: " + move.toString());
+        System.out.println("moveCONCAT: " + move.toString());
     }
 
     /**
@@ -401,5 +398,9 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
             setWaitOn(false);
         }
 
+    }
+
+    public void setInputControl(boolean inputCtrl) {
+        this.inputCtrl = inputCtrl;
     }
 }

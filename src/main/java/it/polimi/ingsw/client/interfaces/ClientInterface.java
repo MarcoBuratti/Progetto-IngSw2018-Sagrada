@@ -41,4 +41,6 @@ public interface ClientInterface {
     void setIsOn(boolean bool);
 
     void setContinueToPlay(boolean bool);
+
+    void setInputControl(boolean bool);
 }

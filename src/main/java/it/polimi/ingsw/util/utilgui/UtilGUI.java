@@ -11,42 +11,7 @@ import javafx.scene.text.TextAlignment;
 
 public class UtilGUI {
 
-    public static GridPane drawLabelScheme(String s, double h, boolean set){
 
-        String cleanedString = cleanString(s);
-        String arr[] = cleanedString.split("]");
-        GridPane labelScheme = new GridPane();
-        labelScheme.setHgap(0);
-        labelScheme.setVgap(0);
-        for (int i = 0; i < 4; i++)
-            for (int j = 0; j < 5; j++) {
-                int ind = i * 5 + j;
-                Label label = new Label();
-                if (arr[ind].substring(arr[ind].length() - 2).equals("  ")) {
-                    setCell(arr[ind].substring(arr[ind].length() - 4, arr[ind].length() - 3), label,h);
-                }else{
-                    GridPane die = new DrawDie().draw(ColorGUI.valueOf(arr[ind].substring(arr[ind].length() - 2,arr[ind].length() - 1)).getColor(),
-                            Color.BLACK,arr[ind].substring(arr[ind].length() - 1),h);
-                    die.setAlignment(Pos.CENTER);
-                    die.setStyle(ColorGUI.valueOf(arr[ind].substring(arr[ind].length() - 2,arr[ind].length() - 1)).getSetOnDie());
-                    label.setGraphic(die);
-
-
-                }
-                if (set){
-                    Integer number= ind;
-                    label.setOnMouseClicked(event -> {
-                        System.out.println(number/5+" "+number%5);
-                    });
-                }
-                label.setMinSize(h,h);
-                label.setMaxSize(h,h);
-                labelScheme.add(label,j,i);
-            }
-        return labelScheme;
-
-
-    }
     public static void setCell(String s, Labeled labeled, double h) {
         DrawDie drawDie = new DrawDie();
         if (s.matches("[1-6]")) {
@@ -106,6 +71,21 @@ public class UtilGUI {
                 replaceAll("\\u001B\\[35m","");
 
 
+    }
+
+    public static Label drawDashboard(String cell,double h) {
+        Label label = new Label();
+        if (cell.substring(cell.length() - 2).equals("  ")) {
+            setCell(cell.substring(cell.length() - 4, cell.length() - 3), label, h);
+        } else {
+            GridPane die = new DrawDie().draw(ColorGUI.valueOf(cell.substring(cell.length() - 2, cell.length() - 1)).getColor(),
+                    Color.BLACK, cell.substring(cell.length() - 1), h);
+            die.setAlignment(Pos.CENTER);
+            die.setStyle(ColorGUI.valueOf(cell.substring(cell.length() - 2, cell.length() - 1)).getSetOnDie());
+            label.setGraphic(die);
+
+        }
+        return label;
     }
 
 }

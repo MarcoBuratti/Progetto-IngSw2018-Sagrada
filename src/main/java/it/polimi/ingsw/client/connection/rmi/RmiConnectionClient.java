@@ -129,6 +129,8 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
      */
     @Override
     public void handleScheme(String fromServer, String fromClient) {
+        System.out.println(fromServer);
+        System.out.println(fromClient);
         int choice = Integer.parseInt(fromClient);
         String substringSchemes = fromServer.substring(fromServer.indexOf('.') + 2);
         StringTokenizer strtok = new StringTokenizer(substringSchemes, ",");
@@ -153,6 +155,7 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
      */
     @Override
     public void handleMove(String fromClient) {
+        System.out.println(fromClient);
         fromClient = fromClient.substring(0, fromClient.length()-1);
         String [] strtok = fromClient.split(" ");
         String key;
@@ -198,7 +201,8 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
             }
         }
 
-        sendMove(PlayerMove.playerMoveReader(jsonObject));
+        if(choice<4)
+            sendMove(PlayerMove.playerMoveReader(jsonObject));
 
     }
 

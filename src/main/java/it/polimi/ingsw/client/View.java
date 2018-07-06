@@ -36,15 +36,15 @@ public abstract class View implements Observer {
     public abstract void start();
 
     public void showInput(String fromServer) {
-        System.out.println("showinput");
         if (fromServer.startsWith("You have logged in")) {
             loginSuccess(fromServer);
+
         }
-        else if (fromServer.startsWith("schemes. "))
+        else if (fromServer.startsWith("schemes. ")) {
             showSchemes(fromServer);
+        }
 
         else if (fromServer.startsWith("The game has started")) {
-            System.out.println("instartgame");
             startGame(fromServer);
 
 
@@ -55,13 +55,16 @@ public abstract class View implements Observer {
             showPrivateAchievement(fromServer);
 
         else if (fromServer.startsWith("Update")) {
+            System.out.println("in update");
             JSONParser parser = new JSONParser();
             try {
-                JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/up.json"));
+                JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/"+getNickname()+".json"));
 
+                System.out.println("achi");
                 String achievement = (String) jsonObject.get("Public Achievements");
                 showPublicAchievements(achievement);
 
+                System.out.println("tool");
                 String tool = (String) jsonObject.get("Tools");
                 if (toolCtrl) {
                     getConnectionClient().setTool(tool);
@@ -85,6 +88,7 @@ public abstract class View implements Observer {
                 for (int i = 0; i < player; i++) {
                     String request = "scheme" + i;
                     String scheme = (String) jsonObject.get(request);
+                    System.out.println("scheme");
                     showPlayers(scheme);
 
                 }
@@ -95,8 +99,21 @@ public abstract class View implements Observer {
                 System.err.println(e.toString());
             }
         }
+        else  if(fromServer.startsWith("You have chosen the following scheme:")){
+            showAnswer(fromServer);
+
+        }
+
+        else  if(fromServer.startsWith("Please wait, the game will start soon.")){
+            newGame(fromServer);
+
+        }
+
+
         else {
-            System.out.println(graphicsClient.printGeneric(fromServer));
+            System.out.println("else finale" +fromServer);
+            showGenericMessage(fromServer);
+
         }
 
     }
@@ -112,6 +129,8 @@ public abstract class View implements Observer {
     public abstract void loginSuccess(String s);
 
     public abstract void showSchemes(String s);
+
+    public abstract void showAnswer(String s);
 
     public abstract void showPrivateAchievement(String s);
 
@@ -133,22 +152,26 @@ public abstract class View implements Observer {
 
     public abstract String getIndex();
 
+    public abstract String getRowColumn();
+
+    public abstract String getRoundTrack();
+
+    public abstract String getTool();
+
+    public abstract void showGenericMessage (String s);
+
+    public abstract void endMove(String s);
+
+    public abstract void newGame(String s);
+
 
     public void createConnection(){
 
         if (choice.equals("SOCKET") || choice.equals("1")) {
             connectionClient = new SocketConnectionClient(this, address, Integer.parseInt(port));
-            this.connectionClient.handleName(nickname);
-            /*synchronized (this){
-                try {
-                    wait();
-                }catch (InterruptedException e){
-                    e.printStackTrace();
-                }
-            }*/
+
         } else{
             connectionClient = new RmiConnectionClient(this, address, Integer.parseInt(port));
-            this.connectionClient.handleName(nickname);
         }
 
     }
@@ -184,6 +207,7 @@ public abstract class View implements Observer {
     public synchronized void update(Observable o, Object arg) {
         System.out.println("update");
             String fromServer = (String) arg;
+        System.out.println(fromServer);
             if(fromServer.startsWith("Terminate")){
                 showOutput("Terminate");
                 connectionClient.setContinueToPlay(true);
@@ -208,25 +232,32 @@ public abstract class View implements Observer {
                 fromServer = fromServer.replace("!", "\n");
                 showInput(fromServer);
             }else if(fromServer.startsWith("*")){
-                fromServer = fromServer.substring(1, fromServer.length());
-                StringTokenizer strtok = new StringTokenizer(fromServer);
-                String key, value;
-                JSONObject jsonObject = new JSONObject();
-                while (strtok.hasMoreTokens()){
-                    key = strtok.nextToken("-");
-                    value = strtok.nextToken("-");
-                    jsonObject.put(key, value);
+                System.out.println("prima del syncro");
+                synchronized (this) {
+                    fromServer = fromServer.substring(1, fromServer.length());
+                    StringTokenizer strtok = new StringTokenizer(fromServer);
+                    String key, value;
+                    JSONObject jsonObject = new JSONObject();
+                    while (strtok.hasMoreTokens()) {
+                        key = strtok.nextToken("-");
+                        value = strtok.nextToken("-");
+                        jsonObject.put(key, value);
+                    }
+                    try (FileWriter up = new FileWriter("src/main/files/"+getNickname()+".json")) {
+                        up.write(jsonObject.toJSONString());
+                    } catch (IOException e) {
+                        System.out.println(e.toString());
+                    }
+                    System.out.println("letto json");
+                    showInput("Update");
                 }
-                try (FileWriter up = new FileWriter("src/main/files/up.json")) {
-                    up.write(jsonObject.toJSONString());
-                } catch (IOException e) {
-                    System.out.println(e.toString() );
-                }
-                System.out.println("ciao");
-                showInput("Update");
             }else
                 showInput(fromServer);
+
+
+        System.out.println("FINE");
     }
+
 
     public synchronized void setHasChosenScheme(boolean bool) {
         this.hasChosenScheme = bool;
@@ -253,6 +284,7 @@ public abstract class View implements Observer {
     public Stage getPrimaryStage() {
         return primaryStage;
     }
+
 
     public void start(Stage primaryStage){
         this.primaryStage=primaryStage;

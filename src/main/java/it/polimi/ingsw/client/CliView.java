@@ -35,6 +35,7 @@ public class CliView extends View  {
         setNickname();
         while (wantToPlay) {
             createConnection();
+            getConnectionClient().handleName(getNickname());
             setScheme();
             super.getConnectionClient().game();
         /*if (!super.getHasChosenScheme()) {
@@ -163,7 +164,8 @@ public class CliView extends View  {
     }
 
     @Override
-    public void startGame(String s){System.out.println(getGraphicsClient().printGeneric(s));}
+    public void startGame(String s){System.out.println(getGraphicsClient().printGeneric(s));
+    getConnectionClient().setInputControl(true);}
 
     @Override
     public void showPublicAchievements(String s){
@@ -201,10 +203,55 @@ public class CliView extends View  {
     }
 
     @Override
+    public String getRowColumn() {
+        showOutput( getGraphicsClient().printRulesMatrix() );
+        return getInput();
+    }
+
+    @Override
+    public String getRoundTrack() {
+        showOutput( getGraphicsClient().printRoundDie() );
+        return getInput();
+
+    }
+
+    @Override
+    public String getTool() {
+        showOutput( getGraphicsClient().printToolIndex() );
+        return getInput();
+    }
+
+    @Override
+    public void showGenericMessage(String fromServer) {
+        System.out.println(getGraphicsClient().printGeneric(fromServer));
+    }
+
+    @Override
+    public void endMove(String s) {
+
+        getConnectionClient().handleMove(s);
+
+    }
+
+    @Override
+    public void newGame(String s) {
+        getConnectionClient().setInputControl(true);
+
+    }
+
+
+    @Override
+    public void showAnswer(String fromServer) {
+        System.out.println(getGraphicsClient().printGeneric(fromServer));
+    }
+
+    @Override
     public String getIndex() {
         showOutput( getGraphicsClient().printRulesDash() );
         return getInput();
     }
+
+
 
     public void showOutput(String s){
         System.out.println(s);

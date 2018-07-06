@@ -1,12 +1,12 @@
 {
-    "Color_Diagonals":"Color Diagonals: Count of diagonally adjacent same color dice",
-    "Row_Shades_Variety":"Row Shades Variety: Rows with no repeated values",
-    "Row_Color_Variety":"Row Color Variety: Rows with no repeated colors",
-    "Color_Variety":"Color Variety: Sets of one of each color anywhere",
-    "Light_Shades":"Light Shades:Sets of 1 & 2 values anywhere",
-    "Medium_Shades":"Medium Shades: Sets of 3 & 4 values anywhere",
-    "Dark_Shades":"Dark Shades: Sets of 5 & 6 values anywhere",
-    "Shades_Variety":"Shades Variety: Sets of one of each value anywhere",
-    "Column_Color_Variety":"Column Color Variety: Columns with no repeated colors",
-    "Column_Shade_Variety":"Column Shade Variety: Columns with no repeated values"
+    "Color_Diagonals":"Color Diagonals (#): Count of diagonally adjacent same color dice",
+    "Row_Shades_Variety":"Row Shades Variety (5): Rows with no repeated values",
+    "Row_Color_Variety":"Row Color Variety (6): Rows with no repeated colors",
+    "Color_Variety":"Color Variety (4): Sets of one of each color anywhere",
+    "Light_Shades":"Light Shades (2): Sets of 1 & 2 values anywhere",
+    "Medium_Shades":"Medium Shades (2): Sets of 3 & 4 values anywhere",
+    "Dark_Shades":"Dark Shades (2): Sets of 5 & 6 values anywhere",
+    "Shades_Variety":"Shades Variety (5): Sets of one of each value anywhere",
+    "Column_Color_Variety":"Column Color Variety (5): Columns with no repeated colors",
+    "Column_Shade_Variety":"Column Shade Variety (4): Columns with no repeated values"
 }

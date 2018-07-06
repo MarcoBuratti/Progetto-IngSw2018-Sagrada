@@ -17,7 +17,7 @@ public class GraphicsClient {
         System.out.println("        \033[31;1mBenvenuto su Sagrada\033[0m");
         System.out.println("Maggiori Informazioni riguardo al gioco");
         System.out.println("e le regole di Sagrada al seguente link:");
-        System.out.println(" http://www.craniocreations.it/prodotto/sagrada/");
+        System.out.println("http://www.craniocreations.it/prodotto/sagrada/");
         System.out.println("\n\n");
         System.out.println("\u001b[1mPer favore inserisci 1 per giocare con CLI o 2 per giocare con GUI:\u001b[0m");
     }
@@ -124,9 +124,28 @@ public class GraphicsClient {
     }
 
     public void printAchievements(String s){
-        s = s.replace("!", "\n");
+        String[] achievements = s.split( ",");
         System.out.println("\n\u001B[34mPublic Achievements:\u001b[0m");
-        System.out.println("\u001b[1m" + s + "\u001b[0m");
+        //System.out.println("\u001b[1m" + s + "\u001b[0m");
+
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = (JSONObject) parser.parse(new FileReader("src/main/resources/public_achievement/achievement.json"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        for (int i = 0; i < 3; i++) {
+
+
+            System.out.println("\u001b[1m" + jsonObject.get(achievements[i]) + "\u001b[0m");
+        }
+
+
+
     }
 
     public void printScheme(String s){
