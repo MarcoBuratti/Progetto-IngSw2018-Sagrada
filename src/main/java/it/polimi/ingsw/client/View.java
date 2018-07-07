@@ -36,7 +36,7 @@ public abstract class View implements Observer {
     public abstract void start();
 
     private void showInput(String fromServer) {
-        if (fromServer.startsWith("You have logged in")) {
+        if (fromServer.startsWith("You have logged")) {
             loginSuccess(fromServer);
 
         }
@@ -50,16 +50,16 @@ public abstract class View implements Observer {
 
         }
 
-        else if (fromServer.startsWith("Your private achievement is:"))
+        else if (fromServer.startsWith("Your private achievement is:")) {
+            System.out.println(fromServer);
             showPrivateAchievement(fromServer);
 
-        else if (fromServer.startsWith("Update")) {
+        }else if (fromServer.startsWith("Update")) {
 
             JSONParser parser = new JSONParser();
             try {
                 JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/"+getNickname()+".json"));
 
-                System.out.println("achi");
                 String achievement = (String) jsonObject.get("Public Achievements");
                 showPublicAchievements(achievement);
 

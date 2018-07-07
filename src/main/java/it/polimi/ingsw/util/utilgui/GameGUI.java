@@ -67,6 +67,7 @@ public class GameGUI {
             borderPane.setMinSize(dim/6,dim/5);
             achievements.getChildren().add(borderPane);
         }
+        System.out.println("-"+s+"_");
         ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/images/achievements/" + s + JPEG),dim/6,dim/5,true,true));
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(img);
