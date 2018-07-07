@@ -42,6 +42,6 @@ public class RowShadeVariety implements CardAchievement, AbstractShadeVariety {
      */
     @Override
     public String toString() {
-        return "Row_Shades_Variety";
+        return "Row_Shade_Variety";
     }
 }

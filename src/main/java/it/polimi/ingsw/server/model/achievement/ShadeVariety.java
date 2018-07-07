@@ -42,6 +42,6 @@ public class ShadeVariety implements CardAchievement {
      */
     @Override
     public String toString() {
-        return "Shades_Variety";
+        return "Shade_Variety";
     }
 }
