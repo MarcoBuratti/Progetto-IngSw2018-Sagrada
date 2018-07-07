@@ -38,6 +38,8 @@ public class GameGUI {
     private String move;
     private Stage secondStage;
     private boolean done;
+    private static final String JPEG = ".jpeg";
+    private static final String VERDANA = "Verdana";
 
 
     public void setMessageFromServer(String s){
@@ -56,13 +58,13 @@ public class GameGUI {
         String[] publicAchievements = fromServer.split(",");
         for (int i = 0; i < 3 ; i++) {
             System.out.println("_"+publicAchievements[i]+"__");
-            ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/images/achievements/"+publicAchievements[i]+".jpeg"),dim/6,dim/5,true,true));
+            ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/images/achievements/" + publicAchievements[i]+ JPEG),dim/6,dim/5,true,true));
             BorderPane borderPane = new BorderPane();
             borderPane.setCenter(img);
             borderPane.setMinSize(dim/6,dim/5);
             achievements.getChildren().add(borderPane);
         }
-        ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/images/achievements/"+s+".jpeg"),dim/6,dim/5,true,true));
+        ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/images/achievements/" + s + JPEG),dim/6,dim/5,true,true));
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(img);
         borderPane.setMinSize(dim/6,dim/5);
@@ -77,7 +79,7 @@ public class GameGUI {
         String[] tool = s.split(",");
         for (int i = 0; i < 6 ; i+=2) {
             System.out.println(tool[i]);
-            ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/images/tools/"+tool[i]+".jpeg"),dim/4,dim/4.5,true,true));
+            ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/images/tools/" + tool[i] + JPEG),dim/4,dim/4.5,true,true));
 
             Label label = new Label();
             label.setMinSize(dim/4,dim/4.5);
@@ -89,7 +91,7 @@ public class GameGUI {
             VBox vBox = new VBox();
             Label used = new Label();
             used.setTextAlignment(TextAlignment.CENTER);
-            used.setFont(Font.font ("Verdana", dim/60));
+            used.setFont(Font.font (VERDANA, dim/60));
 
             if(tool[i +1].equals("false"))
                 used.setText("Cost: 1");
@@ -211,13 +213,13 @@ public class GameGUI {
 
 
     private void drawButtons(){
-        Button placeDie = new Button("Piazza un dado");
+        Button placeDie = new Button("Place a Die");
         placeDie.setOnAction(event->setMove("1"));
-        Button useTool = new Button("Usa Tool");
+        Button useTool = new Button("Use a ToolCard");
         useTool.setOnAction(event->setMove("2"));
-        Button skip = new Button("Passa il turno");
+        Button skip = new Button("Go Through");
         skip.setOnAction(event->setMove("3"));
-        Button quit = new Button("Esci dal gioco");
+        Button quit = new Button("Quit");
         quit.setOnAction(event->setMove("4"));
 
         placeDie.setMinSize(dim/7,dim/20);
@@ -330,7 +332,7 @@ public class GameGUI {
         vBox.setSpacing(dim/15);
         vBox.setPadding(new Insets(dim/50));
         Label label = new Label("Choose a number");
-        label.setFont(Font.font ("Verdana", dim/40));
+        label.setFont(Font.font (VERDANA, dim/40));
 
         GridPane numbers = new GridPane();
         numbers.setHgap(dim/100);
@@ -345,7 +347,7 @@ public class GameGUI {
             button.setMinSize(dim/15,dim/15);
             button.setOnAction(event-> {setMove(choose.toString());
             stage.close();});
-            button.setFont(Font.font ("Verdana", dim/40));
+            button.setFont(Font.font (VERDANA, dim/40));
             numbers.add(button,i%3,i/3);
 
         }
@@ -365,8 +367,8 @@ public class GameGUI {
         if(type)
             label.setText("Choose plus or minus");
         else
-            label.setText("Choose die's number");
-        label.setFont(Font.font ("Verdana", dim/40));
+            label.setText("Choose how many dice you want to place");
+        label.setFont(Font.font (VERDANA, dim/40));
 
         GridPane numbers = new GridPane();
         numbers.setHgap(dim/100);
@@ -392,7 +394,7 @@ public class GameGUI {
             button.setMinSize(dim/15,dim/15);
             button.setOnAction(event-> {setMove(choose.toString());
             stage.close();});
-            button.setFont(Font.font ("Verdana", dim/40));
+            button.setFont(Font.font (VERDANA, dim/40));
             numbers.add(button,i,0);
 
         }
@@ -431,7 +433,7 @@ public class GameGUI {
 
     }
 
-    public void newScreen(){
+    private void newScreen(){
         root = new HBox();
         root.setSpacing(dim/25);
         root.setPadding(new Insets(dim/100));

@@ -156,8 +156,10 @@ public class CliView extends View  {
     }
 
     @Override
-    public void startGame(String s){System.out.println(getGraphicsClient().printGeneric(s));
-    getConnectionClient().setInputControl(true);}
+    public void startGame(String s){
+        System.out.println(getGraphicsClient().printGeneric(s));
+        getConnectionClient().setInputControl(true);
+    }
 
     @Override
     public void showPublicAchievements(String s){

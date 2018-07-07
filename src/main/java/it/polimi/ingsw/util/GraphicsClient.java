@@ -34,7 +34,7 @@ public class GraphicsClient {
 
     public String wrongNick() { return ("Please don't use spaces!"); }
 
-    public String errorConnection(){return ("An error occurred while trying to connect. Please try again.");}
+    public String errorConnection(){return ("An error occurred while trying to create a connection. Please try again.");}
 
     public String printConnection() {
         return ("Insert 1 to play using Socket connection or 2 to play using Rmi connection.");

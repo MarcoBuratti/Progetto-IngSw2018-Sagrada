@@ -36,7 +36,7 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
             super.setView(view);
             view.connectionSuccess();
         } catch (RemoteException | NotBoundException e) {
-            System.out.println("An error occurred while trying to create a connection. Please try again.");
+            view.errorLogin();
         }
     }
 

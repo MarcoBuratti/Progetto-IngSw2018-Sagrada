@@ -4,7 +4,6 @@ import it.polimi.ingsw.util.GraphicsClient;
 import it.polimi.ingsw.util.InputController;
 import it.polimi.ingsw.util.SchemeParser;
 import it.polimi.ingsw.util.utilgui.ColorGUI;
-import it.polimi.ingsw.util.utilgui.DrawDie;
 import it.polimi.ingsw.util.utilgui.GameGUI;
 import it.polimi.ingsw.util.utilgui.UtilGUI;
 import javafx.application.Platform;
@@ -17,23 +16,18 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.TextAlignment;
+import javafx.scene.layout.VBox;import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 
 import static it.polimi.ingsw.util.utilgui.UtilGUI.cleanString;
 import static it.polimi.ingsw.util.utilgui.UtilGUI.drawDashboard;
-import static it.polimi.ingsw.util.utilgui.UtilGUI.setCell;
 
 public class GUIView extends View {
 
 
     private InputController cliController;
     private GridPane grid;
-    private Scene scene;
     private boolean connectionSuccessful = false;
-    private String inputString;
     private double h = 800;
     private double v = 600;
 
@@ -42,7 +36,7 @@ public class GUIView extends View {
     private Label text;
 
 
-    public GUIView() {
+    GUIView() {
         setGraphicsClient(new GraphicsClient());
         cliController = new InputController();
     }
@@ -54,7 +48,7 @@ public class GUIView extends View {
         grid = new GridPane();
         grid.heightProperty().addListener((observable, oldValue, newValue) -> v = (double) newValue);
         grid.widthProperty().addListener((observable, oldValue, newValue) -> h = (double) newValue);
-        scene = new Scene(grid, h, v);
+        Scene scene = new Scene(grid, h, v);
         getPrimaryStage().setScene(scene);
 
         ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/images/intro.jpg"), h * 9 / 20, v / 2, true, true));
@@ -69,7 +63,7 @@ public class GUIView extends View {
         GridPane.setConstraints(label1, 0, 2);
 
         TextField nickNameTextField = new TextField();
-        nickNameTextField.setPromptText("Inserire nickname");
+        nickNameTextField.setPromptText("Nickname");
         setSize(nickNameTextField);
         GridPane.setConstraints(nickNameTextField, 1, 2);
 
@@ -79,7 +73,7 @@ public class GUIView extends View {
         GridPane.setConstraints(label2, 2, 2);
 
         TextField ipAddressTextField = new TextField();
-        ipAddressTextField.setPromptText("Inserire indirizzo IP");
+        ipAddressTextField.setPromptText("Server's IP address");
         setSize(ipAddressTextField);
         GridPane.setConstraints(ipAddressTextField, 3, 2);
 
@@ -89,16 +83,16 @@ public class GUIView extends View {
         GridPane.setConstraints(label3, 0, 3);
 
         TextField portTextField = new TextField();
-        portTextField.setPromptText("Inserire porta");
+        portTextField.setPromptText("Server's port");
         setSize(portTextField);
         GridPane.setConstraints(portTextField, 1, 3);
 
-        Label label4 = new Label("Connessione:");
+        Label label4 = new Label("Connection:");
         setSize(label4);
         label4.setAlignment(Pos.CENTER);
         GridPane.setConstraints(label4, 2, 3);
 
-        ChoiceBox choiceBox = new ChoiceBox();
+        ChoiceBox<String> choiceBox = new ChoiceBox<>();
         choiceBox.getItems().addAll("RMI", "SOCKET");
         choiceBox.setValue("RMI");
         setSize(choiceBox);
@@ -114,11 +108,13 @@ public class GUIView extends View {
         loginButton.requestFocus();
         loginButton.setOnAction(event -> {
                     if (checkChoose(nickNameTextField, ipAddressTextField, portTextField)) {
-                        setChoice(choiceBox.getValue().toString());
+                        setChoice(choiceBox.getValue());
                         Platform.runLater(() -> getPrimaryStage().setScene(waitAnswer("Attendi risposta...")));
                         createConnection();
-                        Thread thread = new Thread(() -> getConnectionClient().handleName(getNickname()));
-                        thread.start();
+                        if ( connectionSuccessful ) {
+                            Thread thread = new Thread(() -> getConnectionClient().handleName(getNickname()));
+                            thread.start();
+                        }
                     }
                 }
         );
@@ -164,7 +160,7 @@ public class GUIView extends View {
         if (cliController.nameController(nickNameTextField.getText()) || nickNameTextField.getText().length() == 0) {
             setRedColor(nickNameTextField);
             if (nickNameTextField.getText().length() == 0)
-                nickNameTextField.setPromptText("Inserire nickname!");
+                nickNameTextField.setPromptText("Insert your nickname!");
             else
                 nickNameTextField.setPromptText(getGraphicsClient().wrongNick());
             nickNameTextField.clear();
@@ -177,7 +173,7 @@ public class GUIView extends View {
         if (cliController.ipController(ipAddressTextField.getText()) || ipAddressTextField.getText().length() == 0) {
             ipAddressTextField.clear();
             setRedColor(ipAddressTextField);
-            ipAddressTextField.setPromptText("Indirizzo IP non valido!");
+            ipAddressTextField.setPromptText("Incorrect IP Address!");
             allOk = false;
 
         } else {
@@ -186,7 +182,7 @@ public class GUIView extends View {
         if (cliController.portController(portTextField.getText()) || portTextField.getText().length() == 0) {
             portTextField.clear();
             setRedColor(portTextField);
-            portTextField.setPromptText("Porta non valida!");
+            portTextField.setPromptText("Incorrect Port!");
             allOk = false;
 
         } else {
@@ -236,7 +232,7 @@ public class GUIView extends View {
         VBox vBox = new VBox();
         vBox.setSpacing(h / 20);
         vBox.setAlignment(Pos.TOP_CENTER);
-        text = new Label("Ciao " + getNickname() + "\nScegli lo schema da usare in questa partita");
+        text = new Label("Welcome to Sagrada,  " + getNickname() + "\nPlease choose one of the following schemes");
         text.setMinHeight(h / 20);
         text.setTextAlignment(TextAlignment.CENTER);
         vBox.getChildren().add(text);
@@ -266,10 +262,10 @@ public class GUIView extends View {
         String substringSchemes = fromServer.substring(fromServer.indexOf('.') + 2);
         String[] schemes = substringSchemes.split(",");
 
-        GridPane grid = new GridPane();
-        grid.setVgap(h / 50);
-        grid.setHgap(h / 50);
-        grid.setAlignment(Pos.CENTER);
+        GridPane gridPane = new GridPane();
+        gridPane.setVgap(h / 50);
+        gridPane.setHgap(h / 50);
+        gridPane.setAlignment(Pos.CENTER);
         Button[] b = new Button[4];
 
         for (int k = 0; k < 4; k++) {
@@ -294,12 +290,12 @@ public class GUIView extends View {
 
 
             });
-            grid.add(b[k], k % 2, k / 2);
+            gridPane.add(b[k], k % 2, k / 2);
 
 
         }
         vBox.setAlignment(Pos.CENTER);
-        vBox.getChildren().add(grid);
+        vBox.getChildren().add(gridPane);
         vBox.setStyle("-fx-background-color: grey");
         Platform.runLater(() -> getPrimaryStage().setScene(new Scene(vBox, h * 2 / 3, h)));
     }
@@ -418,8 +414,7 @@ public class GUIView extends View {
     }
 
     @Override
-    public void newGame(String s) {
-
+    public void newGame(String s) { //TODO SISTEMARE
     }
 
     @Override
@@ -429,8 +424,7 @@ public class GUIView extends View {
     }
 
     @Override
-    public void showOutput(String s) {
-
+    public void showOutput(String s) { //TODO SISTEMARE
     }
 
 

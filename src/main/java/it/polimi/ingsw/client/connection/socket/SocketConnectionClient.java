@@ -40,7 +40,7 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
             executor.submit(this);
             view.connectionSuccess();
         } catch (IOException e) {
-            System.out.println("An error occurred while trying to create a connection. Please try again.");
+            view.errorLogin();
         }
 
     }
