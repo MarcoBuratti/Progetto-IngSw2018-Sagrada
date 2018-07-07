@@ -23,8 +23,8 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
     private PrintStream out;
     private BufferedReader in;
     private Player player;
-    private boolean gameStarted = false;
     private boolean isOn;
+    private boolean gameStarted;
 
     /**
      * Creates a new server thread associated with the socket client connection.
@@ -101,15 +101,37 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
     }
 
     /**
-     * Locks the thread waiting for the attribute gameStarted to be set as true.
+     * Private method used to call methods that must be run only if it's the first time the player logs in.
      */
-    private synchronized void waitGameStart() {
-        while (!gameStarted) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+    private void firstLogHandler() {
+        try {
+            server.registerConnection(this);
+
+            while (!gameStarted && isOn) {
+                out.println();
+                isOn = !out.checkError();
             }
+
+            if (!isOn) {
+                server.deregisterConnection(this);
+            } else {
+                String schemes = game.selectSchemes();
+                String defaultScheme = defaultScheme(schemes);
+                Color privateAchievementColor = game.selectPrivateAchievement();
+                this.player.setPrivateAchievement(new PrivateAchievement(privateAchievementColor));
+                this.send("Your private achievement is: " + privateAchievementColor);
+                String chosenScheme = askForChosenScheme(schemes);
+                boolean schemeChosen = game.isSchemeChosen();
+                if (!schemeChosen) {
+                    this.player.setDashboard(chosenScheme);
+                    this.send("You have chosen the following scheme: " + chosenScheme + "\nPlease wait, the game will start soon.");
+                } else
+                    this.send("Too late! Your scheme is: " + defaultScheme + "\nThe game has already started!");
+            }
+        }
+
+        catch (IOException | NotValidValueException e ) {
+            server.deregisterConnection(this);
         }
     }
 
@@ -123,20 +145,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
             boolean firstLog = !server.alreadyLoggedIn(this);
 
             if (firstLog) {
-                server.registerConnection(this);
-                waitGameStart();
-                String schemes = game.selectSchemes();
-                String defaultScheme = defaultScheme(schemes);
-                Color privateAchievementColor = game.selectPrivateAchievement();
-                this.player.setPrivateAchievement(new PrivateAchievement(privateAchievementColor));
-                this.send("Your private achievement is: " + privateAchievementColor);
-                String chosenScheme = askForChosenScheme(schemes);
-                boolean schemeChosen = game.isSchemeChosen();
-                if (!schemeChosen) {
-                    this.player.setDashboard(chosenScheme);
-                    this.send("You have chosen the following scheme: " + chosenScheme + "\nPlease wait, the game will start soon.");
-                } else
-                    this.send("Too late! Your scheme is: " + defaultScheme + "\nThe game has already started!");
+                firstLogHandler();
             } else
                 server.registerConnection(this);
 
@@ -154,7 +163,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
                     notifyObservers(newMove);
                 }
             }
-        } catch (IOException | NotValidValueException e) {
+        } catch (IOException e) {
             server.deregisterConnection(this);
         }
     }

@@ -229,4 +229,10 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
 
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean ping() throws RemoteException { return true; }
 }

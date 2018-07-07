@@ -221,12 +221,14 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
         try {
             while (getIsOn()) {
                 String message = in.readLine();
-                setChanged();
-                notifyObservers(message);
-                if (message.equals("Terminate."))
-                    close();
-                else
-                    checkMessage(message);
+                if (!message.isEmpty()) {
+                    setChanged();
+                    notifyObservers(message);
+                    if (message.equals("Terminate."))
+                        close();
+                    else
+                        checkMessage(message);
+                }
             }
         } catch (IOException e) {
             System.err.println(e.toString());

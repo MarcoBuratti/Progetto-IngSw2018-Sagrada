@@ -12,4 +12,11 @@ public interface RmiClientInterface extends Remote {
      * @throws RemoteException if the connection with the server has expired
      */
     void update(String string) throws RemoteException;
+
+    /**
+     * Allows the user to know if the connection is alive or not.
+     * @return true (always)
+     * @throws RemoteException if the connection isn't alive
+     */
+    boolean ping() throws RemoteException;
 }

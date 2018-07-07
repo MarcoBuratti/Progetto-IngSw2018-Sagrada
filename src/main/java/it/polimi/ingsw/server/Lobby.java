@@ -90,22 +90,34 @@ class Lobby {
      */
     private void startGame() {
         timer.cancel();
-        server.setNewLobby();
-        gameStarted = true;
+
         if (serverInterfaces.size() >= 2) {
+            server.setNewLobby();
+            gameStarted = true;
             executor.submit(new Game(this, this.server));
-        } else
+        }
+
+        else
             gameFailed();
     }
 
     /**
-     * Tells the connected player that the game start has failed and closes it's connection.
+     * Tells the connected player that the game start has failed and communicates him that he has to wait for other players to be connected.
      */
     private void gameFailed() {
 
         System.out.println("Game start failed because some of the players disconnected!");
-        serverInterfaces.get(0).send("Sorry! Other players disconnected before the game started. Please try again.");
-        serverInterfaces.get(0).close();
+
+        for (RemoteView remoteView : remoteViews) {
+            if (remoteView.getPlayer().getNickname().equals(serverInterfaces.get(0).getPlayer().getNickname())) {
+                remoteView.send("Sorry! Other players disconnected before the game started. Please wait for other players to be connected.");
+            }
+            else {
+                server.removeNickname(remoteView.getPlayer().getNickname());
+                server.removeRemoteView(remoteView);
+                this.remoteViews.remove(remoteView);
+            }
+        }
 
     }
 
