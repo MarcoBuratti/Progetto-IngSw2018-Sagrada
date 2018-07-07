@@ -1,7 +1,7 @@
 {
   "Name": "Lathekin",
   "Number": "8",
-  "String": "Muovi esattamente due dadi, rispettando tutte le restrizioni di piazzamento",
+  "String": "Move exactly two dice, obeying all placement restrictions.\n",
   "Param": 5,
-  "Move": ["CHOOSE_ROW_COLUMNS","CHOOSE_ROW_COLUMNS","CHOOSE_ROW_COLUMNS","CHOOSE_ROW_COLUMNS", "CHOOSE_SEND_MOVE"]
+  "Move": ["GET_COORDINATES","PLACE_COORDINATES","GET_COORDINATES","PLACE_COORDINATES", "CHOOSE_SEND_MOVE"]
 }

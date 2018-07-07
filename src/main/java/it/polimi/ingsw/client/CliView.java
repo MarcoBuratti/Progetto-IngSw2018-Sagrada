@@ -195,8 +195,8 @@ public class CliView extends View {
     }
 
     @Override
-    public String getRowColumn() {
-        showOutput(getGraphicsClient().printRulesMatrix());
+    public String getRowColumn ( boolean place ) {
+        showOutput(getGraphicsClient().printRulesMatrix(place));
         return getInput();
     }
 

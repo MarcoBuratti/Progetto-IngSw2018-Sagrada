@@ -1,7 +1,7 @@
 {
-  "Name": "Taglierina Manuale",
+  "Name": "Tap Wheel",
   "Number": "11",
-  "String": "Muovi fino a due dadi dello stesso colore di un solo dado sul Tracciato dei Round. Devi rispettare tutte le restrizioni di piazzamento",
+  "String": "Move up to two dice of the same color that match the color of a die on the Round Track.\nYou must obey all placement restrictions.\n",
   "Param": 6,
-  "Move": ["CHOOSE_ROW_COLUMNS","CHOOSE_ROW_COLUMNS", "CHOOSE_GO_ON", "CHOOSE_ROW_COLUMNS","CHOOSE_ROW_COLUMNS", "CHOOSE_SEND_MOVE"]
+  "Move": ["GET_COORDINATES","PLACE_COORDINATES", "CHOOSE_GO_ON", "GET_COORDINATES","PLACE_COORDINATES", "CHOOSE_SEND_MOVE"]
 }

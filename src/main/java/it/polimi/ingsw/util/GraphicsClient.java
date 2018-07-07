@@ -69,8 +69,11 @@ public class GraphicsClient {
         return ("Insert the index of the die you want to get from the draft pool - Insert a number between 0 and 8.");
     }
 
-    public String printRulesMatrix() {
-        return ("Please insert the indexes of the Row and the Column where you want to place your die.");
+    public String printRulesMatrix(boolean place) {
+        if (place)
+            return ("Please insert the indexes of the Row and the Column of the position where you want to place your die.");
+        else
+            return ("Please insert the indexes of the Row and the Column of the position where you want to get your die from.");
     }
 
     public String printToolIndex() {
@@ -113,16 +116,16 @@ public class GraphicsClient {
     public void printTool(String s) {
 
         String[] tool = s.split(",");
-        System.out.println("\u001B[34mTool:\033[0m");
+        System.out.println("\u001B[34mToolCards:\033[0m");
         int k = 1;
         for (int i = 0; i < tool.length; i = i + 2, k++) {
             JSONObject jsonObject = null;
             try {
                 jsonObject = (JSONObject) parser.parse(new FileReader("src/main/resources/tool/" + tool[i] + ".json"));
                 if (tool[i + 1].equals("true")) {
-                    System.out.println("\u001b[1mThe following ToolCard has already been used once:\u001b[0m");
+                    System.out.println("\u001b[1mThe following ToolCard has already been used once:\u001b[0m\n");
                 } else
-                    System.out.println("\u001b[1mThe following ToolCard has never been used:\u001b[0m");
+                    System.out.println("\u001b[1mThe following ToolCard has never been used:\u001b[0m\n");
 
                 System.out.println("\u001b[1m" + (k) + ") " + "Name: " + jsonObject.get("Name"));
                 System.out.println(jsonObject.get("String") + "\u001b[0m");
@@ -134,7 +137,7 @@ public class GraphicsClient {
 
     public void printDraft(String s) {
 
-        String bld = "\n\u001B[34mNumber of the die on the DraftPool: 0  1  2  3  4  5  6  7  8\u001b[0m\n" +
+        String bld = "\n\u001B[34mIndex of the die on the Draft Pool: 0  1  2  3  4  5  6  7  8\u001b[0m\n" +
                 "                                    " + s;
         System.out.println(bld);
     }
@@ -166,7 +169,7 @@ public class GraphicsClient {
     }
 
     public void printRoundTrack(String s) {
-        System.out.println("\n\u001B[34mRoundTrack: 0  1  2  3  4  5  6  7  8\033[0m");
+        System.out.println("\n\u001B[34mRound Track: 0  1  2  3  4  5  6  7  8\033[0m");
         s = s.replace("!", "\n");
         System.out.println(s);
     }

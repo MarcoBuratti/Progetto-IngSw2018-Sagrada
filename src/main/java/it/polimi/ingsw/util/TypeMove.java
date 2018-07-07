@@ -11,9 +11,15 @@ public enum TypeMove {
         }
     },
 
-    CHOOSE_ROW_COLUMNS {
+    PLACE_COORDINATES {
         public void moveToDo(ConnectionClient connectionClient) {
-            connectionClient.setRowColumn();
+            connectionClient.setRowColumn( true );
+        }
+    },
+
+    GET_COORDINATES {
+        public void moveToDo(ConnectionClient connectionClient) {
+            connectionClient.setRowColumn( false );
         }
     },
 

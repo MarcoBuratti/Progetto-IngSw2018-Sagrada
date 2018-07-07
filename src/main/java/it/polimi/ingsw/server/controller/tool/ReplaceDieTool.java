@@ -60,7 +60,7 @@ public class ReplaceDieTool implements Tool {
      * Returns an array of int containing the coordinates (old row, old column, new row, new column) for the die the player wants to move.
      * Returns an empty array if the index is different from 1 or 2.
      *
-     * @param index      an int specifying if the user wants to read the coordinates referred to the first or to the second die
+     * @param index an int specifying if the user wants to read the coordinates referred to the first or to the second die
      * @param playerMove the PlayerMove Object representing the move
      * @return an array of int containing coordinates
      */
@@ -75,7 +75,7 @@ public class ReplaceDieTool implements Tool {
     /**
      * Tries to move the selected dice and returns a boolean specifying whether both move have been made successfully or not.
      *
-     * @param turn         the turn being played
+     * @param turn the turn being played
      * @param coordinates1 an array of int containing coordinates referred to the first die
      * @param coordinates2 an array of int containing coordinates referred to the second die
      * @return a boolean
@@ -127,12 +127,9 @@ public class ReplaceDieTool implements Tool {
 
                 int[] coordinates2 = getCoordinates(2, playerMove);
 
-                if (wrongCoordinatesCheck(coordinates2[0], coordinates2[1], coordinates2[2], coordinates2[3]) || wrongCoordinatesCheck(coordinates2[0], coordinates2[1], coordinates1[2], coordinates1[3]))
-                    return false;
-
-                if (toolName.equals(ToolNames.TAP_WHEEL) && !turn.getPlayer().getDashboard().getMatrixScheme()[coordinates1[0]][coordinates1[1]].getDie().getColor().
-                        equals(turn.getPlayer().getDashboard().getMatrixScheme()[coordinates2[0]][coordinates2[1]].getDie().getColor()))
-
+                if (wrongCoordinatesCheck(coordinates2[0], coordinates2[1], coordinates2[2], coordinates2[3]) || wrongCoordinatesCheck(coordinates2[0], coordinates2[1], coordinates1[2], coordinates1[3])
+                        || (toolName.equals(ToolNames.TAP_WHEEL) && !turn.getPlayer().getDashboard().getMatrixScheme()[coordinates1[0]][coordinates1[1]].getDie().getColor().
+                        equals(turn.getPlayer().getDashboard().getMatrixScheme()[coordinates2[0]][coordinates2[1]].getDie().getColor())))
                     return false;
 
                 ret = tryReplace(turn, coordinates1, coordinates2);

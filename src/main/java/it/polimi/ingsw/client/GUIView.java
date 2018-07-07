@@ -383,7 +383,7 @@ public class GUIView extends View {
     }
 
     @Override
-    public String getRowColumn() {
+    public String getRowColumn( boolean bool ) {
         gameGUI.activeDashboard();
         return gameGUI.getMove();
     }

@@ -1,7 +1,7 @@
 {
-  "Name": "Martelletto",
+  "Name": "Glazing Hammer",
   "Number": "5",
-  "String": "Tira nuovamente tutti i dadi della Riserva.\nQuesta carta può essera usata solo durante il tuo secondo turno, prima di scegliere il secondo dado",
+  "String": "Re-roll all dice in the Draft Pool.\nThis may only be used on your second turn before drafting.\n",
   "Param": 1,
   "Move": ["CHOOSE_SEND_MOVE"]
 }

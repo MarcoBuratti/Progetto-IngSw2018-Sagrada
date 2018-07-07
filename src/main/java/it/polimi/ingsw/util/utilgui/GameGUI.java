@@ -149,7 +149,7 @@ public class GameGUI {
                     label.setGraphic(die);
                     Integer round = i + 1;
                     Integer die1 = j;
-                    label.setOnMouseClicked(event -> setMove(round + "_" + die1));
+                    label.setOnMouseClicked(event -> setMove(round + " " + die1));
                     roundTrackDice.add(label, i, j + 1);
 
                     label.setMinSize(dim / 20, dim / 20);

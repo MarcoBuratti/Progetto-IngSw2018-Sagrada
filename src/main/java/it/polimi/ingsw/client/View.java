@@ -139,7 +139,7 @@ public abstract class View implements Observer {
 
     public abstract String getIndex();
 
-    public abstract String getRowColumn();
+    public abstract String getRowColumn( boolean place );
 
     public abstract String getRoundTrack();
 

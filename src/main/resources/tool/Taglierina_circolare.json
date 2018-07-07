@@ -1,7 +1,7 @@
 {
-  "Name": "Taglierina Circolare",
+  "Name": "Lens Cutter",
   "Number": "9",
-  "String": "Dopo aver scelto un dado, scambia quel dado con un dado sul Tracciato dei Round",
+  "String": "After drafting, swap the drafted die with a die from the Round Track.\n",
   "Param": 3,
   "Move": ["CHOOSE_INDEX_DIE","CHOOSE_ROUND_INDEX", "CHOOSE_SEND_MOVE"]
 }

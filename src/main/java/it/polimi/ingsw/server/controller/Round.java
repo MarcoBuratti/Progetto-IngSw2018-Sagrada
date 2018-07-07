@@ -81,7 +81,7 @@ public class Round implements Observer {
                 r.send("It's " + currentPlayer.getNickname() + "'s turn. Please wait.");
 
         if (currentPlayerRemoteView.isOn()) {
-            currentPlayerRemoteView.send("It's your turn! Please make your move.");
+            currentPlayerRemoteView.send("It's your turn!Please make your move.");
             if (!onePlayerLeft) {
                 this.currentTurn = new Turn(searchRemoteView(currentPlayer), currentPlayer, gameBoard, secondTurn);
                 currentTurn.turnManager();

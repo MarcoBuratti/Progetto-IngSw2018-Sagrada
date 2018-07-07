@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.connection;
 import it.polimi.ingsw.client.View;
 import it.polimi.ingsw.client.interfaces.ClientInterface;
 import it.polimi.ingsw.util.ClientController;
-import it.polimi.ingsw.util.GraphicsClient;
 import it.polimi.ingsw.util.TypeMove;
 
 import java.util.ArrayList;
@@ -47,7 +46,7 @@ public abstract class ConnectionClient extends Observable implements ClientInter
                 if (getIsOn()) {
                     if (tmpMove.equals("1")) {
                         TypeMove.CHOOSE_INDEX_DIE.moveToDo(this);
-                        TypeMove.CHOOSE_ROW_COLUMNS.moveToDo(this);
+                        TypeMove.PLACE_COORDINATES.moveToDo(this);
                         TypeMove.CHOOSE_SEND_MOVE.moveToDo(this);
 
                     }
@@ -144,11 +143,11 @@ public abstract class ConnectionClient extends Observable implements ClientInter
     /**
      * Asks the user for the coordinates until they're correct and then appends them to move.
      */
-    public void setRowColumn() {
+    public void setRowColumn( boolean place ) {
         moveCtrl = true;
         String rowColumn;
         do {
-            rowColumn = view.getRowColumn();
+            rowColumn = view.getRowColumn(place);
             moveCtrl = thirdInputDie(rowColumn);
         } while (moveCtrl);
         concatMove(rowColumn);
@@ -385,7 +384,8 @@ public abstract class ConnectionClient extends Observable implements ClientInter
 
         if (str.equals("Please complete your move:"))
             setWaitOn(false);
-        else if (str.equals("You cannot place this die anyway!") || str.equals("It's not your turn. Please wait.")) {
+        else if (str.equals("You cannot place this die anyway!") || str.equals("It's not your turn. Please wait.")
+                || str.equals("You don't have enough favour tokens left to use this tool!")) {
             setToolBreakFlag(true);
             setWaitOn(false);
         }

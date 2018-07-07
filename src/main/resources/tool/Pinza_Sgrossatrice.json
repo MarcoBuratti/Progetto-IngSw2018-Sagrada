@@ -1,7 +1,7 @@
 {
-  "Name": "Pinza Sgrossatrice",
+  "Name": "Grozing Pliers",
   "Number": "7",
-"String": "Dopo aver scelto un dado, aumenta o diminuisce il valore del dado scelto di 1\nNon puoi cambiare un 6 in 1 o un 1 in 6",
+"String": "After drafting, increase or decrease the value of the drafted die by 1.\n1 may not change to 6, or 6 to 1.\n",
   "Param": 3,
   "Move": ["CHOOSE_INDEX_DIE","CHOOSE_PLUS_MIN", "CHOOSE_SEND_MOVE"]
 }

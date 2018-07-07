@@ -1,7 +1,7 @@
 {
-  "Name": "Tenaglia a Rotelle",
+  "Name": "Running Pliers",
   "Number": "10",
-  "String": "Dopo il tuo primo turno scegli immediatamente un altro dado Salta il tuo secondo turno in questo round",
+  "String": "After your first turn, immediately draft a die.\nSkip your next turn this round.\n",
   "Param": 3,
-  "Move": ["CHOOSE_INDEX_DIE", "CHOOSE_ROW_COLUMNS", "CHOOSE_SEND_MOVE"]
+  "Move": ["CHOOSE_INDEX_DIE", "PLACE_COORDINATES", "CHOOSE_SEND_MOVE"]
 }

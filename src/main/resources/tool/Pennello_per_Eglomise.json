@@ -1,7 +1,7 @@
 {
-  "Name": "Pannello per Eglomise",
+  "Name": "Eglomise Brush",
   "Number": "2",
-"String": "Muovi un qualsiasi dado nella tua vetrata ignorando le restrizioni di colore.\nDevi rispettare tutte le altre restrizioni di piazzamento",
+"String": "Move any one die in your window ignoring color restrictions.\nYou must obey all other placement restrictions.\n",
   "Param": 3,
-  "Move": ["CHOOSE_ROW_COLUMNS","CHOOSE_ROW_COLUMNS", "CHOOSE_SEND_MOVE"]
+  "Move": ["GET_COORDINATES","PLACE_COORDINATES", "CHOOSE_SEND_MOVE"]
 }

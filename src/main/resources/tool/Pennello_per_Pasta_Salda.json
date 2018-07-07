@@ -1,7 +1,7 @@
 {
-  "Name": "Pennello per Pasta Salda",
+  "Name": "Flux Brush",
   "Number": "3",
-  "String": "Dopo aver scelto un dado, tira nuovamente quel dado. Se non puoi piazzarlo, riponilo nella Riserva",
+  "String": "After drafting, re-roll the drafted die.\nIf it cannot be placed, return it to the Draft Pool.\n",
   "Param": 5,
-  "Move": ["CHOOSE_INDEX_DIE","CHOOSE_SEND_MOVE", "WAIT_MOVE","CHOOSE_ROW_COLUMNS", "CHOOSE_SEND_MOVE"]
+  "Move": ["CHOOSE_INDEX_DIE","CHOOSE_SEND_MOVE", "WAIT_MOVE","PLACE_COORDINATES", "CHOOSE_SEND_MOVE"]
 }

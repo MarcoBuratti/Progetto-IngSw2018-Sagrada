@@ -1,7 +1,7 @@
 {
-  "Name": "Riga in Sughero",
+  "Name": "Cork Baked Straightedge",
   "Number": "1",
-  "String": "Dopo aver scelto un dado, piazzalo in una casella che non sia adiacente a un altro dado. Devi rispettare tutte le restrizioni di piazzamento",
+  "String": "After drafting, place the die in a spot that is not adjacent to another die.\nYou must obey all other placement restrictions.\n",
   "Param": 3,
-  "Move": ["CHOOSE_INDEX_DIE","CHOOSE_ROW_COLUMNS", "CHOOSE_SEND_MOVE"]
+  "Move": ["CHOOSE_INDEX_DIE","PLACE_COORDINATES", "CHOOSE_SEND_MOVE"]
 }
