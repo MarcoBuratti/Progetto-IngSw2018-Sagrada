@@ -47,7 +47,6 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
             try {
                 this.channel.setPlayerAndAskScheme(message);
             } catch (RemoteException e) {
-                System.err.println(e.toString());
                 close();
             }
         }

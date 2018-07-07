@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.connection.rmi.RmiConnectionClient;
 import it.polimi.ingsw.client.connection.socket.SocketConnectionClient;
 import it.polimi.ingsw.client.interfaces.ClientInterface;
 import it.polimi.ingsw.util.GraphicsClient;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -35,7 +36,7 @@ public abstract class View implements Observer {
 
     public abstract void start();
 
-    public void showInput(String fromServer) {
+    private void showInput(String fromServer) {
         if (fromServer.startsWith("You have logged in")) {
             loginSuccess(fromServer);
 
@@ -118,15 +119,10 @@ public abstract class View implements Observer {
 
     }
 
-    public abstract void showOutput(String s);
-
-    public abstract String getInput();
-
-    public abstract void setScheme();
-
-    public abstract void continueToPlay(String s);
 
     public abstract void loginSuccess(String s);
+
+    public abstract void errorLogin();
 
     public abstract void showSchemes(String s);
 
@@ -158,11 +154,19 @@ public abstract class View implements Observer {
 
     public abstract String getTool();
 
+    public abstract String getPlusOrMinus();
+
+    public abstract String getDieNumber();
+
+    public abstract String getNumber();
+
     public abstract void showGenericMessage (String s);
 
-    public abstract void endMove(String s);
-
     public abstract void newGame(String s);
+
+    public abstract void terminate(String s);
+
+    public abstract void showOutput(String s);
 
 
     public void createConnection(){
@@ -209,8 +213,8 @@ public abstract class View implements Observer {
             String fromServer = (String) arg;
         System.out.println(fromServer);
             if(fromServer.startsWith("Terminate")){
+                terminate(fromServer);
                 showOutput("Terminate");
-                connectionClient.setContinueToPlay(true);
             }
             else if(!fromServer.startsWith("*")){
                 if (fromServer.startsWith("You have logged in")) {
@@ -288,6 +292,8 @@ public abstract class View implements Observer {
 
     public void start(Stage primaryStage){
         this.primaryStage=primaryStage;
+        this.primaryStage.setOnCloseRequest(event->System.exit(0));
+
         start();
     }
 

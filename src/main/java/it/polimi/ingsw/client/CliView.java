@@ -154,6 +154,11 @@ public class CliView extends View  {
     }
 
     @Override
+    public void errorLogin() {
+        System.out.println(getGraphicsClient().errorConnection());
+    }
+
+    @Override
     public void showSchemes(String s){
         getGraphicsClient().printChoice(s);
     }
@@ -194,7 +199,7 @@ public class CliView extends View  {
 
     @Override
     public void endUpdate() {
-        System.out.println(getGraphicsClient().printRulesFirst());
+        showOutput(getGraphicsClient().printRulesFirst());
     }
 
     @Override
@@ -222,21 +227,38 @@ public class CliView extends View  {
     }
 
     @Override
-    public void showGenericMessage(String fromServer) {
-        System.out.println(getGraphicsClient().printGeneric(fromServer));
+    public String getPlusOrMinus() {
+        showOutput( getGraphicsClient().printPlusMin() );
+        return getInput();
     }
 
     @Override
-    public void endMove(String s) {
+    public String getDieNumber() {
+        showOutput( getGraphicsClient().printGoOn() );
+        return getInput();
 
-        getConnectionClient().handleMove(s);
+    }
 
+    @Override
+    public String getNumber() {
+        showOutput(getGraphicsClient().printDieNum());
+        return getInput();
+    }
+
+    @Override
+    public void showGenericMessage(String fromServer) {
+        System.out.println(getGraphicsClient().printGeneric(fromServer));
     }
 
     @Override
     public void newGame(String s) {
         getConnectionClient().setInputControl(true);
 
+    }
+
+    @Override
+    public void terminate(String fromServer) {
+        showOutput(fromServer);
     }
 
 

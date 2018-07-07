@@ -20,6 +20,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Screen;
 
 import static it.polimi.ingsw.util.utilgui.UtilGUI.cleanString;
 import static it.polimi.ingsw.util.utilgui.UtilGUI.drawDashboard;
@@ -113,7 +114,7 @@ public class GUIView extends View {
         loginButton.setOnAction(event -> {
                     if (checkChoose(nickNameTextField, ipAddressTextField, portTextField)) {
                         setChoice(choiceBox.getValue().toString());
-                        Platform.runLater(() -> getPrimaryStage().setScene(waitAnswer()));
+                        Platform.runLater(() -> getPrimaryStage().setScene(waitAnswer("Attendi risposta...")));
                         createConnection();
                         Thread thread = new Thread(() -> getConnectionClient().handleName(getNickname()));
                         thread.start();
@@ -194,8 +195,8 @@ public class GUIView extends View {
 
     }
 
-    private Scene waitAnswer() {
-        Label textField = new Label("Attendi risposta...");
+    private Scene waitAnswer(String s) {
+        Label textField = new Label(s);
         textField.setTextAlignment(TextAlignment.CENTER);
         textField.setStyle("-fx-font-size: 30px;");
         return new Scene(textField, h, v);
@@ -208,6 +209,12 @@ public class GUIView extends View {
         label.setAlignment(Pos.CENTER);
         label.setStyle("-fx-font-size: 30px;");
         Platform.runLater(() -> getPrimaryStage().setScene(new Scene(label, h / 2, v / 2)));
+    }
+
+    @Override
+    public void errorLogin() {
+        Platform.runLater(() -> getPrimaryStage().setScene(waitAnswer(getGraphicsClient().errorConnection())));
+
     }
 
     @Override
@@ -272,9 +279,6 @@ public class GUIView extends View {
 
                 }
                 b[Integer.parseInt(numberChoose) - 1].setOpacity(1);
-                System.out.println(fromServer);
-                System.out.println(numberChoose);
-
                 Thread thread = new Thread(() ->getConnectionClient().handleScheme(fromServer,numberChoose));
                 thread.start();
 
@@ -282,6 +286,7 @@ public class GUIView extends View {
 
             });
             grid.add(b[k], k % 2, k / 2);
+
 
         }
         vBox.setAlignment(Pos.CENTER);
@@ -304,9 +309,13 @@ public class GUIView extends View {
     @Override
     public void startGame(String s) {
         gameGUI = new GameGUI();
+
+        getPrimaryStage().setX(0);
+        getPrimaryStage().setY(0);
+        getPrimaryStage().setWidth(Screen.getPrimary().getBounds().getWidth());
+        getPrimaryStage().setHeight(Screen.getPrimary().getBounds().getHeight());
         Thread thread = new Thread(() -> getConnectionClient().game());
         thread.start();
-        //gameGUI.setMessageFromServer(s);
 
     }
 
@@ -340,6 +349,7 @@ public class GUIView extends View {
     @Override
     public void endUpdate() {
         getConnectionClient().setInputControl(true);
+        Platform.runLater(()->gameGUI.newSecondStage());
         gameGUI.show(getPrimaryStage());
 
     }
@@ -375,6 +385,24 @@ public class GUIView extends View {
     }
 
     @Override
+    public String getPlusOrMinus() {
+        gameGUI.activePlusOrMinusWindow();
+        return  gameGUI.getMove();
+    }
+
+    @Override
+    public String getDieNumber() {
+        gameGUI.activeNumberDiceWindow();
+        return gameGUI.getMove();
+    }
+
+    @Override
+    public String getNumber() {
+        gameGUI.activeNumberWindow();
+        return gameGUI.getMove();
+    }
+
+    @Override
     public void showGenericMessage(String s) {
 
         gameGUI.setMessageFromServer(s);
@@ -382,38 +410,21 @@ public class GUIView extends View {
     }
 
     @Override
-    public void endMove(String s) {
-        Thread thread = new Thread(()-> getConnectionClient().handleMove(s));
-        thread.start();
-    }
-
-    @Override
     public void newGame(String s) {
 
     }
 
+    @Override
+    public void terminate(String s) {
+        gameGUI.setMessageFromServer(s);
+        getPrimaryStage().close();
+    }
 
     @Override
     public void showOutput(String s) {
 
-
     }
 
-    @Override
-    public String getInput() {
-        return null;
-    }
-
-
-    @Override
-    public void setScheme() {
-
-    }
-
-    @Override
-    public void continueToPlay(String s) {
-
-    }
 
     private GridPane drawLabelScheme(String s, double h){
 

@@ -93,7 +93,6 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
             tmpMove = view.getAction();
             if (getContinueToPlay()) {
                 setIsOn(false);
-                view.continueToPlay(tmpMove);
                 moveCtrl = false;
                 inputCtrl = false;
             }else {
@@ -180,8 +179,7 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
         moveCtrl = true;
         String plusMin;
         do {
-            view.showOutput( graphicsClient.printPlusMin() );
-            plusMin = view.getInput();
+            plusMin = view.getPlusOrMinus();
             moveCtrl = plusMin(plusMin);
         } while (moveCtrl);
         concatMove(plusMin);
@@ -194,8 +192,7 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
         moveCtrl = true;
         String dieNum;
         do {
-            view.showOutput( graphicsClient.printDieNum() );
-            dieNum = view.getInput();
+            dieNum = view.getNumber();
             moveCtrl = setDieNum(dieNum);
         } while (moveCtrl);
 
@@ -223,8 +220,7 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
         moveCtrl = true;
         String goOnString;
         do {
-            view.showOutput( graphicsClient.printGoOn() );
-            goOnString = view.getInput();
+            goOnString= view.getDieNumber();
             moveCtrl = plusMin(goOnString);
         } while (moveCtrl);
 
@@ -402,5 +398,11 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
 
     public void setInputControl(boolean inputCtrl) {
         this.inputCtrl = inputCtrl;
+    }
+
+    public void errorLogin(){
+        view.errorLogin();
+
+
     }
 }

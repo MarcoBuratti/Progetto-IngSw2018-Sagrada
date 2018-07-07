@@ -34,6 +34,8 @@ public class GraphicsClient {
 
     public String wrongNick() { return ("Please don't use spaces!"); }
 
+    public String errorConnection(){return ("Impossibile connettersi");}
+
     public String printConnection() {
         return ("Inserisci 1 per socket, 2 per RMI");
     }
