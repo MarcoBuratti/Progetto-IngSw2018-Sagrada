@@ -21,6 +21,7 @@ class PortParser {
 
     /**
      * A static method used to read the Server's ports from a json file and set them.
+     * If it's impossible to read from the selected json file, it sets default port values as 1996 (socket) and 1997 (rmi).
      * @param server the Server
      */
     static void setPorts(Server server) {

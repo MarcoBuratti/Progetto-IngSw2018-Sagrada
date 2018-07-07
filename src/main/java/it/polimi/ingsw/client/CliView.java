@@ -3,9 +3,6 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.util.GraphicsClient;
 import it.polimi.ingsw.util.InputController;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import java.io.*;
 
 
@@ -20,7 +17,7 @@ public class CliView extends View  {
 
 
 
-    public CliView(InputStreamReader input)  {
+    CliView(InputStreamReader input)  {
         bufferedReader = new BufferedReader(input);
         super.setGraphicsClient( new GraphicsClient());
         cliController = new InputController();
@@ -47,7 +44,7 @@ public class CliView extends View  {
         this.connectionSuccessful = true;
     }
 
-    public void setNickname(){
+    private void setNickname(){
     try {
         inputCtrl = false;
         String nick;
@@ -63,7 +60,7 @@ public class CliView extends View  {
     }
     }
 
-    public void setIP() {
+    private void setIP() {
         try {
             String address;
             do {
@@ -77,7 +74,7 @@ public class CliView extends View  {
         }
     }
 
-    public void setPort() {
+    private void setPort() {
         try {
             inputCtrl = true;
             String port;
@@ -92,7 +89,7 @@ public class CliView extends View  {
         }
     }
 
-    public void setChoice() {
+    private void setChoice() {
         try {
             String choice;
             inputCtrl = true;
@@ -107,7 +104,7 @@ public class CliView extends View  {
         }
     }
 
-    public void setScheme() {
+    private void setScheme() {
         synchronized ( this ) {
             while (super.getChosenScheme()) {
                 try {
@@ -268,7 +265,7 @@ public class CliView extends View  {
         System.out.println(s);
     }
 
-    public String getInput(){
+    private String getInput(){
         try {
             input = bufferedReader.readLine();
         } catch (IOException e) {

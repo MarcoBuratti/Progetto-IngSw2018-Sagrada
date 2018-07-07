@@ -62,9 +62,4 @@ public class InputController {
         return  (!s.matches("[1-4]"));
     }
 
-    //TODO DA TOGLIERE
-    public boolean continueToPlayController(String s){
-        return  (!s.matches("[0-1]"));
-    }
-
 }

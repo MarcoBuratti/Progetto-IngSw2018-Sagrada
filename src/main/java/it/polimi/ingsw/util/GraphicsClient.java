@@ -17,7 +17,7 @@ public class GraphicsClient {
     }
 
     /**
-     * Prints the messages that the game launches at the start of the game
+     * Prints the messages that the game launches at the start of the game.
      */
     public void printStart() {
         System.out.println("        \033[31;1mWelcome to Sagrada!\033[0m");

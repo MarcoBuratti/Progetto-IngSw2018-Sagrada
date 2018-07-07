@@ -281,7 +281,7 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
     }
 
     /**
-     * Allows the user to set the extracted tools in ToolClient.
+     * Allows the user to set the extracted tools in ClientTool.
      * @param s the name of the tool
      */
     public void setTool(String s) {
@@ -396,13 +396,12 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
 
     }
 
+    /**
+     * Sets the inputCtrl attribute as the inputCtrl parameter.
+     * @param inputCtrl the boolean the user wants to set
+     */
     public void setInputControl(boolean inputCtrl) {
         this.inputCtrl = inputCtrl;
     }
 
-    public void errorLogin(){
-        view.errorLogin();
-
-
-    }
 }

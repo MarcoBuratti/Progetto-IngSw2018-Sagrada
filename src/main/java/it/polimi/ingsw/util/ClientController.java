@@ -3,15 +3,14 @@ package it.polimi.ingsw.util;
 import java.util.List;
 
 public class ClientController {
-    public ToolClient [] tool;
+    public ClientTool[] tool;
 
     /**
      * Saves the reference to the tools reading the related json files.
      * @param s a String containing the tools' names
      */
     public void setTool(String s) {
-        ToolParser toolParser = new ToolParser(s);
-        tool = toolParser.getToolClients();
+        tool = ToolParser.readTools(s);
     }
 
     /**

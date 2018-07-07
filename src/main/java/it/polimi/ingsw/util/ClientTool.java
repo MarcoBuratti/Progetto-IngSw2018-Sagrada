@@ -3,17 +3,17 @@ package it.polimi.ingsw.util;
 
 import java.util.List;
 
-public class ToolClient {
+public class ClientTool {
     private String number;
     private List<TypeMove> move;
 
     /**
-     * Create a ToolClient Object, containing a String representing the tool index (0-11) and
+     * Create a ClientTool Object, containing a String representing the tool index (0-11) and
      * the list of the TypeMove instances read from a JSON file associated with that tool.
      * @param number a String containing the tool index
      * @param move a List of TypeMove representing the move associated with the tool
      */
-    ToolClient (String number, List<TypeMove> move){
+    ClientTool(String number, List<TypeMove> move){
         this.number = number;
         this.move = move;
     }
