@@ -9,31 +9,37 @@ import java.io.IOException;
 public class GraphicsClient {
     private JSONParser parser;
 
+    /**
+     * Creates a new GraphicsClient Object and initialize the parser.
+     */
     public GraphicsClient (){
         parser = new JSONParser();
     }
 
+    /**
+     * Prints the messages that the game launches at the start of the game
+     */
     public void printStart() {
-        System.out.println("        \033[31;1mBenvenuto su Sagrada\033[0m");
-        System.out.println("Maggiori Informazioni riguardo al gioco");
-        System.out.println("e le regole di Sagrada al seguente link:");
-        System.out.println("http://www.craniocreations.it/prodotto/sagrada/");
+        System.out.println("        \033[31;1mWelcome to Sagrada!\033[0m");
+        System.out.println("More information about the game and rules");
+        System.out.println("are available at the following link:");
+        System.out.println(" http://www.craniocreations.it/prodotto/sagrada/");
         System.out.println("\n\n");
-        System.out.println("\u001b[1mPer favore inserisci 1 per giocare con CLI o 2 per giocare con GUI:\u001b[0m");
+        System.out.println("\u001b[1mPlease insert 1 to play using CLI or 2 to play using GUI:\u001b[0m");
     }
 
     public String askNick() {
         return ("Nickname: ");
     }
 
-    public String wrongNick() { return ("Senza spazio!"); }
+    public String wrongNick() { return ("Please don't use spaces!"); }
 
     public String printConnection() {
         return ("Inserisci 1 per socket, 2 per RMI");
     }
 
     public String printRequest(){
-        return ("Per favore scegli uno dei seguenti schemi, inserisci un numero da 1 a 4 ");
+        return ("Please choose one of the following schemes, insert a number between 1 and 4");
     }
 
     public String printGeneric(String s) {
@@ -44,48 +50,46 @@ public class GraphicsClient {
         return ("\n" + s + "\u001b[0m");
     }
 
-    public String printContinue(){ return ("se vuoi continuare a giocare premi 1 altrimenti 0"); }
+    public String printContinue(){ return ("se vuoi continuare a giocare premi 1 altrimenti 0"); } //TODO ELIMINARE
 
-    public String printEnd(){ return ("Fine del Gioco!");}
+    public String printEnd(){ return ("Game end!");}
 
     public String printRulesFirst() {
-        return ("\n\u001b[1mPremi 1 se vuoi piazzare un dado\nPremi 2 se vuoi usare una ToolCard\nPremi 3 se vuoi passare il turno\nPremi 4 se vuoi lasciare il gioco\u001b[0m");
+        return ("\n\u001b[1mInsert 1 if you want to place a die\nInsert 2 to use a ToolCard\nInsert 3 to go through\nInsert 4 to leave the game\u001b[0m");
     }
 
     public String printRulesDash() {
-        return ("Inserisci il numero del dado che vuoi prelevare dalla DraftPool - INSERISCI UN NUMERO DA 0 A 8");
+        return ("Insert the index of the die you want to get from the draft pool - Insert a number between 0 and 8");
     }
 
     public String printRulesMatrix(){
-        return ("Inserisci l'indice della Riga e della Colonna in cui vuoi piazzare il dado");
+        return ("Please insert the indexes of the Row and the Column where you want to place your die");
     }
 
-    public String printToolIndex(){ return ("Scegli uno dei tre Tool, inserisci 1, 2 o 3"); }
+    public String printToolIndex(){ return ("Please choose one of the three ToolCards, Insert 1, 2 or 3"); }
 
     public String printIP() {
-        return ("Indirizzo IP:");
+        return ("Server IP Address:");
     }
 
     public String printPort() {
-        return ("Porta:");
+        return ("Server Port:");
     }
 
-  //  public String printToolParam(){ return ( "Inserisci i parametri del Tool");}
+    public String printPlusMin(){ return  ("Please insert 0 to decrease the value of the die or 1 to increase it"); }
 
-    public String printPlusMin(){ return  ("Metti 0 per diminuire 1 per aumentare"); }
+    public String printDieNum(){ return  ("Please choose the value of the die, Insert a number between 1 and 6"); }
 
-    public String printDieNum(){ return  ("Inserisci un numero per il dado da settare, da 1 a 6"); }
-
-    public String printRoundDie(){ return ("Inserisci RoundTrack -1/10- e insersci indice del dado -0/8- "); }
+    public String printRoundDie(){ return ("Please choose the round you want to get your die from - 1-10 - and insert the index of the die you want to choose - 0-8 "); }
 
     public void printChoice(String s) {
-        String substringSchemes = s.substring(s.indexOf(".") + 2);
+        String substringSchemes = s.substring(s.indexOf('.') + 2);
         System.out.println(printRequest() + "\n");
         String[] choice = substringSchemes.split(",");
         for (int i = 0; i < 4; i++) {
             SchemeParser schemeParser = new SchemeParser(choice[i]);
-            System.out.println(i + 1 + ") " + "Nome: " + schemeParser.getName());
-            System.out.println("Token: " + schemeParser.getToken());
+            System.out.println(i + 1 + ") " + "Name: " + schemeParser.getName());
+            System.out.println("Favour tokens: " + schemeParser.getToken());
             System.out.println(schemeParser.getStringScheme());
         }
 
@@ -106,11 +110,11 @@ public class GraphicsClient {
                 e.printStackTrace();
             }
             if(tool[i+1].equals("true")){
-                System.out.println("\u001b[1mIl Tool è stato usato\u001b[0m");
+                System.out.println("\u001b[1mThe following ToolCard has already been used once:\u001b[0m");
             }else
-                System.out.println("\u001b[1mIl Tool non è stato usato\u001b[0m");
+                System.out.println("\u001b[1mThe following ToolCard has never been used:\u001b[0m");
 
-            System.out.println("\u001b[1m" + (k) + ") " + "Nome: " + jsonObject.get("Name"));
+            System.out.println("\u001b[1m" + (k) + ") " + "Name: " + jsonObject.get("Name"));
             System.out.println( jsonObject.get("String") + "\u001b[0m");
         }
     }
@@ -165,6 +169,6 @@ public class GraphicsClient {
     }
 
     public String printGoOn() {
-        return "Inserisci 1 per muovere un altro dado, 0 per inviare la tua mossa.";
+        return "Please choose 1 to move another die or 0 to stop and send your move";
     }
 }

@@ -89,7 +89,7 @@ public class Server extends UnicastRemoteObject {
      * Rebinds the Server to a new remote object for RMI and listens to new socket connections through accept method called by serverSocket.
      */
     private void start() {
-        System.out.println("Server is on!");
+        System.out.println("Server is on!\nSocket Port: " + SOCKET_PORT_NUMBER + "\nRmi Port: " + RMI_PORT_NUMBER);
 
         try {
             RmiController rmicontroller = new RmiController(this);
