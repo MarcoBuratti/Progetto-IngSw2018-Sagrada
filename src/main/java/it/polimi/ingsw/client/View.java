@@ -49,13 +49,12 @@ public abstract class View implements Observer {
 
 
         }
-        else if (fromServer.startsWith("Terminate"))
-            graphicsClient.printTerminate();
+
         else if (fromServer.startsWith("Your private achievement is:"))
             showPrivateAchievement(fromServer);
 
         else if (fromServer.startsWith("Update")) {
-            System.out.println("in update");
+
             JSONParser parser = new JSONParser();
             try {
                 JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/"+getNickname()+".json"));
@@ -64,7 +63,6 @@ public abstract class View implements Observer {
                 String achievement = (String) jsonObject.get("Public Achievements");
                 showPublicAchievements(achievement);
 
-                System.out.println("tool");
                 String tool = (String) jsonObject.get("Tools");
                 if (toolCtrl) {
                     getConnectionClient().setTool(tool);
@@ -88,7 +86,6 @@ public abstract class View implements Observer {
                 for (int i = 0; i < player; i++) {
                     String request = "scheme" + i;
                     String scheme = (String) jsonObject.get(request);
-                    System.out.println("scheme");
                     showPlayers(scheme);
 
                 }
@@ -109,9 +106,18 @@ public abstract class View implements Observer {
 
         }
 
+        else  if(fromServer.startsWith("You win")||fromServer.startsWith("You lose")){
+            endGame(fromServer);
+
+        }
+
+        else  if(fromServer.startsWith("Player:")){
+            addPlayerToRanking(fromServer);
+
+        }
+
 
         else {
-            System.out.println("else finale" +fromServer);
             showGenericMessage(fromServer);
 
         }
@@ -168,6 +174,10 @@ public abstract class View implements Observer {
 
     public abstract void showOutput(String s);
 
+    public abstract void endGame(String s);
+
+    public abstract void addPlayerToRanking(String s);
+
     void createConnection(){
 
         if (choice.equals("SOCKET") || choice.equals("1")) {
@@ -208,12 +218,12 @@ public abstract class View implements Observer {
     }
 
     public synchronized void update(Observable o, Object arg) {
-        System.out.println("update");
+
             String fromServer = (String) arg;
-        System.out.println(fromServer);
+
             if(fromServer.startsWith("Terminate")){
                 terminate(fromServer);
-                showOutput("Terminate");
+
             }
             else if(!fromServer.startsWith("*")){
                 if (fromServer.startsWith("You have logged in")) {
@@ -235,11 +245,12 @@ public abstract class View implements Observer {
                 fromServer = fromServer.replace("!", "\n");
                 showInput(fromServer);
             }else if(fromServer.startsWith("*")){
-                System.out.println("prima del syncro");
-                synchronized (this) {
+
+
                     fromServer = fromServer.substring(1, fromServer.length());
                     StringTokenizer strtok = new StringTokenizer(fromServer);
-                    String key, value;
+                    String key;
+                    String value;
                     JSONObject jsonObject = new JSONObject();
                     while (strtok.hasMoreTokens()) {
                         key = strtok.nextToken("-");
@@ -251,14 +262,14 @@ public abstract class View implements Observer {
                     } catch (IOException e) {
                         System.out.println(e.toString());
                     }
-                    System.out.println("letto json");
+
                     showInput("Update");
-                }
+
             }else
                 showInput(fromServer);
 
 
-        System.out.println("FINE");
+
     }
 
 
@@ -276,7 +287,7 @@ public abstract class View implements Observer {
         return this.chosenScheme;
     }
 
-    boolean getHasChosenScheme() { return this.hasChosenScheme; }
+    synchronized boolean getHasChosenScheme() { return this.hasChosenScheme; }
 
     public String getSchemes(){ return schemes;}
 

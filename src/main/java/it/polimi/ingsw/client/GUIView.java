@@ -16,7 +16,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;import javafx.scene.text.TextAlignment;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 
 import static it.polimi.ingsw.util.utilgui.UtilGUI.cleanString;
@@ -34,17 +36,19 @@ public class GUIView extends View {
     private GameGUI gameGUI;
     private String privateAchievement;
     private Label text;
+    private String output = " ";
 
 
     GUIView() {
         setGraphicsClient(new GraphicsClient());
         cliController = new InputController();
+
     }
 
 
     @Override
     public void start() {
-        getPrimaryStage().setTitle("Login Sagrada");
+        getPrimaryStage().setTitle("Sagrada");
         grid = new GridPane();
         grid.heightProperty().addListener((observable, oldValue, newValue) -> v = (double) newValue);
         grid.widthProperty().addListener((observable, oldValue, newValue) -> h = (double) newValue);
@@ -109,7 +113,7 @@ public class GUIView extends View {
         loginButton.setOnAction(event -> {
                     if (checkChoose(nickNameTextField, ipAddressTextField, portTextField)) {
                         setChoice(choiceBox.getValue());
-                        Platform.runLater(() -> getPrimaryStage().setScene(waitAnswer("Attendi risposta...")));
+                        waitAnswer("Wait Answer...");
                         createConnection();
                         if ( connectionSuccessful ) {
                             Thread thread = new Thread(() -> getConnectionClient().handleName(getNickname()));
@@ -197,11 +201,17 @@ public class GUIView extends View {
 
     }
 
-    private Scene waitAnswer(String s) {
-        Label textField = new Label(s);
-        textField.setTextAlignment(TextAlignment.CENTER);
-        textField.setStyle("-fx-font-size: 30px;");
-        return new Scene(textField, h, v);
+    private void waitAnswer(String input) {
+
+        Label genericMessage = new Label();
+        output = output+"\n"+input;
+        genericMessage.setText(output);
+        genericMessage.setAlignment(Pos.CENTER);
+        genericMessage.setTextAlignment(TextAlignment.CENTER);
+        genericMessage.setFont(new Font(h/35));
+
+        Platform.runLater(()->getPrimaryStage().setScene(new Scene(genericMessage, h, h*2/3)));
+
     }
 
     @Override
@@ -209,7 +219,7 @@ public class GUIView extends View {
 
         Label label = new Label(fromServer);
         label.setAlignment(Pos.CENTER);
-        label.setStyle("-fx-font-size: 30px;");
+        label.setFont(new Font(h/25));
         Platform.runLater(() -> {gameGUI = new GameGUI();
         getPrimaryStage().setScene(new Scene(label, h / 2, v / 2));});
         Thread thread = new Thread(() -> getConnectionClient().game());
@@ -218,7 +228,7 @@ public class GUIView extends View {
 
     @Override
     public void errorLogin() {
-        Platform.runLater(() -> getPrimaryStage().setScene(waitAnswer(getGraphicsClient().errorConnection())));
+        waitAnswer(getGraphicsClient().errorConnection());
 
     }
 
@@ -353,6 +363,7 @@ public class GUIView extends View {
     @Override
     public void endUpdate() {
         getConnectionClient().setInputControl(true);
+        gameGUI.setGameStarted(true);
         Platform.runLater(()->gameGUI.newSecondStage());
         gameGUI.show(getPrimaryStage());
 
@@ -408,8 +419,10 @@ public class GUIView extends View {
 
     @Override
     public void showGenericMessage(String s) {
-
-        gameGUI.setMessageFromServer(s);
+        if(gameGUI.isGameStarted())
+            gameGUI.setMessageFromServer(s);
+        else
+            waitAnswer(s);
 
     }
 
@@ -419,12 +432,26 @@ public class GUIView extends View {
 
     @Override
     public void terminate(String s) {
-        gameGUI.setMessageFromServer(s);
-        getPrimaryStage().close();
+        waitAnswer(s);
+
     }
 
     @Override
     public void showOutput(String s) { //TODO SISTEMARE
+    }
+
+    @Override
+    public void endGame(String s) {
+        output = " ";
+        waitAnswer(s);
+        gameGUI.setGameStarted(false);
+
+    }
+
+    @Override
+    public void addPlayerToRanking(String s) {
+        waitAnswer(s);
+
     }
 
 

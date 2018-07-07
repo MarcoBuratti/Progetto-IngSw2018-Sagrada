@@ -265,7 +265,18 @@ public class CliView extends View  {
         System.out.println(s);
     }
 
-    private String getInput(){
+
+    @Override
+    public void endGame(String s) {
+        showOutput(s);
+    }
+
+    @Override
+    public void addPlayerToRanking(String s) {
+        showOutput(s);
+    }
+
+    public String getInput(){
         try {
             input = bufferedReader.readLine();
         } catch (IOException e) {

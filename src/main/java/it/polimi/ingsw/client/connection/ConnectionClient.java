@@ -167,7 +167,6 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
         moveCtrl = true;
         do {
             toolIndex = view.getTool();
-            System.out.println("TOOL INDEX:"+toolIndex);
             moveCtrl = secondToolIndex(toolIndex);
         } while (moveCtrl);
     }
@@ -235,7 +234,7 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
      * Calls handle move using move.toString() as parameter.
      */
     public void sendMove(){
-        System.out.println("SEND"+move.toString());
+
         handleMove(move.toString());
     }
 
@@ -245,7 +244,7 @@ public abstract class ConnectionClient extends Observable implements  ClientInte
      */
     private void concatMove(String s){
         move.append(s).append(" ");
-        System.out.println("moveCONCAT: " + move.toString());
+
     }
 
     /**

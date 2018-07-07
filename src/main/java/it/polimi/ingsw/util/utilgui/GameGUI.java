@@ -37,7 +37,10 @@ public class GameGUI {
     private Label myDashBoard;
     private String move;
     private Stage secondStage;
+
     private boolean done;
+    private boolean gameStarted = false;
+
     private static final String JPEG = ".jpeg";
     private static final String VERDANA = "Verdana";
 
@@ -57,7 +60,7 @@ public class GameGUI {
         String s = privateAchievement.substring(privateAchievement.length()-1);
         String[] publicAchievements = fromServer.split(",");
         for (int i = 0; i < 3 ; i++) {
-            System.out.println("_"+publicAchievements[i]+"__");
+
             ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/images/achievements/" + publicAchievements[i]+ JPEG),dim/6,dim/5,true,true));
             BorderPane borderPane = new BorderPane();
             borderPane.setCenter(img);
@@ -78,7 +81,7 @@ public class GameGUI {
 
         String[] tool = s.split(",");
         for (int i = 0; i < 6 ; i+=2) {
-            System.out.println(tool[i]);
+
             ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/images/tools/" + tool[i] + JPEG),dim/4,dim/4.5,true,true));
 
             Label label = new Label();
@@ -417,6 +420,14 @@ public class GameGUI {
 
     public synchronized String getMove() {
         return move;
+    }
+
+    public void setGameStarted(boolean bool){
+        this.gameStarted = bool;
+    }
+
+    public boolean isGameStarted() {
+        return gameStarted;
     }
 
     private synchronized void inWait(){

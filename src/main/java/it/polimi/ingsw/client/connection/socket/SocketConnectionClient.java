@@ -162,8 +162,7 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
      */
     @Override
     public void handleScheme(String fromServer, String fromClient) {
-        System.out.println(fromServer);
-        System.out.println(fromClient);
+
         int choice = Integer.parseInt(fromClient);
         String substringSchemes = fromServer.substring(fromServer.indexOf('.') + 2);
         StringTokenizer strtok = new StringTokenizer(substringSchemes, ",");
@@ -178,7 +177,7 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
             chosenScheme = schemes[choice - 1];
         else
             chosenScheme = schemes[0];
-        System.out.println(chosenScheme);
+
         send(chosenScheme);
     }
 
@@ -187,7 +186,7 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
      */
     @Override
     public void handleMove(String fromClient) {
-        System.out.println("fro"+fromClient);
+
         fromClient = fromClient.substring(0, fromClient.length()-1);
         String  [] substringSchemes = fromClient.split(" ");
         int moveChoice = Integer.parseInt(substringSchemes[0]);

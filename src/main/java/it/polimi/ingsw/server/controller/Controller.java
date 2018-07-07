@@ -12,7 +12,7 @@ import javafx.util.Pair;
 import java.util.*;
 
 public class Controller extends Observable implements Observer {
-    private static final int NUMBER_OF_ROUNDS = 5;
+    private static final int NUMBER_OF_ROUNDS = 1;
     private static final String PLACE_DIE = "PlaceDie";
     private static final String USE_TOOL = "UseTool";
     private static final String GO_THROUGH = "GoThrough";
@@ -95,7 +95,8 @@ public class Controller extends Observable implements Observer {
                     remoteView.send("You lose!");
 
                 for (Pair pair : finalScores) {
-                    Player otherPlayer = (Player) pair.getKey();
+                    RemoteView r = (RemoteView) pair.getKey();
+                    Player otherPlayer = r.getPlayer();
                     remoteView.send("Player: " + otherPlayer.getNickname() + " , Score: " + pair.getValue());
                 }
             }
