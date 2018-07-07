@@ -9,6 +9,7 @@ import it.polimi.ingsw.server.interfaces.RmiServerInterface;
 import it.polimi.ingsw.util.Message;
 import org.json.simple.JSONObject;
 
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -33,8 +34,9 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
             RmiControllerInterface server = (RmiControllerInterface) registry.lookup("Server");
             channel = server.addClient((RmiClientInterface) UnicastRemoteObject.exportObject(this, 0));
             super.setView(view);
-        } catch (Exception e) {
-            System.out.println("ConnectionClient error: " + e.toString());
+            view.connectionSuccess();
+        } catch (RemoteException | NotBoundException e) {
+            System.out.println("An error occurred while trying to create a connection. Please try again.");
         }
     }
 

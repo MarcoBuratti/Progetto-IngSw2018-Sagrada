@@ -38,8 +38,9 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintStream(socket.getOutputStream());
             executor.submit(this);
+            view.connectionSuccess();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("An error occurred while trying to create a connection. Please try again.");
         }
 
     }

@@ -4,7 +4,6 @@ import it.polimi.ingsw.client.connection.rmi.RmiConnectionClient;
 import it.polimi.ingsw.client.connection.socket.SocketConnectionClient;
 import it.polimi.ingsw.client.interfaces.ClientInterface;
 import it.polimi.ingsw.util.GraphicsClient;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -51,7 +50,7 @@ public abstract class View implements Observer {
 
         }
         else if (fromServer.startsWith("Terminate"))
-            System.out.println(graphicsClient.printContinue());
+            graphicsClient.printTerminate();
         else if (fromServer.startsWith("Your private achievement is:"))
             showPrivateAchievement(fromServer);
 
@@ -119,6 +118,7 @@ public abstract class View implements Observer {
 
     }
 
+    public abstract void connectionSuccess();
 
     public abstract void loginSuccess(String s);
 
@@ -168,8 +168,7 @@ public abstract class View implements Observer {
 
     public abstract void showOutput(String s);
 
-
-    public void createConnection(){
+    void createConnection(){
 
         if (choice.equals("SOCKET") || choice.equals("1")) {
             connectionClient = new SocketConnectionClient(this, address, Integer.parseInt(port));
@@ -180,7 +179,7 @@ public abstract class View implements Observer {
 
     }
 
-    public ClientInterface getConnectionClient() {
+    ClientInterface getConnectionClient() {
         return this.connectionClient;
     }
 
@@ -188,7 +187,7 @@ public abstract class View implements Observer {
         return this.nickname;
     }
 
-    public void setAddress(String address) {
+    void setAddress(String address) {
         this.address = address;
     }
 
@@ -196,15 +195,15 @@ public abstract class View implements Observer {
         this.nickname = nickname;
     }
 
-    public void setPort(String port) {
+    void setPort(String port) {
         this.port = port;
     }
 
-    public void setChoice(String choice) {
+    void setChoice(String choice) {
         this.choice = choice;
     }
 
-    public void setGraphicsClient(GraphicsClient graphicsClient) {
+    void setGraphicsClient(GraphicsClient graphicsClient) {
         this.graphicsClient = graphicsClient;
     }
 
@@ -220,11 +219,11 @@ public abstract class View implements Observer {
                 if (fromServer.startsWith("You have logged in")) {
                     if (fromServer.startsWith("You have logged in again as")) {
                         setHasChosenScheme(true);
-                        setChosenScheme(false);
+                        setChosenScheme();
                     }
                     else {
                         setHasChosenScheme(false);
-                        setChosenScheme(false);
+                        setChosenScheme();
                     }
                     int nicknameStartIndex = fromServer.lastIndexOf(' ') + 1;
                     String nickname = fromServer.substring(nicknameStartIndex);
@@ -263,29 +262,29 @@ public abstract class View implements Observer {
     }
 
 
-    public synchronized void setHasChosenScheme(boolean bool) {
+    synchronized void setHasChosenScheme(boolean bool) {
         this.hasChosenScheme = bool;
         notifyAll();
     }
 
-    public synchronized void setChosenScheme(boolean bool){
-        this.chosenScheme = bool;
+    private synchronized void setChosenScheme(){
+        this.chosenScheme = false;
         notifyAll();
     }
 
-    public boolean getChosenScheme() {
+    boolean getChosenScheme() {
         return this.chosenScheme;
     }
 
-    public boolean getHasChosenScheme() { return this.hasChosenScheme; }
+    boolean getHasChosenScheme() { return this.hasChosenScheme; }
 
     public String getSchemes(){ return schemes;}
 
-    public GraphicsClient getGraphicsClient() {
+    GraphicsClient getGraphicsClient() {
         return graphicsClient;
     }
 
-    public Stage getPrimaryStage() {
+    Stage getPrimaryStage() {
         return primaryStage;
     }
 

@@ -14,8 +14,8 @@ public class CliView extends View  {
 
     private String fromClient;
     private String input;
+    private boolean connectionSuccessful = false;
     private boolean inputCtrl;
-    private boolean wantToPlay = true;
     private InputController cliController;
 
 
@@ -33,19 +33,18 @@ public class CliView extends View  {
         setChoice();
         setPort();
         setNickname();
-        while (wantToPlay) {
-            createConnection();
+        createConnection();
+        if ( connectionSuccessful ) {
             getConnectionClient().handleName(getNickname());
             setScheme();
             super.getConnectionClient().game();
-        /*if (!super.getHasChosenScheme()) {
-            setScheme();
-            super.getConnectionClient().handleScheme(super.getSchemes(), fromClient);
-            super.setHasChosenScheme(true);
-        }*/
-
+            showOutput(getGraphicsClient().printEnd());
         }
-        showOutput(getGraphicsClient().printEnd());
+    }
+
+    @Override
+    public void connectionSuccess() {
+        this.connectionSuccessful = true;
     }
 
     public void setNickname(){
@@ -132,18 +131,6 @@ public class CliView extends View  {
             super.getConnectionClient().handleScheme(super.getSchemes(), fromClient);
             super.setHasChosenScheme(true);
         }
-    }
-
-    public void continueToPlay(String choose){
-            inputCtrl = true;
-            do {
-                showOutput(getGraphicsClient().printContinue());
-                inputCtrl = cliController.continueToPlayController(choose);
-            } while (inputCtrl);
-        if(choose.equals("1")) {
-            setWantToPlay(true);
-        }else
-            setWantToPlay(false);
     }
 
 
@@ -277,10 +264,6 @@ public class CliView extends View  {
 
     public void showOutput(String s){
         System.out.println(s);
-    }
-
-    public void setWantToPlay(boolean wantToPlay) {
-        this.wantToPlay = wantToPlay;
     }
 
     public String getInput(){

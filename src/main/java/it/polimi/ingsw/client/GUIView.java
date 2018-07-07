@@ -32,6 +32,7 @@ public class GUIView extends View {
     private InputController cliController;
     private GridPane grid;
     private Scene scene;
+    private boolean connectionSuccessful = false;
     private String inputString;
     private double h = 800;
     private double v = 600;
@@ -137,6 +138,11 @@ public class GUIView extends View {
         grid.setStyle("-fx-background-color: darkkhaki");
         getPrimaryStage().show();
 
+    }
+
+    @Override
+    public void connectionSuccess() {
+        this.connectionSuccessful = true;
     }
 
 
