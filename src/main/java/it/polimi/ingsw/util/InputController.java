@@ -29,6 +29,8 @@ public class InputController {
      */
     public boolean ipController(String s) {
 
+        String lastChar = s.substring(s.length()-1, s.length());
+        if(lastChar.equals(".")) return true;
         String[] ctrl = s.split("\\.");
         if (ctrl.length != 4) return true;
         int j;
