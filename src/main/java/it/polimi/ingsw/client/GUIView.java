@@ -135,7 +135,7 @@ public class GUIView extends View {
 
 
         grid.getChildren().addAll(label1, label2, label3, label4, nickNameTextField, ipAddressTextField, portTextField, loginButton, choiceBox, pane);
-        grid.setStyle("-fx-background-color: darkkhaki");
+        grid.setStyle("-fx-background-color: grey");
         getPrimaryStage().show();
 
     }
@@ -214,7 +214,10 @@ public class GUIView extends View {
         Label label = new Label(fromServer);
         label.setAlignment(Pos.CENTER);
         label.setStyle("-fx-font-size: 30px;");
-        Platform.runLater(() -> getPrimaryStage().setScene(new Scene(label, h / 2, v / 2)));
+        Platform.runLater(() -> {gameGUI = new GameGUI();
+        getPrimaryStage().setScene(new Scene(label, h / 2, v / 2));});
+        Thread thread = new Thread(() -> getConnectionClient().game());
+        thread.start();
     }
 
     @Override
@@ -297,7 +300,7 @@ public class GUIView extends View {
         }
         vBox.setAlignment(Pos.CENTER);
         vBox.getChildren().add(grid);
-        vBox.setStyle("-fx-background-color: darkkhaki");
+        vBox.setStyle("-fx-background-color: grey");
         Platform.runLater(() -> getPrimaryStage().setScene(new Scene(vBox, h * 2 / 3, h)));
     }
 
@@ -314,14 +317,13 @@ public class GUIView extends View {
 
     @Override
     public void startGame(String s) {
-        gameGUI = new GameGUI();
+
 
         getPrimaryStage().setX(0);
         getPrimaryStage().setY(0);
         getPrimaryStage().setWidth(Screen.getPrimary().getBounds().getWidth());
         getPrimaryStage().setHeight(Screen.getPrimary().getBounds().getHeight());
-        Thread thread = new Thread(() -> getConnectionClient().game());
-        thread.start();
+
 
     }
 
