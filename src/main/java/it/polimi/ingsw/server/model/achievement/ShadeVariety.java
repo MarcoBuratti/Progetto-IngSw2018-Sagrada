@@ -11,6 +11,7 @@ public class ShadeVariety implements CardAchievement {
     /**
      * Returns an int representing the score effect associated with the Shade Variety Achievement.
      * The return value is the count of sets of one of each value anywhere multiplied by five.
+     *
      * @param dashboard the dashboard of the player whose score is being calculated
      * @return an int representing a score effect
      */

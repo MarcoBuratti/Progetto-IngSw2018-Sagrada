@@ -20,8 +20,7 @@ public class ValueRestriction implements Restriction {
         if (value > 0 && value <= NUMBER_OF_SIDES) {
             this.number = value;
             this.type = RestrictionType.VALUE;
-        }
-        else
+        } else
             throw new NotValidValueException();
     }
 
@@ -63,7 +62,7 @@ public class ValueRestriction implements Restriction {
      * {@inheritDoc}
      */
     @Override
-    public boolean restrictionEquals (Restriction restriction) {
+    public boolean restrictionEquals(Restriction restriction) {
         if (restriction != null) {
             if (this.getClass() == restriction.getClass()) {
                 ValueRestriction valueRestriction = (ValueRestriction) restriction;

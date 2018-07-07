@@ -14,6 +14,7 @@ public class ColumnColorVariety implements CardAchievement, AbstractColorVariety
     /**
      * Returns an int representing the score effect associated with the Column Color Variety Achievement.
      * The return value is the number of columns with no repeated colors multiplied by five.
+     *
      * @param dashboard the dashboard of the player whose score is being calculated
      * @return an int representing a score effect
      */
@@ -29,7 +30,7 @@ public class ColumnColorVariety implements CardAchievement, AbstractColorVariety
             for (Color color : Color.values())
                 counter.put(color, false);
             for (int j = 0; j < 4; j++) {
-                foundColumn = found( j, i, matrixScheme, counter, foundColumn );
+                foundColumn = found(j, i, matrixScheme, counter, foundColumn);
             }
             if (foundColumn)
                 score += 5;

@@ -11,6 +11,7 @@ public class PrivateAchievement implements CardAchievement {
     /**
      * Creates a PrivateAchievement Object representing a private achievement.
      * Private achievement are associated with one color.
+     *
      * @param color the Color Object representing the color associated with the private achievement
      */
     public PrivateAchievement(Color color) {
@@ -20,6 +21,7 @@ public class PrivateAchievement implements CardAchievement {
     /**
      * Returns an int representing the score effect associated with the player's Private Achievement.
      * The return value is the number of dice having the same color as the private achievement.
+     *
      * @param dashboard the dashboard of the player whose score is being calculated
      * @return an int representing a score effect
      */

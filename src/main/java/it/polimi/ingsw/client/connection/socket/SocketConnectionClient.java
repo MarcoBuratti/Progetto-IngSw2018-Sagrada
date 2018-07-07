@@ -16,19 +16,20 @@ import java.util.concurrent.Executors;
 
 public class SocketConnectionClient extends ConnectionClient implements Runnable, ClientInterface {
 
+    private static final String PLAYER_ID = "playerID ";
     private Socket socket;
     private BufferedReader in;
     private PrintStream out;
     private ExecutorService executor = Executors.newCachedThreadPool();
     private String playerNickname;
-    private static final String PLAYER_ID = "playerID ";
 
 
     /**
      * Creates a SocketConnectionClient object, adding the corresponding View to its observers and establishing a connection between it and the server.
-     * @param view the View object which has to be added to the observers
+     *
+     * @param view    the View object which has to be added to the observers
      * @param address the server address
-     * @param port the server port
+     * @param port    the server port
      */
     public SocketConnectionClient(View view, String address, int port) {
         this.addObserver(view);
@@ -47,6 +48,7 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
 
     /**
      * Sends a message to the Server through the socket.
+     *
      * @param message the message (String)
      */
     private void send(String message) {
@@ -63,13 +65,14 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
         } catch (IOException e) {
             e.printStackTrace();
         }
-        super.setIsOn( false );
+        super.setIsOn(false);
         executor.shutdown();
 
     }
 
     /**
      * Creates a String containing the information the server needs to create a new placement move.
+     *
      * @param fromClient the String sent by the client (through the view)
      */
     private void placeDieHandler(String fromClient) {
@@ -88,11 +91,12 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
             i++;
         }
 
-        this.send( bld.toString() );
+        this.send(bld.toString());
     }
 
     /**
      * Creates a String containing the information the server needs to create a new tool move.
+     *
      * @param fromClient the String sent by the client (through the view)
      */
     private void useToolHandler(String fromClient) {
@@ -104,10 +108,10 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
         bld.append(" type_playerMove UseTool");
         int i = 1;
         String toolIndex = strtok.nextToken();
-        bld.append( " toolIndex ");
+        bld.append(" toolIndex ");
         bld.append(toolIndex);
         toolIndex = strtok.nextToken();
-        bld.append( " extractedToolIndex ");
+        bld.append(" extractedToolIndex ");
         bld.append(toolIndex);
 
 
@@ -120,7 +124,7 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
             i++;
         }
 
-        this.send( bld.toString() );
+        this.send(bld.toString());
     }
 
     /**
@@ -187,8 +191,8 @@ public class SocketConnectionClient extends ConnectionClient implements Runnable
     @Override
     public void handleMove(String fromClient) {
 
-        fromClient = fromClient.substring(0, fromClient.length()-1);
-        String  [] substringSchemes = fromClient.split(" ");
+        fromClient = fromClient.substring(0, fromClient.length() - 1);
+        String[] substringSchemes = fromClient.split(" ");
         int moveChoice = Integer.parseInt(substringSchemes[0]);
         switch (moveChoice) {
             case 1:

@@ -28,6 +28,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
 
     /**
      * Creates a new server thread associated with the socket client connection.
+     *
      * @param socket the socket used to communicate with the client
      * @param server the server
      * @throws IOException if it's impossible to get the input stream and/or the output stream from the socket
@@ -50,6 +51,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
 
     /**
      * Writes on a json file the content of the String jsonContent.
+     *
      * @param jsonContent a message received from client that needs to be written on a json file
      */
     private synchronized void read(String jsonContent) {
@@ -70,6 +72,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
 
     /**
      * Private method used to send the schemes to the player, waiting for his answer.
+     *
      * @param schemes the extracted schemes
      * @return the player's choice
      * @throws IOException due to input stream problems
@@ -82,6 +85,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
     /**
      * Sets a default scheme before sending to the player the extracted scheme in order to set a scheme
      * in case the player makes his choice too late.
+     *
      * @param schemes the String containing the schemes
      * @return the name of the default scheme
      */
@@ -118,7 +122,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
             this.player = new Player(in.readLine());
             boolean firstLog = !server.alreadyLoggedIn(this);
 
-            if ( firstLog ) {
+            if (firstLog) {
                 server.registerConnection(this);
                 waitGameStart();
                 String schemes = game.selectSchemes();
@@ -133,9 +137,7 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
                     this.send("You have chosen the following scheme: " + chosenScheme + "\nPlease wait, the game will start soon.");
                 } else
                     this.send("Too late! Your scheme is: " + defaultScheme + "\nThe game has already started!");
-            }
-
-            else
+            } else
                 server.registerConnection(this);
 
             isOn = true;
@@ -169,16 +171,16 @@ public class SocketConnectionServer extends Observable implements Runnable, Serv
      * {@inheritDoc}
      */
     @Override
-    public synchronized void setGame(Game game) {
-        this.game = game;
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void setPlayer(Player player) {
-        this.player = player;
+    public synchronized void setGame(Game game) {
+        this.game = game;
     }
 
     /**

@@ -21,11 +21,12 @@ public class Round implements Observer {
 
     /**
      * Creates a Round Object, setting the references to the remote views, to the players and to the game board and also setting the draftPoolCapacity attribute.
+     *
      * @param remoteViews a List of RemoteView Objects
-     * @param players a List of Player Objects
-     * @param gameBoard a GameBoard Object
+     * @param players     a List of Player Objects
+     * @param gameBoard   a GameBoard Object
      */
-    public Round( List<RemoteView> remoteViews, List<Player> players, GameBoard gameBoard) {
+    public Round(List<RemoteView> remoteViews, List<Player> players, GameBoard gameBoard) {
         this.gameBoard = gameBoard;
         draftPoolCapacity = (players.size() * 2) + 1;
         this.players = (ArrayList<Player>) players;
@@ -34,6 +35,7 @@ public class Round implements Observer {
 
     /**
      * Creates the draft pool associated with the round and sets it on the game board.
+     *
      * @throws NotEnoughDiceLeftException if there are not enough dice left in the dice bag
      */
     void initializeDraftPool() throws NotEnoughDiceLeftException {
@@ -68,18 +70,19 @@ public class Round implements Observer {
 
     /**
      * Creates a turn for the currentPlayer and communicates to all the players that his turn has started.
+     *
      * @param secondTurn a boolean specifying whether it's the player's second turn (in the round) or not
      */
-    private void createTurn (boolean secondTurn) {
-        currentPlayerRemoteView = this.searchRemoteView( currentPlayer );
+    private void createTurn(boolean secondTurn) {
+        currentPlayerRemoteView = this.searchRemoteView(currentPlayer);
 
-        for (RemoteView r: remoteViews)
-            if ( ( !r.getPlayer().equals( currentPlayer ) ) && ( r.isOn() ) && ( currentPlayerRemoteView.isOn() ))
+        for (RemoteView r : remoteViews)
+            if ((!r.getPlayer().equals(currentPlayer)) && (r.isOn()) && (currentPlayerRemoteView.isOn()))
                 r.send("It's " + currentPlayer.getNickname() + "'s turn. Please wait.");
 
-        if ( currentPlayerRemoteView.isOn() ) {
+        if (currentPlayerRemoteView.isOn()) {
             currentPlayerRemoteView.send("It's your turn! Please make your move.");
-            if ( !onePlayerLeft ) {
+            if (!onePlayerLeft) {
                 this.currentTurn = new Turn(searchRemoteView(currentPlayer), currentPlayer, gameBoard, secondTurn);
                 currentTurn.turnManager();
             }
@@ -89,24 +92,25 @@ public class Round implements Observer {
     /**
      * Manages the end of a turn, communicating to all the players that the current player's turn has ended.
      */
-    private void endTurn () {
-        for (RemoteView r: remoteViews)
-            if ( ( !r.getPlayer().equals( currentPlayer ) ) && ( r.isOn() ) && ( currentPlayerRemoteView.isOn() ))
+    private void endTurn() {
+        for (RemoteView r : remoteViews)
+            if ((!r.getPlayer().equals(currentPlayer)) && (r.isOn()) && (currentPlayerRemoteView.isOn()))
                 r.send(currentPlayer.getNickname() + "'s turn has ended.");
 
-        if ( currentPlayerRemoteView.isOn() )
+        if (currentPlayerRemoteView.isOn())
             currentPlayerRemoteView.send("Your turn has ended.");
 
     }
 
     /**
      * Return the RemoteView Object associated with the player.
+     *
      * @param player a Player Object representing the player
      * @return a RemoteView Object
      */
     private RemoteView searchRemoteView(Player player) {
-        for ( RemoteView remoteView: remoteViews )
-            if ( remoteView.getPlayer().getNickname().equals( player.getNickname() ) )
+        for (RemoteView remoteView : remoteViews)
+            if (remoteView.getPlayer().getNickname().equals(player.getNickname()))
                 return remoteView;
         throw new IllegalArgumentException();
     }
@@ -135,6 +139,7 @@ public class Round implements Observer {
 
     /**
      * Returns the currentPlayer attribute.
+     *
      * @return a Player Object representing the player who's playing the current turn
      */
     synchronized Player getCurrentPlayer() {
@@ -143,7 +148,8 @@ public class Round implements Observer {
 
     /**
      * Receive a new PlayerMove from the Controller and sends it to the currentTurn.
-     * @param o the Controller
+     *
+     * @param o   the Controller
      * @param arg the new PlayerMove
      */
     @Override

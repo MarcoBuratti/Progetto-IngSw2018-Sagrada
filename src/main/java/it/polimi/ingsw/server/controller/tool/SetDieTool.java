@@ -15,8 +15,9 @@ public class SetDieTool implements Tool {
 
     /**
      * Creates a ChangeDieTool, a class used to manage the following tools: GRINDING STONE, GROZING PLIERS, FLUX BRUSH (using decorator DecoratedSetDieTool).
+     *
      * @param needPlacement a boolean which specifies whether the tool has already been used once or not
-     * @param toolName an instance of ToolNames enum representing the tool's name
+     * @param toolName      an instance of ToolNames enum representing the tool's name
      */
     SetDieTool(boolean needPlacement, ToolNames toolName) {
         this.toolName = toolName;
@@ -51,15 +52,15 @@ public class SetDieTool implements Tool {
 
         Optional<Integer> dieIndex = playerMove.getIndexDie();
 
-        if ( dieIndex.isPresent() ) {
+        if (dieIndex.isPresent()) {
 
             Integer dieIndexValue = dieIndex.get();
 
-            if ( dieIndexValue >= turn.getGameBoard().getDraftPool().size() ) {
+            if (dieIndexValue >= turn.getGameBoard().getDraftPool().size()) {
                 return false;
             }
 
-            Die die = turn.getGameBoard().getDraftPool().get( dieIndexValue );
+            Die die = turn.getGameBoard().getDraftPool().get(dieIndexValue);
 
 
             int oldValue = die.getNumber();
@@ -67,19 +68,17 @@ public class SetDieTool implements Tool {
 
                 Optional<Boolean> increaseNumber = playerMove.getAddOne();
 
-                if ( toolName.equals( ToolNames.GROZING_PLIERS ) && increaseNumber.isPresent() ) {
+                if (toolName.equals(ToolNames.GROZING_PLIERS) && increaseNumber.isPresent()) {
 
                     boolean increaseNumberValue = increaseNumber.get();
 
                     if (increaseNumberValue)
-                        die.setNumber( oldValue + 1 );
+                        die.setNumber(oldValue + 1);
                     else
-                        die.setNumber( oldValue - 1 );
+                        die.setNumber(oldValue - 1);
                     turn.getGameBoard().update();
                     return true;
-                }
-
-                else if (toolName.equals(ToolNames.GRINDING_STONE)) {
+                } else if (toolName.equals(ToolNames.GRINDING_STONE)) {
                     die.setNumber(7 - oldValue);
                     turn.getGameBoard().update();
                     return true;

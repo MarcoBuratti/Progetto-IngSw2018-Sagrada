@@ -7,12 +7,11 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class Client extends Application{
+public class Client extends Application {
     private static String choice;
     private static View view;
 

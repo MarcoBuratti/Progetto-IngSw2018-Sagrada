@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server;
 
-import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
@@ -15,13 +15,14 @@ class PortParser {
      * Private constructor that throws an IllegalStateException when called.
      * This is a static class.
      */
-    private PortParser () {
+    private PortParser() {
         throw new IllegalStateException();
     }
 
     /**
      * A static method used to read the Server's ports from a json file and set them.
      * If it's impossible to read from the selected json file, it sets default port values as 1996 (socket) and 1997 (rmi).
+     *
      * @param server the Server
      */
     static void setPorts(Server server) {
@@ -34,8 +35,7 @@ class PortParser {
             int rmiPort = (int) rmiPortLong;
 
             server.setPorts(socketPort, rmiPort);
-        }
-        catch (IOException | ParseException e) {
+        } catch (IOException | ParseException e) {
             server.setPorts(1996, 1997);
         }
     }

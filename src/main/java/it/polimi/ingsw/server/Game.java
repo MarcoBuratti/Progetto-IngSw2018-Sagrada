@@ -11,6 +11,7 @@ import it.polimi.ingsw.util.TimeParser;
 import java.util.*;
 
 public class Game extends Observable implements Runnable {
+    private static final String SCHEME_CHOICE_TIMER = "Scheme_Choice_Timer";
     private Server server;
     private Controller controller;
     private ModelView modelView;
@@ -23,28 +24,28 @@ public class Game extends Observable implements Runnable {
     private boolean gameEnded = false;
     private CliGraphicsServer cliGraphicsServer;
     private long schemeChoiceTime;
-    private static final String SCHEME_CHOICE_TIMER = "Scheme_Choice_Timer";
 
     /**
      * Creates a new Game Object having references to the server, the controller and all of the players and their connections.
-     * @param lobby the Lobby Object that created the new Game Object
+     *
+     * @param lobby  the Lobby Object that created the new Game Object
      * @param server the server
      */
-    public Game ( Lobby lobby, Server server ) {
+    public Game(Lobby lobby, Server server) {
         this.server = server;
-        server.registerGame( this );
+        server.registerGame(this);
         this.remoteViews = lobby.getRemoteViews();
 
         this.players = new ArrayList<>();
         serverInterfaces = new ArrayList<>();
 
-        for (RemoteView r: remoteViews) {
-            r.setGame( this );
-            this.players.add( r.getPlayer() );
+        for (RemoteView r : remoteViews) {
+            r.setGame(this);
+            this.players.add(r.getPlayer());
             ServerInterface serverInterface = r.getServerInterface();
-            if ( serverInterface != null ) {
-                this.serverInterfaces.add( serverInterface );
-                this.addObserver( serverInterface );
+            if (serverInterface != null) {
+                this.serverInterfaces.add(serverInterface);
+                this.addObserver(serverInterface);
             }
         }
 
@@ -55,47 +56,50 @@ public class Game extends Observable implements Runnable {
     /**
      * Calls a static method of the class TimeParser in order to read the time from a json file.
      */
-    private synchronized void setTime () {
+    private synchronized void setTime() {
         this.schemeChoiceTime = TimeParser.readTime(SCHEME_CHOICE_TIMER);
     }
 
     /**
      * Deletes references to the connection belonging to the player who's disconnected and communicates to the other players that he's disconnected.
      * If the game has not ended and only one player is connected, calls the method gameFailed.
+     *
      * @param remoteView the RemoteView Object belonging to the player who has disconnected
      */
-    synchronized void playerDisconnected ( RemoteView remoteView ) {
+    synchronized void playerDisconnected(RemoteView remoteView) {
 
         for (RemoteView r : remoteViews)
-            if ( r != null && r != remoteView && r.getServerInterface() != null)
+            if (r != null && r != remoteView && r.getServerInterface() != null)
                 r.send(remoteView.getPlayer().getNickname() + " has disconnected from the server.");
 
-        this.serverInterfaces.remove( remoteView.getServerInterface() );
+        this.serverInterfaces.remove(remoteView.getServerInterface());
         remoteView.removeConnection();
 
 
-        if ( this.serverInterfaces.size() == 1 && !isGameEnded() )
+        if (this.serverInterfaces.size() == 1 && !isGameEnded())
             gameFailed();
     }
 
     /**
      * Adds references to the connection belonging to the player who's reconnected and communicates to the other players that he's reconnected.
+     *
      * @param remoteView the RemoteView Object belonging to the player who has reconnected
      */
-    synchronized void playerReconnected ( RemoteView remoteView ) {
+    synchronized void playerReconnected(RemoteView remoteView) {
 
-        remoteView.showGameBoard( modelView );
+        remoteView.showGameBoard(modelView);
 
-        for ( RemoteView r: remoteViews )
-            if ( r != remoteView && r != null )
-                r.send( remoteView.getPlayer().getNickname() + " has reconnected!");
+        for (RemoteView r : remoteViews)
+            if (r != remoteView && r != null)
+                r.send(remoteView.getPlayer().getNickname() + " has reconnected!");
 
-        serverInterfaces.add( remoteView.getServerInterface() );
-        this.addObserver( remoteView.getServerInterface() );
+        serverInterfaces.add(remoteView.getServerInterface());
+        this.addObserver(remoteView.getServerInterface());
     }
 
     /**
      * Returns the remoteViews attribute.
+     *
      * @return a List of RemoteView Objects
      */
     public List<RemoteView> getRemoteViews() {
@@ -104,6 +108,7 @@ public class Game extends Observable implements Runnable {
 
     /**
      * Returns the players attribute.
+     *
      * @return a List of Player Objects
      */
     public List<Player> getPlayers() {
@@ -114,7 +119,7 @@ public class Game extends Observable implements Runnable {
      * Communicates to the Controller, to the Server and to the connected player that the game has ended.
      * It also closes the connected player's connection.
      */
-    private synchronized void gameFailed () {
+    private synchronized void gameFailed() {
 
         if (this.controller != null)
             this.controller.onePlayerLeftEnd();
@@ -138,7 +143,7 @@ public class Game extends Observable implements Runnable {
     /**
      * Launches a timer. When the time is over, the schemeChoiceTimeOut method is called.
      */
-    private void schemeChoiceTimer () {
+    private void schemeChoiceTimer() {
 
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -155,13 +160,14 @@ public class Game extends Observable implements Runnable {
     /**
      * Sets schemeChosen as true and notifies all ( unlocking wait ).
      */
-    private synchronized void schemeChoiceTimeOut () {
+    private synchronized void schemeChoiceTimeOut() {
         schemeChosen = true;
         notifyAll();
     }
 
     /**
      * Returns the schemeChosen attribute.
+     *
      * @return a boolean
      */
     public boolean isSchemeChosen() {
@@ -170,6 +176,7 @@ public class Game extends Observable implements Runnable {
 
     /**
      * Returns a String containing four scheme names, extracting theme randomly from the schemes attribute.
+     *
      * @return a String
      */
     public synchronized String selectSchemes() {
@@ -188,6 +195,7 @@ public class Game extends Observable implements Runnable {
 
     /**
      * Returns a Color Object representing the extracted private achievement for the player.
+     *
      * @return a Color Object
      */
     public synchronized Color selectPrivateAchievement() {
@@ -201,18 +209,18 @@ public class Game extends Observable implements Runnable {
      */
     private synchronized void endGame() {
 
-        for ( RemoteView r: remoteViews ) {
-            server.removeRemoteView( r );
+        for (RemoteView r : remoteViews) {
+            server.removeRemoteView(r);
             Player p = r.getPlayer();
-            server.removeNickname( p.getNickname() );
-            if ( r.getServerInterface() != null )
-                server.removeServerInterface( r.getServerInterface() );
+            server.removeNickname(p.getNickname());
+            if (r.getServerInterface() != null)
+                server.removeServerInterface(r.getServerInterface());
         }
 
         serverInterfaces.clear();
         players.clear();
         remoteViews.clear();
-        server.deregisterGame( this );
+        server.deregisterGame(this);
 
     }
 
@@ -246,7 +254,7 @@ public class Game extends Observable implements Runnable {
             r.setModelView(modelView);
 
         this.controller.setRemoteViews(this);
-        ArrayList<ServerInterface> tempServerInterfaces = new ArrayList<>( serverInterfaces );
+        ArrayList<ServerInterface> tempServerInterfaces = new ArrayList<>(serverInterfaces);
 
         for (ServerInterface s : tempServerInterfaces)
             s.send("The game has started!");
@@ -254,7 +262,7 @@ public class Game extends Observable implements Runnable {
         if (serverInterfaces.size() > 1) {
             cliGraphicsServer.printStart();
             String winner = this.controller.startGame();
-            if ( controller.isGameEnded() ) {
+            if (controller.isGameEnded()) {
                 setGameEnded();
                 tempServerInterfaces = new ArrayList<>(serverInterfaces);
                 for (ServerInterface serverInterface : tempServerInterfaces) {
@@ -263,15 +271,14 @@ public class Game extends Observable implements Runnable {
                 cliGraphicsServer.printWinner(winner);
                 this.endGame();
             }
-        }
-
-        else {
+        } else {
             gameFailed();
         }
     }
 
     /**
      * Returns the gameEnded attribute.
+     *
      * @return a boolean specifying whether the game has ended or not.
      */
     private synchronized boolean isGameEnded() {

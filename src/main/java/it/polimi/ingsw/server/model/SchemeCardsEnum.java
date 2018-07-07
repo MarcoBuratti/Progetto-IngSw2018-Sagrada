@@ -11,6 +11,7 @@ public enum SchemeCardsEnum {
 
     /**
      * Creates an instance of the enum, representing a card which contains two schemes.
+     *
      * @param name1 the name of the first scheme
      * @param name2 the name of the second scheme
      */
@@ -21,6 +22,7 @@ public enum SchemeCardsEnum {
 
     /**
      * Returns the name of the first scheme.
+     *
      * @return the firstScheme attribute
      */
     public String getFirstScheme() {
@@ -29,6 +31,7 @@ public enum SchemeCardsEnum {
 
     /**
      * Returns the name of the second scheme.
+     *
      * @return the secondScheme attribute
      */
     public String getSecondScheme() {

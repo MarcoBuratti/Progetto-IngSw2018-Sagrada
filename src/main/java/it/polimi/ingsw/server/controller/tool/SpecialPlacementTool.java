@@ -23,11 +23,12 @@ public class SpecialPlacementTool implements Tool {
 
     /**
      * Creates a ChangeDieTool, a class used to manage the following tools: CORK BAKED STRAIGHTEDGE.
-     * @param checkColor a boolean specifying whether the color restriction must be considered or not
-     * @param checkValue a boolean specifying whether the value restriction must be considered or not
+     *
+     * @param checkColor      a boolean specifying whether the color restriction must be considered or not
+     * @param checkValue      a boolean specifying whether the value restriction must be considered or not
      * @param checkNeighbours a boolean specifying whether a check about the cells
      *                        near the one where the user wants to move the die is needed or not
-     * @param toolName an instance of ToolNames enum representing the tool's name
+     * @param toolName        an instance of ToolNames enum representing the tool's name
      */
     SpecialPlacementTool(boolean checkValue, boolean checkColor, boolean checkNeighbours, ToolNames toolName) {
         this.checkValue = checkValue;
@@ -63,15 +64,15 @@ public class SpecialPlacementTool implements Tool {
 
         Optional<Integer> dieIndex = playerMove.getIndexDie();
 
-        if ( dieIndex.isPresent() ) {
+        if (dieIndex.isPresent()) {
 
             Integer dieIndexValue = dieIndex.get();
 
 
-            if ( dieIndexValue >= turn.getGameBoard().getDraftPool().size() )
+            if (dieIndexValue >= turn.getGameBoard().getDraftPool().size())
                 return false;
 
-            if ( !turn.isPlacementDone() ) {
+            if (!turn.isPlacementDone()) {
                 int row = playerMove.getIntParameters(0);
                 int column = playerMove.getIntParameters(1);
                 Die die = turn.getGameBoard().getDraftPool().get(dieIndexValue);
@@ -110,9 +111,10 @@ public class SpecialPlacementTool implements Tool {
 
     /**
      * Returns a boolean specifying whether it's possible to make the move or not.
-     * @param row the row of the selected position
-     * @param column the column of the selected position
-     * @param myDie the die the player wants to place
+     *
+     * @param row          the row of the selected position
+     * @param column       the column of the selected position
+     * @param myDie        the die the player wants to place
      * @param matrixScheme the matrix of Cell Objects
      * @return a boolean
      */
@@ -120,24 +122,24 @@ public class SpecialPlacementTool implements Tool {
 
         PlacementCheck placementCheck = new PlacementCheck();
 
-        if ( checkColor &&
-                ( matrixScheme[row][column].getRestriction().getType() == RestrictionType.COLOR ) &&
+        if (checkColor &&
+                (matrixScheme[row][column].getRestriction().getType() == RestrictionType.COLOR) &&
                 !matrixScheme[row][column].allowedMove(myDie)) {
             return false;
         }
 
 
-        if ( checkValue &&
-                ( matrixScheme[row][column].getRestriction().getType() == RestrictionType.VALUE ) &&
+        if (checkValue &&
+                (matrixScheme[row][column].getRestriction().getType() == RestrictionType.VALUE) &&
                 !matrixScheme[row][column].allowedMove(myDie)) {
             return false;
         }
 
-        if ( !checkNeighbours ) {
-            if ( placementCheck.isEmpty( matrixScheme ) )
-                return placementCheck.firstMove( row, column );
+        if (!checkNeighbours) {
+            if (placementCheck.isEmpty(matrixScheme))
+                return placementCheck.firstMove(row, column);
             else
-                return !placementCheck.neighbourOccupiedCell( row, column, matrixScheme );
+                return !placementCheck.neighbourOccupiedCell(row, column, matrixScheme);
         }
 
         return false;

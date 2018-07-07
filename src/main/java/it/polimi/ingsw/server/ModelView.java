@@ -12,6 +12,7 @@ public class ModelView extends Observable implements Observer {
 
     /**
      * Creates a ModelView Object which allows the user to send updates of the model to the players.
+     *
      * @param gameBoard the model
      */
     ModelView(GameBoard gameBoard) {

@@ -16,8 +16,9 @@ public class ChangeDieTool implements Tool {
 
     /**
      * Creates a ChangeDieTool, a class used to manage the following tools: LENS CUTTER, FLUX REMOVER (using decorator DecoratedChangeDieTool).
+     *
      * @param needPlacement a boolean which specifies whether the tool has already been used once or not
-     * @param toolName an instance of ToolNames enum representing the tool's name
+     * @param toolName      an instance of ToolNames enum representing the tool's name
      */
     ChangeDieTool(boolean needPlacement, ToolNames toolName) {
         this.toolName = toolName;
@@ -51,24 +52,22 @@ public class ChangeDieTool implements Tool {
 
         Optional<Integer> dieIndex = playerMove.getIndexDie();
 
-        if ( dieIndex.isPresent() ) {
+        if (dieIndex.isPresent()) {
 
             Integer dieIndexValue = dieIndex.get();
 
-            if ( dieIndexValue < turn.getGameBoard().getDraftPool().size() && toolName.equals(ToolNames.LENS_CUTTER) ) {
+            if (dieIndexValue < turn.getGameBoard().getDraftPool().size() && toolName.equals(ToolNames.LENS_CUTTER)) {
                 try {
-                    if ( playerMove.getIntParameters(0) < turn.getGameBoard().getRoundTrack().getCurrentRound()
-                            && playerMove.getIntParameters(1) < turn.getGameBoard().getRoundTrack().getDiceList(playerMove.getIntParameters(0)).size() ) {
+                    if (playerMove.getIntParameters(0) < turn.getGameBoard().getRoundTrack().getCurrentRound()
+                            && playerMove.getIntParameters(1) < turn.getGameBoard().getRoundTrack().getDiceList(playerMove.getIntParameters(0)).size()) {
                         Die secondDie = turn.getGameBoard().getRoundTrack().getDiceList(playerMove.getIntParameters(0)).get(playerMove.getIntParameters(1));
                         Die dieDraftPool = turn.getGameBoard().changeDie(secondDie, dieIndexValue);
                         turn.getGameBoard().getRoundTrack().changeDie(dieDraftPool, playerMove.getIntParameters(0), playerMove.getIntParameters(1));
                         return true;
                     }
-                }
-                catch (NotValidRoundException e) {
+                } catch (NotValidRoundException e) {
                     return false;
-                }
-                catch (EndedGameException e) {
+                } catch (EndedGameException e) {
                     e.printStackTrace();
                 }
             }

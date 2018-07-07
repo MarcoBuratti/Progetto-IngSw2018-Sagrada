@@ -9,7 +9,7 @@ public enum Color {
     /**
      * Creates a Color object representing a color, used for restrictions or dice.
      *
-     * @param name the name of the color represented in the Color object
+     * @param name       the name of the color represented in the Color object
      * @param colorPrint a string containing a colored letter representing the color
      */
     Color(String name, String colorPrint) {
@@ -29,6 +29,7 @@ public enum Color {
 
     /**
      * Returns the colored letter representing the color
+     *
      * @return the colorPrint attribute
      */
     @Override

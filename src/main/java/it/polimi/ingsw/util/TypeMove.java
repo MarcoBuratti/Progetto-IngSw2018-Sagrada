@@ -12,39 +12,51 @@ public enum TypeMove {
     },
 
     CHOOSE_ROW_COLUMNS {
-        public void moveToDo(ConnectionClient connectionClient){
+        public void moveToDo(ConnectionClient connectionClient) {
             connectionClient.setRowColumn();
         }
     },
 
     CHOOSE_TOOL_INDEX {
-        public void moveToDo(ConnectionClient connectionClient){
+        public void moveToDo(ConnectionClient connectionClient) {
             connectionClient.setToolIndex();
         }
     },
 
     CHOOSE_PLUS_MIN {
-      public void moveToDo(ConnectionClient connectionClient) { connectionClient.setPlusMin(); }
+        public void moveToDo(ConnectionClient connectionClient) {
+            connectionClient.setPlusMin();
+        }
     },
 
     CHOOSE_DIE_NUM {
-        public void moveToDo(ConnectionClient connectionClient) { connectionClient.setDieNum(); }
+        public void moveToDo(ConnectionClient connectionClient) {
+            connectionClient.setDieNum();
+        }
     },
 
-    CHOOSE_ROUND_INDEX{
-        public void moveToDo(ConnectionClient connectionClient) { connectionClient.setRoundTrackIndex(); }
+    CHOOSE_ROUND_INDEX {
+        public void moveToDo(ConnectionClient connectionClient) {
+            connectionClient.setRoundTrackIndex();
+        }
     },
 
-    CHOOSE_SEND_MOVE{
-        public void moveToDo(ConnectionClient connectionClient) { connectionClient.sendMove(); }
+    CHOOSE_SEND_MOVE {
+        public void moveToDo(ConnectionClient connectionClient) {
+            connectionClient.sendMove();
+        }
     },
 
     CHOOSE_GO_ON {
-        public void moveToDo(ConnectionClient connectionClient) { connectionClient.goOn(); }
+        public void moveToDo(ConnectionClient connectionClient) {
+            connectionClient.goOn();
+        }
     },
 
-    WAIT_MOVE{
-        public void moveToDo(ConnectionClient connectionClient) { connectionClient.newPlaceMove(); }
+    WAIT_MOVE {
+        public void moveToDo(ConnectionClient connectionClient) {
+            connectionClient.newPlaceMove();
+        }
     };
 
     public abstract void moveToDo(ConnectionClient connectionClient);

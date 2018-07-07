@@ -8,6 +8,7 @@ public class Message implements Serializable {
 
     /**
      * Creates a Message Object, a serializable class having just a String as attribute.
+     *
      * @param content a String containing the message the user wants to send
      */
     public Message(String content) {
@@ -16,6 +17,7 @@ public class Message implements Serializable {
 
     /**
      * Returns the content attribute.
+     *
      * @return a String containing information
      */
     public String getContent() {

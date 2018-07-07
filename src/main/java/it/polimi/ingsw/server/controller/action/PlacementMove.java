@@ -16,10 +16,11 @@ public class PlacementMove {
     /**
      * Creates a new PlacementMove Object.
      * This class is used to manages a placement move.
+     *
      * @param player the player who's trying to make the move
-     * @param row the row of the selected position
+     * @param row    the row of the selected position
      * @param column the column of the selected position
-     * @param die the die the player wants to place on the position
+     * @param die    the die the player wants to place on the position
      */
     public PlacementMove(Player player, int row, int column, Die die) {
         this.player = player;
@@ -30,8 +31,9 @@ public class PlacementMove {
 
     /**
      * Allows the user to place the die on the selected cell if it's possible.
+     *
      * @return a boolean specifying whether the move has been done or not
-     * @throws OccupiedCellException if the cell is already occupied
+     * @throws OccupiedCellException       if the cell is already occupied
      * @throws NotValidParametersException if the parameters sent by the user are not valid
      */
     public boolean placeDie() throws OccupiedCellException, NotValidParametersException {
@@ -47,6 +49,7 @@ public class PlacementMove {
 
     /**
      * Returns the die attribute.
+     *
      * @return a Die Object
      */
     public Die getDie() {

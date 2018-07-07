@@ -6,6 +6,7 @@ public interface CardAchievement {
 
     /**
      * Calculate the effect that the achievement has on the score of the player having the selected Dashboard.
+     *
      * @param dashboard the dashboard of the player whose score is being calculated
      * @return an int representing the score effect of the achievement
      */

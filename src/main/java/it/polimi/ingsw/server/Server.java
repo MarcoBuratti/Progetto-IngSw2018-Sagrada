@@ -12,7 +12,9 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,16 +37,17 @@ public class Server extends UnicastRemoteObject {
     /**
      * Initialize all the attributes of the Server.
      * Server has the following attributes:
-     *      - serverSocket: a ServerSocket Object used to accept the clients' connections
-     *      - executor: an ExecutorService Object used to submit the SocketConnectionServer threads
-     *      - serverInterfaces: an ArrayList of ServerInterface Objects containing all the ServerInterface Objects of the connected players
-     *      - nicknames: an ArrayList containing all of the nicknames of the players who are currently playing or waiting in the lobby
-     *      - games: an ArrayList containing all the Game Objects created while the server is on
-     *      - gameID: an int representing the first ID that hasn't been already used to identify a Game Object
-     *      - isServerOn: a boolean that is set as true when the Server is launched
-     *      - remoteViews: an ArrayList containing all the RemoteView Objects of the currently connected players
-     *      - cliGraphicsServer: a CliGraphicsServer Object used to print messages on server
-     *      - currentLobby: a Lobby Object representing the Lobby where the players are currently waiting for the game to start
+     * - serverSocket: a ServerSocket Object used to accept the clients' connections
+     * - executor: an ExecutorService Object used to submit the SocketConnectionServer threads
+     * - serverInterfaces: an ArrayList of ServerInterface Objects containing all the ServerInterface Objects of the connected players
+     * - nicknames: an ArrayList containing all of the nicknames of the players who are currently playing or waiting in the lobby
+     * - games: an ArrayList containing all the Game Objects created while the server is on
+     * - gameID: an int representing the first ID that hasn't been already used to identify a Game Object
+     * - isServerOn: a boolean that is set as true when the Server is launched
+     * - remoteViews: an ArrayList containing all the RemoteView Objects of the currently connected players
+     * - cliGraphicsServer: a CliGraphicsServer Object used to print messages on server
+     * - currentLobby: a Lobby Object representing the Lobby where the players are currently waiting for the game to start
+     *
      * @throws IOException if it's impossible to initialize the serverSocket attribute
      */
     private Server() throws IOException {
@@ -58,18 +61,8 @@ public class Server extends UnicastRemoteObject {
         nicknames = new ArrayList<>();
         remoteViews = new ArrayList<>();
         cliGraphicsServer = new CliGraphicsServer();
-        currentLobby = new Lobby( this );
+        currentLobby = new Lobby(this);
         games = new HashMap<>();
-    }
-
-    /**
-     * Allows the user to set the ports' numbers.
-     * @param socketPort the port used for Socket
-     * @param rmiPort the port used for RMI
-     */
-    synchronized void setPorts(int socketPort, int rmiPort) {
-        SOCKET_PORT_NUMBER = socketPort;
-        RMI_PORT_NUMBER = rmiPort;
     }
 
     /**
@@ -83,6 +76,17 @@ public class Server extends UnicastRemoteObject {
             e.printStackTrace();
             System.out.println("Server initialization failed");
         }
+    }
+
+    /**
+     * Allows the user to set the ports' numbers.
+     *
+     * @param socketPort the port used for Socket
+     * @param rmiPort    the port used for RMI
+     */
+    synchronized void setPorts(int socketPort, int rmiPort) {
+        SOCKET_PORT_NUMBER = socketPort;
+        RMI_PORT_NUMBER = rmiPort;
     }
 
     /**
@@ -112,6 +116,7 @@ public class Server extends UnicastRemoteObject {
 
     /**
      * Checks whether the player who is trying to log in has already logged in once or not.
+     *
      * @param newServerInterface the ServerInterface Object belonging to the player who's trying to connect
      * @return a boolean
      */
@@ -122,21 +127,20 @@ public class Server extends UnicastRemoteObject {
     /**
      * Creates a new Lobby Object and sets is as the currentLobby attribute.
      */
-    synchronized void setNewLobby () {
-        this.currentLobby = new Lobby ( this );
+    synchronized void setNewLobby() {
+        this.currentLobby = new Lobby(this);
     }
 
     /**
      * Tries to register a connection, saving all the references to the player who's trying to connect.
+     *
      * @param newServerInterface the ServerInterface Object belonging to the player who's trying to connect
      */
-    public synchronized void registerConnection ( ServerInterface newServerInterface ) {
+    public synchronized void registerConnection(ServerInterface newServerInterface) {
 
         if (alreadyLoggedIn(newServerInterface)) {
-         registerOldPlayer(newServerInterface);
-        }
-
-        else {
+            registerOldPlayer(newServerInterface);
+        } else {
             registerNewPlayer(newServerInterface);
         }
     }
@@ -144,26 +148,25 @@ public class Server extends UnicastRemoteObject {
     /**
      * A private method used by registerConnection. It's used to register a connection belonging to a player
      * who had already logged in before and had disconnected.
+     *
      * @param newServerInterface the ServerInterface Object belonging to the player who's trying to connect
      */
-    private void registerOldPlayer ( ServerInterface newServerInterface ) {
+    private void registerOldPlayer(ServerInterface newServerInterface) {
 
-        for ( RemoteView r: remoteViews ) {
+        for (RemoteView r : remoteViews) {
 
-            if ( r.getPlayer().getNickname().equals( newServerInterface.getPlayer().getNickname() ) ) {
+            if (r.getPlayer().getNickname().equals(newServerInterface.getPlayer().getNickname())) {
 
-                if ( r.getServerInterface() == null ) {
-                    serverInterfaces.add( newServerInterface );
+                if (r.getServerInterface() == null) {
+                    serverInterfaces.add(newServerInterface);
                     r.changeConnection(newServerInterface);
                     cliGraphicsServer.printLoggedAgain(r.getPlayer().getNickname());
                     newServerInterface.send("You have logged in again as: " + newServerInterface.getPlayer().getNickname());
-                    if ( r.isGameStarted() )
-                        r.getGame().playerReconnected( r );
+                    if (r.isGameStarted())
+                        r.getGame().playerReconnected(r);
                     else
-                        currentLobby.playerReconnected( r );
-                }
-
-                else {
+                        currentLobby.playerReconnected(r);
+                } else {
                     newServerInterface.send("This nickname has been already used! Please try again.");
                     newServerInterface.send("Terminate.");
                 }
@@ -175,16 +178,17 @@ public class Server extends UnicastRemoteObject {
     /**
      * A private method used by registerConnection. It's used to register a connection belonging to a player
      * who has not logged in before.
+     *
      * @param newServerInterface the ServerInterface Object belonging to the player who's trying to connect
      */
-    private void registerNewPlayer ( ServerInterface newServerInterface ) {
+    private void registerNewPlayer(ServerInterface newServerInterface) {
 
-        serverInterfaces.add( newServerInterface );
-        RemoteView remoteView = new RemoteView( newServerInterface );
-        remoteViews.add ( remoteView );
+        serverInterfaces.add(newServerInterface);
+        RemoteView remoteView = new RemoteView(newServerInterface);
+        remoteViews.add(remoteView);
         String nickname = newServerInterface.getPlayer().getNickname();
-        nicknames.add( nickname );
-        newServerInterface.send( "You have logged in as: " + nickname );
+        nicknames.add(nickname);
+        newServerInterface.send("You have logged in as: " + nickname);
 
         try {
             cliGraphicsServer.printLoggedIn(newServerInterface.getPlayer().getNickname());
@@ -192,17 +196,18 @@ public class Server extends UnicastRemoteObject {
             cliGraphicsServer.printErr();
         }
 
-        this.currentLobby.addRemoteView ( remoteView );
+        this.currentLobby.addRemoteView(remoteView);
 
     }
 
     /**
      * If the player was already in game, it communicates to the Game Object that the player has disconnected.
      * Else if the player was waiting in the lobby, it communicates to the currentLobby ( Lobby Object) that the player has disconnected.
+     *
      * @param tempRemoteViews a temporary ArrayList used to search the RemoteView having reference to serverInterface
      * @param serverInterface the ServerInterface Object belonging to the player who's disconnected
      */
-    private void disconnectPlayer ( ArrayList<RemoteView> tempRemoteViews, ServerInterface serverInterface ) {
+    private void disconnectPlayer(ArrayList<RemoteView> tempRemoteViews, ServerInterface serverInterface) {
         for (RemoteView r : tempRemoteViews) {
             if (r.getServerInterface() != null && r.getServerInterface().equals(serverInterface)) {
                 if (r.isGameStarted()) {
@@ -216,9 +221,10 @@ public class Server extends UnicastRemoteObject {
 
     /**
      * Tries to deregister a connection, deleting all the references to the player who's trying to connect.
+     *
      * @param serverInterface the ServerInterface Object belonging to the player who's trying to disconnect
      */
-    public synchronized void deregisterConnection ( ServerInterface serverInterface ) {
+    public synchronized void deregisterConnection(ServerInterface serverInterface) {
 
         if (this.serverInterfaces.contains(serverInterface)) {
 
@@ -226,73 +232,78 @@ public class Server extends UnicastRemoteObject {
             serverInterfaces.remove(serverInterface);
 
             ArrayList<RemoteView> tempRemoteViews = new ArrayList<>(remoteViews);
-            disconnectPlayer( tempRemoteViews, serverInterface );
+            disconnectPlayer(tempRemoteViews, serverInterface);
         }
     }
 
 
     /**
      * Allows the user to remove a RemoteView Object from remoteViews.
+     *
      * @param remoteView the RemoteView Object the user wants to remove from remoteViews
      */
-    synchronized void removeRemoteView ( RemoteView remoteView ) {
-        this.remoteViews.remove( remoteView );
+    synchronized void removeRemoteView(RemoteView remoteView) {
+        this.remoteViews.remove(remoteView);
     }
 
     /**
      * Allows the user to remove a ServerInterface Object from serverInterface.
+     *
      * @param serverInterface the ServerInterface Object the user wants to remove from serverInterface
      */
-    synchronized void removeServerInterface ( ServerInterface serverInterface ) {
-        this.serverInterfaces.remove( serverInterface );
+    synchronized void removeServerInterface(ServerInterface serverInterface) {
+        this.serverInterfaces.remove(serverInterface);
     }
 
     /**
      * Allows the user to remove a nickname ( String ) from nicknames.
+     *
      * @param nickname the nickname the user wants to remove from nicknames
      */
-    synchronized void removeNickname ( String nickname ) {
-        this.nicknames.remove( nickname );
+    synchronized void removeNickname(String nickname) {
+        this.nicknames.remove(nickname);
     }
 
     /**
      * Allows the user to register a new Game Object when a new game starts.
+     *
      * @param game the Game Object the user wants to register
      */
-    synchronized void registerGame ( Game game ) {
-        games.put( game, gameID );
-        System.out.println( "A new game has started! GameID: " + gameID );
+    synchronized void registerGame(Game game) {
+        games.put(game, gameID);
+        System.out.println("A new game has started! GameID: " + gameID);
         gameID++;
     }
 
     /**
      * Allows the user to deregister a Game Object when a game ends.
+     *
      * @param game the Game Object the user wants to deregister
      */
-    synchronized void deregisterGame ( Game game ) {
-        System.out.println( "The game having the following ID has ended! Game ID: " + games.get( game ));
-        games.remove( game );
+    synchronized void deregisterGame(Game game) {
+        System.out.println("The game having the following ID has ended! Game ID: " + games.get(game));
+        games.remove(game);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean equals (Object object) {
-        if ( object != null && object.getClass() == this.getClass() ) {
+    public boolean equals(Object object) {
+        if (object != null && object.getClass() == this.getClass()) {
 
             Server server = (Server) object;
 
-            return ( this.serverInterfaces.equals(server.serverInterfaces) && this.nicknames.equals(server.nicknames) && this.games.equals(server.games)
-                    && this.remoteViews.equals(server.remoteViews) && currentLobby.equals(server.currentLobby) && gameID == server.gameID );
-        }
-        else return false;
+            return (this.serverInterfaces.equals(server.serverInterfaces) && this.nicknames.equals(server.nicknames) && this.games.equals(server.games)
+                    && this.remoteViews.equals(server.remoteViews) && currentLobby.equals(server.currentLobby) && gameID == server.gameID);
+        } else return false;
     }
 
     /**
      * {@inheritDoc}
      */
-    @Override //Please note this method is not used, but it's always recommended to override hashCode if equals is overridden
+    @Override
+    //Please note this method is not used, but it's always recommended to override hashCode if equals is overridden
     public int hashCode() {
         return super.hashCode();
     }

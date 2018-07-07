@@ -44,15 +44,6 @@ public class Cell {
     }
 
     /**
-     * Returns a boolean that specifies whether there is a die on the cell or not.
-     *
-     * @return the Cell object's usedCell attribute
-     */
-    public boolean getUsedCell() {
-        return usedCell;
-    }
-
-    /**
      * Allows the user to set a Die object as the Cell object's die attribute if the cell is not occupied.
      *
      * @param die the die the user wants to place on the cell
@@ -63,6 +54,15 @@ public class Cell {
             this.die = die;
             this.usedCell = true;
         } else throw new OccupiedCellException();
+    }
+
+    /**
+     * Returns a boolean that specifies whether there is a die on the cell or not.
+     *
+     * @return the Cell object's usedCell attribute
+     */
+    public boolean getUsedCell() {
+        return usedCell;
     }
 
     /**
@@ -116,8 +116,7 @@ public class Cell {
         if ((this.restriction.restrictionEquals(myCell.restriction)) && (this.usedCell == myCell.usedCell)) {
             if (this.usedCell) {
                 return (this.die.equals(myCell.die));
-            }
-            else return true;
+            } else return true;
         }
 
         return false;

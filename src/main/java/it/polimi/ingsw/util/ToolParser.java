@@ -12,22 +12,24 @@ import java.util.List;
 
 class ToolParser {
 
-    private static ClientTool[] clientTools = new ClientTool[3];;
+    private static ClientTool[] clientTools = new ClientTool[3];
+    ;
 
     /**
      * Private constructor that throws an IllegalStateException when called.
      * This is a static class.
      */
-    private ToolParser () {
+    private ToolParser() {
         throw new IllegalStateException();
     }
 
     /**
      * A static method used to read information about the extracted ToolCards from a json file.
+     *
      * @param s a String containing the tools' names
      * @return an array of ClientTool Objects
      */
-    static synchronized ClientTool[] readTools(String s){
+    static synchronized ClientTool[] readTools(String s) {
 
 
         String[] tool = s.split(",");
@@ -46,15 +48,13 @@ class ToolParser {
                 List<TypeMove> toolMove = new ArrayList<>();
                 JSONArray move = (JSONArray) jsonObject.get("Move");
 
-                for(int j = 0; j < param; j++) {
+                for (int j = 0; j < param; j++) {
                     toolMove.add(TypeMove.valueOf((String) (move.get(j))));
                 }
 
                 clientTools[k] = new ClientTool(number, toolMove);
 
-            }
-
-            catch (IOException | ParseException e) {
+            } catch (IOException | ParseException e) {
                 e.printStackTrace();
             }
         }

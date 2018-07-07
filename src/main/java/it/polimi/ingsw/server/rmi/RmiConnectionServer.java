@@ -27,8 +27,9 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
 
     /**
      * Creates a new server thread associated with the rmi client connection.
+     *
      * @param connectionClientRMI the reference to the client connection
-     * @param server the server
+     * @param server              the server
      */
     RmiConnectionServer(RmiClientInterface connectionClientRMI, Server server) {
         this.client = connectionClientRMI;
@@ -50,6 +51,7 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
 
     /**
      * Sends the schemes to the player.
+     *
      * @param schemes a String containing the extracted schemes
      */
     private synchronized void askForChosenScheme(String schemes) {
@@ -59,6 +61,7 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
     /**
      * Sets a default scheme before sending to the player the extracted scheme in order to set a scheme
      * in case the player makes his choice too late.
+     *
      * @param schemes the String containing the schemes
      * @return the name of the default scheme
      */
@@ -79,20 +82,20 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
     @Override
     public void setPlayerAndAskScheme(Message message) throws RemoteException {
 
-        this.player = new Player( message.getContent());
+        this.player = new Player(message.getContent());
         boolean firstLog = !server.alreadyLoggedIn(this);
 
-        if ( firstLog ) {
+        if (firstLog) {
             server.registerConnection(this);
             waitGameStart();
             String schemes = game.selectSchemes();
             this.defaultScheme = defaultScheme(schemes);
             Color privateAchievementColor = game.selectPrivateAchievement();
-            this.player.setPrivateAchievement(new PrivateAchievement(privateAchievementColor));;
+            this.player.setPrivateAchievement(new PrivateAchievement(privateAchievementColor));
+            ;
             this.send("Your private achievement is: " + privateAchievementColor);
             askForChosenScheme(schemes);
-        }
-        else server.registerConnection(this);
+        } else server.registerConnection(this);
 
     }
 
@@ -144,16 +147,16 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
      * {@inheritDoc}
      */
     @Override
-    public synchronized void setPlayer(Player player) {
-        this.player = player;
+    public synchronized Player getPlayer() {
+        return player;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public synchronized Player getPlayer() {
-        return player;
+    public synchronized void setPlayer(Player player) {
+        this.player = player;
     }
 
     /**

@@ -3,7 +3,10 @@ package it.polimi.ingsw.server.model;
 import it.polimi.ingsw.server.controller.tool.Tool;
 import it.polimi.ingsw.server.controller.tool.ToolFactory;
 import it.polimi.ingsw.server.controller.tool.ToolNames;
-import it.polimi.ingsw.server.model.achievement.*;
+import it.polimi.ingsw.server.model.achievement.AbstractCardFactory;
+import it.polimi.ingsw.server.model.achievement.CardAchievement;
+import it.polimi.ingsw.server.model.achievement.CardFactory;
+import it.polimi.ingsw.server.model.achievement.PublicAchievementNames;
 
 import java.util.*;
 
@@ -29,7 +32,7 @@ public class GameBoard extends Observable {
      * The schemes argument must specify the players' user names and chosen window schemes.
      */
 
-    public GameBoard( List<Player> players) {
+    public GameBoard(List<Player> players) {
 
         this.players = (ArrayList<Player>) players;
         publicAchievements = new ArrayList<>();
@@ -144,7 +147,7 @@ public class GameBoard extends Observable {
     /**
      * Allows the user to change a selected die with one contained in the draftPool.
      *
-     * @param die the die the user wants to put in the draftPool
+     * @param die      the die the user wants to put in the draftPool
      * @param dieIndex the index of the die the user wants to get from the draftPool
      * @return the die removed from the draftPool
      */
@@ -156,6 +159,7 @@ public class GameBoard extends Observable {
 
     /**
      * Allows the user to set the player whose playing the current turn.
+     *
      * @param currentPlayer a Player Object referring to the current player
      */
     public void setCurrentPlayer(Player currentPlayer) {
@@ -164,6 +168,7 @@ public class GameBoard extends Observable {
 
     /**
      * Returns a string telling who is the current player.
+     *
      * @return a String Object which specifies who is the current player
      */
     @Override
@@ -176,6 +181,7 @@ public class GameBoard extends Observable {
 
     /**
      * Returns a representation of the extracted tools.
+     *
      * @return a String Object which specifies the extracted tools
      */
     public String sendTool() {
@@ -192,6 +198,7 @@ public class GameBoard extends Observable {
 
     /**
      * Returns a representation of the extracted public achievements.
+     *
      * @return a String Object which specifies the extracted public achievements
      */
     public String sendAchievement() {
@@ -207,6 +214,7 @@ public class GameBoard extends Observable {
 
     /**
      * Returns a representation of the roundTrack.
+     *
      * @return a String Object which represents the roundTrack
      */
     public String sendRoundTrack() {
@@ -216,6 +224,7 @@ public class GameBoard extends Observable {
 
     /**
      * Returns a representation of the draftPool.
+     *
      * @return a String Object which represents the draftPool
      */
     public String sendDraft() {
@@ -225,7 +234,7 @@ public class GameBoard extends Observable {
             bld.append(die.toString());
             bld.append(" ");
         }
-        if(bld.length() > 0) {
+        if (bld.length() > 0) {
             bl.append("Draft-").append(bld);
             bl.append("-");
         }
@@ -234,6 +243,7 @@ public class GameBoard extends Observable {
 
     /**
      * Returns a list of the extracted tools.
+     *
      * @return an ArrayList Object containing the extracted Tool Objects
      */
     public List<Tool> getTools() {
@@ -243,7 +253,7 @@ public class GameBoard extends Observable {
     /**
      * This method notifies its Observers that something has been changed.
      */
-    public void update () {
+    public void update() {
         setChanged();
         notifyObservers(this);
     }

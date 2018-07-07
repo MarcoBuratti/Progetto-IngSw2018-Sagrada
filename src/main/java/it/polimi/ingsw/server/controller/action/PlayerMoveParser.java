@@ -15,15 +15,16 @@ class PlayerMoveParser {
      * Private constructor that throws an IllegalStateException when called.
      * This is a static class.
      */
-    private PlayerMoveParser () {
+    private PlayerMoveParser() {
         throw new IllegalStateException();
     }
 
     /**
      * Allows the user to read a new move from a json file, parsing it into a new JSONObject.
+     *
      * @return a JSONObject containing the new move
      */
-    static synchronized JSONObject readMove () {
+    static synchronized JSONObject readMove() {
         try {
             return (JSONObject) parser.parse(new FileReader("src/main/files/LastPlayerMove.json"));
         } catch (IOException | ParseException e) {

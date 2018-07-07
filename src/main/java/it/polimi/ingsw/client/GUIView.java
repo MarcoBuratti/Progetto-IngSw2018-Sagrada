@@ -115,7 +115,7 @@ public class GUIView extends View {
                         setChoice(choiceBox.getValue());
                         waitAnswer("Wait Answer...");
                         createConnection();
-                        if ( connectionSuccessful ) {
+                        if (connectionSuccessful) {
                             Thread thread = new Thread(() -> getConnectionClient().handleName(getNickname()));
                             thread.start();
                         }
@@ -204,13 +204,13 @@ public class GUIView extends View {
     private void waitAnswer(String input) {
 
         Label genericMessage = new Label();
-        output = output+"\n"+input;
+        output = output + "\n" + input;
         genericMessage.setText(output);
         genericMessage.setAlignment(Pos.CENTER);
         genericMessage.setTextAlignment(TextAlignment.CENTER);
-        genericMessage.setFont(new Font(h/35));
+        genericMessage.setFont(new Font(h / 35));
 
-        Platform.runLater(()->getPrimaryStage().setScene(new Scene(genericMessage, h, h*2/3)));
+        Platform.runLater(() -> getPrimaryStage().setScene(new Scene(genericMessage, h, h * 2 / 3)));
 
     }
 
@@ -219,9 +219,11 @@ public class GUIView extends View {
 
         Label label = new Label(fromServer);
         label.setAlignment(Pos.CENTER);
-        label.setFont(new Font(h/25));
-        Platform.runLater(() -> {gameGUI = new GameGUI();
-        getPrimaryStage().setScene(new Scene(label, h / 2, v / 2));});
+        label.setFont(new Font(h / 25));
+        Platform.runLater(() -> {
+            gameGUI = new GameGUI();
+            getPrimaryStage().setScene(new Scene(label, h / 2, v / 2));
+        });
         Thread thread = new Thread(() -> getConnectionClient().game());
         thread.start();
     }
@@ -294,9 +296,8 @@ public class GUIView extends View {
 
                 }
                 b[Integer.parseInt(numberChoose) - 1].setOpacity(1);
-                Thread thread = new Thread(() ->getConnectionClient().handleScheme(fromServer,numberChoose));
+                Thread thread = new Thread(() -> getConnectionClient().handleScheme(fromServer, numberChoose));
                 thread.start();
-
 
 
             });
@@ -364,7 +365,7 @@ public class GUIView extends View {
     public void endUpdate() {
         getConnectionClient().setInputControl(true);
         gameGUI.setGameStarted(true);
-        Platform.runLater(()->gameGUI.newSecondStage());
+        Platform.runLater(() -> gameGUI.newSecondStage());
         gameGUI.show(getPrimaryStage());
 
     }
@@ -402,7 +403,7 @@ public class GUIView extends View {
     @Override
     public String getPlusOrMinus() {
         gameGUI.activePlusOrMinusWindow();
-        return  gameGUI.getMove();
+        return gameGUI.getMove();
     }
 
     @Override
@@ -419,7 +420,7 @@ public class GUIView extends View {
 
     @Override
     public void showGenericMessage(String s) {
-        if(gameGUI.isGameStarted())
+        if (gameGUI.isGameStarted())
             gameGUI.setMessageFromServer(s);
         else
             waitAnswer(s);
@@ -427,17 +428,9 @@ public class GUIView extends View {
     }
 
     @Override
-    public void newGame(String s) { //TODO SISTEMARE
-    }
-
-    @Override
     public void terminate(String s) {
         waitAnswer(s);
 
-    }
-
-    @Override
-    public void showOutput(String s) { //TODO SISTEMARE
     }
 
     @Override
@@ -455,7 +448,7 @@ public class GUIView extends View {
     }
 
 
-    private GridPane drawLabelScheme(String s, double h){
+    private GridPane drawLabelScheme(String s, double h) {
 
         String cleanedString = cleanString(s);
         String[] arr = cleanedString.split("]");
@@ -465,10 +458,10 @@ public class GUIView extends View {
         for (int i = 0; i < 4; i++)
             for (int j = 0; j < 5; j++) {
                 int ind = i * 5 + j;
-                Label label = drawDashboard(arr[ind],h);
-                label.setMinSize(h,h);
-                label.setMaxSize(h,h);
-                labelScheme.add(label,j,i);
+                Label label = drawDashboard(arr[ind], h);
+                label.setMinSize(h, h);
+                label.setMaxSize(h, h);
+                labelScheme.add(label, j, i);
             }
         return labelScheme;
 

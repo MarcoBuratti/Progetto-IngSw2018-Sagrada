@@ -32,15 +32,6 @@ public class Die {
     }
 
     /**
-     * Returns a Colour object which represents the die's colour.
-     *
-     * @return the colour of the Die object
-     */
-    public Color getColor() {
-        return color;
-    }
-
-    /**
      * Gives the user the possibility to set the die's number (choosing the side facing upwards).
      * The user is allowed to set an int between 1 and the number of sides of the die (boundaries included).
      *
@@ -52,6 +43,15 @@ public class Die {
             this.number = number;
         else
             throw new NotValidValueException();
+    }
+
+    /**
+     * Returns a Colour object which represents the die's colour.
+     *
+     * @return the colour of the Die object
+     */
+    public Color getColor() {
+        return color;
     }
 
     /**

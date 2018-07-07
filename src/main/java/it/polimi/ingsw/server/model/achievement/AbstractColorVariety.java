@@ -10,14 +10,15 @@ interface AbstractColorVariety {
     /**
      * Checks whether the color of the selected die is present in counter or not.
      * Returns the new value of the boolean flag found.
-     * @param i the row index of the cell the user wants to check
-     * @param j the column index of the cell the user wants to check
+     *
+     * @param i            the row index of the cell the user wants to check
+     * @param j            the column index of the cell the user wants to check
      * @param matrixScheme the matrix of Cell Objects
-     * @param counter a map specifying whether any color has been already found on the row/column or not
-     * @param found a boolean flag
+     * @param counter      a map specifying whether any color has been already found on the row/column or not
+     * @param found        a boolean flag
      * @return a boolean flag
      */
-    default boolean found ( int i, int j, Cell[][] matrixScheme, Map<Color, Boolean> counter, boolean found) {
+    default boolean found(int i, int j, Cell[][] matrixScheme, Map<Color, Boolean> counter, boolean found) {
 
         boolean newFound = found;
 

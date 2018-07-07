@@ -11,8 +11,9 @@ public class RollAgainTool implements Tool {
 
     /**
      * Creates a ChangeDieTool, a class used to manage the following tools: GLAZING HAMMER.
+     *
      * @param needPlacement a boolean which specifies whether the tool has already been used once or not
-     * @param toolName an instance of ToolNames enum representing the tool's name
+     * @param toolName      an instance of ToolNames enum representing the tool's name
      */
     RollAgainTool(boolean needPlacement, ToolNames toolName) {
         this.toolName = toolName;

@@ -11,6 +11,7 @@ public class CliGraphicsServer {
 
     /**
      * Prints a String on the server communicating that the player having s as nickname has logged in again.
+     *
      * @param s the player's nickname
      */
     public void printLoggedAgain(String s) {
@@ -26,6 +27,7 @@ public class CliGraphicsServer {
 
     /**
      * Prints a String on the server communicating that a new player having s as nickname has logged in for the first time.
+     *
      * @param s the player's nickname
      */
     public void printLoggedIn(String s) {
@@ -34,6 +36,7 @@ public class CliGraphicsServer {
 
     /**
      * Prints a String on the server communicating that the player having s as nickname has disconnected from the server.
+     *
      * @param s the player's nickname
      */
     public void printDereg(String s) {
@@ -42,6 +45,7 @@ public class CliGraphicsServer {
 
     /**
      * Prints a String on the server communicating that the player having s as nickname is the winner of his game.
+     *
      * @param s the player's nickname
      */
     public void printWinner(String s) {

@@ -17,9 +17,10 @@ public class DecoratedChangeDieTool extends PlaceToolDecorator {
 
     /**
      * Creates a DecoratedChangeDieTool, a class used to manage the FLUX REMOVER tool. (Using the pattern decorator)
+     *
      * @param tool the Tool Object representing the selected tool
      */
-    public DecoratedChangeDieTool ( Tool tool ) {
+    public DecoratedChangeDieTool(Tool tool) {
         myTool = tool;
     }
 
@@ -51,23 +52,19 @@ public class DecoratedChangeDieTool extends PlaceToolDecorator {
 
             Integer dieIndexValue = dieIndex.get();
 
-            if ( dieIndexValue >= turn.getGameBoard().getDraftPool().size() )
+            if (dieIndexValue >= turn.getGameBoard().getDraftPool().size())
                 return false;
 
-            if ( myTool.getToolName().equals(ToolNames.FLUX_REMOVER )) {
-                Die dieFromDraftPool = turn.getGameBoard().getDraftPool().get( dieIndexValue );
-                Die newDie = turn.getGameBoard().getDiceBag().changeDie( dieFromDraftPool );
-                turn.getGameBoard().changeDie( newDie, dieIndexValue );
+            if (myTool.getToolName().equals(ToolNames.FLUX_REMOVER)) {
+                Die dieFromDraftPool = turn.getGameBoard().getDraftPool().get(dieIndexValue);
+                Die newDie = turn.getGameBoard().getDiceBag().changeDie(dieFromDraftPool);
+                turn.getGameBoard().changeDie(newDie, dieIndexValue);
                 turn.getGameBoard().update();
                 if (cantPlaceDie(turn, newDie))
-                    unableToPlaceDie( turn );
+                    unableToPlaceDie(turn);
                 return true;
-            }
-
-            else return false;
-        }
-
-        else return false;
+            } else return false;
+        } else return false;
 
     }
 
@@ -89,7 +86,8 @@ public class DecoratedChangeDieTool extends PlaceToolDecorator {
 
     /**
      * Allows the user to manage a special placement move, where the player specifies the value he wants to set on the die.
-     * @param turn the turn being played
+     *
+     * @param turn       the turn being played
      * @param playerMove the PlayerMove Object representing the move
      * @return a boolean specifying whether the die has been placed successfully
      */
@@ -124,15 +122,15 @@ public class DecoratedChangeDieTool extends PlaceToolDecorator {
      */
     @Override
     protected boolean cantPlaceDie(Turn turn, Die die) {
-        Die myDie = new Die ( die.getColor() );
+        Die myDie = new Die(die.getColor());
         boolean canPlace = false;
         PlacementCheck placementCheck = new PlacementCheck();
         int myDieValue = 0;
-        while ( myDieValue < 6 && !canPlace ) {
+        while (myDieValue < 6 && !canPlace) {
             myDieValue++;
             try {
-                myDie.setNumber( myDieValue );
-            } catch ( NotValidValueException e ) {
+                myDie.setNumber(myDieValue);
+            } catch (NotValidValueException e) {
                 e.printStackTrace();
             }
             for (int i = 0; i < 4 && !canPlace; i++) {

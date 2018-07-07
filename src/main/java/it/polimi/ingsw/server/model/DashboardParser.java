@@ -16,9 +16,8 @@ import java.io.IOException;
 class DashboardParser {
     private static final int ROW = 4;
     private static final int COLUMN = 5;
-
-    private static Cell[][] matrixScheme;
     private static final JSONParser parser = new JSONParser();
+    private static Cell[][] matrixScheme;
 
     /**
      * Private constructor that throws an IllegalStateException when called.
@@ -31,7 +30,8 @@ class DashboardParser {
     /**
      * Static method that allows the user to set a Dashboard's scheme and favour tokens.
      * This method uses the parser to read the scheme to write on the matrix from JSON files.
-     * @param dashboard the Dashboard of which scheme and favour tokens must be set
+     *
+     * @param dashboard  the Dashboard of which scheme and favour tokens must be set
      * @param schemeName the name of the selected scheme
      */
     static synchronized void createMatrixFromScheme(Dashboard dashboard, String schemeName) {
@@ -50,7 +50,7 @@ class DashboardParser {
                 }
             }
 
-            dashboard.setMatrixScheme( getMatrixSchemeCopy() );
+            dashboard.setMatrixScheme(getMatrixSchemeCopy());
             dashboard.setFavourToken(favourToken);
         } catch (IOException | ParseException e) {
             System.out.println(e.toString());
@@ -61,9 +61,10 @@ class DashboardParser {
 
     /**
      * Returns a copy of the matrixScheme attribute
+     *
      * @return a matrix of Cell Objects
      */
-    private static Cell[][] getMatrixSchemeCopy () {
+    private static Cell[][] getMatrixSchemeCopy() {
         Cell[][] matrixSchemeCopy = new Cell[ROW][COLUMN];
         try {
             for (int i = 0; i < ROW; i++)

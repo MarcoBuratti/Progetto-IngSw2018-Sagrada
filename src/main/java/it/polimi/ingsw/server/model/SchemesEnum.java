@@ -12,6 +12,7 @@ public enum SchemesEnum {
 
     /**
      * Creates an instance of the enum, representing one of the existing schemes.
+     *
      * @param name the name of the scheme
      */
     SchemesEnum(String name) {
@@ -20,6 +21,7 @@ public enum SchemesEnum {
 
     /**
      * Returns the name of the scheme.
+     *
      * @return the name attribute
      */
     public String getName() {

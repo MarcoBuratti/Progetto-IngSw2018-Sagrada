@@ -10,39 +10,39 @@ import java.io.IOException;
 public class SchemeParser {
 
 
-        private String stringScheme;
-        private String name;
-        private String token;
+    private String stringScheme;
+    private String name;
+    private String token;
 
-        public SchemeParser(String name){
+    public SchemeParser(String name) {
 
-            JSONParser parser = new JSONParser();
+        JSONParser parser = new JSONParser();
 
-            try {
-                JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/resources/dashboard_client/"+name+".json"));
-                this.name=(String)jsonObject.get("Name");
-                this.token=(String)jsonObject.get("token");
-                this.stringScheme = (String)jsonObject.get("String");
+        try {
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/resources/dashboard_client/" + name + ".json"));
+            this.name = (String) jsonObject.get("Name");
+            this.token = (String) jsonObject.get("token");
+            this.stringScheme = (String) jsonObject.get("String");
 
-            } catch (IOException e) {
-                System.out.println(e.toString());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
+        } catch (IOException e) {
+            System.out.println(e.toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-
-        public String getStringScheme() {
-            return stringScheme;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getToken() {
-            return token;
-        }
-
 
     }
+
+    public String getStringScheme() {
+        return stringScheme;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+
+}

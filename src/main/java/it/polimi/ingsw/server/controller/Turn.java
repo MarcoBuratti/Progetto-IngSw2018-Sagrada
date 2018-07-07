@@ -17,6 +17,7 @@ import java.util.TimerTask;
 public class Turn {
 
 
+    private static final String TURN_TIMER = "Turn_Timer";
     private final boolean secondTurn;
     private long time;
     private String moveType;
@@ -28,13 +29,13 @@ public class Turn {
     private RemoteView remoteView;
     private GameBoard gameBoard;
     private PlayerMove playerMove;
-    private static final String TURN_TIMER = "Turn_Timer";
 
     /**
      * Creates a new Turn, setting its attribute as the ones of the Round which called the constructor.
+     *
      * @param remoteView the RemoteView Object associated with the player
-     * @param player the Player Object associated with the player who's playing the turn
-     * @param gameBoard the GameBoard Object representing the game board
+     * @param player     the Player Object associated with the player who's playing the turn
+     * @param gameBoard  the GameBoard Object representing the game board
      * @param secondTurn a boolean specifying whether it's the player's second turn or not
      */
     public Turn(RemoteView remoteView, Player player, GameBoard gameBoard, boolean secondTurn) {
@@ -53,7 +54,7 @@ public class Turn {
     /**
      * Calls a static method of the class TimeParser in order to read the time from a json file.
      */
-    private synchronized void setTime () {
+    private synchronized void setTime() {
         this.time = TimeParser.readTime(TURN_TIMER);
     }
 
@@ -75,6 +76,7 @@ public class Turn {
 
     /**
      * Returns the waitMove attribute.
+     *
      * @return a boolean
      */
     private synchronized boolean isWaitMove() {
@@ -83,6 +85,7 @@ public class Turn {
 
     /**
      * Returns the negated turnOver attribute.
+     *
      * @return a boolean specifying if the turn has not ended yet.
      */
     private synchronized boolean notEndedTurn() {
@@ -90,15 +93,8 @@ public class Turn {
     }
 
     /**
-     * Allows the user to set the placementDone attribute as the placementDone parameter.
-     * @param placementDone a boolean
-     */
-    public void setPlacementDone(boolean placementDone) {
-        this.placementDone = placementDone;
-    }
-
-    /**
      * Returns the placementDone attribute.
+     *
      * @return a boolean
      */
     public boolean isPlacementDone() {
@@ -106,7 +102,17 @@ public class Turn {
     }
 
     /**
+     * Allows the user to set the placementDone attribute as the placementDone parameter.
+     *
+     * @param placementDone a boolean
+     */
+    public void setPlacementDone(boolean placementDone) {
+        this.placementDone = placementDone;
+    }
+
+    /**
      * Returns the secondTurn attribute.
+     *
      * @return a boolean
      */
     public boolean isSecondTurn() {
@@ -115,6 +121,7 @@ public class Turn {
 
     /**
      * Returns the player attribute.
+     *
      * @return a Player Object representing the player who's playing the turn
      */
     public Player getPlayer() {
@@ -123,6 +130,7 @@ public class Turn {
 
     /**
      * Returns the gameBoard attribute.
+     *
      * @return a GameBoard Object representing the game board
      */
     public GameBoard getGameBoard() {
@@ -131,6 +139,7 @@ public class Turn {
 
     /**
      * Returns the playerMove attribute.
+     *
      * @return a PlayerMove Object representing the last received player move
      */
     public PlayerMove getPlayerMove() {
@@ -139,25 +148,27 @@ public class Turn {
 
     /**
      * Sends a message to the player if its connection is on.
+     *
      * @param message the String the user wants to send to the player
      */
-    public void sendToPlayer ( String message ) {
-        if ( this.remoteView != null && this.remoteView.isOn() )
-            this.remoteView.send( message );
+    public void sendToPlayer(String message) {
+        if (this.remoteView != null && this.remoteView.isOn())
+            this.remoteView.send(message);
     }
 
     /**
      * //TODO QUESTO METODO ANDREBBE TOLTO E GLI AGGIORNAMENTI ANDREBBERO INVIATI SOLAMENTE DAI TOOL.
      */
     private void sendToPlayerAndUpdate() {
-        if ( this.remoteView != null && this.remoteView.isOn() ) {
-                this.gameBoard.update();
-                this.remoteView.send("The selected tool has been used successfully");
-            }
+        if (this.remoteView != null && this.remoteView.isOn()) {
+            this.gameBoard.update();
+            this.remoteView.send("The selected tool has been used successfully");
+        }
     }
 
     /**
      * As a new player move is received, it sets all the attributes related to it and calls notifyAll.
+     *
      * @param playerMove the PlayerMove Object received from the Round
      */
     synchronized void newMove(PlayerMove playerMove) {
@@ -215,9 +226,7 @@ public class Turn {
 
             setTurnIsOver();
 
-        }
-
-        else remoteView.incorrectMove();
+        } else remoteView.incorrectMove();
 
     }
 
@@ -251,6 +260,7 @@ public class Turn {
 
     /**
      * Manages a placement move.
+     *
      * @param playerMove the PlayerMove Object representing the placement move the player sent
      */
     public void tryPlacementMove(PlayerMove playerMove) {
@@ -277,9 +287,10 @@ public class Turn {
     /**
      * This method is called when the player is trying to use a tool that needs a placement move too.
      * It waits for a new placement move and then manages it if it arrives before the turn has ended.
+     *
      * @param decoratedTool the Tool the player is trying to use
      */
-    private void waitPlaceDieMove ( PlaceToolDecorator decoratedTool ) {
+    private void waitPlaceDieMove(PlaceToolDecorator decoratedTool) {
         setWaitMove();
         boolean correctMove = false;
         synchronized (this) {
@@ -295,8 +306,7 @@ public class Turn {
                     correctMove = decoratedTool.placeDie(this, playerMove);
                     if (!correctMove)
                         setWaitMove();
-                }
-                else {
+                } else {
                     correctMove = true;
                     sendToPlayer("You cannot place the die anymore!");
                 }
@@ -307,21 +317,22 @@ public class Turn {
     /**
      * This method is called when the player is trying to use a tool that needs a placement move too.
      * It manages the first part of the move (the one that doesn't need a placement move) and then calls waitPlaceDieMove.
-     * @param tool the tool the player's trying to use
+     *
+     * @param tool            the tool the player's trying to use
      * @param toolAlreadyUsed a boolean specifying whether the tool has been already used once or not
      */
-    private void needPlacementToolHandler ( Tool tool, boolean toolAlreadyUsed ) {
+    private void needPlacementToolHandler(Tool tool, boolean toolAlreadyUsed) {
         PlaceToolDecorator decoratedTool;
 
-        if ( tool.getToolName().equals(ToolNames.FLUX_BRUSH))
-            decoratedTool = new DecoratedSetDieTool( tool );
-        else if ( tool.getToolName().equals(ToolNames.FLUX_REMOVER) )
-            decoratedTool = new DecoratedChangeDieTool( tool );
+        if (tool.getToolName().equals(ToolNames.FLUX_BRUSH))
+            decoratedTool = new DecoratedSetDieTool(tool);
+        else if (tool.getToolName().equals(ToolNames.FLUX_REMOVER))
+            decoratedTool = new DecoratedChangeDieTool(tool);
         else throw new IllegalArgumentException();
 
         usedTool = decoratedTool.toolEffect(this, playerMove);
-        if ( usedTool ) {
-            if ( !toolAlreadyUsed )
+        if (usedTool) {
+            if (!toolAlreadyUsed)
                 tool.setAlreadyUsed(true);
             sendToPlayer("Please complete your move:");
             waitPlaceDieMove(decoratedTool);
@@ -330,10 +341,11 @@ public class Turn {
 
     /**
      * Manages a common tool move. Tools that need a placement move are not included.
-     * @param tool the tool the player's trying to use
+     *
+     * @param tool            the tool the player's trying to use
      * @param toolAlreadyUsed a boolean specifying whether the tool has been already used once or not
      */
-    private void toolHandler ( Tool tool, boolean toolAlreadyUsed ) {
+    private void toolHandler(Tool tool, boolean toolAlreadyUsed) {
         usedTool = tool.toolEffect(this, playerMove);
         if (!toolAlreadyUsed)
             tool.setAlreadyUsed(true);
@@ -350,25 +362,20 @@ public class Turn {
             Tool tool = gameBoard.getTools().get(toolIndexValue);
 
             boolean toolAlreadyUsed = tool.isAlreadyUsed();
-            if ( this.player.hasEnoughToken( toolAlreadyUsed ) ) {
+            if (this.player.hasEnoughToken(toolAlreadyUsed)) {
 
-                if ( tool.needPlacement() && !isPlacementDone() ) {
-                    needPlacementToolHandler( tool, toolAlreadyUsed );
+                if (tool.needPlacement() && !isPlacementDone()) {
+                    needPlacementToolHandler(tool, toolAlreadyUsed);
+                } else if (!tool.needPlacement()) {
+                    toolHandler(tool, toolAlreadyUsed);
                 }
 
-                else if ( !tool.needPlacement() ) {
-                    toolHandler( tool, toolAlreadyUsed );
-                }
-
-                if ( usedTool ) {
-                    this.player.useToken( toolAlreadyUsed );
+                if (usedTool) {
+                    this.player.useToken(toolAlreadyUsed);
                     this.sendToPlayerAndUpdate();
-                }
-                else
+                } else
                     this.sendToPlayer("Incorrect move! Please try again.");
-            }
-
-            else this.sendToPlayer("You don't have enough favour tokens left to use this tool!");
+            } else this.sendToPlayer("You don't have enough favour tokens left to use this tool!");
 
         } else
             throw new IllegalArgumentException();

@@ -7,14 +7,15 @@ interface AbstractShadeVariety {
     /**
      * Checks whether the value of the selected die is present in counter or not.
      * Returns the new value of the boolean flag found.
-     * @param i the row index of the cell the user wants to check
-     * @param j the column index of the cell the user wants to check
+     *
+     * @param i            the row index of the cell the user wants to check
+     * @param j            the column index of the cell the user wants to check
      * @param matrixScheme the matrix of Cell Objects
-     * @param counter a boolean array specifying whether any value has been already found on the row/column or not
-     * @param found a boolean flag
+     * @param counter      a boolean array specifying whether any value has been already found on the row/column or not
+     * @param found        a boolean flag
      * @return a boolean flag
      */
-    default boolean found ( int i, int j, Cell[][] matrixScheme, boolean[] counter, boolean found ) {
+    default boolean found(int i, int j, Cell[][] matrixScheme, boolean[] counter, boolean found) {
 
         boolean newFound = found;
 

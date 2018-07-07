@@ -11,6 +11,7 @@ public class Shades implements CardAchievement {
     /**
      * Shades gather three Achievements together: Dark Shades, Medium Shades, Light Shades.
      * The int attributes are used to create an instance of the class representing one of the three Achievements.
+     *
      * @param number1 the first number the selected Achievement makes reference to
      * @param number2 the second number the selected Achievement makes reference to
      */
@@ -25,7 +26,8 @@ public class Shades implements CardAchievement {
      * - 1 & 2 for Light Shades Achievement
      * - 3 & 4 for Medium Shades Achievement
      * - 5 & 6 for Dark Shades Achievement
-     *          multiplied by two.
+     * multiplied by two.
+     *
      * @param dashboard the dashboard of the player whose score is being calculated
      * @return an int representing a score effect
      */

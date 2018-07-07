@@ -23,9 +23,10 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
 
     /**
      * Creates a RmiConnectionClient object, adding the corresponding View to its observers and establishing a connection between it and the server.
-     * @param view the View object which has to be added to the observers
+     *
+     * @param view    the View object which has to be added to the observers
      * @param address the server address
-     * @param port the port of the server
+     * @param port    the port of the server
      */
     public RmiConnectionClient(View view, String address, int port) {
         this.addObserver(view);
@@ -42,6 +43,7 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
 
     /**
      * Tries to call the server method which saves the nickname and sends back the possible schemes.
+     *
      * @param message a Message object containing a String which specifies the chosen nickname
      */
     private void sendName(Message message) {
@@ -56,6 +58,7 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
 
     /**
      * Tries to call the server method which initializes the player's dashboard using the chosen scheme.
+     *
      * @param message a Message object containing a String which specifies the chosen scheme
      */
     private void sendScheme(Message message) {
@@ -71,6 +74,7 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
 
     /**
      * Tries to call the server method which forwards the PlayerMove object to the RemoteView.
+     *
      * @param playerMove a PlayerMove object specifying the move the player is trying to make
      */
     private void sendMove(PlayerMove playerMove) {
@@ -88,7 +92,7 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
      * Sets the boolean attribute isOn as false whenever the connection needs to be closed.
      */
     private synchronized void close() {
-        super.setIsOn( false );
+        super.setIsOn(false);
     }
 
     /**
@@ -105,6 +109,7 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
 
     /**
      * Allows the user to set the playerNickname attribute as the player's nickname.
+     *
      * @param nickname the String the user wants to set as playerNickname attribute.
      */
     @Override
@@ -114,6 +119,7 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
 
     /**
      * Sends the chosen nickname to the server as a new Message object containing the corresponding String.
+     *
      * @param name a String specifying the chosen nickname
      */
     @Override
@@ -125,6 +131,7 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
     /**
      * Deals with the client input in order to select the chosen scheme correctly and sends it to the server
      * through the sendScheme method.
+     *
      * @param fromServer a String containing the names of the available schemes
      * @param fromClient a String containing the client input
      */
@@ -151,13 +158,14 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
     /**
      * Deals with the client input in order to build the correct move as a PlayerMove object and sends it
      * to the server through the sendMove method.
+     *
      * @param fromClient a String containing the client input
      */
     @Override
     public void handleMove(String fromClient) {
 
-        fromClient = fromClient.substring(0, fromClient.length()-1);
-        String [] strtok = fromClient.split(" ");
+        fromClient = fromClient.substring(0, fromClient.length() - 1);
+        String[] strtok = fromClient.split(" ");
         String key;
         String value;
         final String TYPE_PLAYERMOVE = "type_playerMove";
@@ -201,7 +209,7 @@ public class RmiConnectionClient extends ConnectionClient implements RmiClientIn
             }
         }
 
-        if(choice<4)
+        if (choice < 4)
             sendMove(PlayerMove.playerMoveReader(jsonObject));
 
     }

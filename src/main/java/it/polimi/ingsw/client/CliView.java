@@ -3,10 +3,13 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.util.GraphicsClient;
 import it.polimi.ingsw.util.InputController;
-import java.io.*;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 
-public class CliView extends View  {
+public class CliView extends View {
     private BufferedReader bufferedReader;
 
     private String fromClient;
@@ -16,10 +19,9 @@ public class CliView extends View  {
     private InputController cliController;
 
 
-
-    CliView(InputStreamReader input)  {
+    CliView(InputStreamReader input) {
         bufferedReader = new BufferedReader(input);
-        super.setGraphicsClient( new GraphicsClient());
+        super.setGraphicsClient(new GraphicsClient());
         cliController = new InputController();
     }
 
@@ -31,7 +33,7 @@ public class CliView extends View  {
         setPort();
         setNickname();
         createConnection();
-        if ( connectionSuccessful ) {
+        if (connectionSuccessful) {
             getConnectionClient().handleName(getNickname());
             setScheme();
             super.getConnectionClient().game();
@@ -44,20 +46,20 @@ public class CliView extends View  {
         this.connectionSuccessful = true;
     }
 
-    private void setNickname(){
-    try {
-        inputCtrl = false;
-        String nick;
-        do {
-            showOutput(getGraphicsClient().askNick());
-            nick = bufferedReader.readLine();
-            inputCtrl = cliController.nameController(nick);
-            if (inputCtrl) showOutput(getGraphicsClient().wrongNick());
-        } while (inputCtrl);
-        super.setNickname(nick);
-    }catch (IOException e) {
-        System.err.println(e.toString());
-    }
+    private void setNickname() {
+        try {
+            inputCtrl = false;
+            String nick;
+            do {
+                showOutput(getGraphicsClient().askNick());
+                nick = bufferedReader.readLine();
+                inputCtrl = cliController.nameController(nick);
+                if (inputCtrl) showOutput(getGraphicsClient().wrongNick());
+            } while (inputCtrl);
+            super.setNickname(nick);
+        } catch (IOException e) {
+            System.err.println(e.toString());
+        }
     }
 
     private void setIP() {
@@ -69,7 +71,7 @@ public class CliView extends View  {
                 inputCtrl = cliController.ipController(address);
             } while (inputCtrl);
             super.setAddress(address);
-        }catch (IOException e) {
+        } catch (IOException e) {
             System.err.println(e.toString());
         }
     }
@@ -84,7 +86,7 @@ public class CliView extends View  {
                 inputCtrl = cliController.portController(port);
             } while (inputCtrl);
             super.setPort(port);
-        }catch (IOException e) {
+        } catch (IOException e) {
             System.out.println(e.toString());
         }
     }
@@ -99,13 +101,13 @@ public class CliView extends View  {
                 inputCtrl = cliController.connectionController(choice);
             } while (inputCtrl);
             super.setChoice(choice);
-        }catch (IOException e) {
+        } catch (IOException e) {
             System.out.println(e.toString());
         }
     }
 
     private void setScheme() {
-        synchronized ( this ) {
+        synchronized (this) {
             while (super.getChosenScheme()) {
                 try {
                     wait();
@@ -122,14 +124,13 @@ public class CliView extends View  {
                     inputCtrl = cliController.schemeController(fromClient);
                     if (inputCtrl) showOutput(getGraphicsClient().printRequest());
                 } while (inputCtrl);
-            }catch (IOException e) {
+            } catch (IOException e) {
                 System.out.println(e.toString());
             }
             super.getConnectionClient().handleScheme(super.getSchemes(), fromClient);
             super.setHasChosenScheme(true);
         }
     }
-
 
 
     @Override
@@ -143,25 +144,25 @@ public class CliView extends View  {
     }
 
     @Override
-    public void showSchemes(String s){
+    public void showSchemes(String s) {
         getGraphicsClient().printChoice(s);
     }
 
     @Override
-    public void showPrivateAchievement(String s){
+    public void showPrivateAchievement(String s) {
         System.out.println(getGraphicsClient().printPrivate(s));
     }
 
     @Override
-    public void startGame(String s){
+    public void startGame(String s) {
         System.out.println(getGraphicsClient().printGeneric(s));
         getConnectionClient().setInputControl(true);
     }
 
     @Override
-    public void showPublicAchievements(String s){
+    public void showPublicAchievements(String s) {
         getGraphicsClient().printAchievements(s);
-        }
+    }
 
     @Override
     public void showTools(String s) {
@@ -195,32 +196,32 @@ public class CliView extends View  {
 
     @Override
     public String getRowColumn() {
-        showOutput( getGraphicsClient().printRulesMatrix() );
+        showOutput(getGraphicsClient().printRulesMatrix());
         return getInput();
     }
 
     @Override
     public String getRoundTrack() {
-        showOutput( getGraphicsClient().printRoundDie() );
+        showOutput(getGraphicsClient().printRoundDie());
         return getInput();
 
     }
 
     @Override
     public String getTool() {
-        showOutput( getGraphicsClient().printToolIndex() );
+        showOutput(getGraphicsClient().printToolIndex());
         return getInput();
     }
 
     @Override
     public String getPlusOrMinus() {
-        showOutput( getGraphicsClient().printPlusMin() );
+        showOutput(getGraphicsClient().printPlusMin());
         return getInput();
     }
 
     @Override
     public String getDieNumber() {
-        showOutput( getGraphicsClient().printGoOn() );
+        showOutput(getGraphicsClient().printGoOn());
         return getInput();
 
     }
@@ -237,12 +238,6 @@ public class CliView extends View  {
     }
 
     @Override
-    public void newGame(String s) {
-        getConnectionClient().setInputControl(true);
-
-    }
-
-    @Override
     public void terminate(String fromServer) {
         showOutput(fromServer);
     }
@@ -255,13 +250,12 @@ public class CliView extends View  {
 
     @Override
     public String getIndex() {
-        showOutput( getGraphicsClient().printRulesDash() );
+        showOutput(getGraphicsClient().printRulesDash());
         return getInput();
     }
 
 
-
-    public void showOutput(String s){
+    private void showOutput(String s) {
         System.out.println(s);
     }
 
@@ -276,7 +270,7 @@ public class CliView extends View  {
         showOutput(s);
     }
 
-    public String getInput(){
+    public String getInput() {
         try {
             input = bufferedReader.readLine();
         } catch (IOException e) {

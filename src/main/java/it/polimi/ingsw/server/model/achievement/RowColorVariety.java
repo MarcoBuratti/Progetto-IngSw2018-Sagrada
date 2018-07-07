@@ -14,6 +14,7 @@ public class RowColorVariety implements CardAchievement, AbstractColorVariety {
     /**
      * Returns an int representing the score effect associated with the Row Color Variety Achievement.
      * The return value is the number of rows with no repeated colors multiplied by six.
+     *
      * @param dashboard the dashboard of the player whose score is being calculated
      * @return an int representing a score effect
      */
@@ -29,7 +30,7 @@ public class RowColorVariety implements CardAchievement, AbstractColorVariety {
             for (Color color : Color.values())
                 counter.put(color, false);
             for (int j = 0; j < 5; j++) {
-                foundRow = found( i, j, matrixScheme, counter, foundRow );
+                foundRow = found(i, j, matrixScheme, counter, foundRow);
             }
             if (foundRow)
                 score += 6;

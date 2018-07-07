@@ -17,7 +17,7 @@ public class RoundTrack {
      * Round track's cells are represented as ArrayLists of Die objects.
      */
     public RoundTrack() {
-        diceList = new ArrayList<>( NUMBER_OF_ROUNDS );
+        diceList = new ArrayList<>(NUMBER_OF_ROUNDS);
         for (int i = 0; i < NUMBER_OF_ROUNDS; i++)
             diceList.add(new ArrayList<>());
     }
@@ -30,7 +30,7 @@ public class RoundTrack {
      * @return an ArrayList containing the dice placed on the selected cell
      * @throws NotValidRoundException whether the user tries to access a not existing round track's cell
      */
-    public List<Die> getDiceList ( int round ) throws NotValidRoundException {
+    public List<Die> getDiceList(int round) throws NotValidRoundException {
         if (round > 0 && round <= NUMBER_OF_ROUNDS)
             return diceList.get(round - 1);
         else throw new NotValidRoundException();
@@ -44,9 +44,9 @@ public class RoundTrack {
      * @param round the cell the user wants to place the dice on
      * @throws NotValidRoundException whether the user specifies a not existing round track's cell
      */
-    public void setDiceList( List<Die> mySet, int round) throws NotValidRoundException {
+    public void setDiceList(List<Die> mySet, int round) throws NotValidRoundException {
         if (round > 0 && round <= NUMBER_OF_ROUNDS)
-            diceList.set( round-1 , new ArrayList<>(mySet) );
+            diceList.set(round - 1, new ArrayList<>(mySet));
         else throw new NotValidRoundException();
     }
 
@@ -76,7 +76,7 @@ public class RoundTrack {
      * @param mySet the dice set the user wants to place on the cell
      * @throws NotValidRoundException if the user tries to access the round track after the game is ended (every round already played)
      */
-    public void setNextRound( List<Die> mySet) throws NotValidRoundException {
+    public void setNextRound(List<Die> mySet) throws NotValidRoundException {
         int currentRound = 0;
         try {
             currentRound = this.getCurrentRound();
@@ -106,8 +106,9 @@ public class RoundTrack {
 
     /**
      * Allows the user to replace a die from the roundTrack with another one.
-     * @param die the die the user wants to put in the draftPool
-     * @param round the round cell the user wants to get the die from
+     *
+     * @param die      the die the user wants to put in the draftPool
+     * @param round    the round cell the user wants to get the die from
      * @param dieIndex the index of the die the user wants to get
      */
     public void changeDie(Die die, int round, int dieIndex) {

@@ -9,8 +9,8 @@ import java.io.IOException;
 
 public class TimeParser {
 
-    private static long time = 90000;
     private static final JSONParser parser = new JSONParser();
+    private static long time = 90000;
 
     /**
      * Private constructor that throws an IllegalStateException when called.
@@ -23,10 +23,11 @@ public class TimeParser {
     /**
      * A static method used to read the time used for timers from a json file and set it.
      * If it's impossible to read from the selected json file, it return a default timer value (90000ms).
+     *
      * @param timerType a String used to select the correct json file
      * @return a long representing the time in ms used for a timer
      */
-    public static synchronized long readTime ( String timerType ) {
+    public static synchronized long readTime(String timerType) {
 
         try {
             JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/resources/timers/" + timerType + ".json"));
@@ -34,9 +35,7 @@ public class TimeParser {
             time = (Long) jsonObject.get("Time");
 
             return time;
-        }
-
-        catch (IOException | ParseException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
 

@@ -15,9 +15,10 @@ public class DecoratedSetDieTool extends PlaceToolDecorator {
 
     /**
      * Creates a DecoratedSetDieTool, a class used to manage the FLUX BRUSH tool. (Using the pattern decorator)
+     *
      * @param tool the Tool Object representing the selected tool
      */
-    public DecoratedSetDieTool ( Tool tool ) {
+    public DecoratedSetDieTool(Tool tool) {
         myTool = tool;
     }
 
@@ -53,21 +54,17 @@ public class DecoratedSetDieTool extends PlaceToolDecorator {
                 return false;
             }
 
-            Die myDie = turn.getGameBoard().getDraftPool().get( dieIndexValue );
+            Die myDie = turn.getGameBoard().getDraftPool().get(dieIndexValue);
 
-            if ( myTool.getToolName().equals( ToolNames.FLUX_BRUSH ) ) {
+            if (myTool.getToolName().equals(ToolNames.FLUX_BRUSH)) {
                 myDie.extractAgain();
                 turn.getGameBoard().update();
                 if (cantPlaceDie(turn, myDie))
-                    unableToPlaceDie( turn );
+                    unableToPlaceDie(turn);
                 return true;
-            }
+            } else return false;
 
-            else return false;
-
-        }
-
-        else return false;
+        } else return false;
 
     }
 
@@ -89,7 +86,8 @@ public class DecoratedSetDieTool extends PlaceToolDecorator {
 
     /**
      * Allows the user to manage a placement move.
-     * @param turn the turn being played
+     *
+     * @param turn       the turn being played
      * @param playerMove the PlayerMove Object representing the move
      * @return a boolean specifying whether the die has been placed successfully
      */

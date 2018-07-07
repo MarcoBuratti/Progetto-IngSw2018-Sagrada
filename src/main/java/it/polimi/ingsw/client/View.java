@@ -19,7 +19,7 @@ import java.util.StringTokenizer;
 public abstract class View implements Observer {
 
     private ClientInterface connectionClient;
-    private GraphicsClient graphicsClient ;
+    private GraphicsClient graphicsClient;
     private String nickname;
     private String address;
     private String port;
@@ -39,26 +39,21 @@ public abstract class View implements Observer {
         if (fromServer.startsWith("You have logged")) {
             loginSuccess(fromServer);
 
-        }
-        else if (fromServer.startsWith("schemes. ")) {
+        } else if (fromServer.startsWith("schemes. ")) {
             showSchemes(fromServer);
-        }
-
-        else if (fromServer.startsWith("The game has started")) {
+        } else if (fromServer.startsWith("The game has started")) {
             startGame(fromServer);
 
 
-        }
+        } else if (fromServer.startsWith("Your private achievement is:")) {
 
-        else if (fromServer.startsWith("Your private achievement is:")) {
-            System.out.println(fromServer);
             showPrivateAchievement(fromServer);
 
-        }else if (fromServer.startsWith("Update")) {
+        } else if (fromServer.startsWith("Update")) {
 
             JSONParser parser = new JSONParser();
             try {
-                JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/"+getNickname()+".json"));
+                JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/" + getNickname() + ".json"));
 
                 String achievement = (String) jsonObject.get("Public Achievements");
                 showPublicAchievements(achievement);
@@ -76,7 +71,7 @@ public abstract class View implements Observer {
 
 
                 String draft = (String) jsonObject.get("Draft");
-                if(draft != null)
+                if (draft != null)
                     showDraftPool(draft);
 
 
@@ -95,29 +90,19 @@ public abstract class View implements Observer {
             } catch (IOException | ParseException e) {
                 System.err.println(e.toString());
             }
-        }
-        else  if(fromServer.startsWith("You have chosen the following scheme:")){
+        } else if (fromServer.startsWith("You have chosen the following scheme:")) {
             showAnswer(fromServer);
 
-        }
+        } else if (fromServer.startsWith("Please wait, the game will start soon.")) {
+            showGenericMessage(fromServer);
 
-        else  if(fromServer.startsWith("Please wait, the game will start soon.")){
-            newGame(fromServer);
-
-        }
-
-        else  if(fromServer.startsWith("You win")||fromServer.startsWith("You lose")){
+        } else if (fromServer.startsWith("You win") || fromServer.startsWith("You lose")) {
             endGame(fromServer);
 
-        }
-
-        else  if(fromServer.startsWith("Player:")){
+        } else if (fromServer.startsWith("Player:")) {
             addPlayerToRanking(fromServer);
 
-        }
-
-
-        else {
+        } else {
             showGenericMessage(fromServer);
 
         }
@@ -166,24 +151,20 @@ public abstract class View implements Observer {
 
     public abstract String getNumber();
 
-    public abstract void showGenericMessage (String s);
-
-    public abstract void newGame(String s);
+    public abstract void showGenericMessage(String s);
 
     public abstract void terminate(String s);
-
-    public abstract void showOutput(String s);
 
     public abstract void endGame(String s);
 
     public abstract void addPlayerToRanking(String s);
 
-    void createConnection(){
+    void createConnection() {
 
         if (choice.equals("SOCKET") || choice.equals("1")) {
             connectionClient = new SocketConnectionClient(this, address, Integer.parseInt(port));
 
-        } else{
+        } else {
             connectionClient = new RmiConnectionClient(this, address, Integer.parseInt(port));
         }
 
@@ -197,12 +178,12 @@ public abstract class View implements Observer {
         return this.nickname;
     }
 
-    void setAddress(String address) {
-        this.address = address;
-    }
-
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    void setAddress(String address) {
+        this.address = address;
     }
 
     void setPort(String port) {
@@ -213,72 +194,58 @@ public abstract class View implements Observer {
         this.choice = choice;
     }
 
-    void setGraphicsClient(GraphicsClient graphicsClient) {
-        this.graphicsClient = graphicsClient;
-    }
-
     public synchronized void update(Observable o, Object arg) {
 
-            String fromServer = (String) arg;
+        String fromServer = (String) arg;
 
-            if(fromServer.startsWith("Terminate")){
-                terminate(fromServer);
+        if (fromServer.startsWith("Terminate")) {
+            terminate(fromServer);
 
-            }
-            else if(!fromServer.startsWith("*")){
-                if (fromServer.startsWith("You have logged in")) {
-                    if (fromServer.startsWith("You have logged in again as")) {
-                        setHasChosenScheme(true);
-                        setChosenScheme();
-                    }
-                    else {
-                        setHasChosenScheme(false);
-                        setChosenScheme();
-                    }
-                    int nicknameStartIndex = fromServer.lastIndexOf(' ') + 1;
-                    String nickname = fromServer.substring(nicknameStartIndex);
-                    this.setNickname(nickname);
-                } else if (fromServer.startsWith("schemes. ")) {
-                    schemes = fromServer;
+        } else if (!fromServer.startsWith("*")) {
+            if (fromServer.startsWith("You have logged in")) {
+                if (fromServer.startsWith("You have logged in again as")) {
+                    setHasChosenScheme(true);
+                    setChosenScheme();
+                } else {
                     setHasChosenScheme(false);
+                    setChosenScheme();
                 }
-                fromServer = fromServer.replace("!", "\n");
-                showInput(fromServer);
-            }else if(fromServer.startsWith("*")){
+                int nicknameStartIndex = fromServer.lastIndexOf(' ') + 1;
+                String nickname = fromServer.substring(nicknameStartIndex);
+                this.setNickname(nickname);
+            } else if (fromServer.startsWith("schemes. ")) {
+                schemes = fromServer;
+                setHasChosenScheme(false);
+            }
+            fromServer = fromServer.replace("!", "\n");
+            showInput(fromServer);
+        } else {
 
 
-                    fromServer = fromServer.substring(1, fromServer.length());
-                    StringTokenizer strtok = new StringTokenizer(fromServer);
-                    String key;
-                    String value;
-                    JSONObject jsonObject = new JSONObject();
-                    while (strtok.hasMoreTokens()) {
-                        key = strtok.nextToken("-");
-                        value = strtok.nextToken("-");
-                        jsonObject.put(key, value);
-                    }
-                    try (FileWriter up = new FileWriter("src/main/files/"+getNickname()+".json")) {
-                        up.write(jsonObject.toJSONString());
-                    } catch (IOException e) {
-                        System.out.println(e.toString());
-                    }
+            fromServer = fromServer.substring(1, fromServer.length());
+            StringTokenizer strtok = new StringTokenizer(fromServer);
+            String key;
+            String value;
+            JSONObject jsonObject = new JSONObject();
+            while (strtok.hasMoreTokens()) {
+                key = strtok.nextToken("-");
+                value = strtok.nextToken("-");
+                jsonObject.put(key, value);
+            }
+            try (FileWriter up = new FileWriter("src/main/files/" + getNickname() + ".json")) {
+                up.write(jsonObject.toJSONString());
+            } catch (IOException e) {
+                System.out.println(e.toString());
+            }
 
-                    showInput("Update");
+            showInput("Update");
 
-            }else
-                showInput(fromServer);
-
+        }
 
 
     }
 
-
-    synchronized void setHasChosenScheme(boolean bool) {
-        this.hasChosenScheme = bool;
-        notifyAll();
-    }
-
-    private synchronized void setChosenScheme(){
+    private synchronized void setChosenScheme() {
         this.chosenScheme = false;
         notifyAll();
     }
@@ -287,12 +254,25 @@ public abstract class View implements Observer {
         return this.chosenScheme;
     }
 
-    synchronized boolean getHasChosenScheme() { return this.hasChosenScheme; }
+    synchronized boolean getHasChosenScheme() {
+        return this.hasChosenScheme;
+    }
 
-    public String getSchemes(){ return schemes;}
+    synchronized void setHasChosenScheme(boolean bool) {
+        this.hasChosenScheme = bool;
+        notifyAll();
+    }
+
+    public String getSchemes() {
+        return schemes;
+    }
 
     GraphicsClient getGraphicsClient() {
         return graphicsClient;
+    }
+
+    void setGraphicsClient(GraphicsClient graphicsClient) {
+        this.graphicsClient = graphicsClient;
     }
 
     Stage getPrimaryStage() {
@@ -300,9 +280,9 @@ public abstract class View implements Observer {
     }
 
 
-    public void start(Stage primaryStage){
-        this.primaryStage=primaryStage;
-        this.primaryStage.setOnCloseRequest(event->System.exit(0));
+    public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+        this.primaryStage.setOnCloseRequest(event -> System.exit(0));
 
         start();
     }

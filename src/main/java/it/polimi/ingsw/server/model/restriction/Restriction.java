@@ -15,14 +15,16 @@ public interface Restriction {
 
     /**
      * Specifies the restriction's type.
+     *
      * @return an instance of the RestrictionType Enum, specifying the restriction's type
      */
     RestrictionType getType();
 
     /**
      * Compares two restrictions.
+     *
      * @param myRestriction the Restriction Object the user wants to compare to the one this method is called from
-     * @return  boolean specifying whether the Restriction Object represents the same restriction as myRestriction argument
+     * @return boolean specifying whether the Restriction Object represents the same restriction as myRestriction argument
      */
-    boolean restrictionEquals (Restriction myRestriction);
+    boolean restrictionEquals(Restriction myRestriction);
 }
