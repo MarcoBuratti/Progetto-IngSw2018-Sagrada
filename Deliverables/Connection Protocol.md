@@ -1,56 +1,135 @@
 # Socket data exchange protocol
 
-All messages are encoded using standard JSON format (key/value).
+Messages from client to Server and the "Update massage" are encoded using standard JSON format (key/value).
+The other message are send using string standard format.
 ### Welcome message
 Message sent from server to client to welcome the player and ask for username.
 *<"welcome">CR*
 
 ### Login message
 Message sent from client to server to communicate username.
-*<{"type_login": "username"}>CR*
+*<{"You have logged in as:": "username"}>CR*
 
-### Successful login message
+### Relogin message
 Message sent from server to client to notify the login process has been completed successfully and communicate the player ID.
-*<{"successful_login": "playerID"}>CR*
+*<{"You have logged in again as: ": "username"}>CR*
 
 ### Failed login message
 Message sent from server to client to ask for insert username again because the login process has failed.
-*<{"type_message": "failed_login"}>CR*
+*<{"This nickname has been already used! Please try again": "failed_login"}>CR*
 
 ### Game start message
 Message sent from server to client to notify the game start, communicating the list of users playing the same game through a JSON file.
-*<{"game_start": "players_list"}>CR*
+*<{"The game has started!"}>CR*
 
 ### Game end message
 Message sent from server to client to notify the game end, communicating the players' scores and results through a JSON file.
-*<{"game_end": "players_scores"}>CR*
+*<{"You win!", "You lose!", "Player + Score"}>CR*
 
 ### Online again message
 Message sent from client to server to notify the user is online again after a disconnection.
-*<{"online_again"}>CR*
+*<{"nickname + “has reconnected!"}>CR*
+
+### Private Achievement message
+Message sent from Server to client to notify the player of his private achievement
+*<{"Your private achievement is:  + privateAchievementColor"}>*
 
 ### Reconnected message
 Message sent from server to client to notify the user has been reconnected to the game and is now able to play.
 *<{"reconnected"}>CR*
 
-### Game Update message
-Message sent from server to client to notify changes on the game board through a JSON file.
-*<{"game_update": "matrixScheme", "playerID"}>CR*
+### Scheme Message
+Messege sent from Server to Client to ask the scheme
+*<{"schemes. + schemes"}>CR*
 
-### Player moves messages DA CANCELLARE
-Message sent from client to server to notify a game move.
-The playerID argument must specify the player making the move,
-the moveID specifies which kind of move is done and other arguments depend on the kind of move.
-*<{"type_playerMove": "playerID", "move_name", "arguments.."}>CR*
+### Second Scheme Message
+Messege sent from Server to Client to notify the scheme chosen
+*<{"You have chosen the following scheme: " + scheme name + "Please wait, the game will start soon."}>CR*
 
-##### Going through
+### Third Scheme Message
+Messege sent from Server to Client to notify the scheme chosen after the timer deadline
+*<{“Too late! Your scheme is: " + schemaDiDefault + "The game has already started!"}>CR*
+
+### Elaboration Message
+Messege sent from Server to Client to tell him that Server is processing the move
+*<{"Trying to make the move ..."}>CR*
+
+### First disconnection Message
+Messege sent from Server to Client to the game has ended
+*<{"Connection expired.", “Terminate.”}>CR*
+ 
+### Second disconnection message
+Messege sent from Server to Client to tell him that he has been disconnected
+*<{“You’ve been disconnected successfully.”}>CR*
+
+### Third disconnection message
+Messege sent from Server to Client to tell that someone has disconnected from server
+*<{nickname + “has disconnected from the server.”}>CR*
+
+### Gameboard Update
+Messege sent from Server to Client to update the gameboard
+*<{Private Achievemnt "Tool":"Extracted Tool" + "Public Achievemnt":"Extracted Achievement" + "RoundTrack":"Extracted Die" + "DraftPool":"DraftPool die" + Player + FavourTokens + Dashboard}>CR*
+
+### Going through
 This message is used to notify the player has chosen to go through without placing dice or using tool cards.
 *<{"playerID": "ID", "type_playerMove": "GoThrough"}>CR*
 
-##### Placing a die
+### Placing a die
 This message is used to notify the player has chosen to place a die on his own dashboard.
 *<{"playerID": "ID", "type_playerMove": "PlaceDie", "Die": "Die_Index", "Row": "Row_Index", "Column": "Column_Index"}>CR*
 
-##### Using a tool card
+### Using a tool card
 This message is used to notify the player has chosen to use a tool card.
 *<{"playerID": "ID", "type_playerMove": "UseTool", "Tool": "Tool_Name", "arguments.."}>CR*
+
+### First Turn Message
+Messege sent from Server to Client to tell him that it's not his turn
+*<{"It's not your turn. Please wait."}>CR*
+
+### Second Turn Message
+Messege sent from Server to Client to tell him that move is incorrect
+*<{“Your move is incorrect.”}>CR*
+
+### Third Turn Message
+Messege sent from Server to Client to tell him that it's turn of....
+*<{"It's " + nickname del currentPlayer + "'s turn. Please wait."}>CR*
+
+### Fourth Turn Message
+Messege sent from Server to Client to tell him that it's his turn
+*<{"It's your turn!Please make your move." }>CR*
+
+### Fifth Turn Message
+Messege sent from Server to Client to tell him that his turn has ended
+*<{nicknameCurrentPlayer + “’s turn has ended.”}>CR*
+
+### Sixth Turn Message
+Messege sent from Server to Client to tell him that the time is over
+*<{“The time is over!”}>CR*
+
+### Seventh Turn Message
+Messege sent from Server to Client to tell him that tool usage succeeded
+*<{“The selected tool has been used successfully"}>CR*
+
+### Eighth Trun Message
+Messege sent from Server to Client to tell him that placement move succeeded
+*<{“The die has been placed on the selected cell."}>CR*
+
+### Ninth Trun Message
+Messege sent from Server to Client to tell him that he can't use the tool
+*<{"You don't have enough favour tokens left to use this tool!"}>CR*
+
+### Tenth Trun Message
+Messege sent from Server to Client to tell him to complete the move afrte using a tool card
+*<{"Please complete your move:"}>CR*
+
+### Tool double communication Message
+Messege sent from Server to Client to tell him that player cannot place the die
+*<{"You cannot place this die anyway!"}>CR*
+
+### Tool double communication Message
+Messege sent from Server to Client to tell him that the move is incorrect
+*<{"Try again placing the die!"}>CR*
+
+### Tool double communication Message
+Messege sent from Server to Client to tell him that by the way the player cannot place the die
+*<{"You cannot place the die anymore!"}>CR*
