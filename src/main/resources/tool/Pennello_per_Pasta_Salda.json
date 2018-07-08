@@ -2,6 +2,6 @@
   "Name": "Flux Brush",
   "Number": "3",
   "String": "After drafting, re-roll the drafted die.\nIf it cannot be placed, return it to the Draft Pool.\n",
-  "Param": 5,
-  "Move": ["CHOOSE_INDEX_DIE","CHOOSE_SEND_MOVE", "WAIT_MOVE","PLACE_COORDINATES", "CHOOSE_SEND_MOVE"]
+  "Param": 6,
+  "Move": ["CHOOSE_INDEX_DIE","CHOOSE_SEND_MOVE", "WAIT_MOVE", "NEW_PLACEMENT_MOVE", "PLACE_COORDINATES", "SEND_MOVE_AND_WAIT"]
 }

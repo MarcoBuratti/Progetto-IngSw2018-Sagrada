@@ -157,7 +157,8 @@ public class Turn {
     }
 
     /**
-     * //TODO QUESTO METODO ANDREBBE TOLTO E GLI AGGIORNAMENTI ANDREBBERO INVIATI SOLAMENTE DAI TOOL.
+     * Send to all the players an update of the game board (needed because of the change of current tokens) and then communicates to the player
+     * who used the tool that the tool has been used successfully.
      */
     private void sendToPlayerAndUpdate() {
         if (this.remoteView != null && this.remoteView.isOn()) {
@@ -304,8 +305,10 @@ public class Turn {
                 }
                 if (notEndedTurn()) {
                     correctMove = decoratedTool.placeDie(this, playerMove);
-                    if (!correctMove)
+                    if (!correctMove) {
+                        sendToPlayer("Try again placing the die!");
                         setWaitMove();
+                    }
                 } else {
                     correctMove = true;
                     sendToPlayer("You cannot place the die anymore!");

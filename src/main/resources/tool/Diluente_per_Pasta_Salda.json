@@ -2,6 +2,6 @@
   "Name": "Flux Remover",
   "Number": "4",
   "String": "After drafting, return the die to the Dice Bag and pull 1 die from the bag.\nChoose a value and place the new die, obeying all placement restrictions, or return it to the Draft Pool.\n",
-  "Param": 6,
-  "Move": ["CHOOSE_INDEX_DIE", "CHOOSE_SEND_MOVE", "WAIT_MOVE", "CHOOSE_DIE_NUM", "PLACE_COORDINATES", "CHOOSE_SEND_MOVE"]
+  "Param": 7,
+  "Move": ["CHOOSE_INDEX_DIE", "CHOOSE_SEND_MOVE", "WAIT_MOVE", "NEW_PLACEMENT_MOVE", "CHOOSE_DIE_NUM", "PLACE_COORDINATES", "SEND_MOVE_AND_WAIT"]
 }

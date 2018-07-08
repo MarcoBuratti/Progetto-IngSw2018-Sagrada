@@ -53,15 +53,25 @@ public enum TypeMove {
         }
     },
 
+    SEND_MOVE_AND_WAIT {
+        public void moveToDo(ConnectionClient connectionClient) { connectionClient.sendMoveAndWait();}
+    },
+
     CHOOSE_GO_ON {
         public void moveToDo(ConnectionClient connectionClient) {
             connectionClient.goOn();
         }
     },
 
-    WAIT_MOVE {
+    NEW_PLACEMENT_MOVE {
         public void moveToDo(ConnectionClient connectionClient) {
             connectionClient.newPlaceMove();
+        }
+    },
+
+    WAIT_MOVE {
+        public void moveToDo(ConnectionClient connectionClient) {
+            connectionClient.setWaitOn(true);
         }
     };
 

@@ -51,13 +51,13 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
      */
     private String defaultScheme(String schemes) {
         StringTokenizer strtok = new StringTokenizer(schemes, ",");
-        String defaultScheme = strtok.nextToken();
+        String defaultSchemeString = strtok.nextToken();
         try {
-            this.player.setDashboard(defaultScheme);
+            this.player.setDashboard(defaultSchemeString);
         } catch (NotValidValueException e) {
             e.printStackTrace();
         }
-        return defaultScheme;
+        return defaultSchemeString;
     }
 
     /**
@@ -87,7 +87,6 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
                 this.defaultScheme = defaultScheme(schemes);
                 Color privateAchievementColor = game.selectPrivateAchievement();
                 this.player.setPrivateAchievement(new PrivateAchievement(privateAchievementColor));
-                ;
                 this.send("Your private achievement is: " + privateAchievementColor);
                 askForChosenScheme(schemes);
             }
@@ -174,7 +173,7 @@ public class RmiConnectionServer extends Observable implements RmiServerInterfac
      */
     @Override
     public void close() {
-        send("ConnectionClient expired.");
+        send("Connection expired.");
         send("Terminate.");
         server.deregisterConnection(this);
         send("You've been disconnected successfully.");

@@ -22,6 +22,8 @@ public abstract class ConnectionClient extends Observable implements ClientInter
     private boolean inputCtrl = false;
     private boolean waitOn;
     private boolean toolBreakFlag = false;
+    private int moveIndex;
+    private int i = 0;
 
     /**
      * Sets the view attribute as the view argument.
@@ -45,12 +47,14 @@ public abstract class ConnectionClient extends Observable implements ClientInter
                 askAction();
                 if (getIsOn()) {
                     if (tmpMove.equals("1")) {
+
                         TypeMove.CHOOSE_INDEX_DIE.moveToDo(this);
                         TypeMove.PLACE_COORDINATES.moveToDo(this);
                         TypeMove.CHOOSE_SEND_MOVE.moveToDo(this);
 
                     }
                     if (tmpMove.equals("2")) {
+
                         TypeMove.CHOOSE_TOOL_INDEX.moveToDo(this);
                         String numberOfTool = numberTool(toolIndex);
                         concatMove(numberOfTool);
@@ -59,7 +63,9 @@ public abstract class ConnectionClient extends Observable implements ClientInter
                         toolNumber--;
                         concatMove(toolNumber.toString());
                         toolBreakFlag = false;
-                        for (int i = 0; i < toolEffects.size() && !isToolBreakFlag(); i++) {
+
+                        for (i = 0; i < toolEffects.size() && !isToolBreakFlag(); i++) {
+
                             toolEffects.get(i).moveToDo(this);
                             synchronized (this) {
                                 while (isWaitOn()) {
@@ -70,6 +76,7 @@ public abstract class ConnectionClient extends Observable implements ClientInter
                                     }
                                 }
                             }
+
                         }
 
                     }
@@ -98,12 +105,14 @@ public abstract class ConnectionClient extends Observable implements ClientInter
 
     /**
      * Initialize a move as a new StringBuilder Object and appends to it the value needed to create a placement move.
+     * It also saves the value of current index i - 1 in moveIndex to restore the call to the right method in the
+     * for cycle inside the use tool section in game method.
      */
     public void newPlaceMove() {
         move = new StringBuilder();
         concatMove("1");
         concatMove(index);
-        setWaitOn(true);
+        moveIndex = i - 1;
     }
 
     /**
@@ -120,7 +129,7 @@ public abstract class ConnectionClient extends Observable implements ClientInter
      *
      * @param bool the value the user wants to set
      */
-    private synchronized void setWaitOn(boolean bool) {
+    public synchronized void setWaitOn(boolean bool) {
         this.waitOn = bool;
         if (!bool) {
             notifyAll();
@@ -217,7 +226,7 @@ public abstract class ConnectionClient extends Observable implements ClientInter
         } while (moveCtrl);
 
         if (goOnString.equals("0")) {
-            setToolBreakFlag(true);
+            setToolBreakFlag();
             TypeMove.CHOOSE_SEND_MOVE.moveToDo(this);
         }
 
@@ -227,7 +236,14 @@ public abstract class ConnectionClient extends Observable implements ClientInter
      * Calls handle move using move.toString() as parameter.
      */
     public void sendMove() {
+        handleMove(move.toString());
+    }
 
+    /**
+     * Sets waitOn as true and sends the move to the server.
+     */
+    public void sendMoveAndWait() {
+        setWaitOn(true);
         handleMove(move.toString());
     }
 
@@ -238,7 +254,6 @@ public abstract class ConnectionClient extends Observable implements ClientInter
      */
     private void concatMove(String s) {
         move.append(s).append(" ");
-
     }
 
     /**
@@ -362,8 +377,8 @@ public abstract class ConnectionClient extends Observable implements ClientInter
     /**
      * Sets the toolBreakFlag attribute as true.
      */
-    private synchronized void setToolBreakFlag(boolean bool) {
-        this.toolBreakFlag = bool;
+    private synchronized void setToolBreakFlag() {
+        this.toolBreakFlag = true;
     }
 
     /**
@@ -382,12 +397,24 @@ public abstract class ConnectionClient extends Observable implements ClientInter
      */
     protected void checkMessage(String str) {
 
-        if (str.equals("Please complete your move:"))
-            setWaitOn(false);
-        else if (str.equals("You cannot place this die anyway!") || str.equals("It's not your turn. Please wait.")
-                || str.equals("You don't have enough favour tokens left to use this tool!")) {
-            setToolBreakFlag(true);
-            setWaitOn(false);
+        switch (str) {
+            case "Please complete your move:":
+                setWaitOn(false);
+                break;
+            case "You cannot place this die anyway!":
+            case "It's not your turn. Please wait.":
+            case "You don't have enough favour tokens left to use this tool!":
+            case "You cannot place the die anymore!":
+            case "The die has been placed on the selected cell.":
+                setToolBreakFlag();
+                setWaitOn(false);
+                break;
+            case "Try again placing the die!":
+                i = moveIndex;
+                setWaitOn(false);
+                break;
+            default:
+                break;
         }
 
     }
