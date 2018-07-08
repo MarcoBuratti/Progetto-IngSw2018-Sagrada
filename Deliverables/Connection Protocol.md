@@ -39,36 +39,40 @@ Message sent from server to client to notify the user has been reconnected to th
 *<{"reconnected"}>CR*
 
 ### Scheme Message
-Messege sent from Server to Client to ask the scheme
+Message sent from Server to Client to ask the scheme
 *<{"schemes. + schemes"}>CR*
 
 ### Second Scheme Message
-Messege sent from Server to Client to notify the scheme chosen
+Message sent from Server to Client to notify the scheme chosen
 *<{"You have chosen the following scheme: " + scheme name + "Please wait, the game will start soon."}>CR*
 
 ### Third Scheme Message
-Messege sent from Server to Client to notify the scheme chosen after the timer deadline
+Message sent from Server to Client to notify the scheme chosen after the timer deadline
 *<{“Too late! Your scheme is: " + schemaDiDefault + "The game has already started!"}>CR*
 
 ### Elaboration Message
-Messege sent from Server to Client to tell him that Server is processing the move
+Message sent from Server to Client to tell him that Server is processing the move
 *<{"Trying to make the move ..."}>CR*
 
 ### First disconnection Message
-Messege sent from Server to Client to the game has ended
+Message sent from Server to Client to the game has ended
 *<{"Connection expired.", “Terminate.”}>CR*
  
 ### Second disconnection message
-Messege sent from Server to Client to tell him that he has been disconnected
+Message sent from Server to Client to tell him that he has been disconnected
 *<{“You’ve been disconnected successfully.”}>CR*
 
 ### Third disconnection message
-Messege sent from Server to Client to tell that someone has disconnected from server
+Message sent from Server to Client to tell that someone has disconnected from server
 *<{nickname + “has disconnected from the server.”}>CR*
 
+### Fourth disconnection message
+Message sent from Client to Server to tell that player wants to leave the game
+*<{"\quit"}>*
+
 ### Gameboard Update
-Messege sent from Server to Client to update the gameboard
-*<{Private Achievemnt "Tool":"Extracted Tool" + "Public Achievemnt":"Extracted Achievement" + "RoundTrack":"Extracted Die" + "DraftPool":"DraftPool die" + Player + FavourTokens + Dashboard}>CR*
+Message sent from Server to Client to update the gameboard
+*<{Private Achievement "Tool":"Extracted Tool" + "Public Achievement":"Extracted Achievement" + "RoundTrack":"Extracted Die" + "DraftPool":"DraftPool die" + Player + FavourTokens + Dashboard}>CR*
 
 ### Going through
 This message is used to notify the player has chosen to go through without placing dice or using tool cards.
@@ -83,53 +87,53 @@ This message is used to notify the player has chosen to use a tool card.
 *<{"playerID": "ID", "type_playerMove": "UseTool", "Tool": "Tool_Name", "arguments.."}>CR*
 
 ### First Turn Message
-Messege sent from Server to Client to tell him that it's not his turn
+Message sent from Server to Client to tell him that it's not his turn
 *<{"It's not your turn. Please wait."}>CR*
 
 ### Second Turn Message
-Messege sent from Server to Client to tell him that move is incorrect
+Message sent from Server to Client to tell him that move is incorrect
 *<{“Your move is incorrect.”}>CR*
 
 ### Third Turn Message
-Messege sent from Server to Client to tell him that it's turn of....
+Message sent from Server to Client to tell him that it's turn of....
 *<{"It's " + nickname del currentPlayer + "'s turn. Please wait."}>CR*
 
 ### Fourth Turn Message
-Messege sent from Server to Client to tell him that it's his turn
+Message sent from Server to Client to tell him that it's his turn
 *<{"It's your turn!Please make your move." }>CR*
 
 ### Fifth Turn Message
-Messege sent from Server to Client to tell him that his turn has ended
+Message sent from Server to Client to tell him that his turn has ended
 *<{nicknameCurrentPlayer + “’s turn has ended.”}>CR*
 
 ### Sixth Turn Message
-Messege sent from Server to Client to tell him that the time is over
+Message sent from Server to Client to tell him that the time is over
 *<{“The time is over!”}>CR*
 
 ### Seventh Turn Message
-Messege sent from Server to Client to tell him that tool usage succeeded
+Message sent from Server to Client to tell him that tool usage succeeded
 *<{“The selected tool has been used successfully"}>CR*
 
-### Eighth Trun Message
-Messege sent from Server to Client to tell him that placement move succeeded
+### Eighth Turn Message
+Message sent from Server to Client to tell him that placement move succeeded
 *<{“The die has been placed on the selected cell."}>CR*
 
-### Ninth Trun Message
-Messege sent from Server to Client to tell him that he can't use the tool
+### Ninth Turn Message
+Message sent from Server to Client to tell him that he can't use the tool
 *<{"You don't have enough favour tokens left to use this tool!"}>CR*
 
-### Tenth Trun Message
-Messege sent from Server to Client to tell him to complete the move afrte using a tool card
+### Tenth Turn Message
+Message sent from Server to Client to tell him to complete the move afrte using a tool card
 *<{"Please complete your move:"}>CR*
 
 ### Tool double communication Message
-Messege sent from Server to Client to tell him that player cannot place the die
+Message sent from Server to Client to tell him that player cannot place the die
 *<{"You cannot place this die anyway!"}>CR*
 
 ### Tool double communication Message
-Messege sent from Server to Client to tell him that the move is incorrect
+Message sent from Server to Client to tell him that the move is incorrect
 *<{"Try again placing the die!"}>CR*
 
 ### Tool double communication Message
-Messege sent from Server to Client to tell him that by the way the player cannot place the die
+Message sent from Server to Client to tell him that by the way the player cannot place the die
 *<{"You cannot place the die anymore!"}>CR*
