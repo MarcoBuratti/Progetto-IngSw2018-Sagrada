@@ -7,12 +7,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
 public class UtilGUI {
 
 
-    public static void setCell(String s, Labeled labeled, double h) {
+    private static void setCell(String s, Labeled labeled, double h) {
         DrawDie drawDie = new DrawDie();
         if (s.matches("[1-6]")) {
             GridPane grid = drawDie.draw(Color.SILVER, Color.DARKSLATEGRAY, s, h);
@@ -31,7 +32,7 @@ public class UtilGUI {
 
     }
 
-    public static VBox drawScheme(String name, String token, GridPane gridMatrix, double H) {
+    public static VBox drawScheme(String name, String token, GridPane gridMatrix, double h) {
 
 
         VBox vBox1 = new VBox();
@@ -39,16 +40,21 @@ public class UtilGUI {
 
 
         Label label = new Label(name);
-        label.setMinSize(H * 3 / 20, H / 20);
+        label.setMinSize(h * 3 / 20, h / 20);
 
         Label label1 = new Label("Token: " + token);
-        label1.setPrefSize(H * 2 / 20, H / 20);
-        label.setStyle("-fx-font-size:" + H / 60 + "px;" + "-fx-font-family: Verdana;");
-        label1.setStyle("-fx-font-size:" + H / 45.5 + "px;" + "-fx-font-family: Times New Roman;");
-        label1.setTextAlignment(TextAlignment.RIGHT);
+        label1.setMinSize(h * 2 / 20, h/ 20);
+        label.setAlignment(Pos.CENTER_LEFT);
+        label1.setAlignment(Pos.CENTER_RIGHT);
+        label.setTextAlignment(TextAlignment.CENTER);
+        label1.setTextAlignment(TextAlignment.CENTER);
+        label.setFont(Font.font("Verdana",h/60));
+        label1.setFont(Font.font("Verdana",h/50));
         hBox1.getChildren().addAll(label, label1);
         vBox1.getChildren().add(hBox1);
-        vBox1.setMinSize(H / 4, H / 4);
+        vBox1.setMinSize(h / 4, h/ 4);
+        gridMatrix.setAlignment(Pos.CENTER);
+        vBox1.setAlignment(Pos.CENTER);
         vBox1.getChildren().add(gridMatrix);
 
 

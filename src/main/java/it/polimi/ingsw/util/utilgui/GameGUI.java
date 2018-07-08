@@ -50,15 +50,18 @@ public class GameGUI {
     private VBox opponents;
     private Label myDashBoard;
     private String move;
+    private String output = "\n" ;
     private Stage secondStage;
     private boolean done;
     private boolean gameStarted = false;
 
     public void setMessageFromServer(String s) {
 
+        output = output+ "\n" + s;
+        showMessage.setVvalue(showMessage.getVmax());
         Platform.runLater(() -> {
             showMessage.setContent(messages);
-            messages.setText(s);
+            messages.setText(output);
         });
 
     }
@@ -72,17 +75,17 @@ public class GameGUI {
         String[] publicAchievements = fromServer.split(",");
         for (int i = 0; i < 3; i++) {
 
-            ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/images/achievements/" + publicAchievements[i] + JPEG), dim / 6, dim / 5, true, true));
+            ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/images/achievements/" + publicAchievements[i] + JPEG), dim / 5.8, dim / 4.8, true, true));
             BorderPane borderPane = new BorderPane();
             borderPane.setCenter(img);
-            borderPane.setMinSize(dim / 6, dim / 5);
+            borderPane.setMinSize(dim / 5.8, dim / 4.8);
             achievements.getChildren().add(borderPane);
         }
 
-        ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/images/achievements/" + s + JPEG), dim / 6, dim / 5, true, true));
+        ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/images/achievements/" + s + JPEG), dim / 5.8, dim / 4.8, true, true));
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(img);
-        borderPane.setMinSize(dim / 6, dim / 5);
+        borderPane.setMinSize(dim / 5.8, dim / 4.8);
         achievements.getChildren().add(borderPane);
 
 
@@ -93,10 +96,10 @@ public class GameGUI {
         String[] tool = s.split(",");
         for (int i = 0; i < 6; i += 2) {
 
-            ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/images/tools/" + tool[i] + JPEG), dim / 4, dim / 4.5, true, true));
+            ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/images/tools/" + tool[i] + JPEG), dim / 3.5, dim / 4, true, true));
 
             Label label = new Label();
-            label.setMinSize(dim / 4, dim / 4.5);
+            label.setMinSize(dim / 3.5, dim / 4);
             label.setGraphic(img);
             Integer number = (i / 2) + 1;
 
@@ -204,7 +207,7 @@ public class GameGUI {
 
         if (name.equals(nickname)) {
 
-            myDashBoard.setGraphic(UtilGUI.drawScheme(name, token, drawLabelScheme(dashBoard, dim / 15, true), dim));
+            myDashBoard.setGraphic(UtilGUI.drawScheme(name, token, drawLabelScheme(dashBoard, dim / 13, true), dim*2));
 
         } else {
 
@@ -364,7 +367,7 @@ public class GameGUI {
         vBox.getChildren().addAll(label, numbers);
 
         Platform.runLater(() -> {
-            stage.setScene(new Scene(vBox, dim / 3, dim / 4));
+            stage.setScene(new Scene(vBox, dim / 3, dim / 3));
             stage.show();
         });
     }
@@ -414,7 +417,7 @@ public class GameGUI {
         vBox.getChildren().addAll(label, numbers);
 
         Platform.runLater(() -> {
-            stage.setScene(new Scene(vBox, dim / 3, dim / 4));
+            stage.setScene(new Scene(vBox, dim / 3, dim / 3));
             stage.show();
         });
 
@@ -482,16 +485,19 @@ public class GameGUI {
         center.setPadding(new Insets(dim / 20, 0, 0, 0));
 
         showMessage = new ScrollPane();
+        showMessage.setMinHeight(dim / 6);
+        showMessage.setMinWidth(dim / 2);
         showMessage.setMaxHeight(dim / 6);
         showMessage.setMaxWidth(dim / 2);
         showMessage.setMinViewportWidth(dim / 2);
         showMessage.setMinViewportHeight(dim / 6);
+        showMessage.setVvalue(showMessage.getVmax());
         showMessage.setStyle("-fx-border-color: lightgreen");
 
 
         messages = new Label();
-        int font = (int) (dim / 25);
-        messages.setStyle("-fx-font-size:" + font + "px;");
+        int font = (int) (dim / 35);
+        messages.setFont(Font.font(VERDANA,font));
         center.getChildren().add(showMessage);
 
         roundTrack = new ScrollPane();

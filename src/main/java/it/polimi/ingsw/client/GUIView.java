@@ -37,6 +37,7 @@ public class GUIView extends View {
     private String privateAchievement;
     private Label text;
     private String output = " ";
+    private String outputSelectScheme = " ";
 
 
     GUIView() {
@@ -214,8 +215,18 @@ public class GUIView extends View {
 
     }
 
+    private void setTextSelectScheme(String s){
+        outputSelectScheme = outputSelectScheme+ "\n" + s;
+        Platform.runLater(() -> {
+            text.setText(outputSelectScheme);
+        });
+    }
     @Override
     public void loginSuccess(String fromServer) {
+        getPrimaryStage().setX(0);
+        getPrimaryStage().setY(0);
+        getPrimaryStage().setWidth(Screen.getPrimary().getBounds().getWidth());
+        getPrimaryStage().setHeight(Screen.getPrimary().getBounds().getHeight());
 
         Label label = new Label(fromServer);
         label.setAlignment(Pos.CENTER);
@@ -244,7 +255,8 @@ public class GUIView extends View {
         VBox vBox = new VBox();
         vBox.setSpacing(h / 20);
         vBox.setAlignment(Pos.TOP_CENTER);
-        text = new Label("Welcome to Sagrada,  " + getNickname() + "\nPlease choose one of the following schemes");
+        text = new Label();
+        setTextSelectScheme("Welcome to Sagrada,  " + getNickname() + "\nPlease choose one of the following schemes");
         text.setMinHeight(h / 20);
         text.setTextAlignment(TextAlignment.CENTER);
         vBox.getChildren().add(text);
@@ -365,6 +377,7 @@ public class GUIView extends View {
     public void endUpdate() {
         getConnectionClient().setInputControl(true);
         gameGUI.setGameStarted(true);
+        gameGUI.setMessageFromServer("");
         Platform.runLater(() -> gameGUI.newSecondStage());
         gameGUI.show(getPrimaryStage());
 
@@ -444,6 +457,11 @@ public class GUIView extends View {
     @Override
     public void addPlayerToRanking(String s) {
         waitAnswer(s);
+
+    }
+
+    @Override
+    public void showGenericMessageSelectScheme(String s) {
 
     }
 

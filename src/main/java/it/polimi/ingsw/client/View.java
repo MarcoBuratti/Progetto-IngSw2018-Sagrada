@@ -50,51 +50,13 @@ public abstract class View implements Observer {
             showPrivateAchievement(fromServer);
 
         } else if (fromServer.startsWith("Update")) {
+                modelUpdate();
 
-            JSONParser parser = new JSONParser();
-            try {
-                JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/" + getNickname() + ".json"));
-
-                String achievement = (String) jsonObject.get("Public Achievements");
-                showPublicAchievements(achievement);
-
-                String tool = (String) jsonObject.get("Tools");
-                if (toolCtrl) {
-                    getConnectionClient().setTool(tool);
-                    toolCtrl = false;
-                }
-                showTools(tool);
-
-
-                String roundTrack = (String) jsonObject.get("Round track");
-                showRoundTrack(roundTrack);
-
-
-                String draft = (String) jsonObject.get("Draft");
-                if (draft != null)
-                    showDraftPool(draft);
-
-
-                String number = (String) jsonObject.get("numberPlayer");
-                int player = Integer.parseInt(number);
-
-                for (int i = 0; i < player; i++) {
-                    String request = "scheme" + i;
-                    String scheme = (String) jsonObject.get(request);
-                    showPlayers(scheme);
-
-                }
-
-                endUpdate();
-
-            } catch (IOException | ParseException e) {
-                System.err.println(e.toString());
-            }
         } else if (fromServer.startsWith("You have chosen the following scheme:")) {
             showAnswer(fromServer);
 
         } else if (fromServer.startsWith("Please wait, the game will start soon.")) {
-            showGenericMessage(fromServer);
+            showGenericMessageSelectScheme(fromServer);
 
         } else if (fromServer.startsWith("You win") || fromServer.startsWith("You lose")) {
             endGame(fromServer);
@@ -159,6 +121,8 @@ public abstract class View implements Observer {
 
     public abstract void addPlayerToRanking(String s);
 
+    public abstract void showGenericMessageSelectScheme(String s);
+
     void createConnection() {
 
         if (choice.equals("SOCKET") || choice.equals("1")) {
@@ -211,8 +175,8 @@ public abstract class View implements Observer {
                     setChosenScheme();
                 }
                 int nicknameStartIndex = fromServer.lastIndexOf(' ') + 1;
-                String nickname = fromServer.substring(nicknameStartIndex);
-                this.setNickname(nickname);
+
+                this.setNickname(fromServer.substring(nicknameStartIndex));
             } else if (fromServer.startsWith("schemes. ")) {
                 schemes = fromServer;
                 setHasChosenScheme(false);
@@ -243,6 +207,49 @@ public abstract class View implements Observer {
         }
 
 
+    }
+
+    private void modelUpdate(){
+
+        JSONParser parser = new JSONParser();
+        try {
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/" + getNickname() + ".json"));
+
+            String achievement = (String) jsonObject.get("Public Achievements");
+            showPublicAchievements(achievement);
+
+            String tool = (String) jsonObject.get("Tools");
+            if (toolCtrl) {
+                getConnectionClient().setTool(tool);
+                toolCtrl = false;
+            }
+            showTools(tool);
+
+
+            String roundTrack = (String) jsonObject.get("Round track");
+            showRoundTrack(roundTrack);
+
+
+            String draft = (String) jsonObject.get("Draft");
+            if (draft != null)
+                showDraftPool(draft);
+
+
+            String number = (String) jsonObject.get("numberPlayer");
+            int player = Integer.parseInt(number);
+
+            for (int i = 0; i < player; i++) {
+                String request = "scheme" + i;
+                String scheme = (String) jsonObject.get(request);
+                showPlayers(scheme);
+
+            }
+
+            endUpdate();
+
+        } catch (IOException | ParseException e) {
+            System.err.println(e.toString());
+        }
     }
 
     private synchronized void setChosenScheme() {
