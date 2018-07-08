@@ -270,6 +270,11 @@ public class CliView extends View {
         showOutput(s);
     }
 
+    @Override
+    public void showGenericMessageSelectScheme(String s) {
+        showOutput(s);
+    }
+
     public String getInput() {
         try {
             input = bufferedReader.readLine();
