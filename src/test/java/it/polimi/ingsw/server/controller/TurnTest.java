@@ -73,15 +73,6 @@ class TurnTest {
                 turn.newMove(new PlayerMove(nickname,"PlaceDie",2, intParameters));
             }
         }, 1000);
-       /* timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                ArrayList<Integer> intParameters = new ArrayList<>();
-                intParameters.add(0);
-                intParameters.add(1);
-                turn.newMove(new PlayerMove(nickname,"PlaceDie",2, intParameters));
-            }
-        }, 1500);*/
         timer.schedule(new TimerTask() {
             @Override
             public void run() {

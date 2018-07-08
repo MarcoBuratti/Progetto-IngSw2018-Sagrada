@@ -194,7 +194,7 @@ public class ReplaceDieTool implements Tool {
                 !matrixScheme[row][column].allowedMove(myDie))
             return false;
 
-        if (needRoundTrack && !turn.getGameBoard().getRoundTrack().isColorOnRoundTrack(myDie.getColor()) && !matrixScheme[row][column].allowedMove(myDie))
+        if (needRoundTrack && (!turn.getGameBoard().getRoundTrack().isColorOnRoundTrack(myDie.getColor()) || !matrixScheme[row][column].allowedMove(myDie)))
             return false;
 
         return (placementCheck.nearBy(row, column, matrixScheme)) && (placementCheck.allowedNeighbours(row, column, myDie, matrixScheme));

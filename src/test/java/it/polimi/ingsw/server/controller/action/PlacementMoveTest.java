@@ -16,7 +16,7 @@ import java.util.ArrayList;
 class PlacementMoveTest {
 
     @Test
-    void positionDie() throws NotValidValueException, NotEnoughDiceLeftException, NotValidParametersException, OccupiedCellException {
+    void positionDie() throws NotValidValueException, NotValidParametersException, OccupiedCellException {
 
         ArrayList<Player> playersList = new ArrayList<>();
         Player player;
