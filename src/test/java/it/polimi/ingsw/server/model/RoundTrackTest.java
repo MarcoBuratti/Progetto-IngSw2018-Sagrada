@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RoundTrackTest {
-    public static final int NUMBER_OF_ROUNDS = 10;
+    private static final int NUMBER_OF_ROUNDS = 10;
 
     @Test
-    public void roundTrackTest() throws NotValidRoundException, EndedGameException {
+    void roundTrackTest() throws NotValidRoundException, EndedGameException {
         RoundTrack roundTrack = new RoundTrack();
         for (int i = 1; i <= NUMBER_OF_ROUNDS; i++)
             assertTrue(roundTrack.getDiceList(i).isEmpty());
@@ -40,7 +40,7 @@ class RoundTrackTest {
         assertEquals(4, roundTrack.getCurrentRound());
         for (int i = 0; i < NUMBER_OF_ROUNDS-3 ; i++)
             roundTrack.setNextRound(diceList2);
-        assertThrows(EndedGameException.class, ()->roundTrack.getCurrentRound());
+        assertThrows(EndedGameException.class, roundTrack::getCurrentRound);
         assertThrows(NotValidRoundException.class, ()->roundTrack.setNextRound(diceList));
         assertThrows(NotValidRoundException.class, ()->roundTrack.setDiceList(diceList2, 11));
         System.out.println(roundTrack.toString());

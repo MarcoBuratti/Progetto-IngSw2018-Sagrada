@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DieTest {
     @Test
-    public void numberFromOneToSix() throws NotValidValueException {
+    void numberFromOneToSix() throws NotValidValueException {
         Die myDie = new Die(Color.GREEN);
         assertTrue(myDie.getNumber()>0 && myDie.getNumber()<7);
         myDie.extractAgain();
@@ -25,13 +25,13 @@ class DieTest {
     }
 
     @Test
-    public void colorsTest(){
+    void colorsTest(){
         Die myDie1 = new Die(Color.valueOf("GREEN"));
         assertEquals(Color.GREEN, myDie1.getColor());
         Die myDie2 = new Die(Color.values()[2]);
         assertEquals(Color.valueOf("BLUE"), myDie2.getColor());
         assertNotEquals(myDie1.getColor(), myDie2.getColor());
         myDie2 = new Die(Color.GREEN);
-        assertTrue(myDie1.getColor().equals(myDie2.getColor()));
+        assertEquals(myDie1.getColor(), myDie2.getColor());
     }
 }

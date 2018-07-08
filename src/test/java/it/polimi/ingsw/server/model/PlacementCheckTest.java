@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 class PlacementCheckTest {
 
     @Test
-    void isEmpty() throws NotValidParametersException, OccupiedCellException, NotValidValueException {
+    void isEmpty() throws NotValidParametersException, OccupiedCellException {
 
 
         Dashboard dashboard = new Dashboard("Scheme_Test");

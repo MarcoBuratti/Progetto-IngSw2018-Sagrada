@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
     @Test
-    public void playerTest() throws NotValidValueException {
+    void playerTest() throws NotValidValueException {
 
         String nickname = "tester";
         PrivateAchievement privateAchievement = new PrivateAchievement(Color.GREEN);

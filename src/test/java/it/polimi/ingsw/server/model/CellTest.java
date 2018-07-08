@@ -10,12 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CellTest {
     @Test
-    public void cellTest() throws NotValidValueException, OccupiedCellException {
+    void cellTest() throws NotValidValueException, OccupiedCellException {
         Restriction r1 = new ValueRestriction(5);
         Cell c1 = new Cell(r1);
         assertEquals(r1, c1.getRestriction());
         assertFalse(c1.getUsedCell());
-        assertEquals(null, c1.getDie());
+        assertNull(c1.getDie());
         Die d1 = new Die(Color.VIOLET);
         Die d2 = new Die(Color.YELLOW);
         d1.setNumber(6);
@@ -29,7 +29,7 @@ class CellTest {
         Cell c2 = c1.copyConstructor();
         assertTrue(c1.cellEquals(c2));
         d1 = c1.removeDie();
-        assertEquals(null, c1.getDie());
+        assertNull(c1.getDie());
         assertEquals(d1, c2.getDie());
         assertFalse(c1.cellEquals(c2));
     }

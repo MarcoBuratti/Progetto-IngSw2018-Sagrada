@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RestrictionTest {
     @Test
-    public void colorTest() {
+    void colorTest() {
         ColorRestriction c1 = new ColorRestriction(Color.BLUE);
         assertEquals(Color.BLUE, c1.getRestriction());
         Die d1 = new Die(Color.BLUE);
@@ -21,7 +21,7 @@ class RestrictionTest {
     }
 
     @Test
-    public void valueTest() throws NotValidValueException {
+    void valueTest() throws NotValidValueException {
         ValueRestriction n1 = new ValueRestriction(2);
         Restriction n2 = new ValueRestriction(6);
         assertEquals(2, n1.getRestriction());
@@ -34,7 +34,7 @@ class RestrictionTest {
     }
 
     @Test
-    public void genericTest() throws NotValidValueException {
+    void genericTest() throws NotValidValueException {
         Die d1 = new Die(Color.BLUE);
         d1.setNumber(1);
         Restriction r1 = new ColorRestriction(Color.BLUE);

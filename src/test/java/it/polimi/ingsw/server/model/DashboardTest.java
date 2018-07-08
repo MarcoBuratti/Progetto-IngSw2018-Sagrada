@@ -173,26 +173,14 @@ class DashboardTest {
     }
 
     @Test
-    void jsonTester() throws NotValidValueException, OccupiedCellException, IOException, ParseException {
-        List<SchemesEnum> schemesEnum = Arrays.asList(SchemesEnum.values());
+    void jsonTester() {
+        SchemesEnum[] schemesEnum = SchemesEnum.values();
         GraphicsClient graphicsClient;
         graphicsClient = new GraphicsClient();
         JSONParser parser = new JSONParser();
-        for (int i = 0; i < schemesEnum.size(); i++){
-           /* String sub = schemesEnum.get(i).getName();
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/resources/dashboard_client/"+ sub +".json"));
-            String change = (String) jsonObject.get("String");
-            change = change.replace("\u001B[37m", "\u001b[0m");
-            jsonObject.put("String", change);
-            try (FileWriter up = new FileWriter("src/main/resources/dashboard_client/"+ sub +".json")) {
-                up.write(jsonObject.toJSONString());
-                System.out.println(change);
-                System.out.println(sub + " eseguito " + i);
-            } catch (IOException e) {
-                System.out.println(e.toString() );
-            }*/
-            Dashboard dashboard = new Dashboard(schemesEnum.get(i).getName());
-            System.out.println(dashboard.getFavourToken() + " " + schemesEnum.get(i).getName());
+        for (SchemesEnum aSchemesEnum : schemesEnum) {
+            Dashboard dashboard = new Dashboard(aSchemesEnum.getName());
+            System.out.println(dashboard.getFavourToken() + " " + aSchemesEnum.getName());
             System.out.println(dashboard);
         }
 

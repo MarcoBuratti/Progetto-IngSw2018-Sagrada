@@ -40,9 +40,9 @@ class GameBoardTest {
         assertTrue(new FakeDashboard("Aurora_Sagradis").equalsScheme(gameBoard.getPlayers().get(2).getDashboard()));
         assertTrue(new FakeDashboard("Chromatic_Splendor").equalsScheme(gameBoard.getPlayers().get(0).getDashboard()));
         assertTrue(new FakeDashboard("Fulgor_del_Cielo").equalsScheme(gameBoard.getPlayers().get(1).getDashboard()));
-        assertNotNull(gameBoard.getPlayers().get(0).getPrivateAchievement());
         assertEquals(4, gameBoard.getPlayers().get(0).getCurrentFavourToken());
         assertEquals(3, gameBoard.getPublicAchievements().size());
+        assertEquals(3, gameBoard.getTools().size());
         assertEquals(draftPool, gameBoard.getDraftPool());
         gameBoard.removeDieFromDraftPool(d2);
         assertEquals(2, gameBoard.getDraftPool().size());
