@@ -9,6 +9,8 @@ Classes already tested and passed:
 - this method does not care about the restriction of the cell but does 
 - only check row and column, if the parameters are not right it throws 
 - an exception
+- __jsonTest__ it tests the DashboardParser works correctly, allowing the user
+to create a new dashboard using the selected scheme.
 
 
 **PlacementCheck empty**
@@ -80,6 +82,61 @@ checks that the restrictionCheck method of NoRestriction returns true
 - __GameBoardTest__: Checks if the constructor works correctly, making sure that
 dice bag, players, public achievements, tools and draft pool are set correctly.
 The removeDieFromDraftPool method is tested too.
+
+**PlacementMove test**
+- __First__: Tries to place die and makes sure all the checks work correctly 
+(allowing the user to place the die when possible, else refusing to place the die)
+generating PlacementMove Objects.
+
+**Round test**
+- __First__: Tries to initialize the draft pool with the right number of dice for some rounds
+and tries to empty the draft pool and set the dice on the round track as the end of the rounds.
+
+**Turn test**
+- __First__: Tries the execution of a single turn (making sure the timer works correctly)
+and makes sure all the move are handled correctly (place die, use tool, go through)
+
+
+**Achievement tests**
+- __First__: Makes sure the score effect of each achievement (both public and private)
+works correctly. Tests are made using empty, partially full and totally full matrix.
+
+**Restriction factory test**
+- __First__: Makes sure the restriction factory pattern works correctly
+
+**ChangeDieTool test**
+- __First__: Makes sure the tools that use this class allow the user
+to change the selected die with the related arraylist (dice bag or round track).
+It also test the place die move used during the Flux Remover tool works
+correctly.
+
+**ReplaceDieTool test**
+- __First__: Makes sure the tools that use this class allow the user to
+replace the selected die, placing it on the new cell and removing it
+from the cell it used to occupy, according to the rules imposed by the tool
+(managed through booleans used by the constructor)
+
+**RollAgainTool test** 
+- __First__: Makes sure the selected tool allows the user to re-roll
+the dice contained in the draft pool only if it's the player's second turn
+and he still has not placed a die.
+
+
+**SetDieToll test**
+- __First__: Makes sure the tools that use this class allow the user to
+set the new value of the die correctly, checking the value is included
+between 1 and 6. It also test the place die move used during the
+ Flux Brush tool works correctly.
+
+**SpecialPlacementTool test**
+- __First__: Makes sure the tools that use this class allow the user to
+place the die correctly, ignoring only some of the restrictions, according
+to the rules imposed by the selected tool
+
+**TwoTurnTool test**
+- __First__: Checks if the tool allows the player to place a second die
+only if it's the player's first turn (in the round) and if he has already
+placed one die.
 
 
 

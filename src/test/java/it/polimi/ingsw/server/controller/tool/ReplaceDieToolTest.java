@@ -55,7 +55,7 @@ class ReplaceDieToolTest {
         intParameters.add(2);
         PlayerMove playerMove = new PlayerMove(nickname, USE_TOOL, 2, intParameters);
         Assertions.assertTrue(replaceDieTool.toolEffect(turn,playerMove));
-        /*ReplaceDieTool replaceDieTool1= new ReplaceDieTool(true, false, false,false,ToolNames.COPPER_FOIL_BURNISHER);
+        ReplaceDieTool replaceDieTool1= new ReplaceDieTool(true, false, false,false,ToolNames.COPPER_FOIL_BURNISHER);
 
 
         intParameters = new ArrayList<>();
@@ -69,7 +69,7 @@ class ReplaceDieToolTest {
         intParameters.add(1);
         intParameters.add(2);
         intParameters.add(1);
-        intParameters.add(3);
+        intParameters.add(0);
         intParameters.add(0);
         intParameters.add(2);
         intParameters.add(0);
@@ -77,7 +77,7 @@ class ReplaceDieToolTest {
         PlayerMove playerMove2 = new PlayerMove(nickname,USE_TOOL,8, intParameters);
         ReplaceDieTool replaceDieTool2= new ReplaceDieTool(true, true, false,false,ToolNames.LATHEKIN);
         Assertions.assertTrue(replaceDieTool2.toolEffect(turn,playerMove2));
-
+//??
         Die d1 = new Die(Color.BLUE);
         Die d2 = new Die(Color.VIOLET);
         ArrayList<Die> diceList = new ArrayList<>();
@@ -90,14 +90,14 @@ class ReplaceDieToolTest {
         intParameters = new ArrayList<>();
         intParameters.add(0);
         intParameters.add(1);
-        intParameters.add(0);
-        intParameters.add(0);
-        intParameters.add(2);
-        intParameters.add(0);
+        intParameters.add(3);
         intParameters.add(1);
         intParameters.add(2);
+        intParameters.add(0);
+        intParameters.add(2);
+        intParameters.add(2);
         PlayerMove playerMove3 = new PlayerMove(nickname,USE_TOOL, 11, intParameters);
-        Assertions.assertTrue(replaceDieTool3.toolEffect(turn,playerMove3));*/
+        Assertions.assertTrue(replaceDieTool3.toolEffect(turn,playerMove3));
 
         for (int i = 0; i <4 ; i++) {
             for (int j = 0; j <5; j++) {
