@@ -135,7 +135,7 @@ public class DecoratedChangeDieTool extends PlaceToolDecorator {
             }
             for (int i = 0; i < 4 && !canPlace; i++) {
                 for (int j = 0; j < 5 && !canPlace; j++) {
-                    canPlace = placementCheck.genericCheck(i, j, die, turn.getPlayer().getDashboard().getMatrixScheme());
+                    canPlace = placementCheck.genericCheck(i, j, myDie, turn.getPlayer().getDashboard().getMatrixScheme());
                 }
             }
         }

@@ -29,7 +29,7 @@ public abstract class PlaceToolDecorator implements Tool {
             turn.sendToPlayer("The die has been placed on the selected cell.");
             return true;
         } else {
-            turn.sendToPlayer("Incorrect move! Please try again.");
+            turn.sendToPlayer("Try again placing the die!");
             return false;
         }
     }

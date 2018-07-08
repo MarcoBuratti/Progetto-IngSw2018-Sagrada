@@ -175,38 +175,13 @@ class DashboardTest {
     @Test
     void jsonTester() {
         SchemesEnum[] schemesEnum = SchemesEnum.values();
-        GraphicsClient graphicsClient;
-        graphicsClient = new GraphicsClient();
-        JSONParser parser = new JSONParser();
         for (SchemesEnum aSchemesEnum : schemesEnum) {
             Dashboard dashboard = new Dashboard(aSchemesEnum.getName());
             System.out.println(dashboard.getFavourToken() + " " + aSchemesEnum.getName());
             System.out.println(dashboard);
         }
 
-        try {
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/main/files/up.json"));
-            String achievement = (String) jsonObject.get("Public Achievements");
-            graphicsClient.printAchievements(achievement);
-            String tool = (String) jsonObject.get("Tools");
-            graphicsClient.printTool(tool);
-            String roundTrack = (String) jsonObject.get("Round track");
-            graphicsClient.printRoundTrack(roundTrack);
-            String draft = (String) jsonObject.get("Draft");
-            if(draft != null) graphicsClient.printDraft(draft);
-            String number = (String) jsonObject.get("numberPlayer");
-            int player = Integer.parseInt(number);
-            System.out.println(number);
-            for (int i = 0; i < player; i++) {
-                String request = "scheme" + i;
-                System.out.println(request);
-                String scheme = (String) jsonObject.get(request);
-                graphicsClient.printScheme(scheme);
-            }
 
-        } catch (IOException | ParseException e) {
-            System.err.println(e.toString());
-        }
 
     }
 

@@ -406,6 +406,7 @@ public abstract class ConnectionClient extends Observable implements ClientInter
             case "You don't have enough favour tokens left to use this tool!":
             case "You cannot place the die anymore!":
             case "The die has been placed on the selected cell.":
+            case "Incorrect move! Please try again.":
                 setToolBreakFlag();
                 setWaitOn(false);
                 break;

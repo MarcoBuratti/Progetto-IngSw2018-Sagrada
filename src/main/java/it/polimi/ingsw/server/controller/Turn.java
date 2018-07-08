@@ -306,7 +306,7 @@ public class Turn {
                 if (notEndedTurn()) {
                     correctMove = decoratedTool.placeDie(this, playerMove);
                     if (!correctMove) {
-                        sendToPlayer("Try again placing the die!");
+
                         setWaitMove();
                     }
                 } else {
