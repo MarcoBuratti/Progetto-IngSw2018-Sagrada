@@ -178,7 +178,4 @@ public class GraphicsClient {
         return "Please choose 1 to move another die or 0 to stop and send your move";
     }
 
-    public void printTerminate() {
-        System.out.println("Terminate.\nYou have been disconnected.");
-    }
 }
